@@ -9,17 +9,17 @@
 	<slot />
 </ul>
 
-<style lang="postcss">
+<style lang="scss">
 	ul {
 		list-style-type: disc;
-		margin-block: theme('spacing.6');
-		margin-left: theme('spacing.6');
+		margin-block: 1.5rem;
+		margin-left: 1.5rem;
+	}
 
-		:global(ul) {
+		ul :global(ul) {
 			list-style-type: circle;
 
-			margin-block: theme('spacing.2');
-			margin-left: theme('spacing.6');
+			margin-block: 0.5rem;
+			margin-left: 1.5rem;
 		}
-	}
 </style>

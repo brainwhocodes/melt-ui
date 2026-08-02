@@ -14,7 +14,7 @@
 <div use:melt={$root}>
 	{#each items as { id, triggerId, title, description }}
 		<div use:melt={$item(id)} data-testid={id}>
-			<h2 class="flex">
+			<h2 class="surface-b437054915">
 				<button data-testid={triggerId} use:melt={$trigger(id)}>
 					{title}
 				</button>

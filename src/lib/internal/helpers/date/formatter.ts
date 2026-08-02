@@ -40,7 +40,9 @@ export function createFormatter(initialLocale: string) {
 	}
 
 	function fullMonthAndYear(date: Date) {
-		return new DateFormatter(locale, { month: 'long', year: 'numeric' }).format(date);
+		return new DateFormatter(locale, { month: 'long', year: 'numeric' }).format(
+			date,
+		);
 	}
 
 	function fullMonth(date: Date) {
@@ -62,7 +64,10 @@ export function createFormatter(initialLocale: string) {
 		}
 	}
 
-	function dayOfWeek(date: Date, length: Intl.DateTimeFormatOptions['weekday'] = 'narrow') {
+	function dayOfWeek(
+		date: Date,
+		length: Intl.DateTimeFormatOptions['weekday'] = 'narrow',
+	) {
 		return new DateFormatter(locale, { weekday: length }).format(date);
 	}
 
@@ -90,7 +95,7 @@ export function createFormatter(initialLocale: string) {
 	function part(
 		dateObj: DateValue,
 		type: Intl.DateTimeFormatPartTypes,
-		options: Intl.DateTimeFormatOptions = {}
+		options: Intl.DateTimeFormatOptions = {},
 	) {
 		const opts = { ...defaultPartOptions, ...options };
 		const parts = toParts(dateObj, opts);

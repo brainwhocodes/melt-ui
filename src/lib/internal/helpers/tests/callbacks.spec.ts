@@ -17,7 +17,11 @@ describe('executeCallbacks', () => {
 		}
 
 		// Create a listener group.
-		const cleanup = executeCallbacks(testFunction(), testFunction(), testFunction());
+		const cleanup = executeCallbacks(
+			testFunction(),
+			testFunction(),
+			testFunction(),
+		);
 		// Assert that `functionMock` was called 3x and `callbackMock` was not.
 		expect(functionMock).toBeCalledTimes(3);
 		expect(callbackMock).not.toBeCalled();

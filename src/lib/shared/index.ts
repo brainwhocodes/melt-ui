@@ -4,19 +4,27 @@
  * use, they should be exported from this file to prevent conflicts
  * with other builders that may export the same types or functions.
  */
-import type { SegmentPart, EditableSegmentPart } from '$lib/builders/date-field/_internal/types.js';
-import type { Granularity, Matcher, DateRange, Month } from '$lib/internal/helpers/date/index.js';
-import type { FocusProp, FocusTarget } from '$lib/internal/helpers/index.js';
+import type {
+	EditableSegmentPart,
+	SegmentPart,
+} from '$lib/builders/date-field/_internal/types.js';
 import type { InteractOutsideEvent } from '$lib/internal/actions/index.js';
+import type {
+	DateRange,
+	Granularity,
+	Matcher,
+	Month,
+} from '$lib/internal/helpers/date/index.js';
+import type { FocusProp, FocusTarget } from '$lib/internal/helpers/index.js';
 
 export type {
-	Granularity,
+	DateRange,
+	EditableSegmentPart,
 	FocusProp,
 	FocusTarget,
+	Granularity,
+	InteractOutsideEvent,
 	Matcher,
-	DateRange,
 	Month,
 	SegmentPart,
-	EditableSegmentPart,
-	InteractOutsideEvent,
 };

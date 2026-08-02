@@ -1,7 +1,7 @@
 import { ATTRS } from '$docs/constants.js';
 import { builderSchema, elementSchema } from '$docs/utils/index.js';
-import type { BuilderData } from './index.js';
 import { scrollAreaIdParts } from '$lib/builders/scroll-area/create.js';
+import type { BuilderData } from './index.js';
 
 /**
  * Props that are also returned in the form of stores via the `options` property.
@@ -90,7 +90,8 @@ const viewport = elementSchema('viewport', {
 });
 
 const content = elementSchema('content', {
-	description: 'The scrollable content. This is the element that will be scrolled.',
+	description:
+		'The scrollable content. This is the element that will be scrolled.',
 	dataAttributes: [
 		{
 			name: 'data-melt-scroll-area-content',

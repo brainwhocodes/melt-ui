@@ -1,7 +1,8 @@
-import type { BuilderReturn, Orientation } from '$lib/internal/types.js';
 import type { Writable } from 'svelte/store';
-import type { createRadioGroup } from './create.js';
 import type { ChangeFn } from '$lib/internal/helpers/index.js';
+import type { BuilderReturn, Orientation } from '$lib/internal/types.js';
+import type { createRadioGroup } from './create.js';
+
 export type { RadioGroupComponentEvents } from './events.js';
 
 export type CreateRadioGroupProps = {

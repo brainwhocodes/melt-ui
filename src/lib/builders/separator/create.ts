@@ -15,7 +15,8 @@ export const createSeparator = (props?: CreateSeparatorProps) => {
 	const root = makeElement('separator', {
 		stores: [orientation, decorative],
 		returned: ([$orientation, $decorative]) => {
-			const ariaOrientation = $orientation === 'vertical' ? $orientation : undefined;
+			const ariaOrientation =
+				$orientation === 'vertical' ? $orientation : undefined;
 			return {
 				role: $decorative ? 'none' : 'separator',
 				'aria-orientation': ariaOrientation,

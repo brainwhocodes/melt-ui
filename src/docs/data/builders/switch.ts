@@ -13,12 +13,14 @@ const OPTION_PROPS = [
 	{
 		name: 'name',
 		type: 'string',
-		description: 'The name of the hidden input element used for form submission..',
+		description:
+			'The name of the hidden input element used for form submission..',
 	},
 	{
 		name: 'value',
 		type: 'string',
-		description: 'The value of the hidden input element used for form submission.',
+		description:
+			'The value of the hidden input element used for form submission.',
 	},
 ];
 
@@ -65,7 +67,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'checked',
 			type: 'Writable<boolean>',
-			description: 'A writable store that returns whether or not the switch is checked.',
+			description:
+				'A writable store that returns whether or not the switch is checked.',
 		},
 	],
 	options: OPTION_PROPS,
@@ -112,7 +115,10 @@ const keyboard: KeyboardSchema = [
 ];
 
 const schemas = [builder, root, input];
-const features = ['Full keyboard navigation', 'Can be controlled or uncontrolled'];
+const features = [
+	'Full keyboard navigation',
+	'Can be controlled or uncontrolled',
+];
 
 export const switchData: BuilderData = {
 	schemas,

@@ -14,27 +14,33 @@
 </script>
 
 <button use:melt={$trigger} aria-label="More info">
-	<Info class={cn('size-4 text-white', iconClasses)} />
-	<span class="sr-only">Open popover</span>
+	<Info class={cn('surface-2edca20fab', iconClasses)} />
+	<span class="surface-4b7396ff96">Open popover</span>
 </button>
 {#if $open}
 	<div
 		use:melt={$content}
 		transition:fade={{ duration: 100 }}
 		class={cn(
-			'mdsvex z-30 max-w-[300px] rounded-md bg-zinc-800 px-4 py-3 shadow-sm shadow-neutral-800',
+			'mdsvex surface-3913b2c9d7',
 			contentClasses
 		)}
 	>
 		<div use:melt={$arrow} />
-		<p class="text-sm leading-5 text-white">
+		<p class="surface-7ff6331d58">
 			<slot />
 		</p>
 	</div>
 {/if}
 
-<style lang="postcss">
-	div {
-		@apply focus:ring-0 !important;
+<style lang="scss">
+	div:focus {
+    
+    
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 0 #0000 !important
+}
+	.docs-info-popover-icon--muted {
+		color: rgb(var(--color-neutral-200) / 1);
 	}
 </style>
+

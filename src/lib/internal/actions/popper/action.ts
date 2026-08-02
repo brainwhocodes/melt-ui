@@ -1,19 +1,19 @@
+import type { Action } from 'svelte/action';
 import {
-	useFocusTrap,
 	useEscapeKeydown,
 	useFloating,
+	useFocusTrap,
 	usePortal,
 } from '$lib/internal/actions/index.js';
 import {
-	executeCallbacks,
 	type Callback,
-	noop,
+	executeCallbacks,
 	isHTMLElement,
+	noop,
 } from '$lib/internal/helpers/index.js';
-import type { Action } from 'svelte/action';
-import type { PopperArgs, PopperConfig } from './types.js';
 import { useModal } from '../modal/action.js';
 import { usePreventTextSelectionOverflow } from '../prevent-text-selection-overflow/action.js';
+import type { PopperArgs, PopperConfig } from './types.js';
 
 const defaultConfig = {
 	floating: {},
@@ -39,14 +39,16 @@ export const usePopper = ((popperElement, args) => {
 		callbacks.push(usePortal(popperElement, opts.portal).destroy);
 	}
 
-	callbacks.push(useFloating(anchorElement, popperElement, opts.floating).destroy);
+	callbacks.push(
+		useFloating(anchorElement, popperElement, opts.floating).destroy,
+	);
 
 	if (opts.focusTrap !== null) {
 		callbacks.push(
 			useFocusTrap(popperElement, {
 				fallbackFocus: popperElement,
 				...opts.focusTrap,
-			}).destroy
+			}).destroy,
 		);
 	}
 
@@ -62,14 +64,17 @@ export const usePopper = ((popperElement, args) => {
 				shouldCloseOnInteractOutside: (e) => {
 					if (e.defaultPrevented) return false;
 
-					if (isHTMLElement(anchorElement) && anchorElement.contains(e.target as Element)) {
+					if (
+						isHTMLElement(anchorElement) &&
+						anchorElement.contains(e.target as Element)
+					) {
 						return false;
 					}
 
 					return true;
 				},
 				...opts.modal,
-			}).destroy
+			}).destroy,
 		);
 	}
 
@@ -80,7 +85,7 @@ export const usePopper = ((popperElement, args) => {
 					open.set(false);
 				},
 				...opts.escapeKeydown,
-			}).destroy
+			}).destroy,
 		);
 	}
 

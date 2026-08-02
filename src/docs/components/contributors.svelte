@@ -7,9 +7,9 @@
 	const contributors = $page.data.contributors as FullContributor[] | undefined;
 </script>
 
-<ul class="ml-2 flex flex-wrap gap-y-4">
+<ul class="surface-7373b185b1">
 	{#each contributors ?? [] as contributor}
-		<li class="-ml-3">
+		<li class="surface-d132c3748d">
 			<Contributor {contributor} />
 		</li>
 	{/each}

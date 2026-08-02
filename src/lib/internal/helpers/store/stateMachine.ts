@@ -16,7 +16,7 @@ export type MachineEvent<T> = {
  */
 export function createStateMachine<M>(
 	initialState: MachineState<M>,
-	machine: M & Machine<MachineState<M>>
+	machine: M & Machine<MachineState<M>>,
 ) {
 	// init a store with the initial state
 	const state = withGet.writable(initialState);

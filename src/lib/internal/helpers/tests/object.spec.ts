@@ -4,7 +4,10 @@ import { omit } from '../object.js';
 describe('omit', () => {
 	it('omits keys from a given object', () => {
 		expect(
-			omit({ sweet: ['Caramel', 'Chocolate'], savory: ['Basil', 'Bacon'] }, 'sweet')
+			omit(
+				{ sweet: ['Caramel', 'Chocolate'], savory: ['Basil', 'Bacon'] },
+				'sweet',
+			),
 		).toStrictEqual({ savory: ['Basil', 'Bacon'] });
 	});
 });

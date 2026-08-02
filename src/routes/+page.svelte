@@ -28,76 +28,71 @@
 	<title>Melt UI</title>
 </svelte:head>
 
-<div class="relative flex min-h-[1080px] w-full flex-col items-center">
-	<div class="flex flex-col items-center px-2">
+<div class="surface-6697eecc81">
+	<div class="surface-6b6db04515">
 		<h1
-			class="z-10 mt-[clamp(2rem,5vh,6rem)] max-w-2xl text-center font-display text-5xl sm:text-6xl
-		md:max-w-3xl md:text-7xl lg:max-w-5xl lg:text-[6rem] lg:leading-none"
+			class="preview-offset-top-clamp-2rem-5vh-6rem surface-fc510fd660"
 		>
-			<Logo class="inline-block h-12 md:-my-2 md:h-20 lg:-my-4 lg:h-32" /> <b>melt</b> away<br /> complexity
+			<Logo class="surface-0f0c047abd" /> <b>melt</b> away<br /> complexity
 		</h1>
 
 		<p
-			class="mt-6 max-w-sm text-center text-neutral-400 md:max-w-md lg:mt-8 lg:max-w-xl lg:text-xl"
+			class="surface-9d6e4e0133"
 		>
 			An open-source Svelte library for building high-quality, accessible design systems and web
 			apps.
 		</p>
 		<button
 			on:click={copyInstallCommand}
-			class="text-md group mt-8 flex items-center justify-between gap-4 break-keep rounded-xl
-				bg-zinc-800 px-4 py-3 text-left font-mono text-sm transition hover:bg-zinc-800/75
-				active:translate-y-0.5 sm:shrink"
+			class="text-md group surface-6cb894fbe5"
 			aria-label="Copy install command"
 		>
 			<span>npx @melt-ui/cli@latest init</span>
 			{#if copied}
 				<div in:fly={{ y: -4 }}>
-					<Check class="inline-block size-4 text-magnum-500 transition" />
+					<Check class="surface-d70d0a51eb" />
 				</div>
 			{:else}
 				<div in:fly={{ y: 4 }}>
-					<Copy class="inline-block size-4 transition" />
+					<Copy class="surface-b241a74562" />
 				</div>
 			{/if}
 		</button>
 		<a
 			href="/docs"
-			class="force-dark mt-4 rounded-xl bg-magnum-400 px-4 py-2 font-semibold text-magnum-900 transition
-		hover:opacity-75 active:translate-y-0.5"
+			class="force-dark surface-1702e49a6d"
 		>
 			Get started
 		</a>
 	</div>
 
-	<div class="force-dark dotted-bg mt-1 grid w-full grow overflow-hidden">
+	<div class="force-dark dotted-bg surface-6e6bbf39f3">
 		<div
-			class="translate-y absolute -top-2 left-1/2 z-10 h-[50rem]
-			w-[90rem] -translate-x-1/2 translate-y-[clamp(0px,5vh,5rem)] md:block"
+			class="preview-motion-y-clamp-0px-5vh-5rem surface-041ba41863"
 		>
-			<Accordion class="absolute left-1/2 top-[7rem] -translate-x-1/2 sm:top-[5rem]" />
-			<Slider class="absolute left-1/2 top-[25rem] translate-x-[calc(-50%+30px)]" />
-			<Switch class="absolute left-[52.5rem] top-[3.5rem] sm:left-[62.5rem] sm:top-[3.5rem]" />
-			<TagsInput class="absolute left-[70%] top-[10rem]" />
-			<PinInput class="absolute left-[62%] top-[15rem] sm:left-[67.5%] lg:left-3/4" />
+			<Accordion class="surface-7f29a76d66" />
+			<Slider class="surface-7e485ca27b" />
+			<Switch class="surface-383d41d7ca" />
+			<TagsInput class="surface-c5691668bf" />
+			<PinInput class="surface-633b72a829" />
 			<Popover
-				class="absolute left-1/4 top-[10rem] hidden md:flex lg:left-[20%] "
-				contentClass="hidden md:block"
+				class="surface-0f523012e4"
+				contentClass="preview-content-hidden-mobile"
 			/>
-			<Tabs class="absolute left-[20rem] top-[30rem] sm:left-0 sm:top-[16rem]" />
+			<Tabs class="surface-566fbc5ea0" />
 			<ToggleGroup
-				class="absolute left-[25rem] top-[10rem] sm:left-[20rem] sm:top-[7.5rem] md:left-[-2rem] md:top-[10rem]"
+				class="surface-53ca7c1707"
 			/>
-			<Toolbar class="absolute left-[50rem] top-[30rem] md:left-[72.5%] md:top-[30rem]" />
+			<Toolbar class="surface-24bc70f06b" />
 		</div>
 	</div>
 </div>
 
-<style lang="postcss">
+<style lang="scss">
 	.dotted-bg {
 		background-image: radial-gradient(
 			circle at 1px 1px,
-			theme('colors.magnum.200') 2px,
+			rgb(var(--color-magnum-200) / 1) 2px,
 			transparent 0
 		);
 		background-size: 1.5rem 1.5rem;
@@ -105,24 +100,24 @@
 		background-position: 0.5rem center;
 
 		position: relative;
+	}
 
-		&::after {
+		.dotted-bg::after {
 			position: absolute;
 			content: '';
 			inset: 0;
-			background: linear-gradient(to bottom, theme('colors.neutral.100') 0%, transparent 25%);
+			background: linear-gradient(to bottom, rgb(var(--color-neutral-100) / 1) 0%, transparent 25%);
 		}
-	}
 
 	:global(:root.dark) .dotted-bg {
 		background-image: radial-gradient(
 			circle at 1px 1px,
-			theme('colors.magnum.200/0.25') 2px,
+			rgb(var(--color-magnum-200) / 0.25) 2px,
 			transparent 0
 		);
-
-		&::after {
-			background: linear-gradient(to bottom, theme('colors.neutral.900') 0%, transparent 25%);
-		}
 	}
+
+	:global(:root.dark) .dotted-bg::after {
+			background: linear-gradient(to bottom, rgb(var(--color-neutral-900) / 1) 0%, transparent 25%);
+		}
 </style>

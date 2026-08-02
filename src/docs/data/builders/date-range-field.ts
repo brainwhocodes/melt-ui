@@ -73,7 +73,8 @@ const dateRangeFieldProps = [
 	{
 		name: 'readonlySegments',
 		type: '{ start: EditableSegmentPart[], end: EditableSegmentPart[] }',
-		description: 'The sets of segments that are readonly on the start and end fields.',
+		description:
+			'The sets of segments that are readonly on the start and end fields.',
 	},
 	{
 		name: 'hourCycle',
@@ -113,7 +114,7 @@ const dateRangeFieldProps = [
 
 const excludedProps = ['value', 'placeholder'];
 const dateRangeFieldOptions = dateRangeFieldProps.filter(
-	(prop) => !excludedProps.includes(prop.name)
+	(prop) => !excludedProps.includes(prop.name),
 );
 
 const BUILDER_NAME = 'date field';
@@ -144,18 +145,21 @@ const builder = builderSchema(BUILDER_NAME, {
 		},
 		{
 			name: 'startHiddenInput',
-			description: 'The hidden input used to submit the start value within a form',
+			description:
+				'The hidden input used to submit the start value within a form',
 		},
 		{
 			name: 'endHiddenInput',
-			description: 'The hidden input used to submit the end value within a form',
+			description:
+				'The hidden input used to submit the end value within a form',
 		},
 	],
 	states: [
 		{
 			name: 'value',
 			type: 'Writable<DateRange>',
-			description: 'A writable store which represents the current value of the date field.',
+			description:
+				'A writable store which represents the current value of the date field.',
 		},
 		{
 			name: 'segmentValues',
@@ -166,7 +170,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'segmentContents',
 			type: 'Record<"start" | "end", Readable<{ part: SegmentPart; value: string; }[]>>',
-			description: 'An object of readable stores used to dynamically render the date segments.',
+			description:
+				'An object of readable stores used to dynamically render the date segments.',
 		},
 		{
 			name: 'segmentContentsObj',
@@ -177,12 +182,14 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'placeholder',
 			type: 'Writable<DateValue>',
-			description: 'A writable store which represents the placeholder value of the date field.',
+			description:
+				'A writable store which represents the placeholder value of the date field.',
 		},
 		{
 			name: 'isInvalid',
 			type: 'Readable<boolean>',
-			description: 'A readable store which represents whether the date field is invalid.',
+			description:
+				'A readable store which represents whether the date field is invalid.',
 		},
 		{
 			name: 'isDateUnavailable',

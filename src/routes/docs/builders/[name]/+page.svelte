@@ -12,7 +12,6 @@
 
 	export let data: PageData;
 
-	// eslint-disable-next-line no-undef
 	type Component = $$Generic<typeof SvelteComponent>;
 	$: component = data.doc.default as unknown as Component;
 	$: doc = data.doc.metadata;
@@ -24,10 +23,10 @@
 	$: schemas = data.builderData.schemas;
 </script>
 
-<main class="relative px-2 py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_240px]">
-	<div class="mx-auto w-full min-w-0">
-		<div class="space-y-2">
-			<h1 class={cn('scroll-m-20 text-4xl font-bold tracking-tight')}>
+<main class="surface-d02747668d">
+	<div class="surface-94daa81d14">
+		<div class="surface-afb0f8cbdb">
+			<h1 class={cn('surface-f0ba3454be')}>
 				{doc.title}
 			</h1>
 			{#if doc.description}
@@ -36,7 +35,7 @@
 				</Description>
 			{/if}
 		</div>
-		<div use:melt={$separator} class="my-4 md:my-6" />
+		<div use:melt={$separator} class="surface-cf84d1beba" />
 		<div class="mdsvex" id="mdsvex">
 			<Preview code={snippets.main} viewCode={false} variant="default">
 				<svelte:component this={mainPreview} />
@@ -45,11 +44,11 @@
 
 			<svelte:component this={component} {snippets} {schemas} {previews} {keyboard} />
 		</div>
-		<div use:melt={$separator} class="my-4 md:my-6" />
+		<div use:melt={$separator} class="surface-e423b90bef" />
 		<!-- <DocsPager /> -->
 	</div>
-	<div class="hidden text-sm xl:block">
-		<div class="fixed top-16 h-[calc(100vh-4rem)] overflow-y-auto overflow-x-visible py-6 pr-4">
+	<div class="surface-f91ac6edbd">
+		<div class="surface-16879ba6f0">
 			{#key $page.url.pathname}
 				<TOC />
 			{/key}

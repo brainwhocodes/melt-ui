@@ -1,5 +1,5 @@
-import type { MaybeReadable } from '$lib/internal/types.js';
 import type { HTMLInputAttributes } from 'svelte/elements';
+import type { MaybeReadable } from '$lib/internal/types.js';
 
 export type CreateHiddenInputProps = {
 	value: MaybeReadable<string>;

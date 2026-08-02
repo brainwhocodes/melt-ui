@@ -9,15 +9,15 @@
 </script>
 
 <div
-	class="absolute -left-[1px] -top-[1px] flex items-center justify-between gap-1.5 rounded-br-md rounded-tl-md border border-magnum-600 bg-magnum-600/25 px-3 py-1.5"
+	class="surface-cbe4151a5e"
 >
-	<H3 class="mb-0 mt-0" id={createHeadingId(title)}>{title}</H3>
+	<H3 class="surface-8a1ba8da1f" id={createHeadingId(title)}>{title}</H3>
 </div>
 {#if isBuilder}
-	<Hammer class="absolute right-4 top-4 size-4 text-white" />
+	<Hammer class="surface-a0a99ccb82" />
 {:else}
-	<Shapes class="absolute right-4 top-4 size-4 text-white" />
+	<Shapes class="surface-727ff98f90" />
 {/if}
-<P class="mb-6">
+<P class="surface-0a32fac59a">
 	{@html description}
 </P>

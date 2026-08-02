@@ -1,13 +1,17 @@
+import {
+	type DateValue,
+	endOfMonth,
+	startOfMonth,
+} from '@internationalized/date';
+import { get, type Writable } from 'svelte/store';
 import { chunk, isHTMLElement } from '$lib/internal/helpers/index.js';
-import { type DateValue, startOfMonth, endOfMonth } from '@internationalized/date';
-import type { Month } from './types.js';
 import {
 	getDaysInMonth,
 	getLastFirstDayOfWeek,
 	getNextLastDayOfWeek,
 	parseStringToDateValue,
 } from './index.js';
-import { get, type Writable } from 'svelte/store';
+import type { Month } from './types.js';
 
 /**
  * Checks if a given node is a calendar cell element.
@@ -75,18 +79,35 @@ function createMonth(props: CreateMonthProps): Month<DateValue> {
 	const { dateObj, weekStartsOn, fixedWeeks, locale } = props;
 	const daysInMonth = getDaysInMonth(dateObj);
 
-	const datesArray = Array.from({ length: daysInMonth }, (_, i) => dateObj.set({ day: i + 1 }));
+	const datesArray = Array.from({ length: daysInMonth }, (_, i) =>
+		dateObj.set({ day: i + 1 }),
+	);
 
 	const firstDayOfMonth = startOfMonth(dateObj);
 	const lastDayOfMonth = endOfMonth(dateObj);
 
-	const lastSunday = getLastFirstDayOfWeek(firstDayOfMonth, weekStartsOn, locale);
-	const nextSaturday = getNextLastDayOfWeek(lastDayOfMonth, weekStartsOn, locale);
+	const lastSunday = getLastFirstDayOfWeek(
+		firstDayOfMonth,
+		weekStartsOn,
+		locale,
+	);
+	const nextSaturday = getNextLastDayOfWeek(
+		lastDayOfMonth,
+		weekStartsOn,
+		locale,
+	);
 
-	const lastMonthDays = getDaysBetween(lastSunday.subtract({ days: 1 }), firstDayOfMonth);
-	const nextMonthDays = getDaysBetween(lastDayOfMonth, nextSaturday.add({ days: 1 }));
+	const lastMonthDays = getDaysBetween(
+		lastSunday.subtract({ days: 1 }),
+		firstDayOfMonth,
+	);
+	const nextMonthDays = getDaysBetween(
+		lastDayOfMonth,
+		nextSaturday.add({ days: 1 }),
+	);
 
-	const totalDays = lastMonthDays.length + datesArray.length + nextMonthDays.length;
+	const totalDays =
+		lastMonthDays.length + datesArray.length + nextMonthDays.length;
 
 	if (fixedWeeks && totalDays < 42) {
 		const extraDays = 42 - totalDays;
@@ -130,7 +151,7 @@ export function createMonths(props: SetMonthProps) {
 			createMonth({
 				...monthProps,
 				dateObj,
-			})
+			}),
 		);
 		return months;
 	}
@@ -139,7 +160,7 @@ export function createMonths(props: SetMonthProps) {
 		createMonth({
 			...monthProps,
 			dateObj,
-		})
+		}),
 	);
 
 	// Create all the months, starting with the current month
@@ -149,7 +170,7 @@ export function createMonths(props: SetMonthProps) {
 			createMonth({
 				...monthProps,
 				dateObj: nextMonth,
-			})
+			}),
 		);
 	}
 
@@ -161,8 +182,8 @@ export function getSelectableCells(calendarId: string) {
 	if (!node) return [];
 	const selectableSelector = `[data-melt-calendar-cell]:not([data-disabled]):not([data-outside-visible-months])`;
 
-	return Array.from(node.querySelectorAll(selectableSelector)).filter((el): el is HTMLElement =>
-		isHTMLElement(el)
+	return Array.from(node.querySelectorAll(selectableSelector)).filter(
+		(el): el is HTMLElement => isHTMLElement(el),
 	);
 }
 
@@ -175,7 +196,10 @@ export function getSelectableCells(calendarId: string) {
  * @param node - The node to extract the date from.
  * @param placeholder - The placeholder value store which will be set to the extracted date.
  */
-export function setPlaceholderToNodeValue(node: HTMLElement, placeholder: Writable<DateValue>) {
+export function setPlaceholderToNodeValue(
+	node: HTMLElement,
+	placeholder: Writable<DateValue>,
+) {
 	const cellValue = node.getAttribute('data-value');
 	if (!cellValue) return;
 	placeholder.set(parseStringToDateValue(cellValue, get(placeholder)));

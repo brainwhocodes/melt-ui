@@ -1,8 +1,8 @@
-import { testKbd as kbd } from '../utils.js';
 import { render } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { describe } from 'vitest';
+import { testKbd as kbd } from '../utils.js';
 import AccordionTest from './AccordionTest.svelte';
 
 const items = [

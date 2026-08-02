@@ -1,6 +1,6 @@
+import { writable } from 'svelte/store';
 import { overridable, toWritableStores } from '$lib/internal/helpers/index.js';
 import { withGet } from '$lib/internal/helpers/withGet.js';
-import { writable } from 'svelte/store';
 import { omit } from '../../internal/helpers/object.js';
 import { createMenuBuilder } from '../menu/index.js';
 import type { CreateDropdownMenuProps } from './types.js';
@@ -27,7 +27,10 @@ const defaults = {
 } satisfies CreateDropdownMenuProps;
 
 export function createDropdownMenu(props?: CreateDropdownMenuProps) {
-	const withDefaults = { ...defaults, ...props } satisfies CreateDropdownMenuProps;
+	const withDefaults = {
+		...defaults,
+		...props,
+	} satisfies CreateDropdownMenuProps;
 
 	const rootOptions = toWritableStores(omit(withDefaults, 'ids'));
 

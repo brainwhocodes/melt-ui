@@ -1,7 +1,12 @@
-import { useFocusTrap, useEscapeKeydown, usePortal } from '$lib/internal/actions/index.js';
+import { derived, writable } from 'svelte/store';
+import {
+	useEscapeKeydown,
+	useFocusTrap,
+	usePortal,
+} from '$lib/internal/actions/index.js';
+import { useModal } from '$lib/internal/actions/modal/action.js';
 import {
 	addMeltEventListener,
-	makeElement,
 	createElHelpers,
 	effect,
 	executeCallbacks,
@@ -11,20 +16,19 @@ import {
 	isBrowser,
 	isHTMLElement,
 	kbd,
+	makeElement,
 	noop,
 	omit,
 	overridable,
+	portalAttr,
 	removeScroll,
 	styleToString,
 	toWritableStores,
-	portalAttr,
 } from '$lib/internal/helpers/index.js';
 import { withGet } from '$lib/internal/helpers/withGet.js';
 import type { Defaults, MeltActionReturn } from '$lib/internal/types.js';
-import { derived, writable } from 'svelte/store';
 import type { DialogEvents } from './events.js';
 import type { CreateDialogProps } from './types.js';
-import { useModal } from '$lib/internal/actions/modal/action.js';
 
 type DialogParts =
 	| 'trigger'
@@ -114,7 +118,7 @@ export function createDialog(props?: CreateDialogProps) {
 					if (e.key !== kbd.ENTER && e.key !== kbd.SPACE) return;
 					e.preventDefault();
 					handleOpen(e);
-				})
+				}),
 			);
 
 			return {
@@ -181,7 +185,7 @@ export function createDialog(props?: CreateDialogProps) {
 					}).destroy;
 
 					unsubFocusTrap = useFocusTrap(node, { fallbackFocus: node }).destroy;
-				}
+				},
 			);
 
 			return {
@@ -201,7 +205,7 @@ export function createDialog(props?: CreateDialogProps) {
 		returned: ($portal) =>
 			({
 				'data-portal': portalAttr($portal),
-			} as const),
+			}) as const,
 		action: (node: HTMLElement) => {
 			const unsubPortal = effect([portal], ([$portal]) => {
 				if ($portal === null) return noop;
@@ -223,7 +227,7 @@ export function createDialog(props?: CreateDialogProps) {
 		returned: ([$titleId]) =>
 			({
 				id: $titleId,
-			} as const),
+			}) as const,
 	});
 
 	const description = makeElement(name('description'), {
@@ -231,14 +235,14 @@ export function createDialog(props?: CreateDialogProps) {
 		returned: ([$descriptionId]) =>
 			({
 				id: $descriptionId,
-			} as const),
+			}) as const,
 	});
 
 	const close = makeElement(name('close'), {
 		returned: () =>
 			({
 				type: 'button',
-			} as const),
+			}) as const,
 		action: (node: HTMLElement): MeltActionReturn<DialogEvents['close']> => {
 			const unsub = executeCallbacks(
 				addMeltEventListener(node, 'click', () => {
@@ -248,7 +252,7 @@ export function createDialog(props?: CreateDialogProps) {
 					if (e.key !== kbd.SPACE && e.key !== kbd.ENTER) return;
 					e.preventDefault();
 					handleClose();
-				})
+				}),
 			);
 
 			return {
@@ -285,7 +289,7 @@ export function createDialog(props?: CreateDialogProps) {
 				defaultEl: activeTrigger.get(),
 			});
 		},
-		{ skipFirstRun: true }
+		{ skipFirstRun: true },
 	);
 
 	return {

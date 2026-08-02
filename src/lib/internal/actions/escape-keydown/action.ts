@@ -1,9 +1,20 @@
-import { addEventListener } from '$lib/internal/helpers/event.js';
-import { isFunction, isHTMLElement, isReadable } from '$lib/internal/helpers/is.js';
-import { readable, type Readable } from 'svelte/store';
-import { effect, executeCallbacks, kbd, noop, withGet, type WithGet } from '../../helpers/index.js';
-import type { EscapeBehaviorType, EscapeKeydownConfig } from './types.js';
 import type { Action } from 'svelte/action';
+import { type Readable, readable } from 'svelte/store';
+import { addEventListener } from '$lib/internal/helpers/event.js';
+import {
+	isFunction,
+	isHTMLElement,
+	isReadable,
+} from '$lib/internal/helpers/is.js';
+import {
+	effect,
+	executeCallbacks,
+	kbd,
+	noop,
+	type WithGet,
+	withGet,
+} from '../../helpers/index.js';
+import type { EscapeBehaviorType, EscapeKeydownConfig } from './types.js';
 
 const layers = new Map<HTMLElement, WithGet<Readable<EscapeBehaviorType>>>();
 
@@ -12,7 +23,10 @@ export const useEscapeKeydown = ((node, config = {}) => {
 
 	function update(config: EscapeKeydownConfig = {}) {
 		unsub();
-		const options = { behaviorType: 'close', ...config } satisfies EscapeKeydownConfig;
+		const options = {
+			behaviorType: 'close',
+			...config,
+		} satisfies EscapeKeydownConfig;
 		const behaviorType = isReadable(options.behaviorType)
 			? options.behaviorType
 			: withGet(readable(options.behaviorType));
@@ -36,14 +50,15 @@ export const useEscapeKeydown = ((node, config = {}) => {
 			effect(behaviorType, ($behaviorType) => {
 				if (
 					$behaviorType === 'close' ||
-					($behaviorType === 'defer-otherwise-close' && [...layers.keys()][0] === node)
+					($behaviorType === 'defer-otherwise-close' &&
+						[...layers.keys()][0] === node)
 				) {
 					node.dataset.escapee = '';
 				} else {
 					delete node.dataset.escapee;
 				}
 			}),
-			behaviorType.destroy || noop
+			behaviorType.destroy || noop,
 		);
 	}
 
@@ -76,15 +91,23 @@ const isResponsibleEscapeLayer = (node: HTMLElement): boolean => {
 	return firstLayerNode === node;
 };
 
-const shouldIgnoreEvent = (e: KeyboardEvent, ignore: EscapeKeydownConfig['ignore']): boolean => {
+const shouldIgnoreEvent = (
+	e: KeyboardEvent,
+	ignore: EscapeKeydownConfig['ignore'],
+): boolean => {
 	if (!ignore) return false;
 	if (isFunction(ignore) && ignore(e)) return true;
-	if (Array.isArray(ignore) && ignore.some((ignoreEl) => e.target === ignoreEl)) {
+	if (
+		Array.isArray(ignore) &&
+		ignore.some((ignoreEl) => e.target === ignoreEl)
+	) {
 		return true;
 	}
 	return false;
 };
 
-const shouldInvokeResponsibleLayerHandler = (behaviorType: EscapeBehaviorType) => {
+const shouldInvokeResponsibleLayerHandler = (
+	behaviorType: EscapeBehaviorType,
+) => {
 	return behaviorType === 'close' || behaviorType === 'defer-otherwise-close';
 };

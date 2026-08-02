@@ -28,8 +28,8 @@
 		use:setCodeString
 		use:setIsPPBlock
 		class={cn(
-			'force-dark mb-4 mt-6 max-h-[650px] overflow-x-auto !rounded-xl border !border-neutral-700/50 !bg-neutral-800 py-4 dark:!bg-neutral-800/50',
-			isPPBlock === undefined && 'data-[non-pp]:hidden',
+			'force-dark surface-ea5bc47c74',
+			isPPBlock === undefined && 'preview-state-non-pp-preview-hidden',
 			className
 		)}
 		tabindex="0"
@@ -38,25 +38,25 @@
 	</pre>
 	{#if isPPBlock !== undefined}
 		<button
-			class="absolute right-4 top-4 z-10"
+			class="surface-15b0fea8f4"
 			aria-label="copy"
 			on:click={copyCode}
 			data-code-copy
 		>
 			{#if $copied}
 				<div in:fly={{ y: -4 }}>
-					<Check class="size-4 text-magnum-500" />
+					<Check class="surface-2047aab20f" />
 				</div>
 			{:else}
 				<div in:fly={{ y: 4 }}>
-					<Copy class="size-4 hover:text-magnum-500" />
+					<Copy class="surface-99a95ae560" />
 				</div>
 			{/if}
 		</button>
 	{/if}
 {/if}
 
-<style>
+<style lang="scss">
 	/* Override theme colors for WCAG concerns */
 	pre :global([style*='color: #6A737D']) {
 		color: #727e8b !important;

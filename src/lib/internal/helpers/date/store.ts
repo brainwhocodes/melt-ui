@@ -1,7 +1,5 @@
-import type { Writable } from 'svelte/store';
 import type {
 	CalendarDate,
-	ZonedDateTime,
 	CalendarDateTime,
 	DateDuration,
 	DateFields,
@@ -9,7 +7,9 @@ import type {
 	DateValue,
 	Disambiguation,
 	TimeFields,
+	ZonedDateTime,
 } from '@internationalized/date';
+import type { Writable } from 'svelte/store';
 import { withGet } from '../withGet.js';
 
 type AnyDateTime = ZonedDateTime | CalendarDateTime;
@@ -17,14 +17,14 @@ type AnyDateTime = ZonedDateTime | CalendarDateTime;
 type DerivedDuration<T> = T extends AnyDateTime
 	? DateTimeDuration
 	: T extends CalendarDate
-	? DateDuration
-	: never;
+		? DateDuration
+		: never;
 
 type DerivedFields<T> = T extends AnyDateTime
 	? DateFields & TimeFields
 	: T extends CalendarDate
-	? DateFields
-	: never;
+		? DateFields
+		: never;
 
 /**
  * A higher order store that encapsulates a writable store holding a `DateValue` from the
@@ -33,7 +33,10 @@ type DerivedFields<T> = T extends AnyDateTime
  *
  * @see [@internationalized/date](https://react-spectrum.adobe.com/internationalized/date/index.html)
  */
-export function dateStore<T extends DateValue>(store: Writable<T>, defaultValue: T) {
+export function dateStore<T extends DateValue>(
+	store: Writable<T>,
+	defaultValue: T,
+) {
 	const { set, update, subscribe, get } = withGet(store);
 
 	function add(duration: DerivedDuration<T>) {
@@ -62,7 +65,7 @@ export function dateStore<T extends DateValue>(store: Writable<T>, defaultValue:
 
 	function setDate(
 		fields: DerivedFields<T>,
-		disambiguation?: T extends ZonedDateTime ? Disambiguation : never
+		disambiguation?: T extends ZonedDateTime ? Disambiguation : never,
 	) {
 		if (disambiguation) {
 			update((d) => {
@@ -111,7 +114,7 @@ export type DateStore<T> = Writable<T> & {
 	subtract: (duration: DerivedDuration<T>) => void;
 	setDate: (
 		fields: DerivedFields<T>,
-		disambiguation?: T extends ZonedDateTime ? Disambiguation : never
+		disambiguation?: T extends ZonedDateTime ? Disambiguation : never,
 	) => void;
 	reset: () => void;
 	nextPage: (amount: number) => void;

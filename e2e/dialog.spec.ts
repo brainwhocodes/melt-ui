@@ -1,4 +1,4 @@
-import { test, expect, type Page, Locator } from '@playwright/test';
+import { expect, Locator, type Page, test } from '@playwright/test';
 import { jsAvailable } from './utils.js';
 
 const locators = {
@@ -31,11 +31,17 @@ test.describe('dialog', () => {
 			const [centerX, centerY] = await getElementCenterPosition(viewCodeButton);
 
 			// Make sure "View Code" Button is not under the dialog, but under the overlay.
-			const isButtonUnderneathContent = await isPositionInsideElement(content, centerX, centerY);
+			const isButtonUnderneathContent = await isPositionInsideElement(
+				content,
+				centerX,
+				centerY,
+			);
 			expect(isButtonUnderneathContent).toBe(false);
 
 			// Tap the overlay at the position of the "View code" button
-			await page.tap(locators.overlay, { position: { x: centerX, y: centerY } });
+			await page.tap(locators.overlay, {
+				position: { x: centerX, y: centerY },
+			});
 
 			await expect(content).not.toBeVisible();
 
@@ -60,13 +66,20 @@ const getBoundingBox = async (locator: Locator) => {
  */
 const getElementCenterPosition = async (locator: Locator) => {
 	const bounding = await getBoundingBox(locator);
-	return [bounding.x + bounding.width / 2, bounding.y + bounding.height / 2] as const;
+	return [
+		bounding.x + bounding.width / 2,
+		bounding.y + bounding.height / 2,
+	] as const;
 };
 
 /**
  * Verifies an x, y position is within the boundaries of an element.
  */
-const isPositionInsideElement = async (locator: Locator, x: number, y: number) => {
+const isPositionInsideElement = async (
+	locator: Locator,
+	x: number,
+	y: number,
+) => {
 	const bounding = await getBoundingBox(locator);
 	const isXValid = bounding.x <= x && x <= bounding.x + bounding.width;
 	const isYValid = bounding.y <= y && y <= bounding.y + bounding.height;

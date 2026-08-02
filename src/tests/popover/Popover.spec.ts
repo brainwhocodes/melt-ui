@@ -1,10 +1,10 @@
 import { render, waitFor } from '@testing-library/svelte';
-import { axe } from 'jest-axe';
-import PopoverTest from './PopoverTest.svelte';
 import { userEvent } from '@testing-library/user-event';
+import { axe } from 'jest-axe';
 import type { CreatePopoverProps } from '$lib/index.js';
-import { assertActiveFocusTrap, testKbd as kbd } from '../utils.js';
 import { sleep } from '$lib/internal/helpers/index.js';
+import { assertActiveFocusTrap, testKbd as kbd } from '../utils.js';
+import PopoverTest from './PopoverTest.svelte';
 
 function setup(props: CreatePopoverProps = {}) {
 	const user = userEvent.setup();
@@ -37,6 +37,36 @@ describe('Popover (Default)', () => {
 
 	test('Opens on click', async () => {
 		await open();
+	});
+
+	test('forceVisible keeps closed parts mounted without reporting an open state', async () => {
+		const { trigger, content, user, getByTestId } = setup({
+			forceVisible: true,
+		});
+		const overlay = getByTestId('overlay');
+
+		expect(trigger).toHaveAttribute('aria-expanded', 'false');
+		expect(trigger).toHaveAttribute('data-state', 'closed');
+		expect(content).toBeVisible();
+		expect(content).toHaveAttribute('data-state', 'closed');
+		expect(overlay).toBeVisible();
+		expect(overlay).toHaveAttribute('data-state', 'closed');
+
+		await user.click(trigger);
+
+		expect(trigger).toHaveAttribute('aria-expanded', 'true');
+		expect(trigger).toHaveAttribute('data-state', 'open');
+		expect(content).toHaveAttribute('data-state', 'open');
+		expect(overlay).toHaveAttribute('data-state', 'open');
+
+		await user.click(trigger);
+
+		expect(content).toBeVisible();
+		expect(overlay).toBeVisible();
+		expect(trigger).toHaveAttribute('aria-expanded', 'false');
+		expect(trigger).toHaveAttribute('data-state', 'closed');
+		expect(content).toHaveAttribute('data-state', 'closed');
+		expect(overlay).toHaveAttribute('data-state', 'closed');
 	});
 
 	test('Closes on escape', async () => {
@@ -110,7 +140,9 @@ describe('Popover (Default)', () => {
 	});
 
 	it("Doesn't deactivate focus trap on escape provided `escapeBehavior` false", async () => {
-		const { getByTestId, user, content } = await open({ escapeBehavior: 'ignore' });
+		const { getByTestId, user, content } = await open({
+			escapeBehavior: 'ignore',
+		});
 		await user.keyboard(kbd.ESCAPE);
 		expect(content).toBeVisible();
 		expect(getByTestId('content')).toHaveFocus();
@@ -118,7 +150,9 @@ describe('Popover (Default)', () => {
 	});
 
 	it("Doesn't deactivate focus trap on outside click provided `closeOnOutsideClick` false", async () => {
-		const { getByTestId, user, content } = await open({ closeOnOutsideClick: false });
+		const { getByTestId, user, content } = await open({
+			closeOnOutsideClick: false,
+		});
 		await user.click(getByTestId('outside'));
 		expect(content).toBeVisible();
 		await assertActiveFocusTrap(user, content);
@@ -151,6 +185,49 @@ describe('Popover (Default)', () => {
 		await user.click(getByTestId('click-interceptor'));
 		expect(content).toBeVisible();
 		await assertActiveFocusTrap(user, content);
+	});
+
+	it('closes when the outside interaction target removes itself', async () => {
+		const { content, user, getByRole, queryByRole } = await open();
+
+		await user.click(getByRole('button', { name: 'Remove me' }));
+
+		expect(
+			queryByRole('button', { name: 'Remove me' }),
+		).not.toBeInTheDocument();
+		await waitFor(() => expect(content).not.toBeVisible());
+	});
+
+	it('closes when clicking an outside canvas', async () => {
+		const { content, user, getByTestId } = await open();
+
+		await user.click(getByTestId('outside-canvas'));
+
+		await waitFor(() => expect(content).not.toBeVisible());
+	});
+
+	it('ignores an outside secondary-button interaction', async () => {
+		const { content, user, getByRole } = await open();
+
+		await user.pointer({
+			keys: '[MouseRight]',
+			target: getByRole('button', { name: 'Outside' }),
+		});
+		await sleep(30);
+
+		expect(content).toBeVisible();
+	});
+
+	it('uses the composed Shadow DOM path for outside interactions', async () => {
+		const { content, user, getByTestId } = await open();
+		const shadowButton =
+			getByTestId('shadow-host').shadowRoot?.querySelector('button');
+		if (!shadowButton)
+			throw new Error('Expected the outside Shadow DOM button');
+
+		await user.click(shadowButton);
+
+		await waitFor(() => expect(content).not.toBeVisible());
 	});
 
 	it('closes popover when opening a sibling popover', async () => {

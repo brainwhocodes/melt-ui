@@ -1,37 +1,51 @@
+import { derived, type Readable, type Writable, writable } from 'svelte/store';
 import {
 	addEventListener,
 	addMeltEventListener,
-	makeElement,
 	createElHelpers,
 	effect,
 	executeCallbacks,
 	generateIds,
-	isHTMLElement,
-	noop,
-	styleToString,
-	toWritableStores,
 	type IdObj,
-	type ToWritableStores,
+	isHTMLElement,
+	makeElement,
+	noop,
 	omit,
-	withGet,
+	styleToString,
+	type ToWritableStores,
+	toWritableStores,
 	type WithGet,
+	withGet,
 } from '$lib/internal/helpers/index.js';
-import { derived, writable, type Readable, type Writable } from 'svelte/store';
-import type { CreateScrollAreaProps } from './types.js';
-import type { MeltActionReturn, Orientation, TextDirection } from '$lib/internal/types.js';
+import type {
+	MeltActionReturn,
+	Orientation,
+	TextDirection,
+} from '$lib/internal/types.js';
+import type { ScrollAreaEvents } from './events.js';
 import {
 	addUnlinkedScrollListener,
 	getScrollPositionFromPointer,
 	getThumbOffsetFromScroll,
 	getThumbRatio,
 	isScrollingWithinScrollbarBounds,
-	toInt,
 	type Sizes,
+	toInt,
 } from './helpers.js';
-import { createScrollbarX, createScrollbarY, getScrollbarActionByType } from './scrollbars.js';
-import type { ScrollAreaEvents } from './events.js';
+import {
+	createScrollbarX,
+	createScrollbarY,
+	getScrollbarActionByType,
+} from './scrollbars.js';
+import type { CreateScrollAreaProps } from './types.js';
 
-type ScrollAreaParts = 'root' | 'viewport' | 'content' | 'scrollbar' | 'thumb' | 'corner';
+type ScrollAreaParts =
+	| 'root'
+	| 'viewport'
+	| 'content'
+	| 'scrollbar'
+	| 'thumb'
+	| 'corner';
 export const { name } = createElHelpers<ScrollAreaParts>('scroll-area');
 
 export const scrollAreaIdParts = [
@@ -106,7 +120,10 @@ export function createScrollArea(props?: CreateScrollAreaProps) {
 	const scrollbarXEl = withGet.writable<HTMLElement | null>(null);
 	const scrollbarYEl = withGet.writable<HTMLElement | null>(null);
 
-	const ids = toWritableStores({ ...generateIds(scrollAreaIdParts), ...withDefaults.ids });
+	const ids = toWritableStores({
+		...generateIds(scrollAreaIdParts),
+		...withDefaults.ids,
+	});
 
 	const rootState: ScrollAreaRootState = {
 		cornerWidth,
@@ -237,7 +254,12 @@ export function createScrollArea(props?: CreateScrollAreaProps) {
 		});
 
 		function getScrollPosition(pointerPos: number, dir?: TextDirection) {
-			return getScrollPositionFromPointer(pointerPos, pointerOffset.get(), sizes.get(), dir);
+			return getScrollPositionFromPointer(
+				pointerPos,
+				pointerOffset.get(),
+				sizes.get(),
+				dir,
+			);
 		}
 
 		function handleWheelScroll(e: WheelEvent, payload: number) {
@@ -279,8 +301,14 @@ export function createScrollArea(props?: CreateScrollAreaProps) {
 			const $thumbEl = thumbEl.get();
 			if (!$viewportEl || !$thumbEl) return;
 
-			const scrollPos = isHorizontal.get() ? $viewportEl.scrollLeft : $viewportEl.scrollTop;
-			const offset = getThumbOffsetFromScroll(scrollPos, sizes.get(), rootState.options.dir.get());
+			const scrollPos = isHorizontal.get()
+				? $viewportEl.scrollLeft
+				: $viewportEl.scrollTop;
+			const offset = getThumbOffsetFromScroll(
+				scrollPos,
+				sizes.get(),
+				rootState.options.dir.get(),
+			);
 			thumbOffset.set(offset);
 		}
 
@@ -288,7 +316,10 @@ export function createScrollArea(props?: CreateScrollAreaProps) {
 			const $viewportEl = viewportEl.get();
 			if (!$viewportEl) return;
 			if (isHorizontal.get()) {
-				$viewportEl.scrollLeft = getScrollPosition(payload, rootState.options.dir.get());
+				$viewportEl.scrollLeft = getScrollPosition(
+					payload,
+					rootState.options.dir.get(),
+				);
 			} else {
 				$viewportEl.scrollTop = getScrollPosition(payload);
 			}
@@ -360,7 +391,8 @@ export function createScrollArea(props?: CreateScrollAreaProps) {
 		};
 	}
 
-	const { scrollbar: scrollbarX, thumb: thumbX } = createScrollbar('horizontal');
+	const { scrollbar: scrollbarX, thumb: thumbX } =
+		createScrollbar('horizontal');
 	const { scrollbar: scrollbarY, thumb: thumbY } = createScrollbar('vertical');
 
 	const corner = createScrollAreaCorner(rootState);
@@ -401,13 +433,20 @@ function createScrollbarThumb(state: ScrollAreaState) {
 		if (unsubListener) return;
 		const $viewportEl = rootState.viewportEl.get();
 		if ($viewportEl) {
-			unsubListener = addUnlinkedScrollListener($viewportEl, scrollbarState.onThumbPositionChange);
+			unsubListener = addUnlinkedScrollListener(
+				$viewportEl,
+				scrollbarState.onThumbPositionChange,
+			);
 		}
 		scrollbarState.onThumbPositionChange();
 	}
 
 	const thumb = makeElement(name('thumb'), {
-		stores: [scrollbarState.hasThumb, scrollbarState.isHorizontal, scrollbarState.thumbOffset],
+		stores: [
+			scrollbarState.hasThumb,
+			scrollbarState.isHorizontal,
+			scrollbarState.thumbOffset,
+		],
 		returned: ([$hasThumb, $isHorizontal, $offset]) => {
 			return {
 				style: styleToString({
@@ -420,7 +459,9 @@ function createScrollbarThumb(state: ScrollAreaState) {
 				'data-state': $hasThumb ? 'visible' : 'hidden',
 			} as const;
 		},
-		action: (node: HTMLElement): MeltActionReturn<ScrollAreaEvents['thumb']> => {
+		action: (
+			node: HTMLElement,
+		): MeltActionReturn<ScrollAreaEvents['thumb']> => {
 			scrollbarState.thumbEl.set(node);
 
 			const unsubEffect = effect([scrollbarState.sizes], ([_]) => {
@@ -434,7 +475,7 @@ function createScrollbarThumb(state: ScrollAreaState) {
 
 			const unsubEvents = executeCallbacks(
 				addMeltEventListener(node, 'pointerdown', handlePointerDown),
-				addMeltEventListener(node, 'pointerup', handlePointerUp)
+				addMeltEventListener(node, 'pointerup', handlePointerUp),
 			);
 
 			return {
@@ -454,7 +495,10 @@ function createScrollAreaCorner(rootState: ScrollAreaRootState) {
 	const width = writable(0);
 	const height = writable(0);
 
-	const hasSize = derived([width, height], ([$width, $height]) => !!$width && !!$height);
+	const hasSize = derived(
+		[width, height],
+		([$width, $height]) => !!$width && !!$height,
+	);
 
 	function setCornerHeight() {
 		const offsetHeight = rootState.scrollbarXEl.get()?.offsetHeight || 0;
@@ -484,19 +528,19 @@ function createScrollAreaCorner(rootState: ScrollAreaRootState) {
 		[rootState.scrollbarXEl, rootState.scrollbarYEl],
 		([$scrollbarXEl, $scrollbarYEl]) => {
 			return !!$scrollbarXEl && !!$scrollbarYEl;
-		}
+		},
 	);
 
 	const hasCorner = derived(
 		[rootState.options.type, hasBothScrollbarsVisible],
 		([$type, $hasBoth]) => {
 			return $type !== 'scroll' && $hasBoth;
-		}
+		},
 	);
 
 	const shouldDisplay = derived(
 		[hasCorner, hasSize],
-		([$hasCorner, $hasSize]) => $hasCorner && $hasSize
+		([$hasCorner, $hasSize]) => $hasCorner && $hasSize,
 	);
 
 	const corner = makeElement(name('corner'), {

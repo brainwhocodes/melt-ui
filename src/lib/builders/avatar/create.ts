@@ -1,13 +1,13 @@
+import { writable } from 'svelte/store';
 import {
-	makeElement,
 	effect,
 	isBrowser,
+	makeElement,
 	omit,
 	overridable,
 	styleToString,
 	toWritableStores,
 } from '$lib/internal/helpers/index.js';
-import { writable } from 'svelte/store';
 import type { CreateAvatarProps } from './types.js';
 
 const defaults = {
@@ -19,11 +19,17 @@ const defaults = {
 export const createAvatar = (props?: CreateAvatarProps) => {
 	const withDefaults = { ...defaults, ...props } satisfies CreateAvatarProps;
 
-	const options = toWritableStores(omit(withDefaults, 'loadingStatus', 'onLoadingStatusChange'));
+	const options = toWritableStores(
+		omit(withDefaults, 'loadingStatus', 'onLoadingStatusChange'),
+	);
 	const { src, delayMs } = options;
 
-	const loadingStatusWritable = withDefaults.loadingStatus ?? writable('loading');
-	const loadingStatus = overridable(loadingStatusWritable, withDefaults?.onLoadingStatusChange);
+	const loadingStatusWritable =
+		withDefaults.loadingStatus ?? writable('loading');
+	const loadingStatus = overridable(
+		loadingStatusWritable,
+		withDefaults?.onLoadingStatusChange,
+	);
 
 	effect([src, delayMs], ([$src, $delayMs]) => {
 		if (isBrowser) {
@@ -66,7 +72,7 @@ export const createAvatar = (props?: CreateAvatarProps) => {
 					$loadingStatus === 'loaded'
 						? styleToString({
 								display: 'none',
-						  })
+							})
 						: undefined,
 				hidden: $loadingStatus === 'loaded' ? true : undefined,
 			} as const;

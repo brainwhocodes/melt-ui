@@ -6,8 +6,8 @@ import {
 	floatingSideAndAlignDataAttrs,
 	floatingSideDataAttr,
 } from '$docs/utils/index.js';
-import { tooltipIdParts } from '$lib/index.js';
 import { tooltipEvents } from '$lib/builders/tooltip/events.js';
+import { tooltipIdParts } from '$lib/index.js';
 import type { BuilderData } from './index.js';
 
 /**
@@ -29,13 +29,15 @@ const OPTION_PROPS = [
 		name: 'openDelay',
 		type: 'number',
 		default: '1000',
-		description: 'The delay in milliseconds before the tooltip opens after a pointer over event.',
+		description:
+			'The delay in milliseconds before the tooltip opens after a pointer over event.',
 	},
 	{
 		name: 'closeDelay',
 		type: 'number',
 		default: '500',
-		description: 'The delay in milliseconds before the tooltip closes after a pointer leave event.',
+		description:
+			'The delay in milliseconds before the tooltip closes after a pointer leave event.',
 	},
 	{
 		name: 'disableHoverableContent',
@@ -57,7 +59,12 @@ const BUILDER_NAME = 'tooltip';
 const builder = builderSchema(BUILDER_NAME, {
 	ids: tooltipIdParts,
 	title: 'createTooltip',
-	props: [...OPTION_PROPS, PROPS.DEFAULT_OPEN, PROPS.OPEN, PROPS.ON_OPEN_CHANGE],
+	props: [
+		...OPTION_PROPS,
+		PROPS.DEFAULT_OPEN,
+		PROPS.OPEN,
+		PROPS.ON_OPEN_CHANGE,
+	],
 	elements: [
 		{
 			name: 'trigger',
@@ -76,7 +83,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'open',
 			type: 'Writable<boolean>',
-			description: 'A writable store that indicates whether the tooltip is open or not',
+			description:
+				'A writable store that indicates whether the tooltip is open or not',
 		},
 	],
 	options: OPTION_PROPS,

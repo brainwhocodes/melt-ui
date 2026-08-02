@@ -1,13 +1,15 @@
-import { createElHelpers, makeElement } from '$lib/internal/helpers/makeElement.js';
-import { readable } from 'svelte/store';
-import type { CreateHiddenInputProps } from './types.js';
-import { styleToString } from '$lib/internal/helpers/style.js';
-import { toReadableStores } from '$lib/internal/helpers/store/toReadableStores.js';
-import { omit } from '$lib/internal/helpers/object.js';
 import type { Readable } from 'svelte/motion';
-import { removeUndefined } from '$lib/internal/helpers/object.js';
-import { withGet } from '$lib/internal/helpers/withGet.js';
+import { readable } from 'svelte/store';
 import { executeCallbacks } from '$lib/internal/helpers/callbacks.js';
+import {
+	createElHelpers,
+	makeElement,
+} from '$lib/internal/helpers/makeElement.js';
+import { omit, removeUndefined } from '$lib/internal/helpers/object.js';
+import { toReadableStores } from '$lib/internal/helpers/store/toReadableStores.js';
+import { styleToString } from '$lib/internal/helpers/style.js';
+import { withGet } from '$lib/internal/helpers/withGet.js';
+import type { CreateHiddenInputProps } from './types.js';
 
 const defaults = {
 	prefix: '',
@@ -25,16 +27,19 @@ export function createHiddenInput(props: CreateHiddenInputProps) {
 	} satisfies CreateHiddenInputProps;
 	const { name: elName } = createElHelpers(withDefaults.prefix);
 	const { value, name, disabled, required, type, checked } = toReadableStores(
-		omit(withDefaults, 'prefix')
+		omit(withDefaults, 'prefix'),
 	);
 	const nameStore = name as Readable<string | undefined>; // TODO: Remove this cast when types are fixed
 
-	const actualChecked = withGet.derived([checked, type], ([$checked, $type]) => {
-		if ($type === 'checkbox') {
-			return ($checked === 'indeterminate' ? false : $checked) as boolean;
-		}
-		return undefined;
-	});
+	const actualChecked = withGet.derived(
+		[checked, type],
+		([$checked, $type]) => {
+			if ($type === 'checkbox') {
+				return ($checked === 'indeterminate' ? false : $checked) as boolean;
+			}
+			return undefined;
+		},
+	);
 
 	const hiddenInput = makeElement(elName('hidden-input'), {
 		stores: [value, nameStore, disabled, required, type, actualChecked],
@@ -73,7 +78,7 @@ export function createHiddenInput(props: CreateHiddenInputProps) {
 						return;
 					}
 					node.dispatchEvent(new Event('change', { bubbles: true }));
-				})
+				}),
 			);
 
 			return {

@@ -44,13 +44,15 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'value',
 			type: 'Writable<string>',
-			description: 'A writable store that can be used to update the tabs value.',
+			description:
+				'A writable store that can be used to update the tabs value.',
 			see: SEE.BRING_YOUR_OWN_STORE,
 		},
 		{
 			name: 'onValueChange',
 			type: 'ChangeFn<string>',
-			description: 'A callback that is called when the value of the tabs changes.',
+			description:
+				'A callback that is called when the value of the tabs changes.',
 			see: SEE.CHANGE_FUNCTIONS,
 		},
 	],
@@ -76,7 +78,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'value',
 			type: 'Writable<string>',
-			description: 'A writable store that represents the current value of the tabs.',
+			description:
+				'A writable store that represents the current value of the tabs.',
 		},
 	],
 	options: OPTION_PROPS,

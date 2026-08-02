@@ -22,36 +22,36 @@
 	<img
 		src="/logo-mark.svg"
 		alt="Melt UI Logo"
-		class="h-full w-full rounded-full bg-neutral-900 object-contain p-2"
+		class="surface-4b189cb6db"
 	/>
-	<span class="sr-only">Open Melt UI Details</span>
+	<span class="surface-43a79b87d9">Open Melt UI Details</span>
 </a>
 
-<div use:melt={$content} class="z-10 rounded-md bg-white shadow-sm" data-testid="content">
-	<div class="w-[300px] rounded-md bg-white p-5 shadow-sm">
-		<div class="flex flex-col gap-2">
+<div use:melt={$content} class="surface-449da680da" data-testid="content">
+	<div class="surface-51c6b063e4">
+		<div class="surface-5bc74db062">
 			<img
 				src="/logo-mark.svg"
 				alt="Melt UI Logo"
-				class="object-fit block h-14 w-14 rounded-full bg-neutral-900 p-2"
+				class="object-fit surface-4a9c89cb4b"
 			/>
-			<div class="flex flex-col gap-4">
+			<div class="surface-d99abd330b">
 				<div>
-					<div class="font-bold text-neutral-900">Melt UI</div>
-					<div class="text-neutral-400">melt-ui/melt-ui</div>
+					<div class="surface-60de120929">Melt UI</div>
+					<div class="surface-af4e7e3abf">melt-ui/melt-ui</div>
 				</div>
 			</div>
-			<div class="m-0 text-neutral-700" data-testid="highlight">
+			<div class="surface-32d3fac7b4" data-testid="highlight">
 				A set of accessible, unstyled component builders for Svelte & SvelteKit. Open source.
 			</div>
-			<div class="flex gap-4">
-				<div class="flex gap-1">
-					<div class="text-neutral-900">618</div>
-					<div class="text-neutral-400">Stars</div>
+			<div class="surface-44942b1b68">
+				<div class="surface-04016a7754">
+					<div class="surface-06569e738e">618</div>
+					<div class="surface-9c802f88cd">Stars</div>
 				</div>
-				<div class="flex gap-1">
-					<div class="text-neutral-900">37</div>
-					<div class="text-neutral-400">Forks</div>
+				<div class="surface-a876bcbc0e">
+					<div class="surface-e072aace73">37</div>
+					<div class="surface-d9f7bc65db">Forks</div>
 				</div>
 			</div>
 		</div>
@@ -60,11 +60,34 @@
 </div>
 <div data-testid="start" />
 
-<style lang="postcss">
+<style lang="scss">
 	.trigger {
-		@apply flex h-12 w-12 items-center justify-center;
-		@apply rounded-full bg-white p-0 text-sm font-medium;
-		@apply text-magnum-900 transition-colors hover:bg-white/90;
-		@apply focus-visible:ring focus-visible:ring-magnum-400 focus-visible:ring-offset-2;
-	}
+    display: flex;
+    height: 3rem;
+    width: 3rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    
+    background-color: rgb(var(--color-white) / 1);
+    padding: 0px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    
+    color: rgb(var(--color-magnum-900) / 1);
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms
+}
+	.trigger:hover {
+    background-color: rgb(var(--color-white) / 0.9)
+}
+	.trigger:focus-visible {
+    
+    
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 0 #0000;
+    
+    
+    }
 </style>

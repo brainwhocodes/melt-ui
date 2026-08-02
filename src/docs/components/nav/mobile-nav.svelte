@@ -20,43 +20,42 @@
 
 <button
 	use:melt={$trigger}
-	class="text-neutral-400 transition-colors hover:text-neutral-50 md:hidden"
+	class="surface-0fc523b133"
 >
-	<Menu class="size-6" />
-	<span class="sr-only">Toggle Menu</span>
+	<Menu class="surface-680d89d586" />
+	<span class="surface-5af4a07943">Toggle Menu</span>
 </button>
 {#if $open}
-	<div use:melt={$portalled} class="md:hidden">
+	<div use:melt={$portalled} class="surface-ca315bd640">
 		<div
 			use:melt={$overlay}
-			class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm"
+			class="surface-7b6b9ec05f"
 			transition:fade={{ duration: 150 }}
 		/>
 		<div
 			use:melt={$content}
-			class="menu safe-area fixed bottom-0 z-50 h-2/3 w-full bg-neutral-900 px-2
-				 pt-6 shadow-lg focus:outline-none"
+			class="menu safe-area preview-space-x-2      surface-ba286df37b"
 			transition:fly={{ y: 768, duration: 300, opacity: 1 }}
 		>
-			<div class="flex items-center justify-between">
+			<div class="surface-43b75a033f">
 				<MobileNavLink href="/" {open}>
-					<Logo class="h-9" withText textColor="white" />
+					<Logo class="surface-4776956474" withText textColor="white" />
 				</MobileNavLink>
-				<Button class="px-2" size="sm" variant="faded" {...$close} action={$close.action}>
-					<X class="size-4" />
+				<Button class="surface-71de47bb5e" size="sm" variant="faded" {...$close} action={$close.action}>
+					<X class="surface-5d7492796d" />
 				</Button>
 			</div>
 
-			<div class="mt-2 flex justify-center rounded-xl bg-neutral-800 px-4 py-3">
+			<div class="surface-c4eb9abb8e">
 				<Switch id="preprocessor" bind:checked={$usingPreprocessor} keepState>
-					<a href="/docs/preprocessor" class="underline transition hover:opacity-75">
+					<a href="/docs/preprocessor" class="surface-90639c0745">
 						Preprocessor
 					</a>
 				</Switch>
 			</div>
 
-			<div class="mb-4 mt-1 h-full overflow-auto overflow-x-visible py-2 pr-4">
-				<div class="flex flex-col">
+			<div class="surface-25065a9855">
+				<div class="surface-a2b0a0b0d2">
 					{#each navConfig.mainNav as navItem, index (navItem + index.toString())}
 						{#if navItem.href}
 							<MobileNavLink href={navItem.href} {open}>
@@ -65,11 +64,11 @@
 						{/if}
 					{/each}
 				</div>
-				<div class="flex flex-col space-y-2">
+				<div class="surface-5a782129da">
 					{#each navConfig.sidebarNav as navItem, index (index)}
-						<div class="flex flex-col pt-6">
+						<div class="surface-48743cd5f6">
 							<span
-								class="rounded-md px-3 pb-2 text-sm font-semibold uppercase tracking-wider text-neutral-400"
+								class="surface-66977f1dc8"
 								>{navItem.title}</span
 							>
 							{#if navItem?.items?.length}
@@ -89,11 +88,13 @@
 	</div>
 {/if}
 
-<style lang="postcss">
+<style lang="scss">
 	.menu,
 	.menu :global(*) {
-		@apply !ring-0;
-	}
+		
+		
+		box-shadow: 0 0 #0000, 0 0 #0000, 0 0 #0000 !important;
+}
 
 	.safe-area {
 		padding-bottom: calc(6.5rem + env(safe-area-inset-bottom));

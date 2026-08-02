@@ -25,7 +25,8 @@ const OPTION_PROPS = [
 		name: 'step',
 		type: 'number',
 		default: '1',
-		description: 'The amount to increment/decrement the value by when using the keyboard.',
+		description:
+			'The amount to increment/decrement the value by when using the keyboard.',
 	},
 	{
 		name: 'orientation',
@@ -43,7 +44,8 @@ const OPTION_PROPS = [
 		name: 'autoSort',
 		type: 'boolean',
 		default: 'true',
-		description: 'Whether to automatically sort the values array when using multiple thumbs.',
+		description:
+			'Whether to automatically sort the values array when using multiple thumbs.',
 	},
 	PROPS.DISABLED,
 ];
@@ -63,19 +65,22 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'value',
 			type: 'Writable<number[]>',
-			description: 'A writable store that can be used to update the slider value.',
+			description:
+				'A writable store that can be used to update the slider value.',
 			see: SEE.BRING_YOUR_OWN_STORE,
 		},
 		{
 			name: 'onValueChange',
 			type: 'ChangeFn<number[]>',
-			description: 'A callback that is called when the value of the slider changes.',
+			description:
+				'A callback that is called when the value of the slider changes.',
 			see: SEE.CHANGE_FUNCTIONS,
 		},
 		{
 			name: 'onValueCommitted',
 			type: '(value: number[]) => void',
-			description: 'The callback invoked when the user has committed the value of the slider.',
+			description:
+				'The callback invoked when the user has committed the value of the slider.',
 		},
 	],
 	elements: [
@@ -105,7 +110,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'value',
 			type: 'Writable<number[]>',
-			description: 'A writable store that can be used to get the current value of the slider.',
+			description:
+				'A writable store that can be used to get the current value of the slider.',
 		},
 		{
 			name: 'active',
@@ -192,11 +198,13 @@ const features = [
 const keyboard: KeyboardSchema = [
 	{
 		key: KBD.ARROW_RIGHT,
-		behavior: 'Increments/decrements by the `step` value depending on `orientation`.',
+		behavior:
+			'Increments/decrements by the `step` value depending on `orientation`.',
 	},
 	{
 		key: KBD.ARROW_LEFT,
-		behavior: 'Increments/decrements by the `step` value depending on `orientation`.',
+		behavior:
+			'Increments/decrements by the `step` value depending on `orientation`.',
 	},
 	{
 		key: KBD.ARROW_UP,

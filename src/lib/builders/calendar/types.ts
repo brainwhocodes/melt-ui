@@ -1,20 +1,19 @@
-import type { CalendarIdParts, createCalendar } from './create.js';
-import type { Writable } from 'svelte/store';
-import type { ChangeFn, IdObj } from '$lib/internal/helpers/index.js';
 import type { DateValue } from '@internationalized/date';
+import type { Writable } from 'svelte/store';
 import type { Matcher } from '$lib/index.js';
+import type { ChangeFn, IdObj } from '$lib/internal/helpers/index.js';
 import type { WhenTrue } from '$lib/internal/types.js';
+import type { CalendarIdParts, createCalendar } from './create.js';
 
-export type CalendarValue<Multiple extends boolean, Value extends DateValue = DateValue> = WhenTrue<
-	Multiple,
-	Value[],
-	Value
->;
+export type CalendarValue<
+	Multiple extends boolean,
+	Value extends DateValue = DateValue,
+> = WhenTrue<Multiple, Value[], Value>;
 
 export type CreateCalendarProps<
 	Multiple extends boolean = false,
 	Value extends DateValue = DateValue,
-	S extends CalendarValue<Multiple, Value> = CalendarValue<Multiple, Value>
+	S extends CalendarValue<Multiple, Value> = CalendarValue<Multiple, Value>,
 > = {
 	/**
 	 * Prevent deselecting the selected date(s), which would set the

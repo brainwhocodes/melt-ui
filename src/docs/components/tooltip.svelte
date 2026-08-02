@@ -24,14 +24,14 @@
 	<div
 		use:melt={$content}
 		in:fade={{ duration: 150 }}
-		class="z-50 rounded-md bg-neutral-700 px-2 py-1 text-sm text-neutral-50 shadow-sm"
+		class="surface-99dc174566"
 	>
 		<div use:melt={$arrow} />
 		{text}
 	</div>
 {/if}
 
-<style lang="postcss">
+<style lang="scss">
 	[data-melt-tooltip-trigger] {
 		display: grid;
 		place-items: center;

@@ -1,15 +1,15 @@
+import { derived, writable } from 'svelte/store';
 import {
 	addMeltEventListener,
-	makeElement,
 	createElHelpers,
 	disabledAttr,
+	makeElement,
 	omit,
 	overridable,
 	styleToString,
 	toWritableStores,
 } from '$lib/internal/helpers/index.js';
 import type { MeltActionReturn } from '$lib/internal/types.js';
-import { derived, writable } from 'svelte/store';
 import type { CollapsibleEvents } from './events.js';
 import type { CreateCollapsibleProps } from './types.js';
 
@@ -22,9 +22,14 @@ const defaults = {
 const { name } = createElHelpers('collapsible');
 
 export function createCollapsible(props?: CreateCollapsibleProps) {
-	const withDefaults = { ...defaults, ...props } satisfies CreateCollapsibleProps;
+	const withDefaults = {
+		...defaults,
+		...props,
+	} satisfies CreateCollapsibleProps;
 
-	const options = toWritableStores(omit(withDefaults, 'open', 'defaultOpen', 'onOpenChange'));
+	const options = toWritableStores(
+		omit(withDefaults, 'open', 'defaultOpen', 'onOpenChange'),
+	);
 	const { disabled, forceVisible } = options;
 
 	const openWritable = withDefaults.open ?? writable(withDefaults.defaultOpen);
@@ -36,7 +41,7 @@ export function createCollapsible(props?: CreateCollapsibleProps) {
 			({
 				'data-state': $open ? 'open' : 'closed',
 				'data-disabled': disabledAttr($disabled),
-			} as const),
+			}) as const,
 	});
 
 	const trigger = makeElement(name('trigger'), {
@@ -46,8 +51,10 @@ export function createCollapsible(props?: CreateCollapsibleProps) {
 				'data-state': $open ? 'open' : 'closed',
 				'data-disabled': disabledAttr($disabled),
 				disabled: disabledAttr($disabled),
-			} as const),
-		action: (node: HTMLElement): MeltActionReturn<CollapsibleEvents['trigger']> => {
+			}) as const,
+		action: (
+			node: HTMLElement,
+		): MeltActionReturn<CollapsibleEvents['trigger']> => {
 			const unsub = addMeltEventListener(node, 'click', () => {
 				const disabled = node.dataset.disabled !== undefined;
 				if (disabled) return;
@@ -62,7 +69,7 @@ export function createCollapsible(props?: CreateCollapsibleProps) {
 
 	const isVisible = derived(
 		[open, forceVisible],
-		([$open, $forceVisible]) => $open || $forceVisible
+		([$open, $forceVisible]) => $open || $forceVisible,
 	);
 
 	const content = makeElement(name('content'), {
@@ -73,7 +80,7 @@ export function createCollapsible(props?: CreateCollapsibleProps) {
 				'data-disabled': disabledAttr($disabled),
 				hidden: $isVisible ? undefined : true,
 				style: $isVisible ? undefined : styleToString({ display: 'none' }),
-			} as const),
+			}) as const,
 	});
 
 	return {

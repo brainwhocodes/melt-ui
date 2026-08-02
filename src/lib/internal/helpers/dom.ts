@@ -21,7 +21,9 @@ export function getTabbableNodes(container: HTMLElement): HTMLElement[] {
 			// `.tabIndex` is not the same as the `tabindex` attribute. It works on the
 			// runtime's understanding of tabbability, so this automatically accounts
 			// for any kind of element that could be tabbed to.
-			return node.tabIndex >= 0 ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+			return node.tabIndex >= 0
+				? NodeFilter.FILTER_ACCEPT
+				: NodeFilter.FILTER_SKIP;
 		},
 	});
 	while (walker.nextNode()) {

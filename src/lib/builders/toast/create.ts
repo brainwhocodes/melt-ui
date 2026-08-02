@@ -1,17 +1,17 @@
+import { derived, readonly, writable } from 'svelte/store';
 import { usePortal } from '$lib/internal/actions/index.js';
 import {
 	addMeltEventListener,
-	makeElement,
 	createElHelpers,
 	executeCallbacks,
 	generateId,
 	isTouch,
 	kbd,
+	makeElement,
 	noop,
 	toWritableStores,
 } from '$lib/internal/helpers/index.js';
 import type { MeltActionReturn } from '$lib/internal/types.js';
-import { derived, readonly, writable } from 'svelte/store';
 import type { ToastEvents } from './events.js';
 import type { AddToastProps, CreateToasterProps, Toast } from './types.js';
 
@@ -50,7 +50,7 @@ export function createToaster<T = object>(props?: CreateToasterProps) {
 				? null
 				: window.setTimeout(() => {
 						removeToast(ids.content);
-				  }, propsWithDefaults.closeDelay);
+					}, propsWithDefaults.closeDelay);
 
 		const getPercentage = () => {
 			const { createdAt, pauseDuration, closeDelay, pausedAt } = toast;
@@ -107,7 +107,8 @@ export function createToaster<T = object>(props?: CreateToasterProps) {
 	};
 	const restartToastTimer = (currentToast: Toast<T>) => {
 		const pausedAt = currentToast.pausedAt ?? currentToast.createdAt;
-		const elapsed = pausedAt - currentToast.createdAt - currentToast.pauseDuration;
+		const elapsed =
+			pausedAt - currentToast.createdAt - currentToast.pauseDuration;
 		const remaining = currentToast.closeDelay - elapsed;
 		currentToast.timeout = window.setTimeout(() => {
 			removeToast(currentToast.id);
@@ -144,7 +145,8 @@ export function createToaster<T = object>(props?: CreateToasterProps) {
 						switch (hover.get()) {
 							case 'pause': {
 								const currentToast = currentMap.get(node.id);
-								if (!currentToast || currentToast.closeDelay === 0) return currentMap;
+								if (!currentToast || currentToast.closeDelay === 0)
+									return currentMap;
 								pauseToastTimer(currentToast);
 								break;
 							}
@@ -164,7 +166,8 @@ export function createToaster<T = object>(props?: CreateToasterProps) {
 						switch (hover.get()) {
 							case 'pause': {
 								const currentToast = currentMap.get(node.id);
-								if (!currentToast || currentToast.closeDelay === 0) return currentMap;
+								if (!currentToast || currentToast.closeDelay === 0)
+									return currentMap;
 								restartToastTimer(currentToast);
 								break;
 							}
@@ -182,7 +185,7 @@ export function createToaster<T = object>(props?: CreateToasterProps) {
 				}),
 				() => {
 					removeToast(node.id);
-				}
+				},
 			);
 
 			return {
@@ -224,7 +227,7 @@ export function createToaster<T = object>(props?: CreateToasterProps) {
 				({
 					type: 'button',
 					'data-id': id,
-				} as const);
+				}) as const;
 		},
 		action: (node: HTMLElement): MeltActionReturn<ToastEvents['close']> => {
 			function handleClose() {
@@ -240,7 +243,7 @@ export function createToaster<T = object>(props?: CreateToasterProps) {
 					if (e.key !== kbd.ENTER && e.key !== kbd.SPACE) return;
 					e.preventDefault();
 					handleClose();
-				})
+				}),
 			);
 
 			return {

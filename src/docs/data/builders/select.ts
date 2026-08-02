@@ -53,13 +53,15 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'selected',
 			type: 'Writable<SelectOption<unknown>>',
-			description: 'A writable store that can be used to get or update or the selected option.',
+			description:
+				'A writable store that can be used to get or update or the selected option.',
 			see: SEE.BRING_YOUR_OWN_STORE,
 		},
 		{
 			name: 'onSelectedChange',
 			type: 'ChangeFn<SelectOption<unknown>>',
-			description: 'A callback that is called when the selected option changes.',
+			description:
+				'A callback that is called when the selected option changes.',
 			see: SEE.CHANGE_FUNCTIONS,
 		},
 		...OPTION_PROPS,
@@ -115,7 +117,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'open',
 			type: 'Writable<boolean>',
-			description: 'A writable store that returns whether or not the select is open.',
+			description:
+				'A writable store that returns whether or not the select is open.',
 		},
 		{
 			name: 'selected',
@@ -125,14 +128,16 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'selectedLabel',
 			type: 'Readable<string>',
-			description: "A readable store whose value is the selected option's label.",
+			description:
+				"A readable store whose value is the selected option's label.",
 		},
 	],
 	helpers: [
 		{
 			name: 'isSelected',
 			type: 'Readable<(value: unknown) => boolean>',
-			description: 'A derived store that returns whether or not the given value is selected.',
+			description:
+				'A derived store that returns whether or not the given value is selected.',
 		},
 	],
 	options: OPTION_PROPS,
@@ -246,7 +251,8 @@ const separator = elementSchema('separator', {
 });
 
 const group = elementSchema('group', {
-	description: 'A function which takes in a unique key to group options together.',
+	description:
+		'A function which takes in a unique key to group options together.',
 	props: [
 		{
 			name: 'key',
@@ -263,7 +269,8 @@ const group = elementSchema('group', {
 });
 
 const groupLabel = elementSchema('groupLabel', {
-	description: 'A function which takes in a unique key to group options together.',
+	description:
+		'A function which takes in a unique key to group options together.',
 	props: [
 		{
 			name: 'key',

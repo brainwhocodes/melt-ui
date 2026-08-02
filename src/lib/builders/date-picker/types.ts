@@ -1,11 +1,14 @@
-import type { Writable } from 'svelte/store';
-import type { ChangeFn } from '$lib/internal/helpers/index.js';
-import type { createDatePicker } from './create.js';
-import type { CreateCalendarProps, CreatePopoverProps } from '$lib/builders/index.js';
 import type { DateValue } from '@internationalized/date';
-import type { CreateDateFieldProps } from '../date-field/types.js';
+import type { Writable } from 'svelte/store';
+import type {
+	CreateCalendarProps,
+	CreatePopoverProps,
+} from '$lib/builders/index.js';
 import type { Matcher } from '$lib/index.js';
+import type { ChangeFn } from '$lib/internal/helpers/index.js';
 import type { RenameProperties } from '$lib/internal/types.js';
+import type { CreateDateFieldProps } from '../date-field/types.js';
+import type { createDatePicker } from './create.js';
 
 export type DatePickerProps = {
 	/**
@@ -130,14 +133,20 @@ type ModifiedDateFieldProps = Omit<
 	'readonlySegments'
 >;
 
-type ModifiedCalendarProps = RenameProperties<CreateCalendarProps, { ids: 'calendarIds' }>;
+type ModifiedCalendarProps = RenameProperties<
+	CreateCalendarProps,
+	{ ids: 'calendarIds' }
+>;
 type ModifiedPopoverProps = Omit<
 	RenameProperties<CreatePopoverProps, { ids: 'popoverIds' }>,
 	'disabled'
 >;
 
 export type CreateDatePickerProps = Expand<
-	DatePickerProps & ModifiedDateFieldProps & ModifiedPopoverProps & ModifiedCalendarProps
+	DatePickerProps &
+		ModifiedDateFieldProps &
+		ModifiedPopoverProps &
+		ModifiedCalendarProps
 >;
 
 export type DatePicker = ReturnType<typeof createDatePicker>;

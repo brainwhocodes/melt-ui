@@ -1,6 +1,7 @@
 import type { BuilderReturn } from '$lib/internal/types.js';
 import type { _Menu } from '../menu/index.js';
 import type { createContextMenu } from './create.js';
+
 export type { ContextMenuComponentEvents } from './events.js';
 
 // Props
@@ -19,17 +20,24 @@ export type ContextMenuOptions = ContextMenu['options'];
 export type ContextMenuStates = ContextMenu['states'];
 export type ContextMenuBuilders = ContextMenu['builders'];
 
-export type ContextMenuSubmenu = BuilderReturn<ContextMenuBuilders['createSubmenu']>;
+export type ContextMenuSubmenu = BuilderReturn<
+	ContextMenuBuilders['createSubmenu']
+>;
 export type ContextMenuSubmenuElements = ContextMenuSubmenu['elements'];
 export type ContextMenuSubmenuOptions = ContextMenuSubmenu['options'];
 export type ContextMenuSubmenuStates = ContextMenuSubmenu['states'];
 
-export type ContextMenuRadioGroup = BuilderReturn<ContextMenuBuilders['createMenuRadioGroup']>;
+export type ContextMenuRadioGroup = BuilderReturn<
+	ContextMenuBuilders['createMenuRadioGroup']
+>;
 export type ContextMenuRadioGroupElements = ContextMenuRadioGroup['elements'];
 export type ContextMenuRadioGroupStates = ContextMenuRadioGroup['states'];
 export type ContextMenuRadioGroupHelpers = ContextMenuRadioGroup['helpers'];
 
-export type ContextMenuCheckboxItem = BuilderReturn<ContextMenuBuilders['createCheckboxItem']>;
-export type ContextMenuCheckboxItemElements = ContextMenuCheckboxItem['elements'];
+export type ContextMenuCheckboxItem = BuilderReturn<
+	ContextMenuBuilders['createCheckboxItem']
+>;
+export type ContextMenuCheckboxItemElements =
+	ContextMenuCheckboxItem['elements'];
 export type ContextMenuCheckboxItemStates = ContextMenuCheckboxItem['states'];
 export type ContextMenuCheckboxItemHelpers = ContextMenuCheckboxItem['helpers'];

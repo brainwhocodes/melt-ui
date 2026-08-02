@@ -21,8 +21,8 @@
 	aria-label="Update dimensions"
 	data-testid="popover-trigger-{level}"
 >
-	<Settings2 class="h-4 w-4" />
-	<span class="sr-only">Open Popover</span>
+	<Settings2 class="surface-6afd848cde" />
+	<span class="surface-e1d8de000e">Open Popover</span>
 </button>
 
 {#if $open || !forceVisible}

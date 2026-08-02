@@ -15,23 +15,23 @@
 		</svelte:fragment>
 	</APITableHeading>
 
-	<div class="mb-4 mt-2">
-		<div class="overflow-x-auto sm:mx-0">
-			<div class="inline-block min-w-full">
-				<table class="w-full min-w-[540px] text-left sm:min-w-full">
-					<tbody class="divide-y divide-neutral-700">
-						<tr class="w-full text-neutral-300">
-							<td class="w-1/2 whitespace-nowrap py-2 pl-4 text-sm font-medium sm:pl-0">
+	<div class="surface-6080e285bb">
+		<div class="surface-1a0a093d96">
+			<div class="surface-743a6a7d12">
+				<table class="surface-4acdcaec51">
+					<tbody class="surface-d04f3c138a">
+						<tr class="surface-161f422285">
+							<td class="surface-b448bad6d1">
 								Data Attribute
 							</td>
-							<td class="w-1/2 whitespace-nowrap py-2 text-sm font-medium">Value</td>
+							<td class="surface-d088e670aa">Value</td>
 						</tr>
 						{#each data as { name, value }}
 							<tr>
-								<td class="py-3 pl-4 align-baseline sm:pl-0">
+								<td class="surface-6ed67e8e92">
 									<code>{`[${name}]`}</code>
 								</td>
-								<td class="py-3 align-baseline text-sm">
+								<td class="surface-4bf8972a60">
 									<p>{@html transformAPIString(value)}</p>
 								</td>
 							</tr>

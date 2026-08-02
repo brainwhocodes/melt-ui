@@ -1,11 +1,21 @@
-import type { CreateRangeCalendarProps, DateRange } from '$lib/index.js';
-import { CalendarDate, CalendarDateTime, toZoned, type DateValue } from '@internationalized/date';
+import {
+	CalendarDate,
+	CalendarDateTime,
+	type DateValue,
+	HebrewCalendar,
+	toZoned,
+} from '@internationalized/date';
 import { render } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { tick } from 'svelte';
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 import { describe } from 'vitest';
+import {
+	type CreateRangeCalendarProps,
+	createRangeCalendar,
+	type DateRange,
+} from '$lib/index.js';
 import { testKbd as kbd } from '../utils.js';
 import RangeCalendarTest from './RangeCalendarTest.svelte';
 
@@ -25,12 +35,22 @@ const zonedDateTimeRange = {
 };
 
 const controlledCalendarDateRange = writable<DateRange>(calendarDateRange);
-const controlledCalendarDateTimeRange = writable<DateRange>(calendarDateTimeRange);
+const controlledCalendarDateTimeRange = writable<DateRange>(
+	calendarDateTimeRange,
+);
 const controlledZonedDateTimeRange = writable<DateRange>(zonedDateTimeRange);
 
 const narrowWeekdays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 const shortWeekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const longWeekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const longWeekdays = [
+	'Sunday',
+	'Monday',
+	'Tuesday',
+	'Wednesday',
+	'Thursday',
+	'Friday',
+	'Saturday',
+];
 
 function setup(props: CreateRangeCalendarProps = {}) {
 	const user = userEvent.setup();
@@ -51,6 +71,36 @@ describe('Range Calendar', () => {
 
 			expect(await axe(container)).toHaveNoViolations();
 		});
+	});
+
+	test('setMonth enforces Gregorian one-based integer bounds', () => {
+		const calendar = createRangeCalendar({
+			defaultPlaceholder: new CalendarDate(2024, 6, 15),
+		});
+
+		calendar.helpers.setMonth(1);
+		expect(get(calendar.states.placeholder).month).toBe(1);
+		calendar.helpers.setMonth(12);
+		expect(get(calendar.states.placeholder).month).toBe(12);
+
+		for (const month of [0, 13, 1.5]) {
+			expect(() => calendar.helpers.setMonth(month)).toThrow(
+				'Month must be an integer between 1 and 12.',
+			);
+		}
+		expect(get(calendar.states.placeholder).month).toBe(12);
+	});
+
+	test('setMonth uses the active calendar month count', () => {
+		const calendar = createRangeCalendar({
+			defaultPlaceholder: new CalendarDate(new HebrewCalendar(), 5784, 6, 15),
+		});
+
+		calendar.helpers.setMonth(13);
+		expect(get(calendar.states.placeholder).month).toBe(13);
+		expect(() => calendar.helpers.setMonth(14)).toThrow(
+			'Month must be an integer between 1 and 13.',
+		);
 	});
 	test('populated with defaultValue - CalendarDate', async () => {
 		const { getByTestId, calendar } = setup({
@@ -234,7 +284,9 @@ describe('Range Calendar', () => {
 		const heading = getByTestId('heading');
 		expect(heading).toHaveTextContent('January - February 1980');
 
-		const firstMonthDayDateStr = calendarDateRange.start.set({ day: 12 }).toString();
+		const firstMonthDayDateStr = calendarDateRange.start
+			.set({ day: 12 })
+			.toString();
 
 		const firstMonthDay = getByTestId('month-1-date-12');
 		expect(firstMonthDay).toHaveTextContent('12');
@@ -242,7 +294,9 @@ describe('Range Calendar', () => {
 
 		const secondMonthDay = getByTestId('month-2-date-15');
 
-		const secondMonthDayDateStr = calendarDateRange.start.set({ day: 15, month: 2 }).toString();
+		const secondMonthDayDateStr = calendarDateRange.start
+			.set({ day: 15, month: 2 })
+			.toString();
 
 		expect(secondMonthDay).toHaveTextContent('15');
 		expect(secondMonthDay).toHaveAttribute('data-value', secondMonthDayDateStr);
@@ -251,7 +305,10 @@ describe('Range Calendar', () => {
 
 		await user.click(nextButton);
 		expect(heading).toHaveTextContent('March - April 1980');
-		expect(firstMonthDay).not.toHaveAttribute('data-value', firstMonthDayDateStr);
+		expect(firstMonthDay).not.toHaveAttribute(
+			'data-value',
+			firstMonthDayDateStr,
+		);
 
 		await user.click(prevButton);
 		expect(heading).toHaveTextContent('January - February 1980');
@@ -281,7 +338,7 @@ describe('Range Calendar', () => {
 	test('controlled value should update selected value', async () => {
 		const valueStore = writable<DateRange>(undefined);
 
-		const { getByTestId } = setup({
+		const { getByTestId, calendar, user } = setup({
 			value: valueStore,
 		});
 
@@ -303,6 +360,33 @@ describe('Range Calendar', () => {
 		await tick();
 		expect(startValue).toHaveTextContent('2023-08-10');
 		expect(endValue).toHaveTextContent('2023-10-11');
+
+		const internalStart = getByTestId('internal-start-value');
+		const internalEnd = getByTestId('internal-end-value');
+
+		valueStore.set({
+			start: new CalendarDate(2024, 2, 3),
+			end: undefined,
+		});
+		await tick();
+		expect(internalStart).toHaveTextContent('undefined');
+		expect(internalEnd).toHaveTextContent('undefined');
+
+		valueStore.set({ start: undefined, end: undefined });
+		await tick();
+		expect(internalStart).toHaveTextContent('undefined');
+		expect(internalEnd).toHaveTextContent('undefined');
+
+		const firstAvailableCell = calendar.querySelector<HTMLElement>(
+			'[data-melt-calendar-cell]:not([data-outside-month]):not([data-disabled])',
+		);
+		if (!firstAvailableCell)
+			throw new Error('Expected an available calendar cell');
+		await user.click(firstAvailableCell);
+
+		expect(internalStart).not.toHaveTextContent('undefined');
+		expect(internalEnd).toHaveTextContent('undefined');
+		expect(get(valueStore)).toEqual({ start: undefined, end: undefined });
 	});
 
 	test('controlled placeholder should change view', async () => {
@@ -394,7 +478,8 @@ describe('Range Calendar', () => {
 		await user.click(thirdDayInMonth);
 		await tick();
 
-		const selectedDaysAfterClick = getByTestId('calendar').querySelectorAll('[data-selected]');
+		const selectedDaysAfterClick =
+			getByTestId('calendar').querySelectorAll('[data-selected]');
 		expect(selectedDaysAfterClick).toHaveLength(3);
 	});
 

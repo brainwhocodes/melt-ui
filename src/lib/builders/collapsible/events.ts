@@ -1,4 +1,7 @@
-import type { GroupedEvents, MeltComponentEvents } from '$lib/internal/types.js';
+import type {
+	GroupedEvents,
+	MeltComponentEvents,
+} from '$lib/internal/types.js';
 
 export const collapsibleEvents = {
 	trigger: ['click'] as const,

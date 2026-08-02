@@ -7,23 +7,23 @@
 </script>
 
 {#if keyboard && keyboard.length}
-	<div class="mb-12 mt-4">
-		<div class="overflow-x-auto sm:mx-0">
-			<div class="inline-block min-w-full">
-				<table class="w-full min-w-[540px] border-b border-neutral-700 text-left sm:min-w-full">
-					<tbody class="divide-y divide-neutral-700">
-						<tr class="w-full text-neutral-300">
-							<td class="w-1/6 whitespace-nowrap py-2 pl-4 pr-4 text-sm font-medium sm:pl-0">
+	<div class="surface-b0b7d304e5">
+		<div class="surface-9dcbb18e9a">
+			<div class="surface-44be816e1b">
+				<table class="surface-0d89222460">
+					<tbody class="surface-a827207c7f">
+						<tr class="surface-040b34a2fe">
+							<td class="surface-e7aea2c7d5">
 								Key
 							</td>
-							<td class="w-5/6 whitespace-nowrap py-2 text-sm font-medium">Behavior</td>
+							<td class="surface-1c7b64ace2">Behavior</td>
 						</tr>
 						{#each keyboard as { key, behavior }}
 							<tr>
-								<td class="py-3 pl-4 pr-4 align-baseline sm:pl-0">
+								<td class="surface-2cc8e412fb">
 									<Kbd>{key}</Kbd>
 								</td>
-								<td class="py-3 align-baseline text-sm">
+								<td class="surface-31ddb2778c">
 									<p>{@html transformAPIString(behavior, true)}</p>
 								</td>
 							</tr>

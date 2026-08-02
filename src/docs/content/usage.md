@@ -35,9 +35,8 @@ Each component is different, so be sure to check out the documentation before at
 
 ### Styling
 
-Melt UI leaves the styling up to you. Whether you prefer scoped or global CSS, a utility framework
-like [TailwindCSS](https://tailwindcss.com), or third-party components, as long as you can pass in
-Melt's props, it's all good.
+Melt UI leaves the styling up to you. Use scoped or global CSS, your preferred design system, or
+third-party components, as long as you can pass Melt's props to the elements.
 
 ```svelte
 <script>
@@ -56,8 +55,8 @@ Melt's props, it's all good.
 <Button on:click={() => console.log('clicked')} {...$trigger} action={trigger}>
   {$open ? 'Close' : 'Open'}
 </Button>
-<!-- Using an utility class library, such as Tailwind -->
-<div class="rounded-md p-4 text-orange-500 shadow-sm" use:melt={$content}>
+<!-- Using a shared component style -->
+<div class="example-content" use:melt={$content}>
   Obi-Wan says: Hello there!
 </div>
 </div>

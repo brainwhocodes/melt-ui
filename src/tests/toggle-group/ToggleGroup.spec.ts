@@ -1,12 +1,12 @@
 import { render } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { axe } from 'jest-axe';
-import { describe } from 'vitest';
-import ToggleGroupTest from './ToggleGroupTest.svelte';
 import { tick } from 'svelte';
 import { writable } from 'svelte/store';
+import { describe } from 'vitest';
 import type { CreateToggleGroupProps } from '$lib/index.js';
 import { testKbd as kbd } from '../utils.js';
+import ToggleGroupTest from './ToggleGroupTest.svelte';
 
 const items = ['item-1', 'item-2', 'item-3'];
 const defaults: { items: string[]; type: 'single' | 'multiple' } = {
@@ -15,7 +15,10 @@ const defaults: { items: string[]; type: 'single' | 'multiple' } = {
 };
 
 function setup<T extends 'single' | 'multiple'>(
-	props?: CreateToggleGroupProps<T> & { items?: string[]; type: 'single' | 'multiple' }
+	props?: CreateToggleGroupProps<T> & {
+		items?: string[];
+		type: 'single' | 'multiple';
+	},
 ) {
 	const withDefaults = { ...defaults, ...props };
 	const user = userEvent.setup();
@@ -99,7 +102,9 @@ describe('Toggle Group', () => {
 		await user.keyboard(kbd.SPACE);
 
 		const root = getByTestId('root');
-		const checkedItems = root.querySelectorAll<HTMLElement>('[aria-checked="true"]');
+		const checkedItems = root.querySelectorAll<HTMLElement>(
+			'[aria-checked="true"]',
+		);
 		expect(checkedItems.length).toBe(1);
 	});
 
@@ -119,7 +124,9 @@ describe('Toggle Group', () => {
 		expect(getByTestId(items[1])).toHaveAttribute('aria-pressed', 'true');
 
 		const root = getByTestId('root');
-		const checkedItems = root.querySelectorAll<HTMLElement>('[aria-pressed="true"]');
+		const checkedItems = root.querySelectorAll<HTMLElement>(
+			'[aria-pressed="true"]',
+		);
 		expect(checkedItems.length).toBe(2);
 	});
 
@@ -243,7 +250,9 @@ describe('Toggle Group', () => {
 		});
 
 		const root = getByTestId('root');
-		const checkedItems = root.querySelectorAll<HTMLElement>('[aria-checked="true"]');
+		const checkedItems = root.querySelectorAll<HTMLElement>(
+			'[aria-checked="true"]',
+		);
 		expect(checkedItems.length).toBe(0);
 
 		const item2 = getByTestId(items[1]);
@@ -259,7 +268,9 @@ describe('Toggle Group', () => {
 		});
 
 		const root = getByTestId('root');
-		const pressedItems = root.querySelectorAll<HTMLElement>('[aria-pressed="true"]');
+		const pressedItems = root.querySelectorAll<HTMLElement>(
+			'[aria-pressed="true"]',
+		);
 		expect(pressedItems.length).toBe(0);
 
 		const item3 = getByTestId(items[2]);

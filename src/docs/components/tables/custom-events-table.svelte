@@ -16,21 +16,21 @@
 		</svelte:fragment>
 	</APITableHeading>
 
-	<div class="mb-4 mt-2">
-		<div class="overflow-x-auto sm:mx-0">
-			<div class="inline-block min-w-full">
-				<table class="w-full min-w-[540px] text-left sm:min-w-full">
-					<tbody class="divide-y divide-neutral-700">
-						<tr class="w-full text-neutral-300">
-							<td class="w-1/2 whitespace-nowrap py-2 pl-4 text-sm font-medium sm:pl-0"> Event </td>
-							<td class="w-1/2 whitespace-nowrap py-2 text-sm font-medium">Value</td>
+	<div class="surface-b2ffcaf81e">
+		<div class="surface-5e7c273a8e">
+			<div class="surface-8081b0b685">
+				<table class="surface-20a4ee4540">
+					<tbody class="surface-b4f10155df">
+						<tr class="surface-4615942637">
+							<td class="surface-29653149b9"> Event </td>
+							<td class="surface-07d6f28bd2">Value</td>
 						</tr>
 						{#each data as { name }}
 							<tr>
-								<td class="py-3 pl-4 align-baseline sm:pl-0">
+								<td class="surface-7538e58a4c">
 									<code>{name}</code>
 								</td>
-								<td class="py-3 align-baseline text-sm">
+								<td class="surface-512e1786e2">
 									<CustomEventDialog />
 								</td>
 							</tr>

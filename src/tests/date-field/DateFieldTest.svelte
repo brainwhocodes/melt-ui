@@ -1,6 +1,9 @@
 <script lang="ts">
-	import { createDateField, type CreateDateFieldProps } from '$lib/builders/index.js';
-	import { melt } from '$lib/index.js';
+	import {
+		createDateField,
+		melt,
+		type CreateDateFieldProps,
+	} from '$lib/index.js';
 	import { removeUndefined } from '../utils.js';
 
 	export let value: CreateDateFieldProps['value'] = undefined;
@@ -21,6 +24,7 @@
 	const {
 		elements: { field, segment, label, validation },
 		states: { value: insideValue, segmentContents },
+		options: { hourCycle: hourCycleOption, locale: localeOption },
 	} = createDateField(
 		removeUndefined({
 			value,
@@ -42,21 +46,21 @@
 </script>
 
 <main>
-	<div class="flex w-full flex-col items-center gap-3">
-		<div class="flex w-full items-center justify-center">
-			<p class="text-xs" data-testid="inside-value">{$insideValue}</p>
+	<div class="surface-593199ae65">
+		<div class="surface-da85031cc6">
+			<p class="surface-e3678618e9" data-testid="inside-value">{$insideValue}</p>
 		</div>
 		<div>
-			<span use:melt={$label} class="text-magnum-800" data-testid="label">Date</span>
+			<span use:melt={$label} class="surface-07ddc06ea2" data-testid="label">Date</span>
 			<div
 				use:melt={$field}
-				class="flex w-full max-w-[300px] items-center rounded-md border bg-white p-1.5 text-magnum-800"
+				class="surface-b963add057"
 				data-testid="field"
 			>
 				{#each $segmentContents as seg, i (i)}
 					<div
 						use:melt={$segment(seg.part)}
-						class="segment whitespace-nowrap"
+						class="segment surface-aa97e97ecb"
 						data-testid={seg.part === 'literal' ? undefined : seg.part}
 					>
 						{seg.value}
@@ -67,3 +71,19 @@
 		</div>
 	</div>
 </main>
+
+<button data-testid="set-locale-en-gb" on:click={() => ($localeOption = 'en-GB')}>
+	Use en-GB
+</button>
+<button data-testid="set-locale-en-us" on:click={() => ($localeOption = 'en-US')}>
+	Use en-US
+</button>
+<button data-testid="set-hour-cycle-12" on:click={() => ($hourCycleOption = 12)}>
+	Use 12-hour cycle
+</button>
+<button data-testid="set-hour-cycle-24" on:click={() => ($hourCycleOption = 24)}>
+	Use 24-hour cycle
+</button>
+<button data-testid="clear-hour-cycle" on:click={() => ($hourCycleOption = undefined)}>
+	Use locale hour cycle
+</button>

@@ -40,13 +40,14 @@ export function genProps(name: string, props: PropGen[]): Props {
 
 export function genElements(
 	name: string,
-	elements: { name: string; description: string; link?: string }[]
+	elements: { name: string; description: string; link?: string }[],
 ): ReturnedProps {
 	return elements.map((element) => {
 		return {
 			name: element.name,
 			description:
-				element.description ?? `The builder store used to create the ${name} ${element.name}.`,
+				element.description ??
+				`The builder store used to create the ${name} ${element.name}.`,
 			link: element.link ?? `#${element.name.toLowerCase()}`,
 		};
 	});
@@ -90,8 +91,18 @@ type ElementSchema = {
 };
 
 export function builderSchema(name: string, schema: BuilderSchema): APISchema {
-	const { title, description, props, elements, helpers, states, builders, actions, options, ids } =
-		schema;
+	const {
+		title,
+		description,
+		props,
+		elements,
+		helpers,
+		states,
+		builders,
+		actions,
+		options,
+		ids,
+	} = schema;
 
 	const localProps = props ? [...props] : [];
 	if (ids) {

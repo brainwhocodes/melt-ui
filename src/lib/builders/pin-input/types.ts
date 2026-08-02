@@ -1,7 +1,8 @@
+import type { Writable } from 'svelte/store';
 import type { ChangeFn, IdObj } from '$lib/internal/helpers/index.js';
 import type { BuilderReturn } from '$lib/internal/types.js';
-import type { Writable } from 'svelte/store';
-import type { PinInputIdParts, createPinInput } from './create.js';
+import type { createPinInput, PinInputIdParts } from './create.js';
+
 export type { PinInputComponentEvents } from './events.js';
 
 export type CreatePinInputProps = {

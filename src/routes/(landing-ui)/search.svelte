@@ -83,24 +83,23 @@
 />
 
 <Tooltip text="Search">
-	<button class="transition-colors hover:text-neutral-50" use:melt={$trigger}>
-		<SearchIcon class="h-5 w-5" />
+	<button class="surface-1f07b58ff2" use:melt={$trigger}>
+		<SearchIcon class="surface-df1bc37795" />
 	</button>
 </Tooltip>
 
-<div use:melt={$portalled} class="contents">
-	<div use:melt={$overlay} class="fixed inset-0 z-40 bg-black bg-opacity-50" />
+<div use:melt={$portalled} class="surface-f4b2afd98c">
+	<div use:melt={$overlay} class="surface-7ef270ecc5" />
 	<div
 		use:melt={$content}
-		class="fixed left-1/2 top-4 z-50 grid -translate-x-1/2 place-items-center md:top-64"
+		class="surface-4aa8c6d24e"
 	>
-		<div class="flex flex-col gap-1">
-			<div class="relative">
+		<div class="surface-9143f75033">
+			<div class="surface-de57919a1f">
 				<input
 					bind:this={comboboxInput}
 					use:melt={$input}
-					class="flex h-10 w-[calc(100vw-2rem)] max-w-[600px] items-center justify-between rounded-lg border
-            border-neutral-500 bg-neutral-800 px-3 pl-8 text-white focus:border-magnum-400"
+					class="surface-6d7884f481"
 					placeholder="Search..."
 					on:keydown={(e) => {
 						if (e.key === 'Escape') {
@@ -109,11 +108,11 @@
 						}
 					}}
 				/>
-				<SearchIcon class="absolute left-2 top-1/2 size-4 -translate-y-1/2" />
+				<SearchIcon class="surface-9b566a0be7" />
 				{#if search}
 					{#await search}
-						<div class="absolute right-2 top-1/2 -translate-y-1/2">
-							<LoaderIcon class="size-4 animate-spin" />
+						<div class="surface-368f86308a">
+							<LoaderIcon class="surface-468304606b" />
 						</div>
 					{/await}
 				{/if}
@@ -121,16 +120,16 @@
 		</div>
 
 		<div
-			class="z-50 flex max-h-[min(600px,50vh)] flex-col"
+			class="preview-limit-h-min-600px-50vh surface-849326f3f2"
 			use:melt={$menu}
-			class:hidden={!$inputValue}
+			class:preview-hidden={!$inputValue}
 		>
 			{#if search}
 				{#await search then results}
 					<div
-						class="flex max-h-full flex-col gap-0 overflow-y-auto rounded-lg bg-neutral-800 px-2 py-2 text-white"
+						class="surface-1fb1ece7fd"
 					>
-						<p aria-live="polite" class="px-4 py-1 font-light opacity-50">
+						<p aria-live="polite" class="surface-3af95bbfc1">
 							{results.length === 0 ? 'No results' : `Found ${results.length} results`}
 						</p>
 						{#each results as data, index (index)}
@@ -138,37 +137,37 @@
 
 							<div
 								use:melt={$option({ value: data, label: data.meta.title })}
-								class="relative scroll-my-2 rounded-md px-4 py-2 data-[disabled]:opacity-50"
+								class="surface-ae2c8b782e"
 							>
 								<a
-									class="title text-lg font-semibold underline hover:opacity-75"
+									class="title surface-b08ac68b8d"
 									href={sanitizeLink(data.url)}>{data.meta.title}</a
 								>
-								<p class="mt-1 font-light">
+								<p class="surface-c3e8f3c0ff">
 									{@html data.excerpt}
 								</p>
 							</div>
 							{#each data.sub_results.filter(({ title }) => title !== data.meta.title) as subresult}
 								<div
-									class="subresult ml-3 scroll-my-2 rounded-md py-2 pl-3"
+									class="subresult surface-e73dd998e6"
 									use:melt={$option({ value: subresult, label: subresult.title })}
 								>
-									<div class="flex items-center gap-1">
-										<CornerDownRight class="size-4 opacity-75" />
+									<div class="surface-3c2d90a018">
+										<CornerDownRight class="surface-e5d26165c8" />
 										<a
-											class="font-semibold underline hover:opacity-75"
+											class="surface-fc304e40e4"
 											href={sanitizeLink(subresult.url)}
 										>
 											{subresult.title}
 										</a>
 									</div>
-									<p class="mt-2 text-sm font-light opacity-75">
+									<p class="surface-3bcedf56c8">
 										{@html subresult.excerpt}
 									</p>
 								</div>
 							{/each}
 							{#if !isLast}
-								<hr class="mx-4 my-2 border-neutral-700" />
+								<hr class="surface-464b00330d" />
 							{/if}
 						{/each}
 					</div>
@@ -178,28 +177,24 @@
 	</div>
 </div>
 
-<style lang="postcss">
+<style lang="scss">
 	[data-melt-combobox-menu] :global(mark) {
-		background-color: theme('colors.magnum.400/0.5');
-		color: theme('colors.white');
-		border-radius: theme('borderRadius.sm');
+		background-color: rgb(var(--color-magnum-400) / 0.5);
+		color: rgb(var(--color-white) / 1);
+		border-radius: 0.125rem;
 		padding-inline: 1px;
 		font-weight: 500;
 	}
 
 	.subresult :global(mark) {
-		background-color: theme('colors.magnum.400/0.5');
-		color: theme('colors.white');
+		background-color: rgb(var(--color-magnum-400) / 0.5);
+		color: rgb(var(--color-white) / 1);
 		font-weight: 300;
 	}
 
 	[data-highlighted] {
-		background-color: theme('colors.magnum.400/0.25');
-		color: theme('colors.white');
+		background-color: rgb(var(--color-magnum-400) / 0.25);
+		color: rgb(var(--color-white) / 1);
 
-		/* :global(mark) {
-			background-color: theme('colors.magnum.500');
-			color: theme('colors.magnum.100');
-		} */
 	}
 </style>

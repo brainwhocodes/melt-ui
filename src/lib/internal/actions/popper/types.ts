@@ -1,11 +1,11 @@
+import type { VirtualElement } from '@floating-ui/core';
+import type { Writable } from 'svelte/store';
 import type {
+	EscapeKeydownConfig,
 	FloatingConfig,
 	FocusTrapConfig,
 	PortalConfig,
-	EscapeKeydownConfig,
 } from '$lib/internal/actions/index.js';
-import type { VirtualElement } from '@floating-ui/core';
-import type { Writable } from 'svelte/store';
 import type { ModalConfig } from '../modal/types.js';
 import type { PreventTextSelectionOverflowConfig } from '../prevent-text-selection-overflow/types.js';
 

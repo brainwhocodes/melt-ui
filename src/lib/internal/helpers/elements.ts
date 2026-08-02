@@ -18,7 +18,7 @@ function getPortalParent(node: HTMLElement) {
  */
 export function getPortalDestination(
 	node: HTMLElement,
-	portalProp: string | HTMLElement | undefined | null
+	portalProp: string | HTMLElement | undefined | null,
 ) {
 	// user-specified portal prop, use it
 	if (portalProp !== undefined) return portalProp;

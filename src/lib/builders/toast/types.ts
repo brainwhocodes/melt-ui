@@ -1,5 +1,6 @@
 import type { BuilderReturn } from '$lib/internal/types.js';
 import type { createToaster } from './create.js';
+
 export type { ToastComponentEvents } from './events.js';
 export type EmptyType = Record<never, never>;
 
@@ -33,7 +34,15 @@ export type Toast<T = object> = {
 };
 
 export type Toasts<T = object> = BuilderReturn<typeof createToaster<T>>;
-export type ToastsElements<T = object> = BuilderReturn<typeof createToaster<T>>['elements'];
-export type ToastsOptions<T = object> = BuilderReturn<typeof createToaster<T>>['options'];
-export type ToastsStates<T = object> = BuilderReturn<typeof createToaster<T>>['states'];
-export type ToastsHelpers<T = object> = BuilderReturn<typeof createToaster<T>>['helpers'];
+export type ToastsElements<T = object> = BuilderReturn<
+	typeof createToaster<T>
+>['elements'];
+export type ToastsOptions<T = object> = BuilderReturn<
+	typeof createToaster<T>
+>['options'];
+export type ToastsStates<T = object> = BuilderReturn<
+	typeof createToaster<T>
+>['states'];
+export type ToastsHelpers<T = object> = BuilderReturn<
+	typeof createToaster<T>
+>['helpers'];

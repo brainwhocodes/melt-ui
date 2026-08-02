@@ -23,41 +23,46 @@
 <div
 	use:melt={$root}
 	class={cn(
-		"flex items-center overflow-hidden rounded-xl shadow-sm data-[orientation='vertical']:flex-col",
+		"preview-state-orientation-layout-col-2 surface-92922a8ebd",
 		className
 	)}
 	aria-label="Text alignment"
 >
 	<button class="toggle-item" use:melt={$item('left')} aria-label="Left aligned">
-		<AlignLeft class="size-5" />
+		<AlignLeft class="surface-6d7c12cc54" />
 	</button>
 	<button class="toggle-item" use:melt={$item('center')} aria-label="Center aligned">
-		<AlignCenter class="size-5" />
+		<AlignCenter class="surface-896575d199" />
 	</button>
 	<button class="toggle-item" use:melt={$item('right')} aria-label="Right aligned">
-		<AlignRight class="size-5" />
+		<AlignRight class="surface-39c14cad45" />
 	</button>
 </div>
 
-<style lang="postcss">
+<style lang="scss">
 	.toggle-item {
 		display: grid;
 		place-items: center;
 		align-items: center;
 
-		background-color: theme('colors.neutral.100');
-		color: theme('colors.neutral.400');
-		line-height: theme('lineHeight.4');
+		background-color: rgb(var(--color-neutral-100) / 1);
+		color: rgb(var(--color-neutral-400) / 1);
+		line-height: 1rem;
 		outline: none;
 
-		height: theme('height.12');
-		width: theme('width.12');
+		height: 3rem;
+		width: 3rem;
 
 		position: relative;
 
-		@apply transition;
+		transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
 
-		&::after {
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+		transition-duration: 150ms;
+	}
+
+		.toggle-item::after {
 			position: absolute;
 			left: 50%;
 			bottom: 0.25rem;
@@ -65,33 +70,34 @@
 			content: '';
 			width: 0.25rem;
 			height: 0.25rem;
-			border-radius: theme('borderRadius.full');
-			background-color: theme('colors.magnum.400');
+			border-radius: 9999px;
+			background-color: rgb(var(--color-magnum-400) / 1);
 			opacity: 0;
-			@apply transition;
+			transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+			transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+			transition-duration: 150ms;
 		}
 
-		&:focus::after {
+		.toggle-item:focus::after {
 			opacity: 1;
 		}
-	}
 
 	.toggle-item[data-disabled] {
-		@apply cursor-not-allowed;
-	}
+		cursor: not-allowed;
+}
 
-	.toggle-item[data-orientation='horizontal'] {
-		&:first-child {
-			@apply rounded-l-xl;
-		}
+	.toggle-item[data-orientation='horizontal']:first-child {
+		border-top-left-radius: 0.75rem;
+		border-bottom-left-radius: 0.75rem;
+}
 
-		&:last-child {
-			@apply rounded-r-xl;
-		}
-	}
+	.toggle-item[data-orientation='horizontal']:last-child {
+		border-top-right-radius: 0.75rem;
+		border-bottom-right-radius: 0.75rem;
+}
 
 	.toggle-item[data-state='on'] {
-		background-color: theme('colors.white');
-		color: theme('colors.magnum.800');
+		background-color: rgb(var(--color-white) / 1);
+		color: rgb(var(--color-magnum-800) / 1);
 	}
 </style>

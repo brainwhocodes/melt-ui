@@ -1,12 +1,10 @@
-import { getOwnerDocument, isOrContainsTarget } from '$lib/internal/helpers/elements.js';
+import type { Action } from 'svelte/action';
+import { getOwnerDocument } from '$lib/internal/helpers/elements.js';
 import {
 	addEventListener,
-	isElement,
+	debounce,
 	executeCallbacks,
 	noop,
-	debounce,
-	isShadowRoot,
-	isHTMLElement,
 } from '$lib/internal/helpers/index.js';
 import type {
 	ComputedEventData,
@@ -15,11 +13,25 @@ import type {
 	InteractOutsideInterceptEventType,
 	InteractOutsideInterceptHandler,
 } from './types.js';
-import type { Action } from 'svelte/action';
 
 const layers = new Set<HTMLElement>();
 
-export const useInteractOutside = ((node, config: InteractOutsideConfig = {}) => {
+function captureEventData(event: InteractOutsideEvent): ComputedEventData {
+	const path = event.composedPath();
+	const originalTarget =
+		path.find((target): target is Node => target instanceof Node) ??
+		(event.target instanceof Node ? event.target : undefined);
+
+	return {
+		path: path.length > 0 ? path : event.target ? [event.target] : [],
+		originalTarget,
+	};
+}
+
+export const useInteractOutside = ((
+	node,
+	config: InteractOutsideConfig = {},
+) => {
 	let unsubEvents = noop;
 	let unsubPointerDown = noop;
 	let unsubPointerUp = noop;
@@ -32,15 +44,16 @@ export const useInteractOutside = ((node, config: InteractOutsideConfig = {}) =>
 	let isPointerDown = false;
 	let isPointerDownInside = false;
 
-	const interceptedEvents: Record<InteractOutsideInterceptEventType, boolean> = {
-		pointerdown: false,
-		pointerup: false,
-		mousedown: false,
-		mouseup: false,
-		touchstart: false,
-		touchend: false,
-		click: false,
-	};
+	const interceptedEvents: Record<InteractOutsideInterceptEventType, boolean> =
+		{
+			pointerdown: false,
+			pointerup: false,
+			mousedown: false,
+			mouseup: false,
+			touchstart: false,
+			touchend: false,
+			click: false,
+		};
 
 	const resetInterceptedEvents = () => {
 		for (const eventType in interceptedEvents) {
@@ -60,10 +73,10 @@ export const useInteractOutside = ((node, config: InteractOutsideConfig = {}) =>
 	 * If they are not invoked again in the bubbling phase, it indicates user interception.
 	 */
 	const setupCapturePhaseHandlerAndMarkAsIntercepted = <
-		E extends InteractOutsideInterceptEventType
+		E extends InteractOutsideInterceptEventType,
 	>(
 		eventType: E,
-		handler?: InteractOutsideInterceptHandler<E>
+		handler?: InteractOutsideInterceptHandler<E>,
 	) => {
 		return addEventListener(
 			documentObj,
@@ -72,7 +85,7 @@ export const useInteractOutside = ((node, config: InteractOutsideConfig = {}) =>
 				interceptedEvents[eventType] = true;
 				handler?.(e);
 			},
-			true
+			true,
 		);
 	};
 
@@ -80,21 +93,19 @@ export const useInteractOutside = ((node, config: InteractOutsideConfig = {}) =>
 	 * An event listener for the bubbling phase marks events as not intercepted.
 	 */
 	const setupBubblePhaseHandlerAndMarkAsNotIntercepted = <
-		E extends InteractOutsideInterceptEventType
+		E extends InteractOutsideInterceptEventType,
 	>(
 		eventType: E,
-		handler?: InteractOutsideInterceptHandler<E>
+		handler?: InteractOutsideInterceptHandler<E>,
 	) => {
-		return addEventListener(documentObj, eventType, (e: HTMLElementEventMap[E]) => {
-			interceptedEvents[eventType] = false;
-			const computedData: ComputedEventData = {};
-
-			if (isHTMLElement(e.target) && isShadowRoot(e.target.shadowRoot)) {
-				computedData.shadowTarget = e.composedPath()[0];
-			}
-
-			handler?.(e, computedData);
-		});
+		return addEventListener(
+			documentObj,
+			eventType,
+			(e: HTMLElementEventMap[E]) => {
+				interceptedEvents[eventType] = false;
+				handler?.(e, captureEventData(e));
+			},
+		);
 	};
 
 	function update(config: InteractOutsideConfig) {
@@ -103,7 +114,10 @@ export const useInteractOutside = ((node, config: InteractOutsideConfig = {}) =>
 		unsubPointerUp();
 		unsubResetInterceptedEvents();
 		resetInterceptedEvents();
-		const { onInteractOutside, onInteractOutsideStart, enabled } = { enabled: true, ...config };
+		const { onInteractOutside, onInteractOutsideStart, enabled } = {
+			enabled: true,
+			...config,
+		};
 		if (!enabled) return;
 		let wasTopLayerInPointerDownCapture = false;
 
@@ -114,14 +128,15 @@ export const useInteractOutside = ((node, config: InteractOutsideConfig = {}) =>
 		const onPointerDownDebounced = debounce(
 			(e: InteractOutsideEvent, computedEventData?: ComputedEventData) => {
 				if (!wasTopLayerInPointerDownCapture || isAnyEventIntercepted()) return;
-				if (onInteractOutside && isValidEvent(e, node)) onInteractOutsideStart?.(e);
-				const target = computedEventData?.shadowTarget ? computedEventData.shadowTarget : e.target;
-				if (isElement(target) && isOrContainsTarget(node, target)) {
-					isPointerDownInside = true;
+
+				const eventData = computedEventData ?? captureEventData(e);
+				if (onInteractOutside && isValidEvent(e, node, eventData)) {
+					onInteractOutsideStart?.(e);
 				}
+				isPointerDownInside = eventData.path.includes(node);
 				isPointerDown = true;
 			},
-			10
+			10,
 		);
 		unsubPointerDown = onPointerDownDebounced.destroy;
 
@@ -129,16 +144,20 @@ export const useInteractOutside = ((node, config: InteractOutsideConfig = {}) =>
 		 * Debouncing `onPointerUp` ensures that other events can be flagged as not intercepted,
 		 * allowing a comprehensive check for intercepted events thereafter.
 		 */
-		const onPointerUpDebounced = debounce((e: InteractOutsideEvent) => {
-			if (
-				wasTopLayerInPointerDownCapture &&
-				!isAnyEventIntercepted() &&
-				shouldTriggerInteractOutside(e)
-			) {
-				onInteractOutside?.(e);
-			}
-			resetPointerState();
-		}, 10);
+		const onPointerUpDebounced = debounce(
+			(e: InteractOutsideEvent, computedEventData?: ComputedEventData) => {
+				const eventData = computedEventData ?? captureEventData(e);
+				if (
+					wasTopLayerInPointerDownCapture &&
+					!isAnyEventIntercepted() &&
+					shouldTriggerInteractOutside(e, eventData)
+				) {
+					onInteractOutside?.(e, eventData);
+				}
+				resetPointerState();
+			},
+			10,
+		);
 		unsubPointerUp = onPointerUpDebounced.destroy;
 
 		/**
@@ -146,7 +165,10 @@ export const useInteractOutside = ((node, config: InteractOutsideConfig = {}) =>
 		 * delay is intentionally set longer than `onPointerUp`'s to ensure `onPointerUp` events are fully processed
 		 * during the bubbling phase before `resetInterceptedEventsDebounced` executes in the capture phase.
 		 */
-		const resetInterceptedEventsDebounced = debounce(resetInterceptedEvents, 20);
+		const resetInterceptedEventsDebounced = debounce(
+			resetInterceptedEvents,
+			20,
+		);
 		unsubResetInterceptedEvents = resetInterceptedEventsDebounced.destroy;
 
 		const markTopLayerInPointerDown = () => {
@@ -155,39 +177,88 @@ export const useInteractOutside = ((node, config: InteractOutsideConfig = {}) =>
 
 		unsubEvents = executeCallbacks(
 			/** Capture Events For Interaction Start */
-			setupCapturePhaseHandlerAndMarkAsIntercepted('pointerdown', markTopLayerInPointerDown),
-			setupCapturePhaseHandlerAndMarkAsIntercepted('mousedown', markTopLayerInPointerDown),
-			setupCapturePhaseHandlerAndMarkAsIntercepted('touchstart', markTopLayerInPointerDown),
+			setupCapturePhaseHandlerAndMarkAsIntercepted(
+				'pointerdown',
+				markTopLayerInPointerDown,
+			),
+			setupCapturePhaseHandlerAndMarkAsIntercepted(
+				'mousedown',
+				markTopLayerInPointerDown,
+			),
+			setupCapturePhaseHandlerAndMarkAsIntercepted(
+				'touchstart',
+				markTopLayerInPointerDown,
+			),
 			/**
 			 * Intercepted events are reset only at the end of an interaction, allowing
 			 * interception at the start while still capturing the entire interaction.
 			 * Additionally, intercepted events are reset in the capture phase with `resetInterceptedEventsDebounced`,
 			 * accommodating events not invoked in the bubbling phase due to user interception.
 			 */
-			setupCapturePhaseHandlerAndMarkAsIntercepted('pointerup', resetInterceptedEventsDebounced),
-			setupCapturePhaseHandlerAndMarkAsIntercepted('mouseup', resetInterceptedEventsDebounced),
-			setupCapturePhaseHandlerAndMarkAsIntercepted('touchend', resetInterceptedEventsDebounced),
-			setupCapturePhaseHandlerAndMarkAsIntercepted('click', resetInterceptedEventsDebounced),
+			setupCapturePhaseHandlerAndMarkAsIntercepted(
+				'pointerup',
+				resetInterceptedEventsDebounced,
+			),
+			setupCapturePhaseHandlerAndMarkAsIntercepted(
+				'mouseup',
+				resetInterceptedEventsDebounced,
+			),
+			setupCapturePhaseHandlerAndMarkAsIntercepted(
+				'touchend',
+				resetInterceptedEventsDebounced,
+			),
+			setupCapturePhaseHandlerAndMarkAsIntercepted(
+				'click',
+				resetInterceptedEventsDebounced,
+			),
 
 			/** Bubbling Events For Interaction Start */
-			setupBubblePhaseHandlerAndMarkAsNotIntercepted('pointerdown', onPointerDownDebounced),
-			setupBubblePhaseHandlerAndMarkAsNotIntercepted('mousedown', onPointerDownDebounced),
-			setupBubblePhaseHandlerAndMarkAsNotIntercepted('touchstart', onPointerDownDebounced),
+			setupBubblePhaseHandlerAndMarkAsNotIntercepted(
+				'pointerdown',
+				onPointerDownDebounced,
+			),
+			setupBubblePhaseHandlerAndMarkAsNotIntercepted(
+				'mousedown',
+				onPointerDownDebounced,
+			),
+			setupBubblePhaseHandlerAndMarkAsNotIntercepted(
+				'touchstart',
+				onPointerDownDebounced,
+			),
 			/**
 			 * To effectively detect an end of an interaction, we must monitor all relevant events,
 			 * not just `click` events. This is because on touch devices, actions like pressing,
 			 * moving the finger, and lifting it off the screen may not trigger a `click` event,
 			 * but should still invoke `onPointerUp` to properly handle the interaction.
 			 */
-			setupBubblePhaseHandlerAndMarkAsNotIntercepted('pointerup', onPointerUpDebounced),
-			setupBubblePhaseHandlerAndMarkAsNotIntercepted('mouseup', onPointerUpDebounced),
-			setupBubblePhaseHandlerAndMarkAsNotIntercepted('touchend', onPointerUpDebounced),
-			setupBubblePhaseHandlerAndMarkAsNotIntercepted('click', onPointerUpDebounced)
+			setupBubblePhaseHandlerAndMarkAsNotIntercepted(
+				'pointerup',
+				onPointerUpDebounced,
+			),
+			setupBubblePhaseHandlerAndMarkAsNotIntercepted(
+				'mouseup',
+				onPointerUpDebounced,
+			),
+			setupBubblePhaseHandlerAndMarkAsNotIntercepted(
+				'touchend',
+				onPointerUpDebounced,
+			),
+			setupBubblePhaseHandlerAndMarkAsNotIntercepted(
+				'click',
+				onPointerUpDebounced,
+			),
 		);
 	}
 
-	function shouldTriggerInteractOutside(e: InteractOutsideEvent) {
-		if (isPointerDown && !isPointerDownInside && isValidEvent(e, node)) {
+	function shouldTriggerInteractOutside(
+		e: InteractOutsideEvent,
+		computedEventData: ComputedEventData,
+	) {
+		if (
+			isPointerDown &&
+			!isPointerDownInside &&
+			isValidEvent(e, node, computedEventData)
+		) {
 			return true;
 		}
 		return false;
@@ -212,18 +283,15 @@ export const useInteractOutside = ((node, config: InteractOutsideConfig = {}) =>
 	};
 }) satisfies Action<HTMLElement, InteractOutsideConfig>;
 
-function isValidEvent(e: InteractOutsideEvent, node: HTMLElement): boolean {
+function isValidEvent(
+	e: InteractOutsideEvent,
+	node: HTMLElement,
+	computedEventData: ComputedEventData,
+): boolean {
 	if ('button' in e && e.button > 0) return false;
-	const target = e.target;
-	if (!isElement(target)) return false;
+	if (!computedEventData.originalTarget) return false;
 
-	// if the target is no longer in the document (e.g. it was removed) ignore it
-	const ownerDocument = target.ownerDocument;
-	if (!ownerDocument || !ownerDocument.documentElement.contains(target)) {
-		return false;
-	}
-
-	return node && !isOrContainsTarget(node, target);
+	return !computedEventData.path.includes(node);
 }
 
 function isHighestLayer(node: HTMLElement): boolean {

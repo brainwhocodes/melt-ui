@@ -1,7 +1,10 @@
-import { testKbd as kbd } from '../utils.js';
 import { act, render } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { axe } from 'jest-axe';
+import { writable } from 'svelte/store';
+import { vi } from 'vitest';
+import { createSlider } from '$lib/index.js';
+import { testKbd as kbd } from '../utils.js';
 import RangeSlider from './RangeSlider.svelte';
 import Slider from './Slider.svelte';
 
@@ -81,31 +84,37 @@ describe('Slider (Default)', () => {
 		expect(isCloseEnough(70, range.style.right)).toBeTruthy();
 	});
 
-	test.each([kbd.ARROW_RIGHT, kbd.ARROW_UP])('Change by 1% when pressing %s', async (key) => {
-		const { getByTestId } = render(Slider);
-		const user = userEvent.setup();
+	test.each([kbd.ARROW_RIGHT, kbd.ARROW_UP])(
+		'Change by 1% when pressing %s',
+		async (key) => {
+			const { getByTestId } = render(Slider);
+			const user = userEvent.setup();
 
-		const thumb = getByTestId('thumb');
-		const range = getByTestId('range');
+			const thumb = getByTestId('thumb');
+			const range = getByTestId('range');
 
-		await act(() => thumb.focus());
-		await user.keyboard(key);
+			await act(() => thumb.focus());
+			await user.keyboard(key);
 
-		expectPercentage({ percentage: 31, thumb, range });
-	});
+			expectPercentage({ percentage: 31, thumb, range });
+		},
+	);
 
-	test.each([kbd.ARROW_LEFT, kbd.ARROW_DOWN])('Change by 1% when pressing %s', async (key) => {
-		const { getByTestId } = render(Slider);
-		const user = userEvent.setup();
+	test.each([kbd.ARROW_LEFT, kbd.ARROW_DOWN])(
+		'Change by 1% when pressing %s',
+		async (key) => {
+			const { getByTestId } = render(Slider);
+			const user = userEvent.setup();
 
-		const thumb = getByTestId('thumb');
-		const range = getByTestId('range');
+			const thumb = getByTestId('thumb');
+			const range = getByTestId('range');
 
-		await act(() => thumb.focus());
-		await user.keyboard(key);
+			await act(() => thumb.focus());
+			await user.keyboard(key);
 
-		expectPercentage({ percentage: 29, thumb, range });
-	});
+			expectPercentage({ percentage: 29, thumb, range });
+		},
+	);
 
 	test('Goes to minimum when pressing Home', async () => {
 		const { getByTestId } = render(Slider);
@@ -174,8 +183,12 @@ describe('Slider (Range)', () => {
 			await act(() => thumb0.focus());
 			await user.keyboard(key);
 
-			expectPercentages({ percentages: [21, 80], thumbs: [thumb0, thumb1], range });
-		}
+			expectPercentages({
+				percentages: [21, 80],
+				thumbs: [thumb0, thumb1],
+				range,
+			});
+		},
 	);
 
 	test.each([kbd.ARROW_RIGHT, kbd.ARROW_UP])(
@@ -191,8 +204,12 @@ describe('Slider (Range)', () => {
 			await act(() => thumb1.focus());
 			await user.keyboard(key);
 
-			expectPercentages({ percentages: [20, 81], thumbs: [thumb0, thumb1], range });
-		}
+			expectPercentages({
+				percentages: [20, 81],
+				thumbs: [thumb0, thumb1],
+				range,
+			});
+		},
 	);
 
 	test.each([kbd.ARROW_LEFT, kbd.ARROW_DOWN])(
@@ -208,8 +225,12 @@ describe('Slider (Range)', () => {
 			await act(() => thumb0.focus());
 			await user.keyboard(key);
 
-			expectPercentages({ percentages: [19, 80], thumbs: [thumb0, thumb1], range });
-		}
+			expectPercentages({
+				percentages: [19, 80],
+				thumbs: [thumb0, thumb1],
+				range,
+			});
+		},
 	);
 
 	test.each([kbd.ARROW_LEFT, kbd.ARROW_DOWN])(
@@ -225,8 +246,12 @@ describe('Slider (Range)', () => {
 			await act(() => thumb1.focus());
 			await user.keyboard(key);
 
-			expectPercentages({ percentages: [20, 79], thumbs: [thumb0, thumb1], range });
-		}
+			expectPercentages({
+				percentages: [20, 79],
+				thumbs: [thumb0, thumb1],
+				range,
+			});
+		},
 	);
 
 	test.each([kbd.ARROW_RIGHT, kbd.ARROW_UP])(
@@ -246,9 +271,13 @@ describe('Slider (Range)', () => {
 			await user.keyboard(key);
 			await user.keyboard(key);
 
-			expectPercentages({ percentages: [51, 52], thumbs: [thumb0, thumb1], range });
+			expectPercentages({
+				percentages: [51, 52],
+				thumbs: [thumb0, thumb1],
+				range,
+			});
 			expect(thumb1).toHaveFocus();
-		}
+		},
 	);
 
 	test.each([kbd.ARROW_LEFT, kbd.ARROW_DOWN])(
@@ -268,9 +297,13 @@ describe('Slider (Range)', () => {
 			await user.keyboard(key);
 			await user.keyboard(key);
 
-			expectPercentages({ percentages: [48, 49], thumbs: [thumb0, thumb1], range });
+			expectPercentages({
+				percentages: [48, 49],
+				thumbs: [thumb0, thumb1],
+				range,
+			});
 			expect(thumb0).toHaveFocus();
-		}
+		},
 	);
 
 	test('Thumb 0 goes to minimum when pressing Home', async () => {
@@ -284,7 +317,11 @@ describe('Slider (Range)', () => {
 		await act(() => thumb0.focus());
 		await user.keyboard(kbd.HOME);
 
-		expectPercentages({ percentages: [0, 80], thumbs: [thumb0, thumb1], range });
+		expectPercentages({
+			percentages: [0, 80],
+			thumbs: [thumb0, thumb1],
+			range,
+		});
 	});
 
 	test('Thumb 1 goes to maximum when pressing End', async () => {
@@ -298,7 +335,11 @@ describe('Slider (Range)', () => {
 		await act(() => thumb1.focus());
 		await user.keyboard(kbd.END);
 
-		expectPercentages({ percentages: [20, 100], thumbs: [thumb0, thumb1], range });
+		expectPercentages({
+			percentages: [20, 100],
+			thumbs: [thumb0, thumb1],
+			range,
+		});
 	});
 
 	test('Thumb 1 goes to minimum when pressing Home (thumbs swap places)', async () => {
@@ -312,7 +353,11 @@ describe('Slider (Range)', () => {
 		await act(() => thumb1.focus());
 		await user.keyboard(kbd.HOME);
 
-		expectPercentages({ percentages: [0, 20], thumbs: [thumb0, thumb1], range });
+		expectPercentages({
+			percentages: [0, 20],
+			thumbs: [thumb0, thumb1],
+			range,
+		});
 		expect(thumb0).toHaveFocus();
 	});
 
@@ -327,7 +372,11 @@ describe('Slider (Range)', () => {
 		await act(() => thumb0.focus());
 		await user.keyboard(kbd.END);
 
-		expectPercentages({ percentages: [80, 100], thumbs: [thumb0, thumb1], range });
+		expectPercentages({
+			percentages: [80, 100],
+			thumbs: [thumb0, thumb1],
+			range,
+		});
 		expect(thumb1).toHaveFocus();
 	});
 });
@@ -347,42 +396,48 @@ describe('Slider (Small min, max, step)', () => {
 		expect(isCloseEnough(50, thumb.style.left)).toBeTruthy();
 	});
 
-	test.each([kbd.ARROW_RIGHT, kbd.ARROW_UP])('Change by 1% when pressing %s', async (key) => {
-		const { getByTestId } = render(Slider, {
-			value: [0.5],
-			min: 0,
-			max: 1,
-			step: 0.01,
-		});
+	test.each([kbd.ARROW_RIGHT, kbd.ARROW_UP])(
+		'Change by 1% when pressing %s',
+		async (key) => {
+			const { getByTestId } = render(Slider, {
+				value: [0.5],
+				min: 0,
+				max: 1,
+				step: 0.01,
+			});
 
-		const user = userEvent.setup();
+			const user = userEvent.setup();
 
-		const thumb = getByTestId('thumb');
-		const range = getByTestId('range');
+			const thumb = getByTestId('thumb');
+			const range = getByTestId('range');
 
-		await act(() => thumb.focus());
-		await user.keyboard(key);
+			await act(() => thumb.focus());
+			await user.keyboard(key);
 
-		expectPercentage({ percentage: 51, thumb, range });
-	});
+			expectPercentage({ percentage: 51, thumb, range });
+		},
+	);
 
-	test.each([kbd.ARROW_LEFT, kbd.ARROW_DOWN])('Change by 10% when pressing %s', async (key) => {
-		const { getByTestId } = render(Slider, {
-			value: [0.5],
-			min: 0,
-			max: 1,
-			step: 0.01,
-		});
-		const user = userEvent.setup();
+	test.each([kbd.ARROW_LEFT, kbd.ARROW_DOWN])(
+		'Change by 10% when pressing %s',
+		async (key) => {
+			const { getByTestId } = render(Slider, {
+				value: [0.5],
+				min: 0,
+				max: 1,
+				step: 0.01,
+			});
+			const user = userEvent.setup();
 
-		const thumb = getByTestId('thumb');
-		const range = getByTestId('range');
+			const thumb = getByTestId('thumb');
+			const range = getByTestId('range');
 
-		await act(() => thumb.focus());
-		await user.keyboard(key);
+			await act(() => thumb.focus());
+			await user.keyboard(key);
 
-		expectPercentage({ percentage: 49, thumb, range });
-	});
+			expectPercentage({ percentage: 49, thumb, range });
+		},
+	);
 });
 
 describe('Slider (negative min)', () => {
@@ -400,42 +455,48 @@ describe('Slider (negative min)', () => {
 		expect(isCloseEnough(50, thumb.style.left)).toBeTruthy();
 	});
 
-	test.each([kbd.ARROW_RIGHT, kbd.ARROW_UP])('Change by 1% when pressing %s', async (key) => {
-		const { getByTestId } = render(Slider, {
-			value: [0],
-			min: -50,
-			max: 50,
-			step: 1,
-		});
+	test.each([kbd.ARROW_RIGHT, kbd.ARROW_UP])(
+		'Change by 1% when pressing %s',
+		async (key) => {
+			const { getByTestId } = render(Slider, {
+				value: [0],
+				min: -50,
+				max: 50,
+				step: 1,
+			});
 
-		const user = userEvent.setup();
+			const user = userEvent.setup();
 
-		const thumb = getByTestId('thumb');
-		const range = getByTestId('range');
+			const thumb = getByTestId('thumb');
+			const range = getByTestId('range');
 
-		await act(() => thumb.focus());
-		await user.keyboard(key);
+			await act(() => thumb.focus());
+			await user.keyboard(key);
 
-		expectPercentage({ percentage: 51, thumb, range });
-	});
+			expectPercentage({ percentage: 51, thumb, range });
+		},
+	);
 
-	test.each([kbd.ARROW_LEFT, kbd.ARROW_DOWN])('Change by 10% when pressing %s', async (key) => {
-		const { getByTestId } = render(Slider, {
-			value: [0],
-			min: -50,
-			max: 50,
-			step: 1,
-		});
-		const user = userEvent.setup();
+	test.each([kbd.ARROW_LEFT, kbd.ARROW_DOWN])(
+		'Change by 10% when pressing %s',
+		async (key) => {
+			const { getByTestId } = render(Slider, {
+				value: [0],
+				min: -50,
+				max: 50,
+				step: 1,
+			});
+			const user = userEvent.setup();
 
-		const thumb = getByTestId('thumb');
-		const range = getByTestId('range');
+			const thumb = getByTestId('thumb');
+			const range = getByTestId('range');
 
-		await act(() => thumb.focus());
-		await user.keyboard(key);
+			await act(() => thumb.focus());
+			await user.keyboard(key);
 
-		expectPercentage({ percentage: 49, thumb, range });
-	});
+			expectPercentage({ percentage: 49, thumb, range });
+		},
+	);
 });
 
 describe('Slider (value=[5], min=0, max=10, step=1)', () => {
@@ -597,6 +658,51 @@ describe('Slider (min=0, max=100, step=30)', () => {
 			value: [40],
 		});
 
-		expectPercentage({ percentage: 30, thumb: getByTestId('thumb'), range: getByTestId('range') });
+		expectPercentage({
+			percentage: 30,
+			thumb: getByTestId('thumb'),
+			range: getByTestId('range'),
+		});
+	});
+});
+
+describe('Slider invalid numeric configuration', () => {
+	const configurationError =
+		'Invalid slider configuration: min, max, and every value must be finite numbers, and step must be a finite number greater than 0.';
+
+	test.each([
+		['min', { min: Number.NaN }],
+		['max', { max: Number.POSITIVE_INFINITY }],
+		['step', { step: 0 }],
+		['step', { step: Number.NEGATIVE_INFINITY }],
+	])('rejects an invalid %s before normalizing values', (_, props) => {
+		const value = writable<number[]>([]);
+		const update = vi.spyOn(value, 'update');
+
+		expect(() => createSlider({ value, ...props })).toThrow(configurationError);
+		expect(update).not.toHaveBeenCalled();
+	});
+
+	test.each([Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY])(
+		'rejects an invalid controlled value %s before normalizing values',
+		(invalidValue) => {
+			const value = writable([10, invalidValue, 20]);
+			const update = vi.spyOn(value, 'update').mockImplementation(() => {
+				throw new Error('unexpected slider normalization write-back');
+			});
+
+			expect(() => createSlider({ value })).toThrow(configurationError);
+			expect(update).not.toHaveBeenCalled();
+		},
+	);
+
+	test('rejects each value in a controlled update without writing back', () => {
+		const value = writable([10, 20]);
+		const update = vi.spyOn(value, 'update');
+
+		createSlider({ value });
+
+		expect(() => value.set([10, Number.NaN, 20])).toThrow(configurationError);
+		expect(update).not.toHaveBeenCalled();
 	});
 });

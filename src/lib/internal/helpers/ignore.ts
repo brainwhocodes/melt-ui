@@ -1,4 +1,8 @@
-import { getElementByMeltId, isElement, isHTMLLabelElement } from '$lib/internal/helpers/index.js';
+import {
+	getElementByMeltId,
+	isElement,
+	isHTMLLabelElement,
+} from '$lib/internal/helpers/index.js';
 import type { InteractOutsideEvent } from '../actions/index.js';
 
 export function createClickOutsideIgnore(meltId: string) {

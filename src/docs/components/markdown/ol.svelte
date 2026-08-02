@@ -5,6 +5,6 @@
 	export { className as class };
 </script>
 
-<ol class={cn('my-6 ml-6 list-decimal', className)} {...$$restProps}>
+<ol class={cn('surface-d252eaf835', className)} {...$$restProps}>
 	<slot />
 </ol>

@@ -1,6 +1,11 @@
-import { type InteractOutsideEvent, usePopper } from '$lib/internal/actions/index.js';
+import { dequal as deepEqual } from 'dequal';
+import { tick } from 'svelte';
+import { derived, get, type Readable, readonly, writable } from 'svelte/store';
 import {
-	FIRST_LAST_KEYS,
+	type InteractOutsideEvent,
+	usePopper,
+} from '$lib/internal/actions/index.js';
+import {
 	addHighlight,
 	addMeltEventListener,
 	back,
@@ -11,8 +16,10 @@ import {
 	disabledAttr,
 	effect,
 	executeCallbacks,
+	FIRST_LAST_KEYS,
 	forward,
 	generateId,
+	getElementById,
 	getOptions,
 	getPortalDestination,
 	isBrowser,
@@ -34,15 +41,11 @@ import {
 	removeScroll,
 	stripValues,
 	styleToString,
-	toWritableStores,
 	toggle,
+	toWritableStores,
 	withGet,
-	getElementById,
 } from '$lib/internal/helpers/index.js';
 import type { Defaults, MeltActionReturn } from '$lib/internal/types.js';
-import { dequal as deepEqual } from 'dequal';
-import { tick } from 'svelte';
-import { derived, get, readonly, writable, type Readable } from 'svelte/store';
 import { generateIds } from '../../internal/helpers/id.js';
 import { createHiddenInput } from '../hidden-input/create.js';
 import { createLabel } from '../label/create.js';
@@ -54,8 +57,29 @@ import type {
 	ListboxSelected,
 } from './types.js';
 
-// prettier-ignore
-export const INTERACTION_KEYS = [kbd.ARROW_LEFT, kbd.ESCAPE, kbd.ARROW_RIGHT, kbd.SHIFT, kbd.CAPS_LOCK, kbd.CONTROL, kbd.ALT, kbd.META, kbd.ENTER, kbd.F1, kbd.F2, kbd.F3, kbd.F4, kbd.F5, kbd.F6, kbd.F7, kbd.F8, kbd.F9, kbd.F10, kbd.F11, kbd.F12];
+export const INTERACTION_KEYS = [
+	kbd.ARROW_LEFT,
+	kbd.ESCAPE,
+	kbd.ARROW_RIGHT,
+	kbd.SHIFT,
+	kbd.CAPS_LOCK,
+	kbd.CONTROL,
+	kbd.ALT,
+	kbd.META,
+	kbd.ENTER,
+	kbd.F1,
+	kbd.F2,
+	kbd.F3,
+	kbd.F4,
+	kbd.F5,
+	kbd.F6,
+	kbd.F7,
+	kbd.F8,
+	kbd.F9,
+	kbd.F10,
+	kbd.F11,
+	kbd.F12,
+];
 
 const defaults = {
 	positioning: {
@@ -103,10 +127,13 @@ type ListboxParts =
 export function createListbox<
 	Value,
 	Multiple extends boolean = false,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	S extends ListboxSelected<Multiple, Value> = ListboxSelected<Multiple, Value>
+	S extends ListboxSelected<Multiple, Value> = ListboxSelected<Multiple, Value>,
 >(props?: CreateListboxProps<Value, Multiple, S>) {
-	const withDefaults = { ...defaults, ...props } satisfies CreateListboxProps<Value, Multiple, S>;
+	const withDefaults = { ...defaults, ...props } satisfies CreateListboxProps<
+		Value,
+		Multiple,
+		S
+	>;
 
 	// Trigger element for the popper portal. This will be our input element.
 	const activeTrigger = withGet(writable<HTMLElement | null>(null));
@@ -114,12 +141,16 @@ export function createListbox<
 	const highlightedItem = withGet(writable<HTMLElement | null>(null));
 
 	const selectedWritable =
-		withDefaults.selected ?? writable<S | undefined>(withDefaults.defaultSelected);
+		withDefaults.selected ??
+		writable<S | undefined>(withDefaults.defaultSelected);
 
-	const selected = overridable(selectedWritable, withDefaults?.onSelectedChange);
+	const selected = overridable(
+		selectedWritable,
+		withDefaults?.onSelectedChange,
+	);
 
 	const highlighted = derived(highlightedItem, ($highlightedItem) =>
-		$highlightedItem ? getOptionProps($highlightedItem) : undefined
+		$highlightedItem ? getOptionProps($highlightedItem) : undefined,
 	) as Readable<ListboxOption<Value> | undefined>;
 
 	// Either the provided open store or a store with the default open value
@@ -163,9 +194,14 @@ export function createListbox<
 		}
 	}
 
-	const { name, selector } = createElHelpers<ListboxParts>(withDefaults.builder);
+	const { name, selector } = createElHelpers<ListboxParts>(
+		withDefaults.builder,
+	);
 
-	const ids = toWritableStores({ ...generateIds(listboxIdParts), ...withDefaults.ids });
+	const ids = toWritableStores({
+		...generateIds(listboxIdParts),
+		...withDefaults.ids,
+	});
 
 	const { handleTypeaheadSearch } = createTypeaheadSearch({
 		onMatch: (element) => {
@@ -198,7 +234,7 @@ export function createListbox<
 			if ($multiple) {
 				const optionArr = Array.isArray($option) ? [...$option] : [];
 				return toggle(newOption, optionArr, (itemA, itemB) =>
-					deepEqual(itemA.value, itemB.value)
+					deepEqual(itemA.value, itemB.value),
 				) as S;
 			}
 			return newOption as S;
@@ -284,7 +320,14 @@ export function createListbox<
 	/** Action and attributes for the text input. */
 	const trigger = makeElement(name('trigger'), {
 		stores: [open, highlightedItem, disabled, ids.menu, ids.trigger, ids.label],
-		returned: ([$open, $highlightedItem, $disabled, $menuId, $triggerId, $labelId]) => {
+		returned: ([
+			$open,
+			$highlightedItem,
+			$disabled,
+			$menuId,
+			$triggerId,
+			$labelId,
+		]) => {
 			return {
 				'aria-activedescendant': $highlightedItem?.id,
 				'aria-autocomplete': 'list',
@@ -353,18 +396,22 @@ export function createListbox<
 
 							const enabledItems = Array.from(
 								menuEl.querySelectorAll(
-									`${selector('item')}:not([data-disabled]):not([data-hidden])`
-								)
+									`${selector('item')}:not([data-disabled]):not([data-hidden])`,
+								),
 							).filter((item): item is HTMLElement => isHTMLElement(item));
 
 							if (!enabledItems.length) return;
 
 							if (e.key === kbd.ARROW_DOWN) {
 								highlightedItem.set(enabledItems[0]);
-								enabledItems[0].scrollIntoView({ block: scrollAlignment.get() });
+								enabledItems[0].scrollIntoView({
+									block: scrollAlignment.get(),
+								});
 							} else if (e.key === kbd.ARROW_UP) {
 								highlightedItem.set(last(enabledItems));
-								last(enabledItems).scrollIntoView({ block: scrollAlignment.get() });
+								last(enabledItems).scrollIntoView({
+									block: scrollAlignment.get(),
+								});
 							}
 						});
 					}
@@ -384,7 +431,23 @@ export function createListbox<
 						e.preventDefault();
 						const $highlightedItem = highlightedItem.get();
 						if ($highlightedItem) {
-							selectItem($highlightedItem);
+							const menuElement = getElementById(
+								ids.menu.get(),
+								rootElement.get(),
+							);
+							const enabledItems = isHTMLElement(menuElement)
+								? getOptions(menuElement).filter(
+										(item) =>
+											!isElementDisabled(item) &&
+											item.dataset.hidden === undefined,
+									)
+								: [];
+
+							if (enabledItems.includes($highlightedItem)) {
+								selectItem($highlightedItem);
+							} else {
+								highlightedItem.set(null);
+							}
 						}
 						if (!multiple.get()) {
 							closeMenu();
@@ -399,17 +462,23 @@ export function createListbox<
 					if (FIRST_LAST_KEYS.includes(e.key)) {
 						e.preventDefault();
 						// Get all the menu items.
-						const menuElement = getElementById(ids.menu.get(), rootElement.get());
+						const menuElement = getElementById(
+							ids.menu.get(),
+							rootElement.get(),
+						);
 						if (!isHTMLElement(menuElement)) return;
 						const itemElements = getOptions(menuElement);
 						if (!itemElements.length) return;
 						// Disabled items can't be highlighted. Skip them.
 						const candidateNodes = itemElements.filter(
-							(opt) => !isElementDisabled(opt) && opt.dataset.hidden === undefined
+							(opt) =>
+								!isElementDisabled(opt) && opt.dataset.hidden === undefined,
 						);
 						// Get the index of the currently highlighted item.
 						const $currentItem = highlightedItem.get();
-						const currentIndex = $currentItem ? candidateNodes.indexOf($currentItem) : -1;
+						const currentIndex = $currentItem
+							? candidateNodes.indexOf($currentItem)
+							: -1;
 						// Find the next menu item to highlight.
 						const $loop = loop.get();
 						const $scrollAlignment = scrollAlignment.get();
@@ -445,7 +514,7 @@ export function createListbox<
 
 						handleTypeaheadSearch(e.key, getOptions(menuEl));
 					}
-				})
+				}),
 			);
 
 			return {
@@ -476,7 +545,13 @@ export function createListbox<
 				// Bind the popper portal to the input element.
 				effect(
 					[isVisible, portal, closeOnOutsideClick, positioning, activeTrigger],
-					([$isVisible, $portal, $closeOnOutsideClick, $positioning, $activeTrigger]) => {
+					([
+						$isVisible,
+						$portal,
+						$closeOnOutsideClick,
+						$positioning,
+						$activeTrigger,
+					]) => {
 						unsubPopper();
 
 						if (!$isVisible || !$activeTrigger) return;
@@ -499,7 +574,10 @@ export function createListbox<
 											if (e.defaultPrevented) return false;
 											const target = e.target;
 											if (!isElement(target)) return false;
-											if (target === $activeTrigger || $activeTrigger.contains(target)) {
+											if (
+												target === $activeTrigger ||
+												$activeTrigger.contains(target)
+											) {
 												return false;
 											}
 											// return opposite of the result of the ignoreHandler
@@ -508,14 +586,19 @@ export function createListbox<
 										},
 									},
 
-									escapeKeydown: { handler: closeMenu, behaviorType: escapeBehavior },
+									escapeKeydown: {
+										handler: closeMenu,
+										behaviorType: escapeBehavior,
+									},
 									portal: getPortalDestination(node, $portal),
-									preventTextSelectionOverflow: { enabled: preventTextSelectionOverflow },
+									preventTextSelectionOverflow: {
+										enabled: preventTextSelectionOverflow,
+									},
 								},
 							}).destroy;
 						});
-					}
-				)
+					},
+				),
 			);
 			return {
 				destroy: () => {
@@ -583,11 +666,11 @@ export function createListbox<
 						}),
 						addMeltEventListener(node, 'mouseleave', () => {
 							highlightedItem.set(null);
-						})
+						}),
 					);
 
 					return unsub;
-				})
+				}),
 			);
 
 			return { destroy: unsubscribe };
@@ -600,7 +683,7 @@ export function createListbox<
 				({
 					role: 'group',
 					'aria-labelledby': groupId,
-				} as const);
+				}) as const;
 		},
 	});
 
@@ -609,13 +692,15 @@ export function createListbox<
 			return (groupId: string) =>
 				({
 					id: groupId,
-				} as const);
+				}) as const;
 		},
 	});
 
 	const hiddenInput = createHiddenInput({
 		value: derived([selected], ([$selected]) => {
-			const value = Array.isArray($selected) ? $selected.map((o) => o.value) : $selected?.value;
+			const value = Array.isArray($selected)
+				? $selected.map((o) => o.value)
+				: $selected?.value;
 			return typeof value === 'string' ? value : JSON.stringify(value);
 		}),
 		name: readonly(nameProp),
@@ -633,7 +718,7 @@ export function createListbox<
 					width: `var(--arrow-size, ${$arrowSize}px)`,
 					height: `var(--arrow-size, ${$arrowSize}px)`,
 				}),
-			} as const),
+			}) as const,
 	});
 
 	/* ------------------- */

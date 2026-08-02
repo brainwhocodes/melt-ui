@@ -1,5 +1,5 @@
-import type { ChangeFn } from '$lib/internal/helpers/index.js';
 import type { Writable } from 'svelte/store';
+import type { ChangeFn } from '$lib/internal/helpers/index.js';
 import type { createTreeView } from './create.js';
 
 export type CreateTreeViewProps = {

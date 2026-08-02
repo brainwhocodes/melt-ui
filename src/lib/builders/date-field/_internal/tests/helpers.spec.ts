@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { initSegmentIds, initSegmentStates, initializeSegmentValues } from '../helpers.js';
+import {
+	initializeSegmentValues,
+	initSegmentIds,
+	initSegmentStates,
+} from '../helpers.js';
 
 describe('initializeSegmentValues', () => {
 	it('should return the correct values for each granularity', () => {
@@ -35,20 +39,38 @@ describe('initializeSegmentValues', () => {
 describe('initSegmentStates', () => {
 	it('should initialize the segment states', () => {
 		const states = initSegmentStates();
-		const properties = ['day', 'month', 'year', 'hour', 'minute', 'second', 'dayPeriod'];
+		const properties = [
+			'day',
+			'month',
+			'year',
+			'hour',
+			'minute',
+			'second',
+			'dayPeriod',
+		];
 		const initState = {
 			lastKeyZero: false,
 			hasLeftFocus: true,
 			hasTouched: false,
 		};
-		expect(states).toEqual(Object.fromEntries(properties.map((prop) => [prop, initState])));
+		expect(states).toEqual(
+			Object.fromEntries(properties.map((prop) => [prop, initState])),
+		);
 	});
 });
 
 describe('initSegmentIds', () => {
 	it('should initialize the segment ids', () => {
 		const ids = initSegmentIds();
-		const properties = ['day', 'month', 'year', 'hour', 'minute', 'second', 'dayPeriod'];
+		const properties = [
+			'day',
+			'month',
+			'year',
+			'hour',
+			'minute',
+			'second',
+			'dayPeriod',
+		];
 
 		properties.forEach((prop) => {
 			expect(ids).toHaveProperty(prop);

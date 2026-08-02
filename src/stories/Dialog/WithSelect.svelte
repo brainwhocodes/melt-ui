@@ -10,25 +10,22 @@
 	<BaseDialog let:trigger>
 		<button
 			use:melt={trigger}
-			class="inline-flex items-center justify-center rounded-md bg-white px-4 py-2
-		font-medium leading-none text-magnum-700 shadow-lg hover:opacity-75
-		"
+			class="preview-space-y-2   preview-type-medium preview-hover-opacity-75    surface-bbee522c5d"
 		>
 			Open Dialog
 		</button>
 		<svelte:fragment slot="content" let:title let:description let:close>
-			<h2 use:melt={title} class="m-0 text-lg font-medium text-black">Dialog</h2>
-			<p use:melt={description} class="mb-5 mt-2 leading-normal text-zinc-600">
+			<h2 use:melt={title} class="surface-ddf9e83082">Dialog</h2>
+			<p use:melt={description} class="surface-06abffe25a">
 				This dialog should contain a select element.
 			</p>
 
 			<Select />
 
-			<div class="flex items-center justify-end gap-4">
+			<div class="surface-a7c798766d">
 				<button
 					use:melt={close}
-					class="inline-flex h-8 items-center justify-center rounded-[4px] bg-neutral-100
-      px-4 font-medium leading-none text-neutral-900"
+					class="preview-surface-neutral-100  surface-415205e036"
 				>
 					Close
 				</button>

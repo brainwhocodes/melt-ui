@@ -6,16 +6,34 @@ describe('back', () => {
 		// No elements.
 		{ array: [], index: 0, increment: 1, loop: true, expected: undefined },
 		// Happy path: finding the next element.
-		{ array: ['a', 'b', 'c', 'd'], index: 3, increment: 2, loop: false, expected: 'b' },
+		{
+			array: ['a', 'b', 'c', 'd'],
+			index: 3,
+			increment: 2,
+			loop: false,
+			expected: 'b',
+		},
 		// With looping disabled, the last element should be returned.
-		{ array: ['a', 'b', 'c', 'd'], index: 2, increment: 5, loop: false, expected: 'a' },
+		{
+			array: ['a', 'b', 'c', 'd'],
+			index: 2,
+			increment: 5,
+			loop: false,
+			expected: 'a',
+		},
 		// With looping enabled, the first element should be returned.
-		{ array: ['a', 'b', 'c', 'd'], index: 0, increment: 5, loop: true, expected: 'd' },
+		{
+			array: ['a', 'b', 'c', 'd'],
+			index: 0,
+			increment: 5,
+			loop: true,
+			expected: 'd',
+		},
 	])(
 		'back($array, $index, $increment, $loop) -> $expected',
 		({ array, index, increment, loop, expected }) => {
 			expect(back(array, index, increment, loop)).toBe(expected);
-		}
+		},
 	);
 });
 
@@ -24,16 +42,34 @@ describe('forward', () => {
 		// No elements.
 		{ array: [], index: 0, increment: 1, loop: true, expected: undefined },
 		// Happy path: finding the next element.
-		{ array: ['a', 'b', 'c', 'd'], index: 0, increment: 2, loop: false, expected: 'c' },
+		{
+			array: ['a', 'b', 'c', 'd'],
+			index: 0,
+			increment: 2,
+			loop: false,
+			expected: 'c',
+		},
 		// With looping disabled, the last element should be returned.
-		{ array: ['a', 'b', 'c', 'd'], index: 0, increment: 5, loop: false, expected: 'd' },
+		{
+			array: ['a', 'b', 'c', 'd'],
+			index: 0,
+			increment: 5,
+			loop: false,
+			expected: 'd',
+		},
 		// With looping enabled, the first element should be returned.
-		{ array: ['a', 'b', 'c', 'd'], index: 0, increment: 5, loop: true, expected: 'a' },
+		{
+			array: ['a', 'b', 'c', 'd'],
+			index: 0,
+			increment: 5,
+			loop: true,
+			expected: 'a',
+		},
 	])(
 		'forward($array, $index, $increment, $loop) -> $expected',
 		({ array, index, increment, loop, expected }) => {
 			expect(forward(array, index, increment, loop)).toBe(expected);
-		}
+		},
 	);
 });
 
@@ -56,9 +92,12 @@ describe('next', () => {
 		// Looping behavior.
 		{ array: ['a', 'b', 'c'], index: 2, loop: false, expected: 'c' },
 		{ array: ['a', 'b', 'c'], index: 2, loop: true, expected: 'a' },
-	])('next($array, $index, $loop) -> $expected', ({ array, index, loop, expected }) => {
-		expect(next(array, index, loop)).toBe(expected);
-	});
+	])(
+		'next($array, $index, $loop) -> $expected',
+		({ array, index, loop, expected }) => {
+			expect(next(array, index, loop)).toBe(expected);
+		},
+	);
 });
 
 describe('prev', () => {
@@ -73,18 +112,36 @@ describe('prev', () => {
 		// With looping enabled, the last element should be returned.
 		{ array: ['a', 'b', 'c'], index: 0, loop: true, expected: 'c' },
 		{ array: ['a', 'b', 'c'], index: -1, loop: true, expected: 'c' },
-	])('prev($array, $index, $loop) -> $expected', ({ array, index, loop, expected }) => {
-		expect(prev(array, index, loop)).toBe(expected);
-	});
+	])(
+		'prev($array, $index, $loop) -> $expected',
+		({ array, index, loop, expected }) => {
+			expect(prev(array, index, loop)).toBe(expected);
+		},
+	);
 });
 
 describe('wrapArray', () => {
 	test.each([
 		{ array: [], startIndex: 0, expected: [] },
-		{ array: ['a', 'b', 'c', 'd'], startIndex: 0, expected: ['a', 'b', 'c', 'd'] },
-		{ array: ['a', 'b', 'c', 'd'], startIndex: 2, expected: ['c', 'd', 'a', 'b'] },
-		{ array: ['a', 'b', 'c', 'd'], startIndex: 4, expected: ['a', 'b', 'c', 'd'] },
-	])('wrapArray($array, $startIndex) -> $expected', ({ array, startIndex, expected }) => {
-		expect(wrapArray(array, startIndex)).toStrictEqual(expected);
-	});
+		{
+			array: ['a', 'b', 'c', 'd'],
+			startIndex: 0,
+			expected: ['a', 'b', 'c', 'd'],
+		},
+		{
+			array: ['a', 'b', 'c', 'd'],
+			startIndex: 2,
+			expected: ['c', 'd', 'a', 'b'],
+		},
+		{
+			array: ['a', 'b', 'c', 'd'],
+			startIndex: 4,
+			expected: ['a', 'b', 'c', 'd'],
+		},
+	])(
+		'wrapArray($array, $startIndex) -> $expected',
+		({ array, startIndex, expected }) => {
+			expect(wrapArray(array, startIndex)).toStrictEqual(expected);
+		},
+	);
 });

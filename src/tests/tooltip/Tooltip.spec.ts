@@ -1,10 +1,10 @@
 import { fireEvent, render, waitFor } from '@testing-library/svelte';
+import { userEvent } from '@testing-library/user-event';
 import { get, writable } from 'svelte/store';
 import { describe, expect, test } from 'vitest';
-import Tooltip from './Tooltip.svelte';
-import { userEvent } from '@testing-library/user-event';
-import { sleep } from '$lib/internal/helpers/index.js';
 import type { CreateTooltipProps } from '$lib/index.js';
+import { sleep } from '$lib/internal/helpers/index.js';
+import Tooltip from './Tooltip.svelte';
 
 /**
  * Simple setup function to render the tooltip component and

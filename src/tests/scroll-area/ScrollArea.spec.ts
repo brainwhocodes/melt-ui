@@ -1,14 +1,51 @@
-import { render, waitFor, fireEvent } from '@testing-library/svelte';
-import { describe, it } from 'vitest';
+import { fireEvent, render, waitFor } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
-import ScrollAreaTest from './ScrollAreaTest.svelte';
+import { afterEach, beforeEach, describe, it, vi } from 'vitest';
 import type { CreateScrollAreaProps } from '$lib/index.js';
+import ScrollAreaTest from './ScrollAreaTest.svelte';
+
+class TestResizeObserver {
+	static instances: TestResizeObserver[] = [];
+
+	readonly observed = new Set<Element>();
+	readonly allObserved = new Set<Element>();
+
+	constructor(private readonly callback: ResizeObserverCallback) {
+		TestResizeObserver.instances.push(this);
+	}
+
+	observe(target: Element) {
+		this.observed.add(target);
+		this.allObserved.add(target);
+	}
+
+	unobserve(target: Element) {
+		this.observed.delete(target);
+	}
+
+	disconnect() {
+		this.observed.clear();
+	}
+
+	trigger() {
+		if (this.observed.size > 0) {
+			this.callback([], this as unknown as ResizeObserver);
+		}
+	}
+}
+
+function setElementSize(element: Element, sizes: Record<string, number>) {
+	for (const [property, value] of Object.entries(sizes)) {
+		Object.defineProperty(element, property, { configurable: true, value });
+	}
+}
 
 function setup(
 	props?: CreateScrollAreaProps & {
 		height?: string;
 		width?: string;
-	}
+		showReplacementControls?: boolean;
+	},
 ) {
 	const user = userEvent.setup();
 	const returned = render(ScrollAreaTest, { props });
@@ -32,6 +69,15 @@ function setup(
 		...returned,
 	};
 }
+
+beforeEach(() => {
+	TestResizeObserver.instances = [];
+	vi.stubGlobal('ResizeObserver', TestResizeObserver);
+});
+
+afterEach(() => {
+	vi.unstubAllGlobals();
+});
 
 describe('Scroll Area', () => {
 	it('Displays the scrollbars when `type` is "always"', async () => {
@@ -92,5 +138,117 @@ describe('Scroll Area', () => {
 
 		await waitFor(() => expect(elements.scrollbarX).not.toBeVisible());
 		await waitFor(() => expect(elements.scrollbarY).not.toBeVisible());
+	});
+
+	it('rebinds both orientation size observers as content and viewport nodes change', async () => {
+		const { elements, getByTestId, getByRole, user, unmount } = setup({
+			type: 'always',
+			showReplacementControls: true,
+		});
+		const scrollbarX = elements.scrollbarX;
+		const scrollbarY = elements.scrollbarY;
+		let viewport = getByTestId('viewport');
+		let content = getByTestId('content');
+
+		setElementSize(viewport, {
+			offsetWidth: 100,
+			scrollWidth: 400,
+			offsetHeight: 80,
+			scrollHeight: 320,
+		});
+		setElementSize(scrollbarX, { clientWidth: 100 });
+		setElementSize(scrollbarY, { clientHeight: 80 });
+
+		const initialViewportObservers = TestResizeObserver.instances.filter(
+			(observer) => observer.observed.has(viewport),
+		);
+		expect(initialViewportObservers).toHaveLength(2);
+		initialViewportObservers.forEach((observer) => observer.trigger());
+
+		await waitFor(() =>
+			expect(
+				scrollbarX.style.getPropertyValue('--melt-scroll-area-thumb-width'),
+			).toBe('25px'),
+		);
+		expect(
+			scrollbarY.style.getPropertyValue('--melt-scroll-area-thumb-height'),
+		).toBe('20px');
+
+		const originalContent = content;
+		await user.click(getByRole('button', { name: 'Replace content' }));
+		content = getByTestId('content');
+
+		expect(content).not.toBe(originalContent);
+		expect(
+			TestResizeObserver.instances.filter((observer) =>
+				observer.observed.has(content),
+			),
+		).toHaveLength(2);
+		expect(
+			TestResizeObserver.instances.some((observer) =>
+				observer.observed.has(originalContent),
+			),
+		).toBe(false);
+		expect(
+			TestResizeObserver.instances.filter((observer) =>
+				observer.observed.has(viewport),
+			),
+		).toHaveLength(2);
+
+		const originalViewport = viewport;
+		const contentBeforeViewportReplacement = content;
+		await user.click(getByRole('button', { name: 'Replace viewport' }));
+		viewport = getByTestId('viewport');
+		content = getByTestId('content');
+
+		expect(viewport).not.toBe(originalViewport);
+		expect(content).not.toBe(contentBeforeViewportReplacement);
+		expect(
+			TestResizeObserver.instances.some((observer) =>
+				observer.observed.has(originalViewport),
+			),
+		).toBe(false);
+		expect(
+			TestResizeObserver.instances.some((observer) =>
+				observer.observed.has(contentBeforeViewportReplacement),
+			),
+		).toBe(false);
+		expect(
+			TestResizeObserver.instances.filter((observer) =>
+				observer.observed.has(viewport),
+			),
+		).toHaveLength(2);
+		expect(
+			TestResizeObserver.instances.filter((observer) =>
+				observer.observed.has(content),
+			),
+		).toHaveLength(2);
+
+		setElementSize(viewport, {
+			offsetWidth: 50,
+			scrollWidth: 500,
+			offsetHeight: 100,
+			scrollHeight: 200,
+		});
+		TestResizeObserver.instances
+			.filter((observer) => observer.observed.has(viewport))
+			.forEach((observer) => observer.trigger());
+
+		await waitFor(() =>
+			expect(
+				scrollbarX.style.getPropertyValue('--melt-scroll-area-thumb-width'),
+			).toBe('18px'),
+		);
+		expect(
+			scrollbarY.style.getPropertyValue('--melt-scroll-area-thumb-height'),
+		).toBe('40px');
+
+		unmount();
+
+		expect(
+			TestResizeObserver.instances.every(
+				(observer) => observer.observed.size === 0,
+			),
+		).toBe(true);
 	});
 });

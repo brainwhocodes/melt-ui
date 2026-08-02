@@ -15,30 +15,27 @@
 	export { className as class };
 </script>
 
-<div class={cn('flex flex-col items-start justify-center gap-2 ', className)}>
+<div class={cn('surface-8b578f7b43', className)}>
 	<div
 		use:melt={$root}
-		class="flex min-w-[240px] flex-row flex-wrap gap-2.5 rounded-xl bg-white px-3 py-2 text-magnum-700
-		shadow-sm focus-within:ring focus-within:ring-magnum-400"
+		class="preview-text-magnum-700   preview-elevation-sm surface-d5abb13958"
 	>
 		{#each $tags as t}
 			<div
 				use:melt={$tag(t)}
-				class="flex items-center overflow-hidden rounded-lg bg-magnum-200 text-magnum-900 [word-break:break-word]
-			data-[disabled]:bg-magnum-300 data-[selected]:bg-magnum-300 data-[disabled]:hover:cursor-default
-				data-[disabled]:focus:!outline-none data-[disabled]:focus:!ring-0"
+				class="preview-word-break-break-word    preview-state-disabled-surface-magnum-300 preview-state-disabled-hover-interaction-default     preview-state-disabled-focus-no-ring surface-0ba6f19bba"
 			>
-				<span class="flex items-center border-r border-white/10 px-1.5">{t.value}</span>
+				<span class="surface-e74faf0c60">{t.value}</span>
 				<button
 					use:melt={$deleteTrigger(t)}
-					class="flex h-full items-center px-1 enabled:hover:bg-magnum-300"
+					class="surface-769ce23e8b"
 				>
-					<X class="size-3" />
+					<X class="surface-75d59431f9" />
 				</button>
 			</div>
 			<div
 				use:melt={$edit(t)}
-				class="flex items-center overflow-hidden rounded-md px-1.5 [word-break:break-word] data-[invalid-edit]:focus:!ring-red-500"
+				class="surface-3fbaccdda7"
 			/>
 		{/each}
 
@@ -46,8 +43,7 @@
 			use:melt={$input}
 			type="text"
 			placeholder="Enter tags..."
-			class="min-w-[4rem] shrink grow basis-0 border-0 text-black outline-none focus:!ring-0
-      data-[invalid]:text-red-500"
+			class="preview-focus-no-ring surface-474b4a419d"
 		/>
 	</div>
 </div>

@@ -7,7 +7,10 @@ import { isIos } from './platform.js';
 
 const LOCK_CLASSNAME = 'data-melt-scroll-lock';
 
-function assignStyle(el: HTMLElement | null | undefined, style: Partial<CSSStyleDeclaration>) {
+function assignStyle(
+	el: HTMLElement | null | undefined,
+	style: Partial<CSSStyleDeclaration>,
+) {
 	if (!el) return;
 	const previousStyle = el.style.cssText;
 	Object.assign(el.style, style);
@@ -16,7 +19,11 @@ function assignStyle(el: HTMLElement | null | undefined, style: Partial<CSSStyle
 	};
 }
 
-function setCSSProperty(el: HTMLElement | null | undefined, property: string, value: string) {
+function setCSSProperty(
+	el: HTMLElement | null | undefined,
+	property: string,
+	value: string,
+) {
 	if (!el) return;
 	const previousValue = el.style.getPropertyValue(property);
 	el.style.setProperty(property, value);
@@ -82,7 +89,10 @@ export function removeScroll(_document?: Document): () => void {
 		};
 	};
 
-	const cleanups = [setScrollbarWidthProperty(), isIos() ? setIOSStyle() : setStyle()];
+	const cleanups = [
+		setScrollbarWidthProperty(),
+		isIos() ? setIOSStyle() : setStyle(),
+	];
 
 	return () => {
 		cleanups.forEach((fn) => fn?.());

@@ -2,7 +2,7 @@
 	"name": "melt-ui",
 	"dockerFile": "Dockerfile",
 	"build": {
-		"args": { "NODE_MAJOR_VERSION": "18", "PNPM_VERSION": "8.6.3" }
+		"args": { "NODE_MAJOR_VERSION": "22", "PNPM_VERSION": "9.12.2" }
 	},
 	"postCreateCommand": [".devcontainer/post-create.sh"],
 	"portsAttributes": {
@@ -13,10 +13,9 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"bradlc.vscode-tailwindcss",
-				"dbaeumer.vscode-eslint",
-				"esbenp.prettier-vscode",
-				"svelte.svelte-vscode"
+				"biomejs.biome",
+				"svelte.svelte-vscode",
+				"stylelint.vscode-stylelint"
 			]
 		}
 	}

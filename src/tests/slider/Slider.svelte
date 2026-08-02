@@ -33,9 +33,9 @@
 </script>
 
 <main>
-	<span data-testid="slider" use:melt={$root} class="relative flex h-[20px] w-[200px] items-center">
-		<span class="block h-[3px] w-full bg-black/40">
-			<span data-testid="range" use:melt={$range} class="h-[3px] bg-white" />
+	<span data-testid="slider" use:melt={$root} class="surface-3e356aa96f">
+		<span class="surface-6a02132cd8">
+			<span data-testid="range" use:melt={$range} class="surface-78f2f031a1" />
 		</span>
 
 		{#each $ticks as tick}
@@ -46,7 +46,7 @@
 			aria-label="Volume"
 			data-testid="thumb"
 			use:melt={$thumbs[0]}
-			class="block h-5 w-5 rounded-full bg-white focus:ring-4 focus:ring-black/40"
+			class="surface-94875c31b1"
 		/>
 	</span>
 </main>

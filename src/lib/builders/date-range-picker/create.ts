@@ -1,22 +1,24 @@
 import { createPopover, createRangeCalendar } from '$lib/builders/index.js';
+import { pickerOpenFocus } from '$lib/internal/helpers/date/focus.js';
 import {
+	createFormatter,
+	dateStore,
+	getDefaultDate,
 	handleSegmentNavigation,
 	isSegmentNavigationKey,
 } from '$lib/internal/helpers/date/index.js';
 import {
 	addMeltEventListener,
-	makeElement,
 	effect,
+	makeElement,
 	omit,
 	toWritableStores,
 } from '$lib/internal/helpers/index.js';
-import type { CreateDateRangePickerProps } from './types.js';
-
-import { pickerOpenFocus } from '$lib/internal/helpers/date/focus.js';
-import { createFormatter, dateStore, getDefaultDate } from '$lib/internal/helpers/date/index.js';
 import type { MeltActionReturn } from '$lib/internal/types.js';
+import { defaults as calendarDefaults } from '../calendar/create.js';
 import { createDateRangeField } from '../date-range-field/create.js';
 import type { DateRangePickerEvents } from './events.js';
+import type { CreateDateRangePickerProps } from './types.js';
 
 const defaults = {
 	isDateDisabled: undefined,
@@ -37,6 +39,18 @@ const defaults = {
 	maxValue: undefined,
 	weekdayFormat: 'narrow',
 	onOutsideClick: undefined,
+	...omit(
+		calendarDefaults,
+		'isDateDisabled',
+		'isDateUnavailable',
+		'value',
+		'locale',
+		'disabled',
+		'readonly',
+		'minValue',
+		'maxValue',
+		'weekdayFormat',
+	),
 } satisfies CreateDateRangePickerProps;
 
 export function createDateRangePicker(props?: CreateDateRangePickerProps) {
@@ -85,7 +99,10 @@ export function createDateRangePicker(props?: CreateDateRangePickerProps) {
 
 	const formatter = createFormatter(locale.get());
 
-	const placeholder = dateStore(rfPlaceholder, withDefaults.defaultPlaceholder ?? defaultDate);
+	const placeholder = dateStore(
+		rfPlaceholder,
+		withDefaults.defaultPlaceholder ?? defaultDate,
+	);
 
 	const trigger = makeElement('popover-trigger', {
 		stores: [popover.elements.trigger, options.disabled],
@@ -97,8 +114,14 @@ export function createDateRangePicker(props?: CreateDateRangePickerProps) {
 				disabled: $disabled ? true : undefined,
 			} as const;
 		},
-		action: (node: HTMLElement): MeltActionReturn<DateRangePickerEvents['trigger']> => {
-			const unsubKeydown = addMeltEventListener(node, 'keydown', handleTriggerKeydown);
+		action: (
+			node: HTMLElement,
+		): MeltActionReturn<DateRangePickerEvents['trigger']> => {
+			const unsubKeydown = addMeltEventListener(
+				node,
+				'keydown',
+				handleTriggerKeydown,
+			);
 
 			const { destroy } = popover.elements.trigger(node);
 
@@ -120,6 +143,18 @@ export function createDateRangePicker(props?: CreateDateRangePickerProps) {
 
 	effect([options.weekdayFormat], ([$weekdayFormat]) => {
 		calendar.options.weekdayFormat.set($weekdayFormat);
+	});
+
+	effect([options.numberOfMonths], ([$numberOfMonths]) => {
+		calendar.options.numberOfMonths.set($numberOfMonths);
+	});
+
+	effect([options.fixedWeeks], ([$fixedWeeks]) => {
+		calendar.options.fixedWeeks.set($fixedWeeks);
+	});
+
+	effect([options.weekStartsOn], ([$weekStartsOn]) => {
+		calendar.options.weekStartsOn.set($weekStartsOn);
 	});
 
 	effect([options.disabled], ([$disabled]) => {
@@ -163,7 +198,7 @@ export function createDateRangePicker(props?: CreateDateRangePickerProps) {
 		'disabled',
 		'readonly',
 		'minValue',
-		'maxValue'
+		'maxValue',
 	);
 
 	const rangeCalendarOptions = omit(
@@ -172,7 +207,7 @@ export function createDateRangePicker(props?: CreateDateRangePickerProps) {
 		'disabled',
 		'readonly',
 		'minValue',
-		'maxValue'
+		'maxValue',
 	);
 
 	function handleTriggerKeydown(e: KeyboardEvent) {

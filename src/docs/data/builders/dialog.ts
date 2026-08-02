@@ -1,8 +1,8 @@
 import { ATTRS, KBD, PROPS } from '$docs/constants.js';
 import type { KeyboardSchema } from '$docs/types.js';
 import { builderSchema, elementSchema } from '$docs/utils/index.js';
-import { dialogIdParts } from '$lib/index.js';
 import { dialogEvents } from '$lib/builders/dialog/events.js';
+import { dialogIdParts } from '$lib/index.js';
 import type { BuilderData } from './index.js';
 
 /**
@@ -29,7 +29,12 @@ const BUILDER_NAME = 'dialog';
 const builder = builderSchema(BUILDER_NAME, {
 	ids: dialogIdParts,
 	title: 'createDialog',
-	props: [...OPTION_PROPS, PROPS.DEFAULT_OPEN, PROPS.OPEN, PROPS.ON_OPEN_CHANGE],
+	props: [
+		...OPTION_PROPS,
+		PROPS.DEFAULT_OPEN,
+		PROPS.OPEN,
+		PROPS.ON_OPEN_CHANGE,
+	],
 	elements: [
 		{
 			name: 'trigger',
@@ -37,7 +42,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		},
 		{
 			name: 'portalled',
-			description: 'The builder store used to create the portalled dialog container.',
+			description:
+				'The builder store used to create the portalled dialog container.',
 		},
 		{
 			name: 'overlay',
@@ -71,7 +77,8 @@ const builder = builderSchema(BUILDER_NAME, {
 });
 
 const trigger = elementSchema('trigger', {
-	description: 'The element which triggers the dialog to open when clicked or pressed.',
+	description:
+		'The element which triggers the dialog to open when clicked or pressed.',
 	dataAttributes: [
 		{
 			name: 'data-melt-dialog-trigger',
@@ -97,7 +104,8 @@ const portalled = elementSchema('portalled', {
 });
 
 const overlay = elementSchema('overlay', {
-	description: 'The overlay element which covers the page when the dialog is open.',
+	description:
+		'The overlay element which covers the page when the dialog is open.',
 	dataAttributes: [
 		{
 			name: 'data-state',
@@ -135,7 +143,8 @@ const title = elementSchema('title', {
 });
 
 const description = elementSchema('description', {
-	description: 'The description of the dialog. Used for accessibility purposes.',
+	description:
+		'The description of the dialog. Used for accessibility purposes.',
 	dataAttributes: [
 		{
 			name: 'data-melt-dialog-description',
@@ -170,7 +179,8 @@ const keyboard: KeyboardSchema = [
 	},
 	{
 		key: KBD.SHIFT_TAB,
-		behavior: 'Moves focus to the previous focusable element within the dialog.',
+		behavior:
+			'Moves focus to the previous focusable element within the dialog.',
 	},
 	{
 		key: KBD.ESCAPE,
@@ -178,7 +188,16 @@ const keyboard: KeyboardSchema = [
 	},
 ];
 
-const schemas = [builder, trigger, portalled, overlay, content, close, title, description];
+const schemas = [
+	builder,
+	trigger,
+	portalled,
+	overlay,
+	content,
+	close,
+	title,
+	description,
+];
 const features = [
 	'Fully managed focus',
 	'Can be controlled or uncontrolled',

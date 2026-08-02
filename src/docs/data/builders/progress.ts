@@ -28,13 +28,15 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'value',
 			type: 'Writable<number>',
-			description: 'A writable store that controls the current value of the progress bar.',
+			description:
+				'A writable store that controls the current value of the progress bar.',
 			see: SEE.BRING_YOUR_OWN_STORE,
 		},
 		{
 			name: 'onValueChange',
 			type: 'ChangeFn<number>',
-			description: 'A callback that is called when the value of the progress bar changes.',
+			description:
+				'A callback that is called when the value of the progress bar changes.',
 			see: SEE.CHANGE_FUNCTIONS,
 		},
 	],
@@ -48,7 +50,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'value',
 			type: 'Writable<number>',
-			description: 'A writable store with the current value of the progress bar.',
+			description:
+				'A writable store with the current value of the progress bar.',
 		},
 	],
 	options: OPTION_PROPS,

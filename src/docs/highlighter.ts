@@ -1,4 +1,4 @@
-import { getHighlighter, type BundledLanguage, type Highlighter } from 'shiki';
+import { type BundledLanguage, getHighlighter, type Highlighter } from 'shiki';
 
 type ShikiOptions = NonNullable<Parameters<typeof getHighlighter>[0]>;
 
@@ -41,7 +41,11 @@ type HighlightCodeArgs = {
 
 const highlightedCodeCache = new Map<string, string>();
 
-export async function highlightCode({ code, lang, classes = {} }: HighlightCodeArgs) {
+export async function highlightCode({
+	code,
+	lang,
+	classes = {},
+}: HighlightCodeArgs) {
 	let cached = highlightedCodeCache.get(code);
 
 	if (!cached) {

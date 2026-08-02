@@ -10,7 +10,11 @@ const config = {
 	extensions: ['.svelte', '.md'],
 	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
 	// for more information about preprocessors
-	preprocess: sequence([mdsvex(mdsvexOptions), vitePreprocess(), preprocessMeltUI()]),
+	preprocess: sequence([
+		mdsvex(mdsvexOptions),
+		vitePreprocess(),
+		preprocessMeltUI(),
+	]),
 
 	kit: {
 		// adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.
@@ -31,6 +35,8 @@ const config = {
 			'$components/*': 'src/docs/components/*',
 			$icons: 'src/docs/components/icons',
 			'$icons/*': 'src/docs/components/icons/*',
+			$styles: 'src/styles',
+			'$styles/*': 'src/styles/*',
 		},
 		typescript: {
 			config: (config) => {

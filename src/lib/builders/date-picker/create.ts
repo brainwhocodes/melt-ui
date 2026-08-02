@@ -1,22 +1,27 @@
-import { createCalendar, createDateField, createPopover } from '$lib/builders/index.js';
 import {
+	createCalendar,
+	createDateField,
+	createPopover,
+} from '$lib/builders/index.js';
+import { pickerOpenFocus } from '$lib/internal/helpers/date/focus.js';
+import {
+	createFormatter,
+	dateStore,
+	getDefaultDate,
 	handleSegmentNavigation,
 	isSegmentNavigationKey,
 } from '$lib/internal/helpers/date/index.js';
 import {
 	addMeltEventListener,
-	makeElement,
 	effect,
+	makeElement,
 	omit,
 	toWritableStores,
 } from '$lib/internal/helpers/index.js';
-import type { CreateDatePickerProps } from './types.js';
-
-import { pickerOpenFocus } from '$lib/internal/helpers/date/focus.js';
-import { createFormatter, dateStore, getDefaultDate } from '$lib/internal/helpers/date/index.js';
 import type { MeltActionReturn } from '$lib/internal/types.js';
-import type { DatePickerEvents } from './events.js';
 import { defaults as calendarDefaults } from '../calendar/create.js';
+import type { DatePickerEvents } from './events.js';
+import type { CreateDatePickerProps } from './types.js';
 
 const defaults = {
 	isDateDisabled: undefined,
@@ -47,7 +52,7 @@ const defaults = {
 		'readonly',
 		'minValue',
 		'maxValue',
-		'weekdayFormat'
+		'weekdayFormat',
 	),
 } satisfies CreateDatePickerProps;
 
@@ -98,8 +103,14 @@ export function createDatePicker(props?: CreateDatePickerProps) {
 				disabled: $disabled ? true : undefined,
 			} as const;
 		},
-		action: (node: HTMLElement): MeltActionReturn<DatePickerEvents['trigger']> => {
-			const unsubKeydown = addMeltEventListener(node, 'keydown', handleTriggerKeydown);
+		action: (
+			node: HTMLElement,
+		): MeltActionReturn<DatePickerEvents['trigger']> => {
+			const unsubKeydown = addMeltEventListener(
+				node,
+				'keydown',
+				handleTriggerKeydown,
+			);
 
 			const { destroy } = popover.elements.trigger(node);
 
@@ -162,7 +173,7 @@ export function createDatePicker(props?: CreateDatePickerProps) {
 		'disabled',
 		'readonly',
 		'minValue',
-		'maxValue'
+		'maxValue',
 	);
 	const calendarOptions = omit(
 		calendar.options,
@@ -170,7 +181,7 @@ export function createDatePicker(props?: CreateDatePickerProps) {
 		'disabled',
 		'readonly',
 		'minValue',
-		'maxValue'
+		'maxValue',
 	);
 
 	const {
@@ -183,7 +194,10 @@ export function createDatePicker(props?: CreateDatePickerProps) {
 		granularity: withDefaults.granularity,
 	});
 
-	const placeholder = dateStore(dfPlaceholder, withDefaults.defaultPlaceholder ?? defaultDate);
+	const placeholder = dateStore(
+		dfPlaceholder,
+		withDefaults.defaultPlaceholder ?? defaultDate,
+	);
 
 	effect([open], ([$open]) => {
 		if (!$open) {

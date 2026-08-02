@@ -32,7 +32,14 @@ export type HandleTypeaheadSearch = {
  * like `Shift menu item` or `Control center` or `Alt menu` when
  * a user presses those keys.
  */
-const ignoredKeys = new Set(['Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'NumLock']);
+const ignoredKeys = new Set([
+	'Shift',
+	'Control',
+	'Alt',
+	'Meta',
+	'CapsLock',
+	'NumLock',
+]);
 
 /**
  * Default options for the typeahead search.
@@ -74,9 +81,12 @@ export function createTypeaheadSearch(args: TypeaheadArgs = {}) {
 			return true;
 		});
 
-		const isRepeated = $typed.length > 1 && $typed.every((char) => char === $typed[0]);
+		const isRepeated =
+			$typed.length > 1 && $typed.every((char) => char === $typed[0]);
 		const normalizeSearch = isRepeated ? $typed[0] : $typed.join('');
-		const currentItemIndex = isHTMLElement(currentItem) ? candidateItems.indexOf(currentItem) : -1;
+		const currentItemIndex = isHTMLElement(currentItem)
+			? candidateItems.indexOf(currentItem)
+			: -1;
 
 		let wrappedItems = wrapArray(candidateItems, Math.max(currentItemIndex, 0));
 		const excludeCurrentItem = normalizeSearch.length === 1;
@@ -86,7 +96,8 @@ export function createTypeaheadSearch(args: TypeaheadArgs = {}) {
 
 		const nextItem = wrappedItems.find(
 			(item) =>
-				item?.innerText && item.innerText.toLowerCase().startsWith(normalizeSearch.toLowerCase())
+				item?.innerText &&
+				item.innerText.toLowerCase().startsWith(normalizeSearch.toLowerCase()),
 		);
 
 		if (isHTMLElement(nextItem) && nextItem !== currentItem) {

@@ -23,8 +23,8 @@
 	});
 </script>
 
-<div class="space-y-2">
-	<p class="font-medium">On This Page</p>
+<div class="surface-aaec7bacb4">
+	<p class="surface-25b428a459">On This Page</p>
 	<nav>
 		<Tree tree={$headingsTree} activeHeadingIdxs={$activeHeadingIdxs} {item} />
 	</nav>

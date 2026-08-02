@@ -49,7 +49,7 @@ export const SELECTION_KEYS = [kbd.ENTER, kbd.SPACE];
 
 export const getNextKey = (
 	dir: 'ltr' | 'rtl' = 'ltr',
-	orientation: 'horizontal' | 'vertical' = 'horizontal'
+	orientation: 'horizontal' | 'vertical' = 'horizontal',
 ) => {
 	return {
 		horizontal: dir === 'rtl' ? kbd.ARROW_LEFT : kbd.ARROW_RIGHT,
@@ -59,7 +59,7 @@ export const getNextKey = (
 
 export const getPrevKey = (
 	dir: 'ltr' | 'rtl' = 'ltr',
-	orientation: 'horizontal' | 'vertical' = 'horizontal'
+	orientation: 'horizontal' | 'vertical' = 'horizontal',
 ) => {
 	return {
 		horizontal: dir === 'rtl' ? kbd.ARROW_RIGHT : kbd.ARROW_LEFT,
@@ -69,7 +69,7 @@ export const getPrevKey = (
 
 export const getDirectionalKeys = (
 	dir: 'ltr' | 'rtl' = 'ltr',
-	orientation: 'horizontal' | 'vertical' = 'horizontal'
+	orientation: 'horizontal' | 'vertical' = 'horizontal',
 ) => {
 	return {
 		nextKey: getNextKey(dir, orientation),

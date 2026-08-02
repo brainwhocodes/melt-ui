@@ -29,7 +29,7 @@
 </script>
 
 <button use:melt={$trigger} data-testid="trigger">Trigger</button>
-<div use:melt={$content} data-testid="content" class="h-4 overflow-y-auto">
+<div use:melt={$content} data-testid="content" class="surface-9b60fd5cfa">
 	Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae provident non quam,
 	distinctio dolorum sunt sed minus adipisci. Commodi, alias minima! Nisi architecto corrupti quam
 	quisquam totam laborum voluptatem accusantium. Lorem ipsum, dolor sit amet consectetur adipisicing

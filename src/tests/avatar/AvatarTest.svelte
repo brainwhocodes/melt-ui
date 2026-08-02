@@ -10,8 +10,8 @@
 	});
 </script>
 
-<div class="flex h-24 w-24 items-center justify-center rounded-full bg-neutral-100">
-	<img use:melt={$image} alt="Avatar" class="h-full w-full rounded-[inherit]" data-testid="image" />
-	<span use:melt={$fallback} class="text-3xl font-medium text-black" data-testid="fallback">RH</span
+<div class="surface-900127e8ae">
+	<img use:melt={$image} alt="Avatar" class="surface-baa0bffe7c" data-testid="image" />
+	<span use:melt={$fallback} class="surface-451ef3ffb0" data-testid="fallback">RH</span
 	>
 </div>

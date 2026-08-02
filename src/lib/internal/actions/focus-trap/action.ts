@@ -1,7 +1,7 @@
-import type { FocusTrapConfig } from './types.js';
 import { createFocusTrap as _createFocusTrap } from 'focus-trap';
-import { noop } from '$lib/internal/helpers/callbacks.js';
 import type { Action } from 'svelte/action';
+import { noop } from '$lib/internal/helpers/callbacks.js';
+import type { FocusTrapConfig } from './types.js';
 
 export const useFocusTrap = ((node, config = {}) => {
 	let unsub = noop;

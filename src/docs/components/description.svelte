@@ -4,6 +4,6 @@
 	export { className as class };
 </script>
 
-<p class={cn('mb-4 mt-2 text-balance text-xl text-neutral-400', className)}>
+<p class={cn('surface-d7fec73ca2', className)}>
 	<slot />
 </p>

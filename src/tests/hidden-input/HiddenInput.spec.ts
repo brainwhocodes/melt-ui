@@ -2,9 +2,9 @@ import { render } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { writable } from 'svelte/store';
 import { test } from 'vitest';
+import { sleep } from '$lib/internal/helpers/sleep.js';
 import type { HiddenInputProps } from './HiddenInputTest.svelte';
 import HiddenInputTest from './HiddenInputTest.svelte';
-import { sleep } from '$lib/internal/helpers/sleep.js';
 
 /**
  * Simple setup function to render the tooltip component and

@@ -1,8 +1,14 @@
-import { isFunction, isHTMLElement, sleep } from '$lib/internal/helpers/index.js';
 import { tick } from 'svelte';
+import {
+	isFunction,
+	isHTMLElement,
+	sleep,
+} from '$lib/internal/helpers/index.js';
 
 export type FocusTarget = string | HTMLElement | SVGElement | null;
-export type FocusProp = FocusTarget | ((defaultEl?: HTMLElement | null) => FocusTarget);
+export type FocusProp =
+	| FocusTarget
+	| ((defaultEl?: HTMLElement | null) => FocusTarget);
 
 type HandleFocusArgs = {
 	prop?: FocusProp;

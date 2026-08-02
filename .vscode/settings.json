@@ -1,6 +1,12 @@
 {
-  "files.associations": {
-    "*.ignore-svelte": "svelte",
-    "*.ignore-ts": "typescript"
-  }
+	"files.associations": {
+		"*.ignore-svelte": "svelte",
+		"*.ignore-ts": "typescript"
+	},
+	"editor.defaultFormatter": "biomejs.biome",
+	"editor.formatOnSave": true,
+	"stylelint.validate": ["css", "scss", "svelte"],
+	"editor.codeActionsOnSave": {
+		"source.fixAll.stylelint": "explicit"
+	}
 }

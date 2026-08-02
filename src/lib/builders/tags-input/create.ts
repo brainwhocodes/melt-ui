@@ -1,6 +1,8 @@
+import { tick } from 'svelte';
+import { derived, readonly, writable } from 'svelte/store';
+import { useInteractOutside } from '$lib/internal/actions/index.js';
 import {
 	addMeltEventListener,
-	makeElement,
 	createElHelpers,
 	disabledAttr,
 	effect,
@@ -10,21 +12,19 @@ import {
 	isBrowser,
 	isHTMLElement,
 	kbd,
+	makeElement,
+	noop,
 	omit,
 	overridable,
 	styleToString,
 	toWritableStores,
-	noop,
 } from '$lib/internal/helpers/index.js';
 import { withGet } from '$lib/internal/helpers/withGet.js';
 import type { Defaults, MeltActionReturn } from '$lib/internal/types.js';
-import { tick } from 'svelte';
-import { derived, readonly, writable } from 'svelte/store';
 import { generateIds } from '../../internal/helpers/id.js';
 import type { TagsInputEvents } from './events.js';
 import { focusInput, highlightText, setSelectedFromEl } from './helpers.js';
 import type { CreateTagsInputProps, Tag, TagProps } from './types.js';
-import { useInteractOutside } from '$lib/internal/actions/index.js';
 
 const defaults = {
 	placeholder: '',
@@ -44,7 +44,8 @@ const defaults = {
 } satisfies Defaults<CreateTagsInputProps>;
 
 type TagsInputParts = '' | 'tag' | 'delete-trigger' | 'edit' | 'input';
-const { name, attribute, selector } = createElHelpers<TagsInputParts>('tags-input');
+const { name, attribute, selector } =
+	createElHelpers<TagsInputParts>('tags-input');
 
 export function createTagsInput(props?: CreateTagsInputProps) {
 	const withDefaults = { ...defaults, ...props } satisfies CreateTagsInputProps;
@@ -90,9 +91,12 @@ export function createTagsInput(props?: CreateTagsInputProps) {
 		writable<Tag[]>(
 			withDefaults.defaultTags && withDefaults.defaultTags.length > 0
 				? typeof withDefaults.defaultTags[0] === 'string'
-					? (withDefaults.defaultTags as string[]).map((tag) => ({ id: generateId(), value: tag }))
+					? (withDefaults.defaultTags as string[]).map((tag) => ({
+							id: generateId(),
+							value: tag,
+						}))
 					: (withDefaults.defaultTags as Tag[])
-				: [] // if undefined)
+				: [], // if undefined)
 		);
 	const tags = overridable<Tag[]>(tagsWritable, withDefaults?.onTagsChange);
 
@@ -252,7 +256,7 @@ export function createTagsInput(props?: CreateTagsInputProps) {
 						e.preventDefault();
 						focusInput(meltIds.input);
 					}
-				})
+				}),
 			);
 
 			return {
@@ -271,7 +275,9 @@ export function createTagsInput(props?: CreateTagsInputProps) {
 				placeholder: $placeholder,
 			} as const;
 		},
-		action: (node: HTMLInputElement): MeltActionReturn<TagsInputEvents['input']> => {
+		action: (
+			node: HTMLInputElement,
+		): MeltActionReturn<TagsInputEvents['input']> => {
 			const getTagsInfo = (id: string) => {
 				const rootEl = getElementByMeltId(meltIds.root);
 
@@ -283,7 +289,9 @@ export function createTagsInput(props?: CreateTagsInputProps) {
 				if (rootEl) {
 					tagsEl = Array.from(rootEl.querySelectorAll(selector('tag')));
 
-					selectedIndex = tagsEl.findIndex((element) => element.getAttribute('data-tag-id') === id);
+					selectedIndex = tagsEl.findIndex(
+						(element) => element.getAttribute('data-tag-id') === id,
+					);
 
 					prevIndex = selectedIndex - 1;
 					nextIndex = selectedIndex + 1;
@@ -410,7 +418,9 @@ export function createTagsInput(props?: CreateTagsInputProps) {
 							e.preventDefault();
 							const prevSelected = $selected;
 
-							const { tagsEl, nextIndex, prevIndex } = getTagsInfo($selected.id);
+							const { tagsEl, nextIndex, prevIndex } = getTagsInfo(
+								$selected.id,
+							);
 
 							if (prevIndex >= 0) {
 								setSelectedFromEl(tagsEl[prevIndex], selected);
@@ -431,7 +441,7 @@ export function createTagsInput(props?: CreateTagsInputProps) {
 
 							// Do nothing when there is no edit container
 							const editEl = document.querySelector(
-								selector('edit') + `[data-tag-id="${$selected.id}"]`
+								selector('edit') + `[data-tag-id="${$selected.id}"]`,
 							);
 							if (!editEl) return;
 
@@ -441,7 +451,9 @@ export function createTagsInput(props?: CreateTagsInputProps) {
 
 							// Let it become visible then select all
 							await tick();
-							highlightText(selector('edit') + `[data-tag-id="${$selected.id}"]`);
+							highlightText(
+								selector('edit') + `[data-tag-id="${$selected.id}"]`,
+							);
 						}
 					} else {
 						if (e.key === kbd.ENTER) {
@@ -472,7 +484,7 @@ export function createTagsInput(props?: CreateTagsInputProps) {
 				}),
 				addMeltEventListener(node, 'input', () => {
 					inputValue.set(node.value);
-				})
+				}),
 			);
 
 			return {
@@ -507,12 +519,14 @@ export function createTagsInput(props?: CreateTagsInputProps) {
 								opacity: 0,
 								'pointer-events': 'none',
 								margin: 0,
-						  })
+							})
 						: undefined,
 				} as const;
 			};
 		},
-		action: (node: HTMLDivElement): MeltActionReturn<TagsInputEvents['tag']> => {
+		action: (
+			node: HTMLDivElement,
+		): MeltActionReturn<TagsInputEvents['tag']> => {
 			const getElProps = () => {
 				const id = node.getAttribute('data-tag-id') ?? '';
 
@@ -552,7 +566,7 @@ export function createTagsInput(props?: CreateTagsInputProps) {
 
 					// Do nothing when there is no edit container
 					const editEl = document.querySelector(
-						selector('edit') + `[data-tag-id="${getElProps().id}"]`
+						selector('edit') + `[data-tag-id="${getElProps().id}"]`,
 					);
 					if (!editEl) return;
 
@@ -567,8 +581,10 @@ export function createTagsInput(props?: CreateTagsInputProps) {
 
 					// Let it become visible then select all text
 					await tick();
-					highlightText(selector('edit') + `[data-tag-id="${getElProps().id}"]`);
-				})
+					highlightText(
+						selector('edit') + `[data-tag-id="${getElProps().id}"]`,
+					);
+				}),
 			);
 
 			return {
@@ -597,7 +613,9 @@ export function createTagsInput(props?: CreateTagsInputProps) {
 				} as const;
 			};
 		},
-		action: (node: HTMLElement): MeltActionReturn<TagsInputEvents['deleteTrigger']> => {
+		action: (
+			node: HTMLElement,
+		): MeltActionReturn<TagsInputEvents['deleteTrigger']> => {
 			function handleDelete() {
 				if (node.hasAttribute('data-disabled')) return;
 
@@ -618,7 +636,7 @@ export function createTagsInput(props?: CreateTagsInputProps) {
 					if (e.key !== kbd.ENTER && e.key !== kbd.SPACE) return;
 					e.preventDefault();
 					handleDelete();
-				})
+				}),
 			);
 
 			return {
@@ -646,7 +664,7 @@ export function createTagsInput(props?: CreateTagsInputProps) {
 								opacity: 0,
 								'pointer-events': 'none',
 								margin: 0,
-						  })
+							})
 						: undefined,
 				} as const;
 			};
@@ -676,7 +694,9 @@ export function createTagsInput(props?: CreateTagsInputProps) {
 						// Stop editing, reset the value to the original and clear an invalid state
 						editing.set(null);
 						node.textContent = getElProps().value;
-						getElementByMeltId(meltIds.root)?.removeAttribute('data-invalid-edit');
+						getElementByMeltId(meltIds.root)?.removeAttribute(
+							'data-invalid-edit',
+						);
 						node.removeAttribute('data-invalid-edit');
 					}),
 					addMeltEventListener(node, 'keydown', async (e) => {
@@ -695,7 +715,10 @@ export function createTagsInput(props?: CreateTagsInputProps) {
 								editValue.set('');
 								focusInput(meltIds.input);
 							} else {
-								getElementByMeltId(meltIds.root)?.setAttribute('data-invalid-edit', '');
+								getElementByMeltId(meltIds.root)?.setAttribute(
+									'data-invalid-edit',
+									'',
+								);
 								node.setAttribute('data-invalid-edit', '');
 							}
 						} else if (e.key === kbd.ESCAPE) {
@@ -712,7 +735,7 @@ export function createTagsInput(props?: CreateTagsInputProps) {
 					addMeltEventListener(node, 'input', () => {
 						// Update the edit value store
 						editValue.set(node.textContent || '');
-					})
+					}),
 				);
 			});
 
@@ -753,7 +776,7 @@ export function createTagsInput(props?: CreateTagsInputProps) {
 		getElementByMeltId(meltIds.root)?.removeAttribute('data-invalid-edit');
 
 		const invalidEl = Array.from(
-			document.querySelectorAll(selector('edit') + '[data-invalid-edit]')
+			document.querySelectorAll(selector('edit') + '[data-invalid-edit]'),
 		);
 		invalidEl.forEach((e) => {
 			e.removeAttribute('data-invalid-edit');

@@ -1,11 +1,14 @@
+import type { Action } from 'svelte/action';
+import { readable } from 'svelte/store';
 import { executeCallbacks, noop } from '$lib/internal/helpers/callbacks.js';
+import {
+	getOwnerDocument,
+	isOrContainsTarget,
+} from '$lib/internal/helpers/elements.js';
 import { addEventListener } from '$lib/internal/helpers/event.js';
 import { isHTMLElement, isReadable } from '$lib/internal/helpers/is.js';
-import type { Action } from 'svelte/action';
-import type { PreventTextSelectionOverflowConfig } from './types.js';
-import { readable } from 'svelte/store';
 import { withGet } from '$lib/internal/helpers/withGet.js';
-import { getOwnerDocument, isOrContainsTarget } from '$lib/internal/helpers/elements.js';
+import type { PreventTextSelectionOverflowConfig } from './types.js';
 
 const layers = new Set();
 
@@ -20,14 +23,18 @@ export const usePreventTextSelectionOverflow = ((node, config = {}) => {
 		unsubEvents();
 		resetSelectionLock();
 
-		const options = { enabled: true, ...config } satisfies PreventTextSelectionOverflowConfig;
+		const options = {
+			enabled: true,
+			...config,
+		} satisfies PreventTextSelectionOverflowConfig;
 		const enabled = isReadable(options.enabled)
 			? options.enabled
 			: withGet(readable(options.enabled));
 
 		const onPointerDown = (e: PointerEvent) => {
 			const target = e.target;
-			if (!isHighestLayer(node) || !isHTMLElement(target) || !enabled.get()) return;
+			if (!isHighestLayer(node) || !isHTMLElement(target) || !enabled.get())
+				return;
 			isPointerDownInside = isOrContainsTarget(node, target);
 			if (isPointerDownInside) {
 				unsubSelectionLock = preventTextSelectionOverflow(node);
@@ -36,7 +43,7 @@ export const usePreventTextSelectionOverflow = ((node, config = {}) => {
 
 		unsubEvents = executeCallbacks(
 			addEventListener(documentObj, 'pointerdown', onPointerDown, true),
-			addEventListener(documentObj, 'pointerup', resetSelectionLock, true)
+			addEventListener(documentObj, 'pointerup', resetSelectionLock, true),
 		);
 	};
 
@@ -70,7 +77,8 @@ const preventTextSelectionOverflow = (node: HTMLElement) => {
 	};
 };
 
-const getUserSelect = (node: HTMLElement) => node.style.userSelect || node.style.webkitUserSelect;
+const getUserSelect = (node: HTMLElement) =>
+	node.style.userSelect || node.style.webkitUserSelect;
 
 const setUserSelect = (node: HTMLElement, value: string) => {
 	node.style.userSelect = value;

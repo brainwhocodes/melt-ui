@@ -1,9 +1,9 @@
-import { describe, it } from 'vitest';
 import { render, waitFor } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
-import EscapeKeydownRoot from './EscapeKeydownRoot.svelte';
+import { describe, it } from 'vitest';
 import type { CreateDialogProps } from '$lib/index.js';
 import { testKbd } from '../utils.js';
+import EscapeKeydownRoot from './EscapeKeydownRoot.svelte';
 
 async function setup(props: CreateDialogProps) {
 	const user = userEvent.setup();
@@ -27,7 +27,10 @@ const components = [
 	'tooltip',
 ] as const;
 
-const componentsToHover = new Set<(typeof components)[number]>(['tooltip', 'link-preview']);
+const componentsToHover = new Set<(typeof components)[number]>([
+	'tooltip',
+	'link-preview',
+]);
 
 describe('Nested Escape Keydown Behaviors', () => {
 	describe.each(components)('dialog + %s', (componentName) => {
@@ -128,7 +131,9 @@ describe('Nested Escape Keydown Behaviors', () => {
 			 * If the parent element's position in the stack was reset, on escape no element would be closed
 			 * because the parent would be at the "top" of the stack and it's set to ignore escape key presses.
 			 */
-			await user.click(getByTestId(`${componentName}-set-parent-escape-behavior-ignore`));
+			await user.click(
+				getByTestId(`${componentName}-set-parent-escape-behavior-ignore`),
+			);
 			await user.keyboard(testKbd.ESCAPE);
 			expect(getContent()).toBeNull();
 			expect(getRootContent()).toBeVisible();

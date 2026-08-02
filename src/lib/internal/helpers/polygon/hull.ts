@@ -29,14 +29,18 @@ export type Polygon = Array<Point>;
 // Returns a new array of points representing the convex hull of
 // the given set of points. The convex hull excludes collinear points.
 // This algorithm runs in O(n log n) time.
-export function makeHull<P extends Point>(points: Readonly<Array<P>>): Array<P> {
+export function makeHull<P extends Point>(
+	points: Readonly<Array<P>>,
+): Array<P> {
 	const newPoints: Array<P> = points.slice();
 	newPoints.sort(POINT_COMPARATOR);
 	return makeHullPresorted(newPoints);
 }
 
 // Returns the convex hull, assuming that each points[i] <= points[i + 1]. Runs in O(n) time.
-export function makeHullPresorted<P extends Point>(points: Readonly<Array<P>>): Array<P> {
+export function makeHullPresorted<P extends Point>(
+	points: Readonly<Array<P>>,
+): Array<P> {
 	if (points.length <= 1) return points.slice();
 
 	// Andrew's monotone chain algorithm. Positive y coordinates correspond to "up"
@@ -49,7 +53,8 @@ export function makeHullPresorted<P extends Point>(points: Readonly<Array<P>>): 
 		while (upperHull.length >= 2) {
 			const q: P = upperHull[upperHull.length - 1];
 			const r: P = upperHull[upperHull.length - 2];
-			if ((q.x - r.x) * (p.y - r.y) >= (q.y - r.y) * (p.x - r.x)) upperHull.pop();
+			if ((q.x - r.x) * (p.y - r.y) >= (q.y - r.y) * (p.x - r.x))
+				upperHull.pop();
 			else break;
 		}
 		upperHull.push(p);
@@ -62,7 +67,8 @@ export function makeHullPresorted<P extends Point>(points: Readonly<Array<P>>): 
 		while (lowerHull.length >= 2) {
 			const q: P = lowerHull[lowerHull.length - 1];
 			const r: P = lowerHull[lowerHull.length - 2];
-			if ((q.x - r.x) * (p.y - r.y) >= (q.y - r.y) * (p.x - r.x)) lowerHull.pop();
+			if ((q.x - r.x) * (p.y - r.y) >= (q.y - r.y) * (p.x - r.x))
+				lowerHull.pop();
 			else break;
 		}
 		lowerHull.push(p);

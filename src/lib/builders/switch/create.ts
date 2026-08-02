@@ -1,16 +1,16 @@
+import { writable } from 'svelte/store';
 import {
 	addMeltEventListener,
-	makeElement,
 	createElHelpers,
 	disabledAttr,
 	kbd,
+	makeElement,
 	omit,
 	overridable,
 	styleToString,
 	toWritableStores,
 } from '$lib/internal/helpers/index.js';
 import type { Defaults, MeltActionReturn } from '$lib/internal/types.js';
-import { writable } from 'svelte/store';
 import { executeCallbacks } from '../../internal/helpers/callbacks.js';
 import type { SwitchEvents } from './events.js';
 import type { CreateSwitchProps } from './types.js';
@@ -26,13 +26,20 @@ const defaults = {
 const { name } = createElHelpers('switch');
 
 export function createSwitch(props?: CreateSwitchProps) {
-	const propsWithDefaults = { ...defaults, ...props } satisfies CreateSwitchProps;
+	const propsWithDefaults = {
+		...defaults,
+		...props,
+	} satisfies CreateSwitchProps;
 
 	const options = toWritableStores(omit(propsWithDefaults, 'checked'));
 	const { disabled, required, name: nameStore, value } = options;
 
-	const checkedWritable = propsWithDefaults.checked ?? writable(propsWithDefaults.defaultChecked);
-	const checked = overridable(checkedWritable, propsWithDefaults?.onCheckedChange);
+	const checkedWritable =
+		propsWithDefaults.checked ?? writable(propsWithDefaults.defaultChecked);
+	const checked = overridable(
+		checkedWritable,
+		propsWithDefaults?.onCheckedChange,
+	);
 
 	function toggleSwitch() {
 		if (disabled.get()) return;
@@ -61,7 +68,7 @@ export function createSwitch(props?: CreateSwitchProps) {
 					if (e.key !== kbd.ENTER && e.key !== kbd.SPACE) return;
 					e.preventDefault();
 					toggleSwitch();
-				})
+				}),
 			);
 
 			return {

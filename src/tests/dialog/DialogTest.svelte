@@ -65,7 +65,7 @@
 	<button use:melt={$close} data-testid="floating-closer">Close</button>
 {/if}
 
-<style>
+<style lang="scss">
 	[data-testid='overlay'] {
 		position: fixed;
 		inset: 0;

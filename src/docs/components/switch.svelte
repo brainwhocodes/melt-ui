@@ -28,20 +28,19 @@
 	let labelId = generateId();
 </script>
 
-<div class="flex items-center gap-2">
-	<label class="font-semibold text-white" id={labelId} for={id}><slot /></label>
+<div class="surface-ecf965eff6">
+	<label class="surface-66c0cc5b81" id={labelId} for={id}><slot /></label>
 	<button
 		use:melt={$root}
-		class="force-dark relative h-6 cursor-default rounded-full bg-magnum-800 outline-none
- data-[state=checked]:bg-magnum-600 dark:bg-magnum-900 dark:data-[state=checked]:bg-magnum-700"
+		class="force-dark surface-36e9efd785"
 		{id}
 		aria-labelledby={labelId}
 	>
-		<div class="thumb block rounded-full bg-white transition-transform" />
+		<div class="thumb surface-a5b7e6f7d3" />
 	</button>
 </div>
 
-<style>
+<style lang="scss">
 	button {
 		--w: 2.75rem;
 		--padding: 0.125rem;

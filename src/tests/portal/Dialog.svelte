@@ -29,7 +29,7 @@
 {/if}
 <div data-testid="dialog-outside-{level}" />
 
-<style>
+<style lang="scss">
 	.overlay {
 		position: fixed;
 		inset: 0;

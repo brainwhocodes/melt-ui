@@ -25,38 +25,36 @@
 
 <main>
 	<PreviewWrapper>
-		<div use:melt={$root} class="mx-auto w-screen max-w-md">
-			<div class="flex items-center justify-between">
-				<span class="text-sm leading-6 text-white"> @thomasglopes starred 3 repositories </span>
+		<div use:melt={$root} class="surface-3cd2c00bea">
+			<div class="surface-aa2c053172">
+				<span class="surface-58b03cd9cc"> @thomasglopes starred 3 repositories </span>
 				<button
 					use:melt={$trigger}
-					class="relative h-6 w-6 place-items-center rounded-full bg-white text-sm text-magnum-700
-				shadow-lg hover:opacity-75
-				data-[disabled]:cursor-not-allowed data-[disabled]:opacity-75"
+					class="surface-f849fa43f5"
 					aria-label={localOpen ? 'Close' : 'Open'}
 					data-testid="trigger"
 				>
 					<div class="abs-center" aria-hidden="true">
 						{#if $localOpen}
-							<X class="size-4" />
+							<X class="surface-b892565096" />
 						{:else}
-							<ChevronsUpDown class="size-4" />
+							<ChevronsUpDown class="surface-5cebd2aa3a" />
 						{/if}
 					</div>
 				</button>
 			</div>
 
-			<div class="my-2 rounded bg-white p-3 shadow-lg">
-				<span class="text-base leading-6 text-magnum-800">melt-ui/melt-ui</span>
+			<div class="surface-d0dd166244">
+				<span class="surface-7f3f4d5957">melt-ui/melt-ui</span>
 			</div>
 
 			<div use:melt={$content} data-testid="content">
-				<div class="flex flex-col gap-2">
-					<div class="rounded bg-white p-3 shadow-lg">
-						<span class="text-base leading-6 text-magnum-800">sveltejs/svelte</span>
+				<div class="surface-fca850d1da">
+					<div class="surface-cc2acff3aa">
+						<span class="surface-bded08a04c">sveltejs/svelte</span>
 					</div>
-					<div class="rounded bg-white p-3 shadow-lg">
-						<span class="text-base leading-6 text-magnum-800">sveltejs/kit</span>
+					<div class="surface-6921a8cfa4">
+						<span class="surface-5d0903bf28">sveltejs/kit</span>
 					</div>
 				</div>
 			</div>
@@ -64,7 +62,7 @@
 	</PreviewWrapper>
 </main>
 
-<style>
+<style lang="scss">
 	.abs-center {
 		position: absolute;
 		top: 50%;

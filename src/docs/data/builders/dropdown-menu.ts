@@ -31,11 +31,15 @@ const {
 	overlay,
 } = getMenuSchemas(BUILDER_NAME);
 
-const { elements, builders, states, options } = getMenuBuilderReturns(BUILDER_NAME);
+const { elements, builders, states, options } =
+	getMenuBuilderReturns(BUILDER_NAME);
 
 export const builder = builderSchema(BUILDER_NAME, {
 	title: 'createDropdownMenu',
-	props: [...menuBuilderProps, PROPS.POSITIONING({ default: "placement: 'bottom'" })],
+	props: [
+		...menuBuilderProps,
+		PROPS.POSITIONING({ default: "placement: 'bottom'" }),
+	],
 	elements,
 	states,
 	builders,

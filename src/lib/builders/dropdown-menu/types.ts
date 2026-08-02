@@ -1,6 +1,7 @@
 import type { BuilderReturn } from '$lib/internal/types.js';
 import type { _Menu } from '../menu/index.js';
 import type { createDropdownMenu } from './create.js';
+
 export type { DropdownMenuComponentEvents } from './events.js';
 
 // Props
@@ -19,17 +20,25 @@ export type DropdownMenuOptions = DropdownMenu['options'];
 export type DropdownMenuStates = DropdownMenu['states'];
 export type DropdownMenuBuilders = DropdownMenu['builders'];
 
-export type DropdownMenuSubmenu = BuilderReturn<DropdownMenuBuilders['createSubmenu']>;
+export type DropdownMenuSubmenu = BuilderReturn<
+	DropdownMenuBuilders['createSubmenu']
+>;
 export type DropdownMenuSubmenuElements = DropdownMenuSubmenu['elements'];
 export type DropdownMenuSubmenuOptions = DropdownMenuSubmenu['options'];
 export type DropdownMenuSubmenuStates = DropdownMenuSubmenu['states'];
 
-export type DropdownMenuRadioGroup = BuilderReturn<DropdownMenuBuilders['createMenuRadioGroup']>;
+export type DropdownMenuRadioGroup = BuilderReturn<
+	DropdownMenuBuilders['createMenuRadioGroup']
+>;
 export type DropdownMenuRadioGroupElements = DropdownMenuRadioGroup['elements'];
 export type DropdownMenuRadioGroupStates = DropdownMenuRadioGroup['states'];
 export type DropdownMenuRadioGroupHelpers = DropdownMenuRadioGroup['helpers'];
 
-export type DropdownMenuCheckboxItem = BuilderReturn<DropdownMenuBuilders['createCheckboxItem']>;
-export type DropdownMenuCheckboxItemElements = DropdownMenuCheckboxItem['elements'];
+export type DropdownMenuCheckboxItem = BuilderReturn<
+	DropdownMenuBuilders['createCheckboxItem']
+>;
+export type DropdownMenuCheckboxItemElements =
+	DropdownMenuCheckboxItem['elements'];
 export type DropdownMenuCheckboxItemStates = DropdownMenuCheckboxItem['states'];
-export type DropdownMenuCheckboxItemHelpers = DropdownMenuCheckboxItem['helpers'];
+export type DropdownMenuCheckboxItemHelpers =
+	DropdownMenuCheckboxItem['helpers'];

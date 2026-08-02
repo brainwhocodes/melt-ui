@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { cn } from '$docs/utils/index.js';
 	import type { Writable } from 'svelte/store';
-	import { buttonVariants } from '$docs/components/index.js';
 
 	export let href: string;
 	export let open: Writable<boolean>;
@@ -14,7 +12,7 @@
 <a
 	{href}
 	on:click={() => open.set(false)}
-	class={cn(buttonVariants({ variant: 'ghost' }), 'justify-start', className)}
+	class={`docs-button docs-button--ghost docs-button--size-default docs-mobile-nav-link ${className ?? ''}`}
 	{...$$restProps}
 	data-active={$page.url.pathname === href}
 >

@@ -1,16 +1,16 @@
-import type { Granularity, Matcher } from './types.js';
 import {
 	CalendarDate,
 	CalendarDateTime,
-	ZonedDateTime,
 	type DateValue,
-	parseZonedDateTime,
-	parseDateTime,
-	parseDate,
-	getLocalTimeZone,
 	getDayOfWeek,
+	getLocalTimeZone,
+	parseDate,
+	parseDateTime,
+	parseZonedDateTime,
 	toCalendar,
+	ZonedDateTime,
 } from '@internationalized/date';
+import type { Granularity, Matcher } from './types.js';
 
 type GetDefaultDateProps = {
 	defaultValue?: DateValue | DateValue[] | undefined;
@@ -68,7 +68,10 @@ export function getDefaultDate(props?: GetDefaultDateProps): DateValue {
  * Useful for parsing strings from data attributes, which are always
  * strings, to the same type being used by the date component.
  */
-export function parseStringToDateValue(dateStr: string, referenceVal: DateValue): DateValue {
+export function parseStringToDateValue(
+	dateStr: string,
+	referenceVal: DateValue,
+): DateValue {
 	let dateValue: DateValue;
 	if (referenceVal instanceof ZonedDateTime) {
 		dateValue = parseZonedDateTime(dateStr);
@@ -97,11 +100,15 @@ export function toDate(dateValue: DateValue, tz: string = getLocalTimeZone()) {
 	}
 }
 
-export function isCalendarDateTime(dateValue: DateValue): dateValue is CalendarDateTime {
+export function isCalendarDateTime(
+	dateValue: DateValue,
+): dateValue is CalendarDateTime {
 	return dateValue instanceof CalendarDateTime;
 }
 
-export function isZonedDateTime(dateValue: DateValue): dateValue is ZonedDateTime {
+export function isZonedDateTime(
+	dateValue: DateValue,
+): dateValue is ZonedDateTime {
 	return dateValue instanceof ZonedDateTime;
 }
 
@@ -157,7 +164,10 @@ export function isAfter(dateToCompare: DateValue, referenceDate: DateValue) {
  *
  * @see {@link isBefore} for non-inclusive
  */
-export function isBeforeOrSame(dateToCompare: DateValue, referenceDate: DateValue) {
+export function isBeforeOrSame(
+	dateToCompare: DateValue,
+	referenceDate: DateValue,
+) {
 	return dateToCompare.compare(referenceDate) <= 0;
 }
 
@@ -169,7 +179,10 @@ export function isBeforeOrSame(dateToCompare: DateValue, referenceDate: DateValu
  *
  * @see {@link isAfter} for non-inclusive
  */
-export function isAfterOrSame(dateToCompare: DateValue, referenceDate: DateValue) {
+export function isAfterOrSame(
+	dateToCompare: DateValue,
+	referenceDate: DateValue,
+) {
 	return dateToCompare.compare(referenceDate) >= 0;
 }
 
@@ -182,7 +195,11 @@ export function isAfterOrSame(dateToCompare: DateValue, referenceDate: DateValue
  *
  * @see {@link isBetween} for non-inclusive
  */
-export function isBetweenInclusive(date: DateValue, start: DateValue, end: DateValue) {
+export function isBetweenInclusive(
+	date: DateValue,
+	start: DateValue,
+	end: DateValue,
+) {
 	return isAfterOrSame(date, start) && isBeforeOrSame(date, end);
 }
 
@@ -202,7 +219,7 @@ export function isBetween(date: DateValue, start: DateValue, end: DateValue) {
 export function getLastFirstDayOfWeek<T extends DateValue = DateValue>(
 	date: T,
 	firstDayOfWeek: number,
-	locale: string
+	locale: string,
 ): T {
 	const day = getDayOfWeek(date, locale);
 
@@ -218,7 +235,7 @@ export function getLastFirstDayOfWeek<T extends DateValue = DateValue>(
 export function getNextLastDayOfWeek<T extends DateValue = DateValue>(
 	date: T,
 	firstDayOfWeek: number,
-	locale: string
+	locale: string,
 ): T {
 	const day = getDayOfWeek(date, locale);
 	const lastDayOfWeek = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
@@ -238,7 +255,7 @@ export function areAllDaysBetweenValid(
 	start: DateValue,
 	end: DateValue,
 	isUnavailable: Matcher | undefined,
-	isDisabled: Matcher | undefined
+	isDisabled: Matcher | undefined,
 ) {
 	if (isUnavailable === undefined && isDisabled === undefined) {
 		return true;

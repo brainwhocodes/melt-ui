@@ -1,16 +1,14 @@
-import {
-	addMeltEventListener,
-	makeElement,
-	createElHelpers,
-	executeCallbacks,
-} from '$lib/internal/helpers/index.js';
-import type { Defaults } from '$lib/internal/types.js';
-
 import { dequal } from 'dequal';
 import { derived, writable } from 'svelte/store';
-
+import {
+	addMeltEventListener,
+	createElHelpers,
+	executeCallbacks,
+	makeElement,
+} from '$lib/internal/helpers/index.js';
 import { safeOnMount } from '$lib/internal/helpers/lifecycle.js';
 import { withGet } from '$lib/internal/helpers/withGet.js';
+import type { Defaults } from '$lib/internal/types.js';
 import type {
 	CreateTableOfContentsArgs,
 	ElementHeadingLU,
@@ -71,7 +69,9 @@ export function createTableOfContents(args: CreateTableOfContentsArgs) {
 		let headingsList: HTMLHeadingElement[] = [];
 		let elementsList: Element[] = [];
 
-		const includedHeadings = possibleHeadings.filter((h) => !exclude.includes(h));
+		const includedHeadings = possibleHeadings.filter(
+			(h) => !exclude.includes(h),
+		);
 
 		const targetHeaders: NodeListOf<HTMLHeadingElement> | undefined =
 			elementTarget?.querySelectorAll(includedHeadings.join(', '));
@@ -101,7 +101,8 @@ export function createTableOfContents(args: CreateTableOfContentsArgs) {
 		// Filter the array, so that only the allowed headings and elements with no children are in the list to avoid problems with elements that wrap around others.
 		elementsList = elementsList.filter(
 			(el) =>
-				(<string[]>includedHeadings).includes(el.nodeName.toLowerCase()) || el.children.length === 0
+				(<string[]>includedHeadings).includes(el.nodeName.toLowerCase()) ||
+				el.children.length === 0,
 		);
 
 		// We don't care about elements before our first header element, so we can remove those as well.
@@ -118,7 +119,10 @@ export function createTableOfContents(args: CreateTableOfContentsArgs) {
 	 * @param arr An array of heading elements.
 	 * @param startIndex The parent elements original index in the array.
 	 */
-	function createTree(arr: HTMLHeadingElement[], startIndex = 0): TableOfContentsItem[] {
+	function createTree(
+		arr: HTMLHeadingElement[],
+		startIndex = 0,
+	): TableOfContentsItem[] {
 		const tree: TableOfContentsItem[] = [];
 
 		let i = 0;
@@ -201,7 +205,9 @@ export function createTableOfContents(args: CreateTableOfContentsArgs) {
 				}
 			} else {
 				// Remove the observed element from the visibleElementIdxs list if the intersection ratio is below the threshold.
-				tempVisibleElementIdxs = tempVisibleElementIdxs.filter((item) => item !== el_idx);
+				tempVisibleElementIdxs = tempVisibleElementIdxs.filter(
+					(item) => item !== el_idx,
+				);
 				visibleElementIdxs.set(tempVisibleElementIdxs);
 
 				// Remove all parents of obsIndex from the activeParentIdxs list.
@@ -220,7 +226,7 @@ export function createTableOfContents(args: CreateTableOfContentsArgs) {
 		}
 
 		const allActiveHeaderIdxs = Array.from(
-			new Set(visibleElementIdxs.get().map((idx) => elementHeadingLU[idx]))
+			new Set(visibleElementIdxs.get().map((idx) => elementHeadingLU[idx])),
 		);
 
 		let activeHeaderIdxs: number[];
@@ -239,7 +245,9 @@ export function createTableOfContents(args: CreateTableOfContentsArgs) {
 					activeHeaderIdxs = allActiveHeaderIdxs;
 					break;
 				case 'all-parents': {
-					const parentIdxs = allActiveHeaderIdxs.flatMap((idx) => headingParentsLU[idx] ?? []);
+					const parentIdxs = allActiveHeaderIdxs.flatMap(
+						(idx) => headingParentsLU[idx] ?? [],
+					);
 					activeHeaderIdxs = [...allActiveHeaderIdxs, ...parentIdxs];
 					break;
 				}
@@ -250,7 +258,10 @@ export function createTableOfContents(args: CreateTableOfContentsArgs) {
 							: Math.max(...allActiveHeaderIdxs);
 
 					if (headingParentsLU[activeHeaderIdx]) {
-						activeHeaderIdxs = [...(<[]>headingParentsLU[activeHeaderIdx]), activeHeaderIdx];
+						activeHeaderIdxs = [
+							...(<[]>headingParentsLU[activeHeaderIdx]),
+							activeHeaderIdx,
+						];
 					} else {
 						activeHeaderIdxs = [activeHeaderIdx];
 					}
@@ -382,7 +393,7 @@ export function createTableOfContents(args: CreateTableOfContentsArgs) {
 							history.pushState({}, '', `#${id}`);
 						}
 					}
-				})
+				}),
 			);
 
 			return {

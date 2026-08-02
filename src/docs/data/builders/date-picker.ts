@@ -1,9 +1,9 @@
 import { KBD } from '$docs/constants.js';
 import type { KeyboardSchema } from '$docs/types.js';
 import { builderSchema } from '$docs/utils/index.js';
-import type { BuilderData } from './index.js';
-import { dateFieldData } from './date-field.js';
 import { calendarData } from './calendar.js';
+import { dateFieldData } from './date-field.js';
+import type { BuilderData } from './index.js';
 import { popoverData } from './popover.js';
 
 const datePickerProps = [
@@ -82,7 +82,8 @@ const datePickerProps = [
 		name: 'preventDeselect',
 		type: 'boolean',
 		default: 'false',
-		description: 'Whether to prevent the user from deselecting the current value by pressing it.',
+		description:
+			'Whether to prevent the user from deselecting the current value by pressing it.',
 	},
 	{
 		name: 'pagedNavigation',
@@ -94,7 +95,8 @@ const datePickerProps = [
 		name: 'weekStartsOn',
 		type: '0 | 1 | 2 | 3 | 4 | 5 | 6',
 		default: '0',
-		description: 'The day of the week the calendar starts on. 0 is Sunday, 6 is Saturday, etc.',
+		description:
+			'The day of the week the calendar starts on. 0 is Sunday, 6 is Saturday, etc.',
 	},
 	{
 		name: 'fixedWeeks',
@@ -111,12 +113,15 @@ const datePickerProps = [
 	{
 		name: 'ids',
 		type: 'DatePickerIds',
-		description: 'Override the default ids used by the various elements within the date picker.',
+		description:
+			'Override the default ids used by the various elements within the date picker.',
 	},
 ];
 
 const excludedProps = ['value', 'placeholder'];
-const calendarOptions = datePickerProps.filter((prop) => !excludedProps.includes(prop.name));
+const calendarOptions = datePickerProps.filter(
+	(prop) => !excludedProps.includes(prop.name),
+);
 
 const BUILDER_NAME = 'date picker';
 
@@ -173,12 +178,14 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'value',
 			type: 'Writable<DateValue>',
-			description: 'A writable store which represents the current value of the calendar.',
+			description:
+				'A writable store which represents the current value of the calendar.',
 		},
 		{
 			name: 'months',
 			type: 'Readable<Month[]>',
-			description: 'A readable store containing month objects for each month in the calendar.',
+			description:
+				'A readable store containing month objects for each month in the calendar.',
 		},
 		{
 			name: 'weekdays',
@@ -195,27 +202,32 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'segmentValues',
 			type: 'Writable<DateSegmentObj | DateTimeSegmentObj>',
-			description: 'A writable store containing the current values of the date segments.',
+			description:
+				'A writable store containing the current values of the date segments.',
 		},
 		{
 			name: 'segmentContents',
 			type: 'Readable<{ part: SegmentPart; value: string; }[]>',
-			description: 'A readable store used to dynamically render the date segments.',
+			description:
+				'A readable store used to dynamically render the date segments.',
 		},
 		{
 			name: 'segmentContentsObj',
 			type: 'Readable<SegmentContentsObj>',
-			description: 'A readable store containing the current values of the date segments.',
+			description:
+				'A readable store containing the current values of the date segments.',
 		},
 		{
 			name: 'placeholder',
 			type: 'Writable<DateValue>',
-			description: 'A writable store which represents the placeholder value of the calendar.',
+			description:
+				'A writable store which represents the placeholder value of the calendar.',
 		},
 		{
 			name: 'isInvalid',
 			type: 'Readable<boolean>',
-			description: 'A readable store which represents whether the calendar is invalid.',
+			description:
+				'A readable store which represents whether the calendar is invalid.',
 		},
 	],
 	options: calendarOptions,
@@ -248,17 +260,20 @@ const builder = builderSchema(BUILDER_NAME, {
 		},
 		{
 			name: 'isDateDisabled',
-			description: 'A function that returns whether the given date is disabled.',
+			description:
+				'A function that returns whether the given date is disabled.',
 			type: 'Readable<(date: DateValue) => boolean>',
 		},
 		{
 			name: 'isDateUnavailable',
-			description: 'A function that returns whether the given date is unavailable.',
+			description:
+				'A function that returns whether the given date is unavailable.',
 			type: 'Readable<(date: DateValue) => boolean>',
 		},
 		{
 			name: 'isDateSelected',
-			description: 'A function that returns whether the given date is selected.',
+			description:
+				'A function that returns whether the given date is selected.',
 			type: 'Readable<(date: DateValue) => boolean>',
 		},
 	],

@@ -7,7 +7,10 @@ type ConstructTreeArgs<T> = {
 	basePath: string;
 };
 
-export function constructTree<T>({ paths, basePath }: ConstructTreeArgs<T>): Tree {
+export function constructTree<T>({
+	paths,
+	basePath,
+}: ConstructTreeArgs<T>): Tree {
 	const tree: Tree = {};
 
 	for (const path in paths) {

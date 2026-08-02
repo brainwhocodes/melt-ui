@@ -1,8 +1,12 @@
-import { styleToString } from '$lib/internal/helpers/index.js';
 import { cubicOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
+import { styleToString } from '$lib/internal/helpers/index.js';
 
-const scaleConversion = (valueA: number, scaleA: [number, number], scaleB: [number, number]) => {
+const scaleConversion = (
+	valueA: number,
+	scaleA: [number, number],
+	scaleB: [number, number],
+) => {
 	const [minA, maxA] = scaleA;
 	const [minB, maxB] = scaleB;
 
@@ -17,7 +21,10 @@ type FlyAndScaleOptions = {
 	start: number;
 	duration?: number;
 };
-export const flyAndScale = (node: HTMLElement, options: FlyAndScaleOptions): TransitionConfig => {
+export const flyAndScale = (
+	node: HTMLElement,
+	options: FlyAndScaleOptions,
+): TransitionConfig => {
 	const style = getComputedStyle(node);
 	const transform = style.transform === 'none' ? '' : style.transform;
 

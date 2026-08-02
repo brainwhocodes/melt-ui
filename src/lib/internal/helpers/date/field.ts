@@ -1,5 +1,9 @@
 import { isAnySegmentPart } from '$lib/builders/date-field/_internal/helpers.js';
-import { isHTMLElement, kbd } from '$lib/internal/helpers/index.js';
+import {
+	getElementById,
+	isHTMLElement,
+	kbd,
+} from '$lib/internal/helpers/index.js';
 
 /**
  * Handles segment navigation based on the provided keyboard event and field ID.
@@ -7,11 +11,19 @@ import { isHTMLElement, kbd } from '$lib/internal/helpers/index.js';
  * @param e - The keyboard event
  * @param fieldId - The ID of the field we're navigating within
  */
-export function handleSegmentNavigation(e: KeyboardEvent, fieldId: string) {
+export function handleSegmentNavigation(
+	e: KeyboardEvent,
+	fieldId: string,
+	rootElement?: ParentNode,
+) {
 	const currentTarget = e.currentTarget;
 	if (!isHTMLElement(currentTarget)) return;
 
-	const { prev, next } = getPrevNextSegments(currentTarget, fieldId);
+	const { prev, next } = getPrevNextSegments(
+		currentTarget,
+		fieldId,
+		rootElement,
+	);
 
 	if (e.key === kbd.ARROW_LEFT) {
 		if (!prev) return;
@@ -56,8 +68,12 @@ export function getPrevSegment(node: HTMLElement, segments: HTMLElement[]) {
  * @param node - The node we're starting from
  * @param fieldId - The ID of the field we're navigating within
  */
-export function getPrevNextSegments(node: HTMLElement, fieldId: string) {
-	const segments = getSegments(fieldId);
+export function getPrevNextSegments(
+	node: HTMLElement,
+	fieldId: string,
+	rootElement?: ParentNode,
+) {
+	const segments = getSegments(fieldId, rootElement);
 	if (!segments.length) {
 		return {
 			next: null,
@@ -74,10 +90,14 @@ export function getPrevNextSegments(node: HTMLElement, fieldId: string) {
  * Shifts the focus to the next segment in the list of segments
  * within the field identified by the provided ID.
  */
-export function moveToNextSegment(e: KeyboardEvent, fieldId: string) {
+export function moveToNextSegment(
+	e: KeyboardEvent,
+	fieldId: string,
+	rootElement?: ParentNode,
+) {
 	const node = e.currentTarget;
 	if (!isHTMLElement(node)) return;
-	const { next } = getPrevNextSegments(node, fieldId);
+	const { next } = getPrevNextSegments(node, fieldId, rootElement);
 	if (!next) return;
 	next.focus();
 }
@@ -90,25 +110,25 @@ export function isSegmentNavigationKey(key: string) {
 /**
  * Retrieves all the interactive segments within the field identified by the provided ID.
  */
-export function getSegments(id: string) {
-	const inputContainer = document.getElementById(id);
+export function getSegments(id: string, rootElement?: ParentNode) {
+	const inputContainer = getElementById(id, rootElement);
 	if (!isHTMLElement(inputContainer)) return [];
-	const segments = Array.from(inputContainer.querySelectorAll('[data-segment]')).filter(
-		(el): el is HTMLElement => {
-			if (!isHTMLElement(el)) return false;
-			const segment = el.dataset.segment;
-			if (segment === 'trigger') return true;
-			if (!isAnySegmentPart(segment) || segment === 'literal') return false;
-			return true;
-		}
-	);
+	const segments = Array.from(
+		inputContainer.querySelectorAll('[data-segment]'),
+	).filter((el): el is HTMLElement => {
+		if (!isHTMLElement(el)) return false;
+		const segment = el.dataset.segment;
+		if (segment === 'trigger') return true;
+		if (!isAnySegmentPart(segment) || segment === 'literal') return false;
+		return true;
+	});
 	return segments;
 }
 
 /**
  * Get the first interactive segment within the field identified by the provided ID.
  */
-export function getFirstSegment(id: string) {
-	const segments = getSegments(id);
+export function getFirstSegment(id: string, rootElement?: ParentNode) {
+	const segments = getSegments(id, rootElement);
 	return segments[0];
 }

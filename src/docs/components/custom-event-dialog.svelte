@@ -15,16 +15,14 @@
 <code class="neutral"
 	>(e: <button
 		use:melt={$trigger}
-		class="text-magnum-500 underline underline-offset-[3px] transition-all hover:text-magnum-400 hover:underline-offset-4"
+		class="surface-bca2be0d04"
 		>CustomEvent
 	</button>) => void</code
 >
 {#if $open}
-	<div use:melt={$overlay} class="fixed inset-0 z-40 bg-black/50" />
+	<div use:melt={$overlay} class="surface-6697cd3522" />
 	<div
-		class="fixed left-1/2 top-1/2 z-50 max-h-[85vh] w-[90vw] max-w-[960px]
-    -translate-x-1/2 -translate-y-1/2 rounded-md
-    bg-neutral-800 p-4 shadow-lg md:p-8"
+		class="preview-limit-w-960px  preview-shape-md  surface-274bfd9bc8"
 		transition:flyAndScale={{
 			duration: 150,
 			y: 8,
@@ -32,22 +30,20 @@
 		}}
 		use:melt={$content}
 	>
-		<div class="mb-2">
-			<code class="inline-code !text-xl" use:melt={$title}>CustomEventDetail</code>
+		<div class="surface-a698818745">
+			<code class="inline-code surface-f0c41fb05d" use:melt={$title}>CustomEventDetail</code>
 		</div>
-		<div class="relative">
-			<CodeBlock class="rounded-md bg-neutral-900" copyBtnClasses="top-4 right-4">
+		<div class="surface-285f350312">
+			<CodeBlock class="surface-77528e796f" copyBtnClasses="docs-code-block-copy--inset">
 				{@html customEventDetail}
 			</CodeBlock>
 		</div>
 		<button
 			use:melt={$close}
 			aria-label="Close"
-			class="absolute right-[10px] top-[10px] inline-flex h-6 w-6
-                appearance-none items-center justify-center rounded-full text-magnum-300
-                hover:bg-magnum-800/50 focus:shadow-magnum-400"
+			class="preview-width-6  preview-text-magnum-300  surface-63a0a7dd27"
 		>
-			<X class="size-4" />
+			<X class="surface-794a38b8b4" />
 		</button>
 	</div>
 {/if}

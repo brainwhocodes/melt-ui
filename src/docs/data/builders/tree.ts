@@ -27,7 +27,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'onExpandedChange',
 			type: 'ChangeFn<string[]>',
-			description: 'A callback called when the value of the `expanded` store should be changed.',
+			description:
+				'A callback called when the value of the `expanded` store should be changed.',
 			see: SEE.CHANGE_FUNCTIONS,
 		},
 	],
@@ -54,18 +55,21 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'selectedItem',
 			type: 'Writable<HTMLElement | null>',
-			description: 'The currently selected item, or `null` if no item is selected.',
+			description:
+				'The currently selected item, or `null` if no item is selected.',
 		},
 	],
 	helpers: [
 		{
 			name: 'isExpanded',
-			description: 'A function that returns whether or not the item is expanded.',
+			description:
+				'A function that returns whether or not the item is expanded.',
 			type: 'Readable<(itemId: string) => boolean>',
 		},
 		{
 			name: 'isSelected',
-			description: 'A function that returns whether or not the item is selected.',
+			description:
+				'A function that returns whether or not the item is selected.',
 			type: 'Readable<(itemId: string) => boolean>',
 		},
 	],
@@ -108,7 +112,8 @@ const group = elementSchema('group', {
 	props: [
 		{
 			name: 'id',
-			description: 'The unique ID of the group. Must match the ID of the item it belongs to.',
+			description:
+				'The unique ID of the group. Must match the ID of the item it belongs to.',
 			type: 'string',
 			required: true,
 		},

@@ -1,7 +1,8 @@
-import type { BuilderReturn, Orientation } from '$lib/internal/types.js';
 import type { Writable } from 'svelte/store';
-import type { createTabs } from './create.js';
 import type { ChangeFn } from '$lib/internal/helpers/index.js';
+import type { BuilderReturn, Orientation } from '$lib/internal/types.js';
+import type { createTabs } from './create.js';
+
 export type { TabsComponentEvents } from './events.js';
 
 export type CreateTabsProps = {

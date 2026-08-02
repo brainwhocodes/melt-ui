@@ -1,6 +1,31 @@
 import {
+	type DateValue,
+	getLocalTimeZone,
+	getMinimumMonthInYear,
+	isSameDay,
+	isSameMonth,
+	isToday,
+} from '@internationalized/date';
+import { tick } from 'svelte';
+import { derived, writable } from 'svelte/store';
+import {
+	createFormatter,
+	createMonths,
+	dateStore,
+	getAnnouncer,
+	getDefaultDate,
+	getSelectableCells,
+	hasTime,
+	isAfter,
+	isBefore,
+	isCalendarCell,
+	type Month,
+	parseStringToDateValue,
+	setPlaceholderToNodeValue,
+	toDate,
+} from '$lib/internal/helpers/date/index.js';
+import {
 	addMeltEventListener,
-	makeElement,
 	createElHelpers,
 	effect,
 	executeCallbacks,
@@ -9,38 +34,14 @@ import {
 	isHTMLElement,
 	isValidIndex,
 	kbd,
+	makeElement,
 	omit,
 	overridable,
 	styleToString,
 	toWritableStores,
 	withGet,
 } from '$lib/internal/helpers/index.js';
-
-import {
-	createFormatter,
-	createMonths,
-	dateStore,
-	getAnnouncer,
-	getDefaultDate,
-	getSelectableCells,
-	isAfter,
-	isBefore,
-	isCalendarCell,
-	parseStringToDateValue,
-	setPlaceholderToNodeValue,
-	toDate,
-	type Month,
-} from '$lib/internal/helpers/date/index.js';
 import type { MeltActionReturn } from '$lib/internal/types.js';
-import {
-	getLocalTimeZone,
-	isSameDay,
-	isSameMonth,
-	isToday,
-	type DateValue,
-} from '@internationalized/date';
-import { tick } from 'svelte';
-import { derived, writable } from 'svelte/store';
 import type { CalendarEvents } from './events.js';
 import type { CalendarValue, CreateCalendarProps } from './types.js';
 
@@ -62,7 +63,13 @@ export const defaults = {
 	weekdayFormat: 'narrow',
 } satisfies CreateCalendarProps;
 
-type CalendarParts = 'content' | 'nextButton' | 'prevButton' | 'grid' | 'cell' | 'heading';
+type CalendarParts =
+	| 'content'
+	| 'nextButton'
+	| 'prevButton'
+	| 'grid'
+	| 'cell'
+	| 'heading';
 
 const { name } = createElHelpers<CalendarParts>('calendar');
 
@@ -72,9 +79,13 @@ export type CalendarIdParts = typeof calendarIdParts;
 export function createCalendar<
 	Multiple extends boolean = false,
 	Value extends DateValue = DateValue,
-	S extends CalendarValue<Multiple, Value> = CalendarValue<Multiple, Value>
+	S extends CalendarValue<Multiple, Value> = CalendarValue<Multiple, Value>,
 >(props?: CreateCalendarProps<Multiple, Value, S>) {
-	const withDefaults = { ...defaults, ...props } satisfies CreateCalendarProps<Multiple, Value, S>;
+	const withDefaults = { ...defaults, ...props } satisfies CreateCalendarProps<
+		Multiple,
+		Value,
+		S
+	>;
 
 	const options = toWritableStores({
 		...omit(withDefaults, 'value', 'placeholder', 'multiple', 'ids'),
@@ -98,7 +109,10 @@ export function createCalendar<
 		weekdayFormat,
 	} = options;
 
-	const ids = toWritableStores({ ...generateIds(calendarIdParts), ...withDefaults.ids });
+	const ids = toWritableStores({
+		...generateIds(calendarIdParts),
+		...withDefaults.ids,
+	});
 
 	const defaultDate = getDefaultDate({
 		defaultPlaceholder: withDefaults.defaultPlaceholder,
@@ -106,14 +120,16 @@ export function createCalendar<
 	});
 
 	const formatter = createFormatter(withDefaults.locale);
-	const valueWritable = withDefaults.value ?? writable<S | undefined>(withDefaults.defaultValue);
+	const valueWritable =
+		withDefaults.value ?? writable<S | undefined>(withDefaults.defaultValue);
 	const value = overridable(valueWritable, withDefaults.onValueChange);
 
 	const placeholderWritable =
-		withDefaults.placeholder ?? writable(withDefaults.defaultPlaceholder ?? defaultDate);
+		withDefaults.placeholder ??
+		writable(withDefaults.defaultPlaceholder ?? defaultDate);
 	const placeholder = dateStore(
 		overridable(placeholderWritable, withDefaults.onPlaceholderChange),
-		withDefaults.defaultPlaceholder ?? defaultDate
+		withDefaults.defaultPlaceholder ?? defaultDate,
 	);
 
 	/**
@@ -127,8 +143,8 @@ export function createCalendar<
 				locale: withDefaults.locale,
 				fixedWeeks: withDefaults.fixedWeeks,
 				numberOfMonths: withDefaults.numberOfMonths,
-			})
-		)
+			}),
+		),
 	);
 
 	/**
@@ -142,11 +158,14 @@ export function createCalendar<
 		});
 	});
 
-	const isOutsideVisibleMonths = derived([visibleMonths], ([$visibleMonths]) => {
-		return (date: DateValue) => {
-			return !$visibleMonths.some((month) => isSameMonth(date, month));
-		};
-	});
+	const isOutsideVisibleMonths = derived(
+		[visibleMonths],
+		([$visibleMonths]) => {
+			return (date: DateValue) => {
+				return !$visibleMonths.some((month) => isSameMonth(date, month));
+			};
+		},
+	);
 
 	const isNextButtonDisabled = withGet.derived(
 		[months, maxValue, disabled],
@@ -154,9 +173,11 @@ export function createCalendar<
 			if (!$maxValue || !$months.length) return false;
 			if ($disabled) return true;
 			const lastMonthInView = $months[$months.length - 1].value;
-			const firstMonthOfNextPage = lastMonthInView.add({ months: 1 }).set({ day: 1 });
+			const firstMonthOfNextPage = lastMonthInView
+				.add({ months: 1 })
+				.set({ day: 1 });
 			return isAfter(firstMonthOfNextPage, $maxValue);
-		}
+		},
 	);
 
 	const isPrevButtonDisabled = withGet.derived(
@@ -165,9 +186,11 @@ export function createCalendar<
 			if (!$minValue || !$months.length) return false;
 			if ($disabled) return true;
 			const firstMonthInView = $months[0].value;
-			const lastMonthOfPrevPage = firstMonthInView.subtract({ months: 1 }).set({ day: 35 });
+			const lastMonthOfPrevPage = firstMonthInView
+				.subtract({ months: 1 })
+				.set({ day: 35 });
 			return isBefore(lastMonthOfPrevPage, $minValue);
-		}
+		},
 	);
 
 	/**
@@ -183,7 +206,7 @@ export function createCalendar<
 				if ($maxValue && isBefore($maxValue, date)) return true;
 				return false;
 			};
-		}
+		},
 	);
 
 	const isDateSelected = derived([value], ([$value]) => {
@@ -216,7 +239,7 @@ export function createCalendar<
 				if ($isDateUnavailable?.($value)) return true;
 			}
 			return false;
-		}
+		},
 	);
 
 	/**
@@ -235,31 +258,34 @@ export function createCalendar<
 	 * This value updates automatically as the user navigates the calendar, even when
 	 * displaying multiple months using the `numberOfMonths` prop.
 	 */
-	const headingValue = withGet.derived([months, locale], ([$months, $locale]) => {
-		if (!$months.length) return '';
-		if ($locale !== formatter.getLocale()) {
-			formatter.setLocale($locale);
-		}
-		if ($months.length === 1) {
-			const month = $months[0].value;
-			return `${formatter.fullMonthAndYear(toDate(month))}`;
-		}
+	const headingValue = withGet.derived(
+		[months, locale],
+		([$months, $locale]) => {
+			if (!$months.length) return '';
+			if ($locale !== formatter.getLocale()) {
+				formatter.setLocale($locale);
+			}
+			if ($months.length === 1) {
+				const month = $months[0].value;
+				return `${formatter.fullMonthAndYear(toDate(month))}`;
+			}
 
-		const startMonth = toDate($months[0].value);
-		const endMonth = toDate($months[$months.length - 1].value);
+			const startMonth = toDate($months[0].value);
+			const endMonth = toDate($months[$months.length - 1].value);
 
-		const startMonthName = formatter.fullMonth(startMonth);
-		const endMonthName = formatter.fullMonth(endMonth);
-		const startMonthYear = formatter.fullYear(startMonth);
-		const endMonthYear = formatter.fullYear(endMonth);
+			const startMonthName = formatter.fullMonth(startMonth);
+			const endMonthName = formatter.fullMonth(endMonth);
+			const startMonthYear = formatter.fullYear(startMonth);
+			const endMonthYear = formatter.fullYear(endMonth);
 
-		const content =
-			startMonthYear === endMonthYear
-				? `${startMonthName} - ${endMonthName} ${endMonthYear}`
-				: `${startMonthName} ${startMonthYear} - ${endMonthName} ${endMonthYear}`;
+			const content =
+				startMonthYear === endMonthYear
+					? `${startMonthName} - ${endMonthName} ${endMonthYear}`
+					: `${startMonthName} ${startMonthYear} - ${endMonthName} ${endMonthYear}`;
 
-		return content;
-	});
+			return content;
+		},
+	);
 
 	/**
 	 * The accessible heading label for the calendar, generated by combining the `calendarLabel`
@@ -269,7 +295,7 @@ export function createCalendar<
 		[headingValue, calendarLabel],
 		([$headingValue, $calendarLabel]) => {
 			return `${$calendarLabel}, ${$headingValue}`;
-		}
+		},
 	);
 
 	/**
@@ -278,7 +304,13 @@ export function createCalendar<
 	 */
 	const calendar = makeElement(name(), {
 		stores: [fullCalendarLabel, isInvalid, disabled, readonly, ids.calendar],
-		returned: ([$fullCalendarLabel, $isInvalid, $disabled, $readonly, $calendarId]) => {
+		returned: ([
+			$fullCalendarLabel,
+			$isInvalid,
+			$disabled,
+			$readonly,
+			$calendarId,
+		]) => {
 			return {
 				id: $calendarId,
 				role: 'application',
@@ -288,7 +320,9 @@ export function createCalendar<
 				'data-readonly': $readonly ? '' : undefined,
 			} as const;
 		},
-		action: (node: HTMLElement): MeltActionReturn<CalendarEvents['calendar']> => {
+		action: (
+			node: HTMLElement,
+		): MeltActionReturn<CalendarEvents['calendar']> => {
 			/**
 			 * Generates the accessible calendar heading when the grid is mounted.
 			 * The label is dynamically updated through an effect whenever there
@@ -297,7 +331,11 @@ export function createCalendar<
 			createAccessibleHeading(node, fullCalendarLabel.get());
 			announcer = getAnnouncer();
 
-			const unsubKb = addMeltEventListener(node, 'keydown', handleCalendarKeydown);
+			const unsubKb = addMeltEventListener(
+				node,
+				'keydown',
+				handleCalendarKeydown,
+			);
 
 			return {
 				destroy() {
@@ -367,12 +405,14 @@ export function createCalendar<
 				disabled: disabled ? true : undefined,
 			} as const;
 		},
-		action: (node: HTMLElement): MeltActionReturn<CalendarEvents['prevButton']> => {
+		action: (
+			node: HTMLElement,
+		): MeltActionReturn<CalendarEvents['prevButton']> => {
 			const unsub = executeCallbacks(
 				addMeltEventListener(node, 'click', () => {
 					if (isPrevButtonDisabled.get()) return;
 					prevPage();
-				})
+				}),
 			);
 			return {
 				destroy: unsub,
@@ -399,12 +439,14 @@ export function createCalendar<
 				disabled: disabled ? true : undefined,
 			} as const;
 		},
-		action: (node: HTMLElement): MeltActionReturn<CalendarEvents['nextButton']> => {
+		action: (
+			node: HTMLElement,
+		): MeltActionReturn<CalendarEvents['nextButton']> => {
 			const unsub = executeCallbacks(
 				addMeltEventListener(node, 'click', () => {
 					if (isNextButtonDisabled.get()) return;
 					nextPage();
-				})
+				}),
 			);
 			return {
 				destroy: unsub,
@@ -461,16 +503,23 @@ export function createCalendar<
 					role: 'button',
 					'aria-label': labelText,
 					'aria-selected': isSelectedDate ? true : undefined,
-					'aria-disabled': isOutsideMonth || isDisabled || isUnavailable ? true : undefined,
+					'aria-disabled':
+						isOutsideMonth || isDisabled || isUnavailable ? true : undefined,
 					'data-selected': isSelectedDate ? true : undefined,
 					'data-value': cellValue.toString(),
 					'data-disabled': isDisabled || isOutsideMonth ? '' : undefined,
 					'data-unavailable': isUnavailable ? '' : undefined,
 					'data-today': isDateToday ? '' : undefined,
 					'data-outside-month': isOutsideMonth ? '' : undefined,
-					'data-outside-visible-months': isOutsideVisibleMonths ? '' : undefined,
+					'data-outside-visible-months': isOutsideVisibleMonths
+						? ''
+						: undefined,
 					'data-focused': isFocusedDate ? '' : undefined,
-					tabindex: isFocusedDate ? 0 : isOutsideMonth || isDisabled ? undefined : -1,
+					tabindex: isFocusedDate
+						? 0
+						: isOutsideMonth || isDisabled
+							? undefined
+							: -1,
 				} as const;
 			};
 		},
@@ -491,8 +540,10 @@ export function createCalendar<
 					const args = getElArgs();
 					if (args.disabled) return;
 					if (!args.value) return;
-					handleCellClick(parseStringToDateValue(args.value, placeholder.get()));
-				})
+					handleCellClick(
+						parseStringToDateValue(args.value, placeholder.get()),
+					);
+				}),
 			);
 
 			return {
@@ -543,7 +594,7 @@ export function createCalendar<
 			createMonths({
 				...defaultMonthProps,
 				dateObj: $placeholder,
-			})
+			}),
 		);
 	});
 
@@ -568,9 +619,9 @@ export function createCalendar<
 				createMonths({
 					...defaultMonthProps,
 					dateObj: $placeholder,
-				})
+				}),
 			);
-		}
+		},
 	);
 
 	/**
@@ -593,7 +644,11 @@ export function createCalendar<
 			if (lastValue && placeholder.get() !== lastValue) {
 				placeholder.set(lastValue);
 			}
-		} else if (!Array.isArray($value) && $value && placeholder.get() !== $value) {
+		} else if (
+			!Array.isArray($value) &&
+			$value &&
+			placeholder.get() !== $value
+		) {
 			placeholder.set($value);
 		}
 	});
@@ -649,12 +704,15 @@ export function createCalendar<
 	 * ```
 	 *
 	 */
-	const weekdays = derived([months, weekdayFormat, locale], ([$months, $weekdayFormat, _]) => {
-		if (!$months.length) return [];
-		return $months[0].weeks[0].map((date) => {
-			return formatter.dayOfWeek(toDate(date), $weekdayFormat);
-		});
-	});
+	const weekdays = derived(
+		[months, weekdayFormat, locale],
+		([$months, $weekdayFormat, _]) => {
+			if (!$months.length) return [];
+			return $months[0].weeks[0].map((date) => {
+				return formatter.dayOfWeek(toDate(date), $weekdayFormat);
+			});
+		},
+	);
 
 	/**
 	 * Creates an accessible heading for the calendar, ensuring that
@@ -703,7 +761,7 @@ export function createCalendar<
 	 * 	const { { ... }, helpers: { nextPage } } = createCalendar()
 	 * </script>
 	 *
-	 * <button on:click={nextPage} aria-label="Next page">▶️</button>
+	 * <button on:click={nextPage} aria-label="Next page">Next page</button>
 	 * ```
 	 */
 	function nextPage() {
@@ -744,7 +802,7 @@ export function createCalendar<
 	 * 	const { { ... }, helpers: { prevPage } } = createCalendar()
 	 * </script>
 	 *
-	 * <button on:click={prevPage} aria-label="Previous page">◀️</button>
+	 * <button on:click={prevPage} aria-label="Previous page">◀�</button>
 	 * ```
 	 */
 	function prevPage() {
@@ -783,8 +841,8 @@ export function createCalendar<
 	 * 	const { { ... }, helpers: { nextYear, prevYear } } = createCalendar()
 	 * </script>
 	 *
-	 * <button on:click={prevYear} aria-label="Previous year">◀️</button>
-	 * <button on:click={nextYear} aria-label="Next year">▶️</button>
+	 * <button on:click={prevYear} aria-label="Previous year">◀�</button>
+	 * <button on:click={nextYear} aria-label="Next year">▶�</button>
 	 *
 	 * ```
 	 */
@@ -804,8 +862,8 @@ export function createCalendar<
 	 * 	const { { ... }, helpers: { nextYear, prevYear } } = createCalendar()
 	 * </script>
 	 *
-	 * <button on:click={prevYear} aria-label="Previous year">◀️</button>
-	 * <button on:click={nextYear} aria-label="Next year">▶️</button>
+	 * <button on:click={prevYear} aria-label="Previous year">◀�</button>
+	 * <button on:click={nextYear} aria-label="Next year">▶�</button>
 	 *
 	 * ```
 	 */
@@ -813,7 +871,12 @@ export function createCalendar<
 		placeholder.subtract({ years: 1 });
 	}
 
-	const ARROW_KEYS = [kbd.ARROW_DOWN, kbd.ARROW_UP, kbd.ARROW_LEFT, kbd.ARROW_RIGHT];
+	const ARROW_KEYS = [
+		kbd.ARROW_DOWN,
+		kbd.ARROW_UP,
+		kbd.ARROW_LEFT,
+		kbd.ARROW_RIGHT,
+	];
 
 	/**
 	 * Set the year of the calendar to the specified year.
@@ -870,6 +933,15 @@ export function createCalendar<
 	 * ```
 	 */
 	function setMonth(month: number) {
+		const $placeholder = placeholder.get();
+		const minimum = getMinimumMonthInYear($placeholder);
+		const maximum =
+			minimum + $placeholder.calendar.getMonthsInYear($placeholder) - 1;
+		if (!Number.isInteger(month) || month < minimum || month > maximum) {
+			throw new Error(
+				`Month must be an integer between ${minimum} and ${maximum}.`,
+			);
+		}
 		placeholder.setDate({ month: month });
 	}
 
@@ -889,7 +961,10 @@ export function createCalendar<
 				if (!next) {
 					announcer.announce('Selected date is now empty.', 'polite', 5000);
 				} else {
-					announcer.announce(`Selected Date: ${formatter.selectedDate(next, false)}`, 'polite');
+					announcer.announce(
+						`Selected Date: ${formatter.selectedDate(next, false)}`,
+						'polite',
+					);
 				}
 				return next as S;
 			}
@@ -897,19 +972,28 @@ export function createCalendar<
 	}
 
 	function handleSingleUpdate(prev: S | undefined, date: DateValue) {
-		if (Array.isArray(prev)) throw new Error('Invalid value for multiple prop.');
+		if (Array.isArray(prev))
+			throw new Error('Invalid value for multiple prop.');
 		if (!prev) return date;
 		const $preventDeselect = preventDeselect.get();
 		if (!$preventDeselect && isSameDay(prev, date)) {
 			placeholder.set(date);
 			return undefined;
 		}
-		return date;
+		return hasTime(prev)
+			? prev.set({
+					era: date.era,
+					year: date.year,
+					month: date.month,
+					day: date.day,
+				})
+			: date;
 	}
 
 	function handleMultipleUpdate(prev: S | undefined, date: DateValue) {
 		if (!prev) return [date];
-		if (!Array.isArray(prev)) throw new Error('Invalid value for multiple prop.');
+		if (!Array.isArray(prev))
+			throw new Error('Invalid value for multiple prop.');
 		const index = prev.findIndex((d) => isSameDay(d, date));
 		const $preventDeselect = preventDeselect.get();
 
@@ -1092,7 +1176,7 @@ export function createCalendar<
 				if (!isSameMonth(date, $placeholder)) return true;
 				return false;
 			};
-		}
+		},
 	);
 
 	/**
@@ -1119,9 +1203,12 @@ export function createCalendar<
 	 * @param date - The `DateValue` to check
 	 * @returns `true` if the date is disabled, `false` otherwise
 	 */
-	const _isDateUnavailable = derived(isDateUnavailable, ($isDateUnavailable) => {
-		return (date: DateValue) => $isDateUnavailable?.(date);
-	});
+	const _isDateUnavailable = derived(
+		isDateUnavailable,
+		($isDateUnavailable) => {
+			return (date: DateValue) => $isDateUnavailable?.(date);
+		},
+	);
 
 	return {
 		elements: {

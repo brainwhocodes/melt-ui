@@ -1,5 +1,5 @@
+import { get, type Updater, writable } from 'svelte/store';
 import { browser } from '$app/environment';
-import { get, writable, type Updater } from 'svelte/store';
 
 const USING_PREPROCESSOR_KEY = 'melt-using-preprocessor';
 
@@ -9,7 +9,9 @@ export function getUsingPreprocessor() {
 	if (browser) {
 		let parsedStored = true;
 		try {
-			parsedStored = JSON.parse(localStorage.getItem(USING_PREPROCESSOR_KEY) ?? 'true');
+			parsedStored = JSON.parse(
+				localStorage.getItem(USING_PREPROCESSOR_KEY) ?? 'true',
+			);
 		} catch (_e) {
 			/** empty */
 		}

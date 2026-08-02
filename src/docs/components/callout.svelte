@@ -1,24 +1,61 @@
 <script lang="ts">
-	import { tv, type VariantProps } from 'tailwind-variants';
-	import { cn } from '$docs/utils/index.js';
-	const calloutVariants = tv({
-		base: 'relative rounded-tr-xl rounded-br-xl px-5 py-3 before:absolute before:left-0 before:top-0 before:h-full before:w-0.5 before:content-[""] my-6 ',
-		variants: {
-			type: {
-				default: 'before:bg-magnum-700 bg-magnum-700/10 text-white border-magnum-700',
-				info: 'before:bg-blue-500 bg-blue-500/10 text-white border-blue-500',
-				warning: 'before:bg-yellow-500 bg-yellow-500/10 text-white border-yellow-500',
-				danger: 'before:bg-red-500 bg-red-500/10 text-white border-red-500',
-				success: 'before:bg-green-500 bg-green-500/10 text-white border-green-500',
-			},
-		},
-	});
+	type CalloutType = 'default' | 'info' | 'warning' | 'danger' | 'success';
 
 	let className: string | undefined | null = undefined;
 	export { className as class };
-	export let type: VariantProps<typeof calloutVariants>['type'] = 'default';
+	export let type: CalloutType = 'default';
 </script>
 
-<div class={cn(calloutVariants({ type, className }))} data-callout>
+<div class={`docs-callout force-dark ${className ?? ''}`} data-callout data-type={type}>
 	<slot />
 </div>
+
+<style lang="scss">
+	.docs-callout {
+		position: relative;
+		margin: 1.5rem 0;
+		border: 1px solid;
+		border-radius: 0 0.75rem 0.75rem 0;
+		padding: 0.75rem 1.25rem;
+		color: rgb(var(--color-white));
+
+		&::before {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 0.125rem;
+			height: 100%;
+			content: '';
+		}
+
+		&[data-type='default'] {
+			border-color: rgb(var(--color-magnum-700));
+			background: rgb(var(--color-magnum-700) / 0.1);
+			&::before { background: rgb(var(--color-magnum-700)); }
+		}
+
+		&[data-type='info'] {
+			border-color: rgb(59 130 246);
+			background: rgb(59 130 246 / 0.1);
+			&::before { background: rgb(59 130 246); }
+		}
+
+		&[data-type='warning'] {
+			border-color: rgb(234 179 8);
+			background: rgb(234 179 8 / 0.1);
+			&::before { background: rgb(234 179 8); }
+		}
+
+		&[data-type='danger'] {
+			border-color: rgb(239 68 68);
+			background: rgb(239 68 68 / 0.1);
+			&::before { background: rgb(239 68 68); }
+		}
+
+		&[data-type='success'] {
+			border-color: rgb(34 197 94);
+			background: rgb(34 197 94 / 0.1);
+			&::before { background: rgb(34 197 94); }
+		}
+	}
+</style>

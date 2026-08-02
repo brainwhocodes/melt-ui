@@ -24,7 +24,7 @@ type EffectOptions = {
 export function effect<S extends Stores>(
 	stores: S,
 	fn: (values: StoresValues<S>) => (() => void) | void,
-	opts: EffectOptions = {}
+	opts: EffectOptions = {},
 ): () => void {
 	const { skipFirstRun } = opts;
 	let isFirstRun = true;

@@ -10,7 +10,7 @@ will not be tolerated.
 
 ## Heuristics
 
-[heuristic](<https://en.wikipedia.org/wiki/Heuristic_(computer_science)>) /ˌhjʊ(ə)ˈrɪstɪk/
+[heuristic](https://en.wikipedia.org/wiki/Heuristic_(computer_science)) /ˌhjʊ(ə)ˈrɪstɪk/
 
 > A technique designed for solving a problem more quickly when classic methods are too slow, or for
 > finding an approximate solution when classic methods fail to find any exact solution
@@ -124,6 +124,23 @@ broken.
 
 Lastly, run `pnpm run lint` && `pnpm run check` to ensure that everything is in order before
 submitting the pull request.
+
+### Tooling
+
+Use Node `22.23.2` and pnpm `9.12.2` for local work. The repository pins these versions in
+`.nvmrc` and `package.json`.
+
+The development site and headless package are intentionally style-agnostic. Add component styles as
+SCSS or component-scoped styles; do not add Tailwind utilities or PostCSS entrypoints.
+
+Before opening a pull request, run:
+
+```bash
+pnpm run format
+pnpm run lint
+pnpm run check
+pnpm run test --run
+```
 
 ## Contribute from a browser IDE
 

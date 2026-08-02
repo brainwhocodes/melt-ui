@@ -1,17 +1,17 @@
+import { derived, writable } from 'svelte/store';
 import {
 	addMeltEventListener,
-	makeElement,
 	createElHelpers,
 	disabledAttr,
 	executeCallbacks,
 	handleRovingFocus,
 	isHTMLElement,
 	kbd,
+	makeElement,
 	overridable,
 	toWritableStores,
 } from '$lib/internal/helpers/index.js';
 import type { Defaults, MeltActionReturn } from '$lib/internal/types.js';
-import { derived, writable } from 'svelte/store';
 import type { ToolbarEvents } from './events.js';
 import type {
 	CreateToolbarGroupProps,
@@ -48,7 +48,7 @@ export const createToolbar = (props?: CreateToolbarProps) => {
 			({
 				role: 'button',
 				type: 'button',
-			} as const),
+			}) as const,
 		action: (node: HTMLElement): MeltActionReturn<ToolbarEvents['button']> => {
 			setNodeTabIndex(node);
 
@@ -64,7 +64,7 @@ export const createToolbar = (props?: CreateToolbarProps) => {
 		returned: () =>
 			({
 				role: 'link',
-			} as const),
+			}) as const,
 		action: (node: HTMLElement): MeltActionReturn<ToolbarEvents['link']> => {
 			setNodeTabIndex(node);
 
@@ -81,8 +81,10 @@ export const createToolbar = (props?: CreateToolbarProps) => {
 		returned: ($orientation) => {
 			return {
 				role: 'separator',
-				'data-orientation': $orientation === 'horizontal' ? 'vertical' : 'horizontal',
-				'aria-orientation': $orientation === 'horizontal' ? 'vertical' : 'horizontal',
+				'data-orientation':
+					$orientation === 'horizontal' ? 'vertical' : 'horizontal',
+				'aria-orientation':
+					$orientation === 'horizontal' ? 'vertical' : 'horizontal',
 			} as const;
 		},
 	});
@@ -93,7 +95,7 @@ export const createToolbar = (props?: CreateToolbarProps) => {
 	} satisfies CreateToolbarGroupProps;
 
 	const createToolbarGroup = <T extends ToolbarGroupType = 'single'>(
-		props?: CreateToolbarGroupProps<T>
+		props?: CreateToolbarGroupProps<T>,
 	) => {
 		const groupWithDefaults = { ...groupDefaults, ...props };
 
@@ -103,11 +105,12 @@ export const createToolbar = (props?: CreateToolbarProps) => {
 		const defaultValue = groupWithDefaults.defaultValue
 			? groupWithDefaults.defaultValue
 			: groupWithDefaults.type === 'single'
-			? undefined
-			: [];
+				? undefined
+				: [];
 
 		const valueWritable =
-			groupWithDefaults.value ?? writable<string | string[] | undefined>(defaultValue);
+			groupWithDefaults.value ??
+			writable<string | string[] | undefined>(defaultValue);
 		const value = overridable(valueWritable, groupWithDefaults?.onValueChange);
 
 		const { name } = createElHelpers('toolbar-group');
@@ -127,10 +130,13 @@ export const createToolbar = (props?: CreateToolbarProps) => {
 			returned: ([$disabled, $type, $value, $orientation]) => {
 				return (props: ToolbarGroupItemProps) => {
 					const itemValue = typeof props === 'string' ? props : props.value;
-					const argDisabled = typeof props === 'string' ? false : !!props.disabled;
+					const argDisabled =
+						typeof props === 'string' ? false : !!props.disabled;
 					const disabled = $disabled || argDisabled;
 
-					const pressed = Array.isArray($value) ? $value.includes(itemValue) : $value === itemValue;
+					const pressed = Array.isArray($value)
+						? $value.includes(itemValue)
+						: $value === itemValue;
 
 					const isSingle = $type === 'single';
 					const isMultiple = $type === 'multiple';
@@ -186,7 +192,7 @@ export const createToolbar = (props?: CreateToolbarProps) => {
 							return;
 						}
 						handleKeyDown(e);
-					})
+					}),
 				);
 
 				return {
@@ -197,7 +203,9 @@ export const createToolbar = (props?: CreateToolbarProps) => {
 
 		const isPressed = derived(value, ($value) => {
 			return (itemValue: string) => {
-				return Array.isArray($value) ? $value.includes(itemValue) : $value === itemValue;
+				return Array.isArray($value)
+					? $value.includes(itemValue)
+					: $value === itemValue;
 			};
 		});
 
@@ -302,6 +310,8 @@ function setNodeTabIndex(node: HTMLElement) {
  */
 function getToolbarItems(element: HTMLElement) {
 	return Array.from(
-		element.querySelectorAll(`${selector('item')}, ${selector('button')}, ${selector('link')}`)
+		element.querySelectorAll(
+			`${selector('item')}, ${selector('button')}, ${selector('link')}`,
+		),
 	).filter((el): el is HTMLElement => isHTMLElement(el));
 }

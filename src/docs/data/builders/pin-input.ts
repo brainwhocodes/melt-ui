@@ -1,8 +1,8 @@
 import { ATTRS, KBD, SEE } from '$docs/constants.js';
 import type { KeyboardSchema } from '$docs/types.js';
 import { builderSchema, elementSchema } from '$docs/utils/index.js';
-import { pinInputIdParts } from '$lib/index.js';
 import { pinInputEvents } from '$lib/builders/pin-input/events.js';
+import { pinInputIdParts } from '$lib/index.js';
 import { isMac } from '$lib/internal/helpers/index.js';
 import type { BuilderData } from './index.js';
 
@@ -77,7 +77,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		},
 		{
 			name: 'hiddenInput',
-			description: 'The builder store used to create the pin-input hidden input.',
+			description:
+				'The builder store used to create the pin-input hidden input.',
 		},
 	],
 	states: [
@@ -89,7 +90,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'valueStr',
 			type: 'Readable<string>',
-			description: 'A derived store that returns the value of the pin-input as a string.',
+			description:
+				'A derived store that returns the value of the pin-input as a string.',
 		},
 	],
 	helpers: [
@@ -132,7 +134,8 @@ const input = elementSchema('input', {
 });
 
 const hiddenInput = elementSchema('hiddenInput', {
-	description: 'The hidden input element that stores the pin-input value for form submission.',
+	description:
+		'The hidden input element that stores the pin-input value for form submission.',
 	dataAttributes: [
 		{
 			name: 'data-melt-pin-input-hidden-input',
@@ -170,7 +173,11 @@ const keyboard: KeyboardSchema = [
 
 const schemas = [builder, root, input, hiddenInput];
 
-const features = ['Fully managed focus', 'Supports pasting from clipboard', 'Keyboard navigation'];
+const features = [
+	'Fully managed focus',
+	'Supports pasting from clipboard',
+	'Keyboard navigation',
+];
 
 export const pinInputData: BuilderData = {
 	schemas,

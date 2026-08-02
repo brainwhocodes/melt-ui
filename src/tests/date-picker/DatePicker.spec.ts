@@ -1,13 +1,18 @@
-import { testKbd as kbd } from './../utils.js';
+import {
+	CalendarDate,
+	CalendarDateTime,
+	today,
+	toZoned,
+} from '@internationalized/date';
 import { render, waitFor } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { axe } from 'jest-axe';
-import { describe } from 'vitest';
-import DatePickerTest from './DatePickerTest.svelte';
-import { CalendarDate, CalendarDateTime, toZoned, today } from '@internationalized/date';
 import { tick } from 'svelte';
-import { sleep } from '$lib/internal/helpers/index.js';
+import { describe } from 'vitest';
 import type { CreateDatePickerProps } from '$lib/index.js';
+import { sleep } from '$lib/internal/helpers/index.js';
+import { testKbd as kbd } from './../utils.js';
+import DatePickerTest from './DatePickerTest.svelte';
 
 const calendarDateToday = today('America/New_York');
 const calendarDate = new CalendarDate(1980, 1, 20);
@@ -16,7 +21,15 @@ const zonedDateTime = toZoned(calendarDateTime, 'America/New_York');
 
 const narrowWeekdays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 const shortWeekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const longWeekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const longWeekdays = [
+	'Sunday',
+	'Monday',
+	'Tuesday',
+	'Wednesday',
+	'Thursday',
+	'Friday',
+	'Saturday',
+];
 
 function setup(props: CreateDatePickerProps = {}) {
 	const user = userEvent.setup();
@@ -178,13 +191,19 @@ describe('DatePicker', () => {
 			const calendar = getByTestId('calendar');
 			expect(calendar).toBeVisible();
 
-			const selectedDay = calendar.querySelector('[data-selected]') as HTMLElement;
+			const selectedDay = calendar.querySelector(
+				'[data-selected]',
+			) as HTMLElement;
 			expect(selectedDay).toHaveTextContent(String(zonedDateTime.day));
 
 			await user.click(selectedDay);
 
-			const selectedDayAfterClick = calendar.querySelector('[data-selected]') as HTMLElement;
-			expect(selectedDayAfterClick).toHaveTextContent(String(zonedDateTime.day));
+			const selectedDayAfterClick = calendar.querySelector(
+				'[data-selected]',
+			) as HTMLElement;
+			expect(selectedDayAfterClick).toHaveTextContent(
+				String(zonedDateTime.day),
+			);
 		});
 
 		test('selection with mouse', async () => {
@@ -216,7 +235,9 @@ describe('DatePicker', () => {
 			secondDayInMonth.focus();
 			expect(secondDayInMonth).toHaveFocus();
 			await user.keyboard(kbd.SPACE);
-			await waitFor(() => expect(secondDayInMonth).toHaveAttribute('data-selected'));
+			await waitFor(() =>
+				expect(secondDayInMonth).toHaveAttribute('data-selected'),
+			);
 			const newDate = zonedDateTime.set({ day: 2 });
 			const insideValue = getByTestId('inside-value');
 			expect(insideValue).toHaveTextContent(newDate.toString());
@@ -289,7 +310,9 @@ describe('DatePicker', () => {
 			if (calendarDateToday.month === 12) {
 				expect(firstSegment).toHaveTextContent(String(1));
 			} else {
-				expect(firstSegment).toHaveTextContent(String(calendarDateToday.month + 1));
+				expect(firstSegment).toHaveTextContent(
+					String(calendarDateToday.month + 1),
+				);
 			}
 		});
 
@@ -312,7 +335,9 @@ describe('DatePicker', () => {
 			if (calendarDateToday.month === 1) {
 				expect(firstSegment).toHaveTextContent(String(12));
 			} else {
-				expect(firstSegment).toHaveTextContent(String(calendarDateToday.month - 1));
+				expect(firstSegment).toHaveTextContent(
+					String(calendarDateToday.month - 1),
+				);
 			}
 		});
 
@@ -508,7 +533,9 @@ describe('DatePicker', () => {
 				const segmentEl = getByTestId(part);
 				expect(segmentEl.id).toBe(dateFieldIds[part]);
 				if (part === 'field') {
-					expect(segmentEl.getAttribute('aria-describedby')).toBe(dateFieldIds.description);
+					expect(segmentEl.getAttribute('aria-describedby')).toBe(
+						dateFieldIds.description,
+					);
 				}
 			}
 
@@ -522,7 +549,9 @@ describe('DatePicker', () => {
 
 			const calendar = getByTestId('calendar');
 			expect(calendar.id).toBe(calendarIds.calendar);
-			const accessibleHeading = document.getElementById(calendarIds.accessibleHeading);
+			const accessibleHeading = document.getElementById(
+				calendarIds.accessibleHeading,
+			);
 			expect(accessibleHeading).toBeInTheDocument();
 		});
 	});

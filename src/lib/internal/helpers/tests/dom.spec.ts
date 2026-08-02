@@ -38,6 +38,8 @@ describe('getTabbableNodes', () => {
 		const nodes = getTabbableNodes(form);
 		// Assert that the <hr /> element isn't returned from getTabbableNodes.
 		expect(nodes).toHaveLength(2);
-		expect(nodes).toStrictEqual(expect.arrayContaining([nameInput, emailInput]));
+		expect(nodes).toStrictEqual(
+			expect.arrayContaining([nameInput, emailInput]),
+		);
 	});
 });

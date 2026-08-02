@@ -130,7 +130,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		},
 		{
 			name: 'deleteTrigger',
-			description: 'The builder store used to create the tags input delete trigger.',
+			description:
+				'The builder store used to create the tags input delete trigger.',
 		},
 		{
 			name: 'edit',
@@ -146,12 +147,14 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'inputValue',
 			type: 'Readable<string>',
-			description: 'A derived store that returns the value of the input element.',
+			description:
+				'A derived store that returns the value of the input element.',
 		},
 		{
 			name: 'inputInvalid',
 			type: 'Readable<boolean>',
-			description: 'A derived store that returns whether or not the input element is invalid.',
+			description:
+				'A derived store that returns whether or not the input element is invalid.',
 		},
 		{
 			name: 'selected',
@@ -163,7 +166,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'isSelected',
 			type: 'Readable<(tag: Tag) => boolean>',
-			description: 'A derived store that returns a function that checks if a tag is selected.',
+			description:
+				'A derived store that returns a function that checks if a tag is selected.',
 		},
 		{
 			name: 'isInputValid',
@@ -174,17 +178,20 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'addTag',
 			type: '(input: string) => Promise<boolean>',
-			description: 'A method that attempts to add a tag, the same as if a user tried to.',
+			description:
+				'A method that attempts to add a tag, the same as if a user tried to.',
 		},
 		{
 			name: 'updateTag',
 			type: '(tag: Tag, select = false) => Promise<boolean>',
-			description: 'A method that attempts to update a tag, the same as if a user tried to.',
+			description:
+				'A method that attempts to update a tag, the same as if a user tried to.',
 		},
 		{
 			name: 'removeTag',
 			type: '(tag: Tag) => Promise<boolean>',
-			description: 'A method that attempts to remove a tag, the same as if a user tried to.',
+			description:
+				'A method that attempts to remove a tag, the same as if a user tried to.',
 		},
 	],
 	options: OPTION_PROPS,

@@ -1,10 +1,10 @@
 import { render } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { axe } from 'jest-axe';
+import { writable } from 'svelte/store';
 import { describe, it } from 'vitest';
 import { testKbd as kbd } from '../utils.js';
 import PinInputTest from './PinInputTest.svelte';
-import { writable } from 'svelte/store';
 
 describe('PIN Input', () => {
 	it('has no accessibility violations', async () => {
@@ -20,7 +20,10 @@ describe('PIN Input', () => {
 
 	it('uses the `placeholder` prop as the placeholder', async () => {
 		const valueStore = writable([]);
-		const { getByTestId } = render(PinInputTest, { value: valueStore, placeholder: 'X' });
+		const { getByTestId } = render(PinInputTest, {
+			value: valueStore,
+			placeholder: 'X',
+		});
 		expect(getByTestId('input-1')).toHaveAttribute('placeholder', 'X');
 	});
 

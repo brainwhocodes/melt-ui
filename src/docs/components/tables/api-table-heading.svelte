@@ -3,8 +3,8 @@
 	import { InfoPopover } from '$docs/components/index.js';
 </script>
 
-<div class="mt-2 flex items-center gap-1.5">
-	<H4 class="mt-0">
+<div class="surface-ce86cd1b68">
+	<H4 class="surface-779c1bc69b">
 		<slot />
 	</H4>
 	{#if $$slots.info}

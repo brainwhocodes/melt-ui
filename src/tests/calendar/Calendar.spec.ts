@@ -1,11 +1,18 @@
-import type { CreateCalendarProps } from '$lib/builders/index.js';
-import { CalendarDate, CalendarDateTime, toZoned, type DateValue } from '@internationalized/date';
+import {
+	CalendarDate,
+	CalendarDateTime,
+	type DateValue,
+	HebrewCalendar,
+	JapaneseCalendar,
+	toZoned,
+} from '@internationalized/date';
 import { render } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { tick } from 'svelte';
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 import { describe } from 'vitest';
+import { type CreateCalendarProps, createCalendar } from '$lib/index.js';
 import { testKbd as kbd } from '../utils.js';
 import CalendarMultiTest from './CalendarMultiTest.svelte';
 import CalendarTest from './CalendarTest.svelte';
@@ -15,12 +22,22 @@ const calendarDateTime = new CalendarDateTime(1980, 1, 20, 12, 30, 0, 0);
 const zonedDateTime = toZoned(calendarDateTime, 'America/New_York');
 
 const controlledCalendarDate = writable<DateValue | undefined>(calendarDate);
-const controlledCalendarDateTime = writable<DateValue | undefined>(calendarDateTime);
+const controlledCalendarDateTime = writable<DateValue | undefined>(
+	calendarDateTime,
+);
 const controlledZonedDateTime = writable<DateValue | undefined>(zonedDateTime);
 
 const narrowWeekdays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 const shortWeekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const longWeekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const longWeekdays = [
+	'Sunday',
+	'Monday',
+	'Tuesday',
+	'Wednesday',
+	'Thursday',
+	'Friday',
+	'Saturday',
+];
 
 function setup(props: CreateCalendarProps = {}) {
 	const user = userEvent.setup();
@@ -46,6 +63,14 @@ function setupMulti(props: CreateCalendarProps<true> = {}) {
 	};
 }
 
+function getInMonthCell(calendar: HTMLElement, month: number, day: number) {
+	const cell = calendar.querySelector<HTMLElement>(
+		`[data-testid="month-${month}-date-${day}"]:not([data-outside-month])`,
+	);
+	expect(cell).not.toBeNull();
+	return cell as HTMLElement;
+}
+
 describe('Calendar', () => {
 	describe('Accessibility', () => {
 		test('has no accessibility violations', async () => {
@@ -53,6 +78,36 @@ describe('Calendar', () => {
 
 			expect(await axe(container)).toHaveNoViolations();
 		});
+	});
+
+	test('setMonth enforces Gregorian one-based integer bounds', () => {
+		const calendar = createCalendar({
+			defaultPlaceholder: new CalendarDate(2024, 6, 15),
+		});
+
+		calendar.helpers.setMonth(1);
+		expect(get(calendar.states.placeholder).month).toBe(1);
+		calendar.helpers.setMonth(12);
+		expect(get(calendar.states.placeholder).month).toBe(12);
+
+		for (const month of [0, 13, 1.5]) {
+			expect(() => calendar.helpers.setMonth(month)).toThrow(
+				'Month must be an integer between 1 and 12.',
+			);
+		}
+		expect(get(calendar.states.placeholder).month).toBe(12);
+	});
+
+	test('setMonth uses the active calendar month count', () => {
+		const calendar = createCalendar({
+			defaultPlaceholder: new CalendarDate(new HebrewCalendar(), 5784, 6, 15),
+		});
+
+		calendar.helpers.setMonth(13);
+		expect(get(calendar.states.placeholder).month).toBe(13);
+		expect(() => calendar.helpers.setMonth(14)).toThrow(
+			'Month must be an integer between 1 and 13.',
+		);
 	});
 	test('populated with defaultValue - CalendarDate', async () => {
 		const { getByTestId, calendar } = setup({
@@ -125,6 +180,115 @@ describe('Calendar', () => {
 		expect(heading).toHaveTextContent('January 1980');
 	});
 
+	test('keeps CalendarDate selection date-only', async () => {
+		const initial = new CalendarDate(2024, 3, 9);
+		const value = writable<DateValue | undefined>(initial);
+		const { calendar, user } = setup({ value });
+
+		await user.click(getInMonthCell(calendar, 3, 10));
+
+		const selected = get(value);
+		expect(selected).toBeInstanceOf(CalendarDate);
+		expect(selected?.toString()).toBe('2024-03-10');
+	});
+
+	test('preserves updated CalendarDateTime metadata when selecting another day', async () => {
+		const initial = new CalendarDateTime(2024, 3, 9, 9, 10, 11, 12);
+		const updated = initial.set({
+			hour: 22,
+			minute: 23,
+			second: 24,
+			millisecond: 25,
+		});
+		const value = writable<DateValue | undefined>(initial);
+		const { calendar, user } = setup({ value });
+
+		value.set(updated);
+		await tick();
+		await user.click(getInMonthCell(calendar, 3, 10));
+
+		const selected = get(value);
+		expect(selected).toBeInstanceOf(CalendarDateTime);
+		expect(selected?.toString()).toBe(updated.set({ day: 10 }).toString());
+	});
+
+	test('preserves a non-Gregorian CalendarDateTime across an era boundary', async () => {
+		const calendarSystem = new JapaneseCalendar();
+		const initial = new CalendarDateTime(
+			calendarSystem,
+			'heisei',
+			31,
+			4,
+			30,
+			9,
+			10,
+			11,
+			12,
+		);
+		const updated = initial.set({
+			hour: 22,
+			minute: 23,
+			second: 24,
+			millisecond: 25,
+		});
+		const value = writable<DateValue | undefined>(initial);
+		const { calendar, user } = setup({ value, numberOfMonths: 2 });
+
+		value.set(updated);
+		await tick();
+		await user.click(getInMonthCell(calendar, 5, 1));
+
+		const selected = get(value);
+		const expected = updated.set({ era: 'reiwa', year: 1, month: 5, day: 1 });
+		expect(selected).toBeInstanceOf(CalendarDateTime);
+		expect(selected?.calendar.identifier).toBe('japanese');
+		expect(selected?.era).toBe('reiwa');
+		expect(selected?.toString()).toBe(expected.toString());
+	});
+
+	test.each([
+		{
+			name: 'normal date',
+			initial: toZoned(
+				new CalendarDateTime(2024, 1, 20, 9, 30, 12, 345),
+				'America/New_York',
+			),
+			updatedTime: { hour: 18, minute: 45, second: 23, millisecond: 456 },
+			month: 1,
+			day: 21,
+		},
+		{
+			name: 'DST transition',
+			initial: toZoned(
+				new CalendarDateTime(2024, 3, 9, 1, 30, 12, 345),
+				'America/New_York',
+			),
+			updatedTime: { hour: 2, minute: 30, second: 23, millisecond: 456 },
+			month: 3,
+			day: 10,
+		},
+	])(
+		'preserves updated ZonedDateTime metadata across a $name',
+		async ({ initial, updatedTime, month, day }) => {
+			const updated = initial.set(updatedTime);
+			const value = writable<DateValue | undefined>(initial);
+			const { calendar, user } = setup({ value });
+
+			value.set(updated);
+			await tick();
+			await user.click(getInMonthCell(calendar, month, day));
+
+			const selected = get(value);
+			const expected = updated.set({ day });
+			expect(selected?.constructor).toBe(initial.constructor);
+			expect(selected?.toString()).toBe(expected.toString());
+			expect('timeZone' in selected! && selected.timeZone).toBe(
+				'America/New_York',
+			);
+			expect('offset' in selected! && selected.offset).toBe(expected.offset);
+		},
+	);
+
 	test('month navigation', async () => {
 		const { getByTestId, user } = setup({
 			defaultValue: zonedDateTime,
@@ -151,7 +315,9 @@ describe('Calendar', () => {
 			defaultValue: zonedDateTime,
 		});
 
-		const selectedDay = calendar.querySelector('[data-selected]') as HTMLElement;
+		const selectedDay = calendar.querySelector(
+			'[data-selected]',
+		) as HTMLElement;
 		expect(selectedDay).toHaveTextContent(String(zonedDateTime.day));
 
 		await user.click(selectedDay);
@@ -217,7 +383,9 @@ describe('Calendar', () => {
 
 		const secondMonthDay = getByTestId('month-2-date-15');
 
-		const secondMonthDayDateStr = calendarDateTime.set({ day: 15, month: 2 }).toString();
+		const secondMonthDayDateStr = calendarDateTime
+			.set({ day: 15, month: 2 })
+			.toString();
 
 		expect(secondMonthDay).toHaveTextContent('15');
 		expect(secondMonthDay).toHaveAttribute('data-value', secondMonthDayDateStr);
@@ -227,7 +395,10 @@ describe('Calendar', () => {
 
 		await user.click(nextButton);
 		expect(heading).toHaveTextContent('February - March 1980');
-		expect(firstMonthDay).not.toHaveAttribute('data-value', firstMonthDayDateStr);
+		expect(firstMonthDay).not.toHaveAttribute(
+			'data-value',
+			firstMonthDayDateStr,
+		);
 
 		await user.click(prevButton);
 		expect(heading).toHaveTextContent('January - February 1980');
@@ -256,7 +427,9 @@ describe('Calendar', () => {
 
 		const secondMonthDay = getByTestId('month-2-date-15');
 
-		const secondMonthDayDateStr = calendarDateTime.set({ day: 15, month: 2 }).toString();
+		const secondMonthDayDateStr = calendarDateTime
+			.set({ day: 15, month: 2 })
+			.toString();
 
 		expect(secondMonthDay).toHaveTextContent('15');
 		expect(secondMonthDay).toHaveAttribute('data-value', secondMonthDayDateStr);
@@ -265,7 +438,10 @@ describe('Calendar', () => {
 
 		await user.click(nextButton);
 		expect(heading).toHaveTextContent('March - April 1980');
-		expect(firstMonthDay).not.toHaveAttribute('data-value', firstMonthDayDateStr);
+		expect(firstMonthDay).not.toHaveAttribute(
+			'data-value',
+			firstMonthDayDateStr,
+		);
 
 		await user.click(prevButton);
 		expect(heading).toHaveTextContent('January - February 1980');
@@ -554,7 +730,8 @@ describe('Calendar', () => {
 
 		await user.click(fifthDayInMonth);
 
-		const selectedDaysAfterClick2 = calendar.querySelectorAll('[data-selected]');
+		const selectedDaysAfterClick2 =
+			calendar.querySelectorAll('[data-selected]');
 		expect(selectedDaysAfterClick2).toHaveLength(2);
 	});
 

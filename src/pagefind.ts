@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
-
 /** Global index options that can be passed to pagefind.options() */
 export type PagefindIndexOptions = {
 	/** Overrides the URL path that Pagefind uses to load its search bundle */
@@ -197,11 +195,14 @@ export type PagefindSearchAnchor = {
 
 export type Pagefind = {
 	init: () => Promise<void>;
-	search: (query: string, options?: PagefindSearchOptions) => Promise<PagefindSearchResults>;
+	search: (
+		query: string,
+		options?: PagefindSearchOptions,
+	) => Promise<PagefindSearchResults>;
 	debouncedSearch: (
 		query: string,
 		options?: PagefindSearchOptions,
-		duration?: number
+		duration?: number,
 	) => Promise<PagefindSearchResults>;
 	options: (options: PagefindIndexOptions) => Promise<void>;
 };

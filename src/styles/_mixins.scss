@@ -1,0 +1,57 @@
+@use 'tokens';
+
+@mixin focus-ring($inset: false) {
+	outline: none;
+	@if $inset {
+		box-shadow: inset 0 0 0 3px tokens.color(magnum, 400);
+	} @else {
+		box-shadow: 0 0 0 3px tokens.color(magnum, 400);
+	}
+}
+
+@mixin hover-focus {
+	&:hover,
+	&:focus {
+		@content;
+	}
+}
+
+@mixin breakpoint($name) {
+	@media (min-width: tokens.breakpoint($name)) {
+		@content;
+	}
+}
+
+@mixin breakpoint-down($name) {
+	@media (max-width: calc(tokens.breakpoint($name) - 0.02px)) {
+		@content;
+	}
+}
+
+@mixin floating-surface {
+	border: 1px solid tokens.color(neutral, 200, 0.5);
+	border-radius: tokens.radius(lg);
+	background: tokens.color(neutral, 50);
+	box-shadow: tokens.shadow(lg);
+	color: tokens.color(neutral, 950);
+}
+
+@mixin interactive-reset {
+	appearance: none;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+}
+
+@mixin visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
+}

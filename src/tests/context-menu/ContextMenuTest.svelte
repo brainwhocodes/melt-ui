@@ -120,49 +120,97 @@
 	{/if}
 </main>
 
-<style lang="postcss">
+<style lang="scss">
 	.menu {
-		@apply z-10 flex max-h-[300px] min-w-[220px] flex-col shadow-lg;
-		@apply rounded-md;
-		@apply ring-0 !important;
-	}
+		z-index: 10;
+		display: flex;
+		max-height: 300px;
+		min-width: 220px;
+		flex-direction: column;
+		
+		
+		box-shadow: 0 0 #0000, 0 0 #0000, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+		border-radius: 0.375rem;
+		
+		
+		box-shadow: 0 0 #0000, 0 0 #0000, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important
+}
 	.subMenu {
-		@apply min-w-[220px];
-	}
+		min-width: 220px
+}
 	.item {
-		@apply relative h-6 min-h-[24px] select-none rounded-sm pl-6 pr-1;
-		@apply z-20  outline-none;
-		@apply flex items-center text-sm leading-none;
-		@apply ring-0 !important;
-	}
+		position: relative;
+		height: 1.5rem;
+		min-height: 24px;
+		user-select: none;
+		border-radius: 0.125rem;
+		padding-left: 1.5rem;
+		padding-right: 0.25rem;
+		z-index: 20;
+		outline: 2px solid transparent;
+		outline-offset: 2px;
+		display: flex;
+		align-items: center;
+		font-size: 0.875rem;
+		line-height: 1.25rem;
+		line-height: 1;
+		
+		
+		box-shadow: 0 0 #0000, 0 0 #0000, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important
+}
 	.trigger {
-		@apply inline-flex h-24 w-24 items-center justify-center rounded-full;
-		@apply p-0 text-sm font-medium transition-colors;
-	}
+		display: inline-flex;
+		height: 6rem;
+		width: 6rem;
+		align-items: center;
+		justify-content: center;
+		border-radius: 9999px;
+		padding: 0px;
+		font-size: 0.875rem;
+		line-height: 1.25rem;
+		font-weight: 500;
+		transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 150ms
+}
 	.check {
-		@apply absolute left-2 top-1/2;
-		translate: 0 calc(-50% + 1px);
-	}
+		position: absolute;
+		left: 0.5rem;
+		top: 50%;
+		translate: 0 calc(-50% + 1px)
+}
 
 	.dot {
-		@apply h-[4.75px] w-[4.75px] rounded-full;
-	}
+		height: 4.75px;
+		width: 4.75px;
+		border-radius: 9999px
+}
 
 	.separator {
-		@apply m-[5px] h-[1px];
-	}
+		margin: 5px;
+		height: 1px
+}
 
 	.rightSlot {
-		@apply ml-auto pl-5;
-	}
+		margin-left: auto;
+		padding-left: 1.25rem
+}
 
 	.icon {
-		@apply h-[13px] w-[13px];
-	}
+		height: 13px;
+		width: 13px
+}
 	.check {
-		@apply absolute left-0 inline-flex w-6 items-center justify-center;
-	}
+		position: absolute;
+		left: 0px;
+		display: inline-flex;
+		width: 1.5rem;
+		align-items: center;
+		justify-content: center
+}
 	.text {
-		@apply pl-6 text-xs leading-6;
-	}
+		padding-left: 1.5rem;
+		font-size: 0.75rem;
+		line-height: 1.5rem
+}
 </style>

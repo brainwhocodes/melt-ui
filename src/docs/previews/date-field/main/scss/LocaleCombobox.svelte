@@ -1,0 +1,123 @@
+<script lang="ts">
+	import {
+		createCombobox,
+		melt,
+		type CreateComboboxProps,
+	} from '$lib/index.js';
+	import { Check, ChevronDown, ChevronUp } from '$icons/index.js';
+	import { fly } from 'svelte/transition';
+	import { localeOptions } from './locales.js';
+
+	// convert locale option object to array
+	const localeOptionsArr = Object.entries(localeOptions).map(
+		([value, label]) => ({
+			value,
+			label,
+		}),
+	);
+
+	export let onSelectedChange: CreateComboboxProps<string>['onSelectedChange'] =
+		undefined;
+	export let defaultSelected: CreateComboboxProps<string>['defaultSelected'] = {
+		value: 'en-US',
+		label: 'English (US)',
+	};
+
+	const {
+		elements: { menu, input, option, label },
+		states: { open, inputValue, touchedInput, selected },
+		helpers: { isSelected },
+	} = createCombobox<string>({
+		forceVisible: true,
+		onSelectedChange,
+		defaultSelected,
+	});
+
+	$: if (!$open) {
+		$inputValue = $selected?.label ?? '';
+	}
+
+	$: _filteredLocales = localeOptionsArr.filter(({ value, label }) => {
+		const normalizedInput = $inputValue.toLowerCase();
+		return (
+			value.toLowerCase().includes(normalizedInput) ||
+			label.toLowerCase().includes(normalizedInput)
+		);
+	});
+
+	$: filteredLocales = $touchedInput ? _filteredLocales : localeOptionsArr;
+</script>
+
+<div class="surface-b01c347c3b">
+	<div class="surface-dff9595ee6">
+		<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
+		<label use:melt={$label}>
+			<span class="surface-36aefb0453">Choose a locale:</span>
+		</label>
+
+		<div class="surface-fae8229465">
+			<input
+				use:melt={$input}
+				aria-describedby="disclaimer"
+				class="surface-8a7beb2ce4"
+				placeholder="Choose a locale"
+			/>
+			<div
+				class="surface-261e9900bd"
+			>
+				{#if $open}
+					<ChevronUp class="surface-d380a94b38" />
+				{:else}
+					<ChevronDown class="surface-abe87602de" />
+				{/if}
+			</div>
+		</div>
+		<div id="disclaimer" class="surface-f68e388b85">
+			(Not a complete list)
+		</div>
+	</div>
+
+	{#if $open}
+		<ul
+			class="force-dark surface-9f46fabea5"
+			use:melt={$menu}
+			transition:fly={{ duration: 150, y: -5 }}
+		>
+			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+			<div
+				class="surface-7be715bf4e"
+				tabindex="0"
+			>
+				{#each filteredLocales as locale, index (index)}
+					<li
+						use:melt={$option(locale)}
+						class="surface-578c60cc48"
+					>
+						{#if $isSelected(locale.value)}
+							<div class="check surface-ec8d60513c">
+								<Check class="surface-11ef4813aa" />
+							</div>
+						{/if}
+						<div class="surface-1590ccbbc7">
+							<span class="surface-7b6383ca8c">{locale.label}</span>
+							<span class="surface-5423f96258">{locale.value}</span>
+						</div>
+					</li>
+				{:else}
+					<li class="surface-0290010fc7">No results found</li>
+				{/each}
+			</div>
+		</ul>
+	{/if}
+</div>
+
+<style lang="scss">
+	.check {
+		position: absolute;
+		left: 0.5rem;
+		top: 50%;
+		
+		color: rgb(var(--color-magnum-500) / 1);
+		translate: 0 calc(-50% + 1px)
+}
+</style>

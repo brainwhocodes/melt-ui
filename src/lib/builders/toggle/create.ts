@@ -1,15 +1,15 @@
+import { writable } from 'svelte/store';
 import {
 	addMeltEventListener,
-	makeElement,
 	disabledAttr,
 	executeCallbacks,
 	kbd,
+	makeElement,
 	omit,
 	overridable,
 	toWritableStores,
 } from '$lib/internal/helpers/index.js';
 import type { MeltActionReturn } from '$lib/internal/types.js';
-import { writable } from 'svelte/store';
 import type { ToggleEvents } from './events.js';
 import type { CreateToggleProps } from './types.js';
 
@@ -24,7 +24,8 @@ export function createToggle(props?: CreateToggleProps) {
 	const options = toWritableStores(omit(withDefaults, 'pressed'));
 	const { disabled } = options;
 
-	const pressedWritable = withDefaults.pressed ?? writable(withDefaults.defaultPressed);
+	const pressedWritable =
+		withDefaults.pressed ?? writable(withDefaults.defaultPressed);
 	const pressed = overridable(pressedWritable, withDefaults?.onPressedChange);
 
 	function handleToggle() {
@@ -53,7 +54,7 @@ export function createToggle(props?: CreateToggleProps) {
 					if (e.key !== kbd.ENTER && e.key !== kbd.SPACE) return;
 					e.preventDefault();
 					handleToggle();
-				})
+				}),
 			);
 
 			return {

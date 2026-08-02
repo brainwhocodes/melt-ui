@@ -12,7 +12,7 @@
 	export let data: APISchema;
 </script>
 
-<div class="relative overflow-x-visible rounded-md border border-neutral-600/80 px-3 pt-16">
+<div class="surface-ae4c595686">
 	<APISectionHeading
 		description={transformAPIString(data.description, true)}
 		title={data.title}

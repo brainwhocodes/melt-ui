@@ -1,0 +1,51 @@
+@use 'sass:map';
+@use 'tokens';
+
+@mixin emit-palette($name, $palette, $prefix: 'color') {
+	@each $shade, $channels in $palette {
+		--#{$prefix}-#{$name}-#{$shade}: #{$channels};
+	}
+}
+
+@mixin emit-reversed-palette($name, $palette) {
+	@each $target, $source in tokens.$shade-reversal {
+		--color-#{$name}-#{$target}: #{map.get($palette, $source)};
+	}
+}
+
+@mixin emit-dark-theme {
+	@each $shade, $_ in tokens.$magnum {
+		--color-magnum-#{$shade}: var(--initial-color-magnum-#{$shade});
+		--color-neutral-#{$shade}: var(--initial-color-neutral-#{$shade});
+		--color-zinc-#{$shade}: var(--initial-color-zinc-#{$shade});
+	}
+
+	--color-green-400: var(--initial-color-green-400);
+	--color-white: var(--initial-color-white);
+}
+
+@layer app-theme {
+	:root {
+		@include emit-palette('magnum', tokens.$magnum, 'initial-color');
+		@include emit-palette('neutral', tokens.$neutral, 'initial-color');
+		@include emit-palette('zinc', tokens.$zinc, 'initial-color');
+
+		--initial-color-green-400: 74 222 128;
+		--initial-color-white: 255 255 255;
+
+		@include emit-dark-theme;
+	}
+
+	:root:not(.dark) {
+		@include emit-reversed-palette('magnum', tokens.$magnum);
+		@include emit-reversed-palette('neutral', tokens.$neutral);
+		@include emit-reversed-palette('zinc', tokens.$zinc);
+
+		--color-green-400: 22 163 74;
+		--color-white: 0 0 0;
+	}
+
+	:root:not(.dark) .force-dark {
+		@include emit-dark-theme;
+	}
+}

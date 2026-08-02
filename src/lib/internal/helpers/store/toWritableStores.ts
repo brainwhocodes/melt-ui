@@ -1,5 +1,5 @@
 import { type Writable, writable } from 'svelte/store';
-import { withGet, type WithGet } from '../withGet.js';
+import { type WithGet, withGet } from '../withGet.js';
 
 export type ToWritableStores<T extends Record<string, unknown>> = {
 	[K in keyof T]: WithGet<Writable<T[K]>>;
@@ -10,7 +10,7 @@ export type ToWritableStores<T extends Record<string, unknown>> = {
  * with the same properties and values.
  */
 export function toWritableStores<T extends Record<string, unknown>>(
-	properties: T
+	properties: T,
 ): ToWritableStores<T> {
 	const result = {} as { [K in keyof T]: WithGet<Writable<T[K]>> };
 

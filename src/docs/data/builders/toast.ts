@@ -12,7 +12,8 @@ const OPTION_PROPS = [
 		name: 'closeDelay',
 		type: 'number',
 		default: '5000',
-		description: 'The delay in milliseconds before the toast closes. Set to 0 to disable.',
+		description:
+			'The delay in milliseconds before the toast closes. Set to 0 to disable.',
 	},
 	{
 		name: 'type',
@@ -72,7 +73,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'updateToast',
 			type: '(id: string, props: T) => void',
-			description: "A helper function to update a toast's data in the toasts store.",
+			description:
+				"A helper function to update a toast's data in the toasts store.",
 		},
 	],
 	actions: [
@@ -135,7 +137,10 @@ const keyboard: KeyboardSchema = [
 ];
 
 const schemas = [builder, content, title, description, close];
-const features = ['Automatically closes', 'Pause closing on hover (single, all, none)'];
+const features = [
+	'Automatically closes',
+	'Pause closing on hover (single, all, none)',
+];
 
 export const toastData: BuilderData = {
 	schemas,

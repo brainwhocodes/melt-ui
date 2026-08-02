@@ -5,12 +5,12 @@
 	$: message = $page.status === 404 ? 'Page not found' : 'Something went wrong';
 </script>
 
-<main class="grid min-h-full w-full place-items-center px-6 py-24 sm:py-32 lg:px-8">
-	<div class="text-center">
-		<p class="font-semibold text-magnum-500">{$page.status}</p>
-		<h1 class="mt-4 text-4xl font-bold tracking-tight">{message}</h1>
-		<div class="mt-10 flex items-center justify-center gap-x-6">
-			<Button href="/docs" class="mt-4">Back to docs</Button>
+<main class="surface-8c3e6fbc92">
+	<div class="surface-296f29fbd2">
+		<p class="surface-8ff14ec283">{$page.status}</p>
+		<h1 class="surface-7f11ecb941">{message}</h1>
+		<div class="surface-a7c1dcf572">
+			<Button href="/docs" class="surface-06e7eb94c6">Back to docs</Button>
 		</div>
 	</div>
 </main>

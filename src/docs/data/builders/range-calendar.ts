@@ -86,7 +86,8 @@ const rangeCalendarProps = [
 		name: 'weekStartsOn',
 		type: '0 | 1 | 2 | 3 | 4 | 5 | 6',
 		default: '0',
-		description: 'The day of the week the calendar starts on. 0 is Sunday, 6 is Saturday, etc.',
+		description:
+			'The day of the week the calendar starts on. 0 is Sunday, 6 is Saturday, etc.',
 	},
 	{
 		name: 'fixedWeeks',
@@ -103,12 +104,15 @@ const rangeCalendarProps = [
 	{
 		name: 'ids',
 		type: 'RangeCalendarIds',
-		description: 'Override the default ids used by the various elements within the calendar.',
+		description:
+			'Override the default ids used by the various elements within the calendar.',
 	},
 ];
 
 const excludedProps = ['value', 'placeholder'];
-const calendarOptions = rangeCalendarProps.filter((prop) => !excludedProps.includes(prop.name));
+const calendarOptions = rangeCalendarProps.filter(
+	(prop) => !excludedProps.includes(prop.name),
+);
 
 const BUILDER_NAME = 'calendar';
 
@@ -145,12 +149,14 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'value',
 			type: 'Writable<DateRange>',
-			description: 'A writable store which represents the current value of the range calendar.',
+			description:
+				'A writable store which represents the current value of the range calendar.',
 		},
 		{
 			name: 'months',
 			type: 'Readable<Month[]>',
-			description: 'A readable store containing month objects for each month in the calendar.',
+			description:
+				'A readable store containing month objects for each month in the calendar.',
 		},
 		{
 			name: 'weekdays',
@@ -167,7 +173,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'placeholder',
 			type: 'Writable<DateValue>',
-			description: 'A writable store which represents the placeholder value of the calendar.',
+			description:
+				'A writable store which represents the placeholder value of the calendar.',
 		},
 		{
 			name: 'startValue',
@@ -212,17 +219,20 @@ const builder = builderSchema(BUILDER_NAME, {
 		},
 		{
 			name: 'isDateDisabled',
-			description: 'A function that returns whether the given date is disabled.',
+			description:
+				'A function that returns whether the given date is disabled.',
 			type: 'Readable<(date: DateValue) => boolean>',
 		},
 		{
 			name: 'isDateUnavailable',
-			description: 'A function that returns whether the given date is unavailable.',
+			description:
+				'A function that returns whether the given date is unavailable.',
 			type: 'Readable<(date: DateValue) => boolean>',
 		},
 		{
 			name: 'isSelected',
-			description: 'A function that returns whether the given date is selected.',
+			description:
+				'A function that returns whether the given date is selected.',
 			type: 'Readable<(date: DateValue) => boolean>',
 		},
 		{
@@ -348,11 +358,13 @@ const cell = elementSchema('cell', {
 		},
 		{
 			name: 'data-outside-month',
-			value: 'Present when the date is outside the current month it is displayed in.',
+			value:
+				'Present when the date is outside the current month it is displayed in.',
 		},
 		{
 			name: 'data-outside-visible-months',
-			value: 'Present when the date is outside the months that are visible on the calendar.',
+			value:
+				'Present when the date is outside the months that are visible on the calendar.',
 		},
 		{
 			name: 'data-selection-start',
@@ -364,7 +376,8 @@ const cell = elementSchema('cell', {
 		},
 		{
 			name: 'data-highlighted',
-			value: 'Present when the date is highlighted by the user as they select a range.',
+			value:
+				'Present when the date is highlighted by the user as they select a range.',
 		},
 		{
 			name: 'data-focused',
@@ -403,7 +416,15 @@ const keyboard: KeyboardSchema = [
 	},
 ];
 
-const schemas = [builder, calendar, grid, cell, heading, prevButton, nextButton];
+const schemas = [
+	builder,
+	calendar,
+	grid,
+	cell,
+	heading,
+	prevButton,
+	nextButton,
+];
 
 const features = [
 	'Full keyboard navigation',

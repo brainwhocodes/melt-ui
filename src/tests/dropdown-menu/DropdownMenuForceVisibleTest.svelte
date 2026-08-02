@@ -54,8 +54,8 @@
 		aria-label="Update dimensions"
 		data-testid="trigger"
 	>
-		<AlignJustify class="h-4 w-4" />
-		<span class="sr-only">Open Popover</span>
+		<AlignJustify class="surface-5fc80d377d" />
+		<span class="surface-d0ea7095b4">Open Popover</span>
 	</button>
 	{#if $open}
 		<div class="menu" use:melt={$menu} data-testid="menu" transition:slide>
@@ -122,53 +122,153 @@
 	{/if}
 </main>
 
-<style lang="postcss">
+<style lang="scss">
 	.menu {
-		@apply z-10 flex max-h-[300px] min-w-[220px] flex-col shadow-lg;
-		@apply rounded-md bg-white p-1 shadow-neutral-900/30 lg:max-h-none;
-		@apply ring-0 !important;
-	}
+		z-index: 10;
+		display: flex;
+		max-height: 300px;
+		min-width: 220px;
+		flex-direction: column;
+		
+		
+		box-shadow: 0 0 #0000, 0 0 #0000, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+		border-radius: 0.375rem;
+		
+		background-color: rgb(var(--color-white) / 1);
+		padding: 0.25rem;
+		
+		}
+	@media (min-width: 1024px) {
+		.menu {
+				max-height: none
+		}
+}
+	.menu {
+		
+		
+		box-shadow: 0 0 #0000, 0 0 #0000, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important
+}
 	.subMenu {
-		@apply min-w-[220px] shadow-md shadow-neutral-900/30;
-	}
+		min-width: 220px;
+		
+		
+		box-shadow: 0 0 #0000, 0 0 #0000, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+		
+		}
 	.item {
-		@apply relative h-6 min-h-[24px] select-none rounded-sm pl-6 pr-1;
-		@apply z-20 text-magnum-900 outline-none;
-		@apply data-[highlighted]:bg-magnum-200 data-[highlighted]:text-magnum-900;
-		@apply data-[disabled]:text-neutral-300;
-		@apply flex items-center text-sm leading-none;
-		@apply ring-0 !important;
-	}
+		position: relative;
+		height: 1.5rem;
+		min-height: 24px;
+		user-select: none;
+		border-radius: 0.125rem;
+		padding-left: 1.5rem;
+		padding-right: 0.25rem;
+		z-index: 20;
+		
+		color: rgb(var(--color-magnum-900) / 1);
+		outline: 2px solid transparent;
+		outline-offset: 2px
+}
+	.item[data-highlighted] {
+		
+		background-color: rgb(var(--color-magnum-200) / 1);
+		
+		color: rgb(var(--color-magnum-900) / 1)
+}
+	.item[data-disabled] {
+		
+		color: rgb(var(--color-neutral-300) / 1)
+}
+	.item {
+		display: flex;
+		align-items: center;
+		font-size: 0.875rem;
+		line-height: 1.25rem;
+		line-height: 1;
+		
+		
+		box-shadow: 0 0 #0000, 0 0 #0000, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important
+}
 	.trigger {
-		@apply inline-flex h-9 w-9 items-center justify-center rounded-full bg-white;
-		@apply text-magnum-900 transition-colors hover:bg-white/90;
-		@apply data-[highlighted]:ring-magnum-400 data-[highlighted]:ring-offset-2 !important;
-		@apply p-0 text-sm font-medium focus:ring data-[highlighted]:outline-none;
-	}
+		display: inline-flex;
+		height: 2.25rem;
+		width: 2.25rem;
+		align-items: center;
+		justify-content: center;
+		border-radius: 9999px;
+		
+		background-color: rgb(var(--color-white) / 1);
+		
+		color: rgb(var(--color-magnum-900) / 1);
+		transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 150ms
+}
+	.trigger:hover {
+		background-color: rgb(var(--color-white) / 0.9)
+}
+
+	.trigger {
+		padding: 0px;
+		font-size: 0.875rem;
+		line-height: 1.25rem;
+		font-weight: 500
+}
+	.trigger:focus {
+		
+		
+		box-shadow: 0 0 #0000, 0 0 #0000, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)
+}
+	.trigger[data-highlighted] {
+		outline: 2px solid transparent;
+		outline-offset: 2px
+}
 	.check {
-		@apply absolute left-2 top-1/2 text-magnum-500;
-		translate: 0 calc(-50% + 1px);
-	}
+		position: absolute;
+		left: 0.5rem;
+		top: 50%;
+		
+		color: rgb(var(--color-magnum-500) / 1);
+		translate: 0 calc(-50% + 1px)
+}
 
 	.dot {
-		@apply h-[4.75px] w-[4.75px] rounded-full bg-magnum-900;
-	}
+		height: 4.75px;
+		width: 4.75px;
+		border-radius: 9999px;
+		
+		background-color: rgb(var(--color-magnum-900) / 1)
+}
 
 	.separator {
-		@apply m-[5px] h-[1px] bg-magnum-200;
-	}
+		margin: 5px;
+		height: 1px;
+		
+		background-color: rgb(var(--color-magnum-200) / 1)
+}
 
 	.rightSlot {
-		@apply ml-auto pl-5;
-	}
+		margin-left: auto;
+		padding-left: 1.25rem
+}
 
 	.icon {
-		@apply h-[13px] w-[13px];
-	}
+		height: 13px;
+		width: 13px
+}
 	.check {
-		@apply absolute left-0 inline-flex w-6 items-center justify-center;
-	}
+		position: absolute;
+		left: 0px;
+		display: inline-flex;
+		width: 1.5rem;
+		align-items: center;
+		justify-content: center
+}
 	.text {
-		@apply pl-6 text-xs leading-6 text-neutral-600;
-	}
+		padding-left: 1.5rem;
+		font-size: 0.75rem;
+		line-height: 1.5rem;
+		
+		color: rgb(var(--color-neutral-600) / 1)
+}
 </style>

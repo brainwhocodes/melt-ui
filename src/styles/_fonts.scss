@@ -1,0 +1,36 @@
+$font-base-url: 'https://fonts-c75.pages.dev/fonts';
+$font-faces: (
+	('GT Maru Mono', 'GTMaruMono-Black', 900, normal),
+	('GT Maru', 'GTMaru-Regular', 400, normal),
+	('GT Maru', 'GTMaru-Black', 900, normal),
+	('GT Maru Mono', 'GTMaruMono-BoldOblique', 700, italic),
+	('GT Maru', 'GTMaru-BoldOblique', 700, italic),
+	('GT Maru', 'GTMaru-LightOblique', 300, italic),
+	('GT Maru Mono', 'GTMaruMono-MediumOblique', 500, italic),
+	('GT Maru', 'GTMaru-Medium', 500, normal),
+	('GT Maru Mono', 'GTMaruMono-Medium', 500, normal),
+	('GT Maru', 'GTMaru-RegularOblique', 400, italic),
+	('GT Maru', 'GTMaru-MediumOblique', 500, italic),
+	('GT Maru Mono', 'GTMaruMono-Bold', 700, normal),
+	('GT Maru Mono', 'GTMaruMono-Regular', 400, normal),
+	('GT Maru', 'GTMaru-BlackOblique', 900, italic),
+	('GT Maru Mono', 'GTMaruMono-BlackOblique', 900, italic),
+	('GT Maru Mono', 'GTMaruMono-Light', 300, normal),
+	('GT Maru Mono', 'GTMaruMono-RegularOblique', 400, italic),
+	('GT Maru', 'GTMaru-Bold', 700, normal),
+	('GT Maru', 'GTMaru-Light', 300, normal),
+	('GT Maru Mono', 'GTMaruMono-LightOblique', 300, italic)
+);
+
+@layer app-fonts {
+	@each $family, $file, $weight, $style in $font-faces {
+		@font-face {
+			font-family: $family;
+			src: url('#{$font-base-url}/#{$file}.woff2') format('woff2'),
+				url('#{$font-base-url}/#{$file}.woff') format('woff');
+			font-weight: $weight;
+			font-style: $style;
+			font-display: swap;
+		}
+	}
+}

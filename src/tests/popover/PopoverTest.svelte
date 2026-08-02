@@ -2,13 +2,24 @@
 	import { createPopover, melt, type CreatePopoverProps } from '$lib/index.js';
 	import { Settings2, X } from '$icons/index.js';
 	import { kbd } from '$lib/internal/helpers/keyboard.js';
+	import { onMount } from 'svelte';
 
 	export let openFocus: CreatePopoverProps['openFocus'] = undefined;
 	export let closeFocus: CreatePopoverProps['closeFocus'] = undefined;
 	type $$Props = CreatePopoverProps;
 
+	let showSelfRemovingButton = true;
+	let shadowHost: HTMLDivElement;
+
+	onMount(() => {
+		const shadowRoot = shadowHost.attachShadow({ mode: 'open' });
+		const button = document.createElement('button');
+		button.textContent = 'Shadow outside';
+		shadowRoot.append(button);
+	});
+
 	const {
-		elements: { trigger, content, arrow, close },
+		elements: { trigger, content, arrow, close, overlay },
 		states: { open },
 	} = createPopover({
 		openFocus,
@@ -30,13 +41,13 @@
 	aria-label="Update dimensions"
 	data-testid="trigger"
 >
-	<Settings2 class="h-4 w-4" />
-	<span class="sr-only">Open Popover</span>
+	<Settings2 class="surface-3792ff8cab" />
+	<span class="surface-d9f6dc7cd1">Open Popover</span>
 </button>
 
 <div use:melt={$content} class="content" data-testid="content">
 	<div use:melt={$arrow} data-testid="arrow" />
-	<div class="flex flex-col gap-2.5">
+	<div class="surface-07a37995d4">
 		<p>Dimensions</p>
 		<fieldset>
 			<label for="width">Width</label>
@@ -63,57 +74,266 @@
 		<button on:click={() => open.update((p) => !p)} data-testid="toggle-open">toggle open</button>
 	</div>
 	<button class="close" use:melt={$close} data-testid="close">
-		<X class="h-4 w-4 " />
+		<X class="surface-06b5214a49" />
 	</button>
 	<button data-testid="openFocus" id="openFocus"> focus me on open </button>
 </div>
-<div data-testid="outside" />
+<div use:melt={$overlay} data-testid="overlay" />
+<button data-testid="outside">Outside</button>
 <button on:click|stopPropagation data-testid="click-interceptor">click interceptor</button>
+{#if showSelfRemovingButton}
+	<button on:click={() => (showSelfRemovingButton = false)}>Remove me</button>
+{/if}
+<canvas aria-hidden="true" data-testid="outside-canvas">Outside interaction target</canvas>
+<div bind:this={shadowHost} data-testid="shadow-host" />
 
 <button type="button" class="trigger" use:melt={$triggerB} data-testid="trigger-2">
 	<span>Open Popover</span>
 </button>
 <div use:melt={$contentB} class="content" data-testid="content-2">
-	<div class="flex flex-col gap-2.5">
+	<div class="surface-2dfc7ef11d">
 		<p>Dimensions</p>
 	</div>
 </div>
 
-<style lang="postcss">
+<style lang="scss">
 	fieldset {
-		@apply flex items-center gap-5;
-	}
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 1.25rem
+}
 
 	label {
-		@apply w-[75px] text-sm text-neutral-700;
-	}
+
+    width: 75px;
+
+    font-size: 0.875rem;
+
+    line-height: 1.25rem;
+
+    
+
+    color: rgb(var(--color-neutral-700) / 1)
+}
 
 	p {
-		@apply mb-2 font-medium text-neutral-900;
-	}
+
+    margin-bottom: 0.5rem;
+
+    font-weight: 500;
+
+    
+
+    color: rgb(var(--color-neutral-900) / 1)
+}
 
 	.input {
-		@apply flex h-8 w-full rounded-md border border-magnum-800 bg-transparent px-2.5 text-sm;
-		@apply ring-offset-magnum-300 focus-visible:ring;
-		@apply focus-visible:ring-magnum-400 focus-visible:ring-offset-1;
-		@apply flex-1 items-center justify-center;
-		@apply px-2.5 text-sm leading-none text-magnum-700;
-	}
+
+    display: flex;
+
+    height: 2rem;
+
+    width: 100%;
+
+    border-radius: 0.375rem;
+
+    border-width: 1px;
+
+    
+
+    border-color: rgb(var(--color-magnum-800) / 1);
+
+    background-color: transparent;
+
+    padding-left: 0.625rem;
+
+    padding-right: 0.625rem;
+
+    font-size: 0.875rem;
+
+    line-height: 1.25rem;
+
+    }
+
+	.input:focus-visible {
+
+    
+
+    
+
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+    
+
+    
+
+    }
+
+	.input {
+
+    flex: 1 1 0%;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding-left: 0.625rem;
+
+    padding-right: 0.625rem;
+
+    font-size: 0.875rem;
+
+    line-height: 1.25rem;
+
+    line-height: 1;
+
+    
+
+    color: rgb(var(--color-magnum-700) / 1)
+}
 
 	.trigger {
-		@apply inline-flex h-9 w-9 items-center justify-center rounded-full bg-white p-0;
-		@apply text-sm font-medium text-magnum-900 transition-colors hover:bg-white/90;
-		@apply focus-visible:ring focus-visible:ring-magnum-400 focus-visible:ring-offset-2;
-	}
+
+    display: inline-flex;
+
+    height: 2.25rem;
+
+    width: 2.25rem;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 9999px;
+
+    
+
+    background-color: rgb(var(--color-white) / 1);
+
+    padding: 0px;
+
+    font-size: 0.875rem;
+
+    line-height: 1.25rem;
+
+    font-weight: 500;
+
+    
+
+    color: rgb(var(--color-magnum-900) / 1);
+
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+    transition-duration: 150ms
+}
+
+	.trigger:hover {
+
+    background-color: rgb(var(--color-white) / 0.9)
+}
+
+	.trigger:focus-visible {
+
+    
+
+    
+
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+    
+
+    
+
+    }
 
 	.close {
-		@apply absolute right-1.5 top-1.5 flex h-7 w-7 items-center justify-center rounded-full;
-		@apply text-magnum-900 transition-colors hover:bg-magnum-500/10;
-		@apply focus-visible:ring focus-visible:ring-magnum-400 focus-visible:ring-offset-2;
-		@apply bg-white p-0 text-sm font-medium;
-	}
+
+    position: absolute;
+
+    right: 0.375rem;
+
+    top: 0.375rem;
+
+    display: flex;
+
+    height: 1.75rem;
+
+    width: 1.75rem;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 9999px;
+
+    
+
+    color: rgb(var(--color-magnum-900) / 1);
+
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+    transition-duration: 150ms
+}
+
+	.close:hover {
+
+    background-color: rgb(var(--color-magnum-500) / 0.1)
+}
+
+	.close:focus-visible {
+
+    
+
+    
+
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+    
+
+    
+
+    }
+
+	.close {
+
+    
+
+    background-color: rgb(var(--color-white) / 1);
+
+    padding: 0px;
+
+    font-size: 0.875rem;
+
+    line-height: 1.25rem;
+
+    font-weight: 500
+}
 
 	.content {
-		@apply z-10 w-60 rounded-[4px] bg-white p-5 shadow-sm;
-	}
+
+    z-index: 10;
+
+    width: 15rem;
+
+    border-radius: 4px;
+
+    
+
+    background-color: rgb(var(--color-white) / 1);
+
+    padding: 1.25rem;
+
+    
+
+    
+
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)
+}
 </style>

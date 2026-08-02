@@ -2,24 +2,24 @@
 // Source: https://github.com/grail-ui/grail-ui
 // https://github.com/grail-ui/grail-ui/tree/master/packages/grail-ui/src/floating/placement.ts
 
+import type { Placement, VirtualElement } from '@floating-ui/core';
 import {
+	arrow,
+	autoUpdate,
+	computePosition,
 	flip,
 	type Middleware,
 	offset,
-	arrow,
 	shift,
 	size,
-	computePosition,
-	autoUpdate,
 } from '@floating-ui/dom';
-import type { FloatingConfig } from './types.js';
 import {
 	isAttachedToDocument,
 	isHTMLElement,
 	isObject,
 	noop,
 } from '$lib/internal/helpers/index.js';
-import type { Placement, VirtualElement } from '@floating-ui/core';
+import type { FloatingConfig } from './types.js';
 
 const defaultConfig = {
 	strategy: 'absolute',
@@ -50,7 +50,7 @@ export function isVirtualElement(element: unknown): element is VirtualElement {
 export function useFloating(
 	reference: HTMLElement | VirtualElement | undefined,
 	floating: HTMLElement | undefined,
-	opts: FloatingConfig = {}
+	opts: FloatingConfig = {},
 ) {
 	if (!floating || !reference || opts === null) {
 		return {
@@ -69,7 +69,7 @@ export function useFloating(
 				boundary: options.boundary,
 				padding: options.overflowPadding,
 				...(isObject(options.flip) && options.flip),
-			})
+			}),
 		);
 	}
 
@@ -87,7 +87,7 @@ export function useFloating(
 			boundary: options.boundary,
 			crossAxis: options.overlap,
 			padding: options.overflowPadding,
-		})
+		}),
 	);
 
 	if (arrowEl) {
@@ -112,12 +112,13 @@ export function useFloating(
 					});
 				}
 			},
-		})
+		}),
 	);
 
 	function compute() {
 		if (!reference || !floating) return;
-		if (!isVirtualElement(reference) && !isAttachedToDocument(reference)) return;
+		if (!isVirtualElement(reference) && !isAttachedToDocument(reference))
+			return;
 
 		const { placement, strategy } = options;
 
@@ -145,7 +146,11 @@ export function useFloating(
 			if (isHTMLElement(arrowEl) && data.middlewareData.arrow) {
 				const { x, y } = data.middlewareData.arrow;
 
-				const dir = data.placement.split('-')[0] as 'top' | 'bottom' | 'left' | 'right';
+				const dir = data.placement.split('-')[0] as
+					| 'top'
+					| 'bottom'
+					| 'left'
+					| 'right';
 
 				arrowEl.setAttribute('data-side', dir);
 

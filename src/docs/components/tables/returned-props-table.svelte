@@ -21,26 +21,26 @@
 		</svelte:fragment>
 	</APITableHeading>
 
-	<div class="mb-4 mt-4">
-		<div class="overflow-x-auto sm:mx-0">
-			<div class="inline-block min-w-full">
-				<table class="w-full min-w-[540px] text-left sm:min-w-full">
-					<tbody class="divide-y divide-neutral-700">
-						<tr class="w-1/4 text-neutral-300">
-							<td class="w-1/4 whitespace-nowrap py-2 pl-4 text-sm font-medium sm:pl-0">
+	<div class="surface-6854fd0f5e">
+		<div class="surface-24d80be4e6">
+			<div class="surface-a30cc37b11">
+				<table class="surface-3d875f85c8">
+					<tbody class="surface-b6b04dc345">
+						<tr class="surface-e611cdbe7a">
+							<td class="surface-987c5f9ba6">
 								{tableHeading}
 							</td>
-							<td class="w-3/4 whitespace-nowrap py-2 text-sm font-medium">Description</td>
+							<td class="surface-cb803b48d7">Description</td>
 						</tr>
 						{#each data as returnedProp}
 							<tr>
-								<td class="py-3 pl-4 pr-2 align-baseline sm:pl-0">
-									<div class="mdsvex flex items-center gap-1.5">
+								<td class="surface-c7644153cd">
+									<div class="mdsvex surface-73e09183ae">
 										<div>
 											{#if returnedProp.link}
 												<a
 													href={returnedProp.link}
-													class="overflow-x-visible text-magnum-300 underline underline-offset-4 transition-all hover:underline-offset-[6px]"
+													class="surface-093f43cdb8"
 												>
 													<code>
 														{returnedProp.name}
@@ -51,7 +51,7 @@
 											{/if}
 										</div>
 										{#if returnedProp.type}
-											<InfoPopover iconClasses="text-neutral-200">
+											<InfoPopover iconClasses="docs-info-popover-icon--muted">
 												<code class="inline-code neutral">
 													{transformAPIString(returnedProp.type)}
 												</code>
@@ -59,9 +59,9 @@
 										{/if}
 									</div>
 								</td>
-								<td class="py-3 align-baseline text-sm">
+								<td class="surface-b28319b848">
 									{#if returnedProp.description}
-										<div class="my-2 leading-7">
+										<div class="surface-99b94d1e8d">
 											<p>
 												{@html transformAPIString(returnedProp.description, true)}
 											</p>

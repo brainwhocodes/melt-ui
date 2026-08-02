@@ -1,14 +1,18 @@
+import type { Writable } from 'svelte/store';
 import type {
 	EscapeBehaviorType,
 	FloatingConfig,
 	InteractOutsideEvent,
 	PortalConfig,
 } from '$lib/internal/actions/index.js';
-import type { TextDirection } from '$lib/internal/types.js';
-import type { ChangeFn, FocusProp, IdObj } from '$lib/internal/helpers/index.js';
-import type { Writable } from 'svelte/store';
-import type { _MenuIdParts, createMenuBuilder } from './create.js';
+import type {
+	ChangeFn,
+	FocusProp,
+	IdObj,
+} from '$lib/internal/helpers/index.js';
 import type { WithGet } from '$lib/internal/helpers/withGet.js';
+import type { TextDirection } from '$lib/internal/types.js';
+import type { _MenuIdParts, createMenuBuilder } from './create.js';
 
 export type _CreateMenuProps = {
 	/**
@@ -207,7 +211,9 @@ export type _MenuBuilderOptions = {
 		closeFocus: WithGet<Writable<FocusProp | undefined>>;
 		disableFocusFirstItem: WithGet<Writable<boolean>>;
 		closeOnItemClick: WithGet<Writable<boolean>>;
-		onOutsideClick: WithGet<Writable<((event: InteractOutsideEvent) => void) | undefined>>;
+		onOutsideClick: WithGet<
+			Writable<((event: InteractOutsideEvent) => void) | undefined>
+		>;
 	};
 
 	nextFocusable: WithGet<Writable<HTMLElement | null>>;

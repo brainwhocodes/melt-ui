@@ -3,9 +3,11 @@
 
 	type $$Props = CreateTabsProps & {
 		tabValues: string[];
+		disabledValues?: string[];
 	};
 
 	export let tabValues: string[] = [];
+	export let disabledValues: string[] = [];
 
 	const {
 		elements: { content, root, list, trigger },
@@ -18,7 +20,13 @@
 	<div use:melt={$root} data-testid="root">
 		<div use:melt={$list} data-testid="list">
 			{#each tabValues as tab}
-				<button use:melt={$trigger(tab)} data-testid="{tab}-trigger">
+				<button
+					use:melt={$trigger({
+						value: tab,
+						disabled: disabledValues.includes(tab),
+					})}
+					data-testid="{tab}-trigger"
+				>
 					{tab}
 				</button>
 			{/each}

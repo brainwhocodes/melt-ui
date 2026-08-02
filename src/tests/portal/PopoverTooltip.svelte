@@ -27,8 +27,8 @@
 	aria-label="Update dimensions"
 	data-testid="popover-trigger"
 >
-	<Settings2 class="h-4 w-4" />
-	<span class="sr-only">Open Popover</span>
+	<Settings2 class="surface-b5d29f6a44" />
+	<span class="surface-84086a286c">Open Popover</span>
 </button>
 
 <div use:melt={$content} data-testid="popover-content">
@@ -37,5 +37,5 @@
 	<div use:melt={$ttContent} data-testid="tooltip-content">Tooltip content</div>
 	<button use:melt={$close} data-testid="popover-close"> Close </button>
 </div>
-<div class="mt-48 h-[500px] w-[500px] bg-black" />
-<div data-testid="outside" class="h-5 w-5" />
+<div class="surface-6f46a10dd4" />
+<div data-testid="outside" class="surface-75cefea230" />

@@ -31,7 +31,14 @@ export const menuEvents = {
 		'focusout',
 	] as const,
 	submenu: ['keydown', 'pointermove', 'focusout'] as const,
-	subTrigger: ['click', 'keydown', 'pointermove', 'pointerleave', 'focusin', 'focusout'] as const,
+	subTrigger: [
+		'click',
+		'keydown',
+		'pointermove',
+		'pointerleave',
+		'focusin',
+		'focusout',
+	] as const,
 };
 
 export type MenuEvents = GroupedEvents<typeof menuEvents>;

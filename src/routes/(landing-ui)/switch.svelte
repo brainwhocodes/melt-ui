@@ -13,17 +13,15 @@
 </script>
 
 <form class={className}>
-	<div class="flex items-center">
+	<div class="surface-c98d43b9e8">
 		<button
 			use:melt={$root}
-			class="relative h-10 w-[5rem] cursor-default rounded-full bg-magnum-800
-			transition-colors"
+			class="preview-surface-magnum-800 preview-transition-colors surface-182aa88743"
 			id="airplane-mode"
 			aria-label="Switch"
 		>
 			<span
-				class="block size-8 rounded-full transition will-change-transform
-				{$checked ? 'translate-x-[2.75rem] bg-white' : 'translate-x-1 bg-white/50'}"
+				class="{$checked ? 'surface-cee3e8592e' : 'surface-33e1cf8c76'} surface-49f1ae45fc"
 			/>
 		</button>
 		<input use:melt={$input} />

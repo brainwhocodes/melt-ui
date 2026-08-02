@@ -1,12 +1,12 @@
-import { testKbd as kbd } from '../utils.js';
 import { render } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { axe } from 'jest-axe';
-import { describe } from 'vitest';
-import ToolbarTest from './ToolbarTest.svelte';
-import { writable } from 'svelte/store';
 import { tick } from 'svelte';
+import { writable } from 'svelte/store';
+import { describe } from 'vitest';
 import { type CreateToolbarProps } from '$lib/index.js';
+import { testKbd as kbd } from '../utils.js';
+import ToolbarTest from './ToolbarTest.svelte';
 
 const group1Items = ['item-1', 'item-2', 'item-3'];
 const group2Items = ['item-4', 'item-5', 'item-6'];
@@ -52,23 +52,34 @@ describe('Toolbar', () => {
 			props: { linksButtonsOnly: true, buttonsFirst: true },
 			items: tbButtonsAndLinks,
 		},
-	])("tab enters toolbar but doesn't navigate between items - $desc", async ({ props, items }) => {
-		const user = userEvent.setup();
-		const { getByTestId } = render(ToolbarTest, props);
+	])(
+		"tab enters toolbar but doesn't navigate between items - $desc",
+		async ({ props, items }) => {
+			const user = userEvent.setup();
+			const { getByTestId } = render(ToolbarTest, props);
 
-		await user.tab();
-		expect(getByTestId(items[0])).toHaveFocus();
-		await user.tab();
-		expect(getByTestId(items[1])).not.toHaveFocus();
-		await user.tab({ shift: true });
-		expect(getByTestId(items[0])).toHaveFocus();
-		await user.tab({ shift: true });
-		expect(getByTestId(items[0])).not.toHaveFocus();
-	});
+			await user.tab();
+			expect(getByTestId(items[0])).toHaveFocus();
+			await user.tab();
+			expect(getByTestId(items[1])).not.toHaveFocus();
+			await user.tab({ shift: true });
+			expect(getByTestId(items[0])).toHaveFocus();
+			await user.tab({ shift: true });
+			expect(getByTestId(items[0])).not.toHaveFocus();
+		},
+	);
 
 	test.each([
-		{ desc: 'horizontal', props: { orientation: horizontal }, items: allToolbarItems },
-		{ desc: 'vertical', props: { orientation: vertical }, items: allToolbarItems },
+		{
+			desc: 'horizontal',
+			props: { orientation: horizontal },
+			items: allToolbarItems,
+		},
+		{
+			desc: 'vertical',
+			props: { orientation: vertical },
+			items: allToolbarItems,
+		},
 		{
 			desc: 'horizontal, first item is a link',
 			props: { orientation: horizontal, linksFirst: true },
@@ -91,30 +102,48 @@ describe('Toolbar', () => {
 		},
 		{
 			desc: 'horizontal, no group items, first item is a link',
-			props: { orientation: horizontal, linksButtonsOnly: true, linksFirst: true },
+			props: {
+				orientation: horizontal,
+				linksButtonsOnly: true,
+				linksFirst: true,
+			},
 			items: tbLinksAndButtons,
 		},
 		{
 			desc: 'vertical, no group items, first item is a link',
-			props: { orientation: vertical, linksButtonsOnly: true, linksFirst: true },
+			props: {
+				orientation: vertical,
+				linksButtonsOnly: true,
+				linksFirst: true,
+			},
 			items: tbLinksAndButtons,
 		},
 		{
 			desc: 'horizontal, no group items, first item is a button',
-			props: { orientation: horizontal, linksButtonsOnly: true, buttonsFirst: true },
+			props: {
+				orientation: horizontal,
+				linksButtonsOnly: true,
+				buttonsFirst: true,
+			},
 			items: tbButtonsAndLinks,
 		},
 		{
 			desc: 'vertical, no group items, first item is a button',
-			props: { orientation: vertical, linksButtonsOnly: true, buttonsFirst: true },
+			props: {
+				orientation: vertical,
+				linksButtonsOnly: true,
+				buttonsFirst: true,
+			},
 			items: tbButtonsAndLinks,
 		},
 	])('arrow keys navigate between items - $desc', async ({ props, items }) => {
 		const user = userEvent.setup();
 		const { getByTestId } = render(ToolbarTest, props);
 
-		const nextKey = props.orientation === horizontal ? kbd.ARROW_RIGHT : kbd.ARROW_DOWN;
-		const prevKey = props.orientation === horizontal ? kbd.ARROW_LEFT : kbd.ARROW_UP;
+		const nextKey =
+			props.orientation === horizontal ? kbd.ARROW_RIGHT : kbd.ARROW_DOWN;
+		const prevKey =
+			props.orientation === horizontal ? kbd.ARROW_LEFT : kbd.ARROW_UP;
 
 		const reversedItems = [...items].reverse();
 
@@ -132,8 +161,16 @@ describe('Toolbar', () => {
 	});
 
 	test.each([
-		{ desc: 'horizontal', props: { orientation: horizontal }, items: allToolbarItems },
-		{ desc: 'vertical', props: { orientation: vertical }, items: allToolbarItems },
+		{
+			desc: 'horizontal',
+			props: { orientation: horizontal },
+			items: allToolbarItems,
+		},
+		{
+			desc: 'vertical',
+			props: { orientation: vertical },
+			items: allToolbarItems,
+		},
 		{
 			desc: 'horizontal, first item is a link',
 			props: { orientation: horizontal, linksFirst: true },
@@ -156,22 +193,38 @@ describe('Toolbar', () => {
 		},
 		{
 			desc: 'horizontal, no group items, first item is a link',
-			props: { orientation: horizontal, linksButtonsOnly: true, linksFirst: true },
+			props: {
+				orientation: horizontal,
+				linksButtonsOnly: true,
+				linksFirst: true,
+			},
 			items: tbLinksAndButtons,
 		},
 		{
 			desc: 'vertical, no group items, first item is a link',
-			props: { orientation: vertical, linksButtonsOnly: true, linksFirst: true },
+			props: {
+				orientation: vertical,
+				linksButtonsOnly: true,
+				linksFirst: true,
+			},
 			items: tbLinksAndButtons,
 		},
 		{
 			desc: 'horizontal, no group items, first item is a button',
-			props: { orientation: horizontal, linksButtonsOnly: true, buttonsFirst: true },
+			props: {
+				orientation: horizontal,
+				linksButtonsOnly: true,
+				buttonsFirst: true,
+			},
 			items: tbButtonsAndLinks,
 		},
 		{
 			desc: 'vertical, no group items, first item is a button',
-			props: { orientation: vertical, linksButtonsOnly: true, buttonsFirst: true },
+			props: {
+				orientation: vertical,
+				linksButtonsOnly: true,
+				buttonsFirst: true,
+			},
 			items: tbButtonsAndLinks,
 		},
 	])(
@@ -180,8 +233,10 @@ describe('Toolbar', () => {
 			const user = userEvent.setup();
 			const { getByTestId } = render(ToolbarTest, { loop: true, ...props });
 
-			const nextKey = props.orientation === horizontal ? kbd.ARROW_RIGHT : kbd.ARROW_DOWN;
-			const prevKey = props.orientation === horizontal ? kbd.ARROW_LEFT : kbd.ARROW_UP;
+			const nextKey =
+				props.orientation === horizontal ? kbd.ARROW_RIGHT : kbd.ARROW_DOWN;
+			const prevKey =
+				props.orientation === horizontal ? kbd.ARROW_LEFT : kbd.ARROW_UP;
 
 			await user.tab();
 			const firstItem = getByTestId(items[0]);
@@ -191,12 +246,20 @@ describe('Toolbar', () => {
 			expect(lastItem).toHaveFocus();
 			await user.keyboard(nextKey);
 			expect(firstItem).toHaveFocus();
-		}
+		},
 	);
 
 	test.each([
-		{ desc: 'horizontal', props: { orientation: horizontal }, items: allToolbarItems },
-		{ desc: 'vertical', props: { orientation: vertical }, items: allToolbarItems },
+		{
+			desc: 'horizontal',
+			props: { orientation: horizontal },
+			items: allToolbarItems,
+		},
+		{
+			desc: 'vertical',
+			props: { orientation: vertical },
+			items: allToolbarItems,
+		},
 		{
 			desc: 'horizontal, first item is a link',
 			props: { orientation: horizontal, linksFirst: true },
@@ -219,22 +282,38 @@ describe('Toolbar', () => {
 		},
 		{
 			desc: 'horizontal, no group items, first item is a link',
-			props: { orientation: horizontal, linksButtonsOnly: true, linksFirst: true },
+			props: {
+				orientation: horizontal,
+				linksButtonsOnly: true,
+				linksFirst: true,
+			},
 			items: tbLinksAndButtons,
 		},
 		{
 			desc: 'vertical, no group items, first item is a link',
-			props: { orientation: vertical, linksButtonsOnly: true, linksFirst: true },
+			props: {
+				orientation: vertical,
+				linksButtonsOnly: true,
+				linksFirst: true,
+			},
 			items: tbLinksAndButtons,
 		},
 		{
 			desc: 'horizontal, no group items, first item is a button',
-			props: { orientation: horizontal, linksButtonsOnly: true, buttonsFirst: true },
+			props: {
+				orientation: horizontal,
+				linksButtonsOnly: true,
+				buttonsFirst: true,
+			},
 			items: tbButtonsAndLinks,
 		},
 		{
 			desc: 'vertical, no group items, first item is a button',
-			props: { orientation: vertical, linksButtonsOnly: true, buttonsFirst: true },
+			props: {
+				orientation: vertical,
+				linksButtonsOnly: true,
+				buttonsFirst: true,
+			},
 			items: tbButtonsAndLinks,
 		},
 	])(
@@ -243,8 +322,10 @@ describe('Toolbar', () => {
 			const user = userEvent.setup();
 			const { getByTestId } = render(ToolbarTest, { loop: false, ...props });
 
-			const nextKey = props.orientation === horizontal ? kbd.ARROW_RIGHT : kbd.ARROW_DOWN;
-			const prevKey = props.orientation === horizontal ? kbd.ARROW_LEFT : kbd.ARROW_UP;
+			const nextKey =
+				props.orientation === horizontal ? kbd.ARROW_RIGHT : kbd.ARROW_DOWN;
+			const prevKey =
+				props.orientation === horizontal ? kbd.ARROW_LEFT : kbd.ARROW_UP;
 
 			const firstItem = getByTestId(items[0]);
 			const lastItem = getByTestId(items[items.length - 1]);
@@ -258,12 +339,20 @@ describe('Toolbar', () => {
 			expect(lastItem).toHaveFocus();
 			await user.keyboard(nextKey);
 			expect(lastItem).toHaveFocus();
-		}
+		},
 	);
 
 	test.each([
-		{ desc: 'horizontal', props: { orientation: horizontal }, items: allToolbarItems },
-		{ desc: 'vertical', props: { orientation: vertical }, items: allToolbarItems },
+		{
+			desc: 'horizontal',
+			props: { orientation: horizontal },
+			items: allToolbarItems,
+		},
+		{
+			desc: 'vertical',
+			props: { orientation: vertical },
+			items: allToolbarItems,
+		},
 		{
 			desc: 'horizontal, first item is a link',
 			props: { orientation: horizontal, linksFirst: true },
@@ -286,37 +375,56 @@ describe('Toolbar', () => {
 		},
 		{
 			desc: 'horizontal, no group items, first item is a link',
-			props: { orientation: horizontal, linksButtonsOnly: true, linksFirst: true },
+			props: {
+				orientation: horizontal,
+				linksButtonsOnly: true,
+				linksFirst: true,
+			},
 			items: tbLinksAndButtons,
 		},
 		{
 			desc: 'vertical, no group items, first item is a link',
-			props: { orientation: vertical, linksButtonsOnly: true, linksFirst: true },
+			props: {
+				orientation: vertical,
+				linksButtonsOnly: true,
+				linksFirst: true,
+			},
 			items: tbLinksAndButtons,
 		},
 		{
 			desc: 'horizontal, no group items, first item is a button',
-			props: { orientation: horizontal, linksButtonsOnly: true, buttonsFirst: true },
+			props: {
+				orientation: horizontal,
+				linksButtonsOnly: true,
+				buttonsFirst: true,
+			},
 			items: tbButtonsAndLinks,
 		},
 		{
 			desc: 'vertical, no group items, first item is a button',
-			props: { orientation: vertical, linksButtonsOnly: true, buttonsFirst: true },
+			props: {
+				orientation: vertical,
+				linksButtonsOnly: true,
+				buttonsFirst: true,
+			},
 			items: tbButtonsAndLinks,
 		},
-	])('home and end keys focus first and last items - $desc', async ({ props, items }) => {
-		const user = userEvent.setup();
-		const { getByTestId } = render(ToolbarTest, props);
+	])(
+		'home and end keys focus first and last items - $desc',
+		async ({ props, items }) => {
+			const user = userEvent.setup();
+			const { getByTestId } = render(ToolbarTest, props);
 
-		await user.tab();
-		const firstItem = getByTestId(items[0]);
-		const lastItem = getByTestId(items[items.length - 1]);
-		expect(firstItem).toHaveFocus();
-		await user.keyboard(kbd.END);
-		expect(lastItem).toHaveFocus();
-		await user.keyboard(kbd.HOME);
-		expect(firstItem).toHaveFocus();
-	});
+			await user.tab();
+			const firstItem = getByTestId(items[0]);
+			const lastItem = getByTestId(items[items.length - 1]);
+			expect(firstItem).toHaveFocus();
+			await user.keyboard(kbd.END);
+			expect(lastItem).toHaveFocus();
+			await user.keyboard(kbd.HOME);
+			expect(firstItem).toHaveFocus();
+		},
+	);
 
 	test('items can be selected with keyboard', async () => {
 		const user = userEvent.setup();
@@ -370,7 +478,8 @@ describe('Toolbar', () => {
 		}
 
 		const group1 = getByTestId('group-1');
-		const group1OnItems = group1.querySelectorAll<HTMLElement>('[data-state="on"]');
+		const group1OnItems =
+			group1.querySelectorAll<HTMLElement>('[data-state="on"]');
 		expect(group1OnItems.length).toBe(group1Items.length);
 	});
 
@@ -386,7 +495,8 @@ describe('Toolbar', () => {
 		}
 
 		const group2 = getByTestId('group-2');
-		const group2OnItems = group2.querySelectorAll<HTMLElement>('[data-state="on"]');
+		const group2OnItems =
+			group2.querySelectorAll<HTMLElement>('[data-state="on"]');
 		expect(group2OnItems.length).toBe(1);
 	});
 
@@ -402,13 +512,15 @@ describe('Toolbar', () => {
 		});
 
 		const group1 = getByTestId('group-1');
-		const group1OnItems = group1.querySelectorAll<HTMLElement>('[data-state="on"]');
+		const group1OnItems =
+			group1.querySelectorAll<HTMLElement>('[data-state="on"]');
 		expect(group1OnItems.length).toBe(2);
 		expect(group1OnItems[0]).toHaveAttribute('data-testid', 'item-1');
 		expect(group1OnItems[1]).toHaveAttribute('data-testid', 'item-2');
 
 		const group2 = getByTestId('group-2');
-		const group2OnItems = group2.querySelectorAll<HTMLElement>('[data-state="on"]');
+		const group2OnItems =
+			group2.querySelectorAll<HTMLElement>('[data-state="on"]');
 		expect(group2OnItems.length).toBe(1);
 		expect(group2OnItems[0]).toHaveAttribute('data-testid', 'item-5');
 	});
@@ -458,13 +570,15 @@ describe('Toolbar', () => {
 		});
 
 		const group1 = getByTestId('group-1');
-		const group1OnItems = group1.querySelectorAll<HTMLElement>('[data-state="on"]');
+		const group1OnItems =
+			group1.querySelectorAll<HTMLElement>('[data-state="on"]');
 		expect(group1OnItems.length).toBe(2);
 		expect(group1OnItems[0]).toHaveAttribute('data-testid', 'item-1');
 		expect(group1OnItems[1]).toHaveAttribute('data-testid', 'item-2');
 
 		const group2 = getByTestId('group-2');
-		const group2OnItems = group2.querySelectorAll<HTMLElement>('[data-state="on"]');
+		const group2OnItems =
+			group2.querySelectorAll<HTMLElement>('[data-state="on"]');
 		expect(group2OnItems.length).toBe(1);
 		expect(group2OnItems[0]).toHaveAttribute('data-testid', 'item-5');
 	});
@@ -483,23 +597,27 @@ describe('Toolbar', () => {
 		});
 
 		const group1 = getByTestId('group-1');
-		const group1OnItems = group1.querySelectorAll<HTMLElement>('[data-state="on"]');
+		const group1OnItems =
+			group1.querySelectorAll<HTMLElement>('[data-state="on"]');
 		expect(group1OnItems.length).toBe(0);
 
 		const group2 = getByTestId('group-2');
-		const group2OnItems = group2.querySelectorAll<HTMLElement>('[data-state="on"]');
+		const group2OnItems =
+			group2.querySelectorAll<HTMLElement>('[data-state="on"]');
 		expect(group2OnItems.length).toBe(0);
 
 		valueStore1.update(() => ['item-1', 'item-2']);
 		await tick();
-		const group1OnItems2 = group1.querySelectorAll<HTMLElement>('[data-state="on"]');
+		const group1OnItems2 =
+			group1.querySelectorAll<HTMLElement>('[data-state="on"]');
 		expect(group1OnItems2.length).toBe(2);
 		expect(group1OnItems2[0]).toHaveAttribute('data-testid', 'item-1');
 		expect(group1OnItems2[1]).toHaveAttribute('data-testid', 'item-2');
 
 		valueStore2.update(() => 'item-5');
 		await tick();
-		const group2OnItems2 = group2.querySelectorAll<HTMLElement>('[data-state="on"]');
+		const group2OnItems2 =
+			group2.querySelectorAll<HTMLElement>('[data-state="on"]');
 		expect(group2OnItems2.length).toBe(1);
 		expect(group2OnItems2[0]).toHaveAttribute('data-testid', 'item-5');
 	});

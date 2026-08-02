@@ -20,25 +20,25 @@
 		</svelte:fragment>
 	</APITableHeading>
 
-	<div class="mb-4 mt-2">
-		<div class="overflow-x-auto sm:mx-0">
-			<div class="inline-block min-w-full">
-				<table class="w-full min-w-[540px] text-left sm:min-w-full">
-					<tbody class="divide-y divide-neutral-700">
-						<tr class="w-1/4 text-neutral-300">
-							<td class="w-1/4 whitespace-nowrap py-2 pl-4 text-sm font-medium sm:pl-0"> Prop </td>
-							<td class="w-1/4 whitespace-nowrap py-2 text-sm font-medium">Default</td>
-							<td class="w-1/2 whitespace-nowrap py-2 text-sm font-medium">Type / Description</td>
+	<div class="surface-57049b098b">
+		<div class="surface-fc78663666">
+			<div class="surface-5e725e50cf">
+				<table class="surface-a7422addce">
+					<tbody class="surface-c51613bbb0">
+						<tr class="surface-3cd6be3cd9">
+							<td class="surface-d63359750d"> Prop </td>
+							<td class="surface-3d38d2eb7f">Default</td>
+							<td class="surface-73358fca12">Type / Description</td>
 						</tr>
 						{#each data as prop}
 							<tr>
-								<td class="py-3 pl-4 align-baseline sm:pl-0">
+								<td class="surface-f1f4e189ef">
 									<code>{prop.name}</code>
 									{#if prop.required}
-										<span class="text-rose-400">*</span>
+										<span class="surface-25dacae874">*</span>
 									{/if}
 								</td>
-								<td class="py-3 align-baseline text-sm">
+								<td class="surface-510c580f21">
 									<span>
 										{#if prop.default}
 											<code class="neutral">
@@ -49,8 +49,8 @@
 										{/if}
 									</span>
 								</td>
-								<td class="py-3 align-baseline text-sm">
-									<div class="my-0 space-x-5 whitespace-nowrap">
+								<td class="surface-c7060a9c88">
+									<div class="surface-b5a358af38">
 										{#if prop.longType}
 											<TypeDialog
 												code={prop.longType.highlightedCode}
@@ -63,12 +63,12 @@
 										{/if}
 									</div>
 									{#if prop.description}
-										<div class="my-2 whitespace-pre-wrap leading-7">
+										<div class="surface-ecb93aeadc">
 											<p>
 												{@html transformAPIString(prop.description, true)}
 											</p>
 											{#if prop.see}
-												<p class="italic">
+												<p class="surface-50a2dd4c3a">
 													See <A href={prop.see.href}>{prop.see.label}</A>
 												</p>
 											{/if}

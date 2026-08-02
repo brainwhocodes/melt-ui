@@ -9,31 +9,27 @@
 	<BaseDialog let:trigger>
 		<button
 			use:melt={trigger}
-			class="inline-flex items-center justify-center rounded-md bg-white px-4 py-2
-			font-medium leading-none text-magnum-700 shadow-lg hover:opacity-75
-			"
+			class="preview-space-y-2    preview-type-medium preview-hover-opacity-75     surface-d43daaee9a"
 		>
 			Open First
 		</button>
 		<svelte:fragment slot="content" let:title let:description let:close>
-			<h2 use:melt={title} class="m-0 text-lg font-medium text-black">First Dialog</h2>
-			<p use:melt={description} class="mb-5 mt-2 leading-normal text-zinc-600">
+			<h2 use:melt={title} class="surface-ec73974b0f">First Dialog</h2>
+			<p use:melt={description} class="surface-a3fca57a29">
 				Open the second dialog from here.
 			</p>
 
-			<div class="flex items-center justify-end gap-4">
+			<div class="surface-299d0d544d">
 				<button
 					use:melt={close}
-					class="inline-flex h-8 items-center justify-center rounded-[4px] bg-neutral-100
-      px-4 font-medium leading-none text-neutral-900"
+					class="preview-surface-neutral-100  surface-19e79f87c1"
 				>
 					Close
 				</button>
 				<BaseDialog let:trigger={secondTrigger}>
 					<button
 						use:melt={secondTrigger}
-						class="inline-flex h-8 items-center justify-center rounded-[4px] bg-magnum-100
-					px-4 font-medium leading-none text-magnum-900"
+						class="preview-surface-magnum-100      preview-space-x-4 surface-3ea7902605"
 					>
 						Open nested
 					</button>
@@ -43,14 +39,13 @@
 						let:description={secondDescription}
 						let:close={secondClose}
 					>
-						<h2 use:melt={secondTitle} class="m-0 text-lg font-medium text-black">Second Dialog</h2>
-						<p use:melt={secondDescription} class="mb-5 mt-2 leading-normal text-zinc-600">Cool!</p>
+						<h2 use:melt={secondTitle} class="surface-5dd11ed258">Second Dialog</h2>
+						<p use:melt={secondDescription} class="surface-112001a5c4">Cool!</p>
 
-						<div class="flex items-center justify-end gap-4">
+						<div class="surface-d772b76e4b">
 							<button
 								use:melt={secondClose}
-								class="inline-flex h-8 items-center justify-center rounded-[4px] bg-neutral-100
-						px-4 font-medium leading-none text-neutral-900"
+								class="preview-surface-neutral-100       preview-space-x-4 surface-1a01c8485a"
 							>
 								Close
 							</button>

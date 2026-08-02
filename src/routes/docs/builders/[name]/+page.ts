@@ -1,6 +1,10 @@
-import { builderMap, isBuilderName } from '$docs/data/builders/index.js';
-import { getAllPreviewComponents, getDocData, getMainPreviewComponent } from '$docs/utils/index.js';
 import { error } from '@sveltejs/kit';
+import { builderMap, isBuilderName } from '$docs/data/builders/index.js';
+import {
+	getAllPreviewComponents,
+	getDocData,
+	getMainPreviewComponent,
+} from '$docs/utils/index.js';
 import type { EntryGenerator } from './$types.js';
 
 export const entries = (() => {

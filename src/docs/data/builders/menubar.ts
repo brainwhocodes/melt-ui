@@ -23,9 +23,11 @@ const builder = builderSchema(BUILDER_NAME, {
 	options: OPTION_PROPS,
 });
 
-const menubarMenuBuilderProps = dropdownBuilder.props?.filter((p) => p.name !== 'preventScroll');
+const menubarMenuBuilderProps = dropdownBuilder.props?.filter(
+	(p) => p.name !== 'preventScroll',
+);
 const menubarMenuBuilderOptions = dropdownBuilder.options?.filter(
-	(opt) => opt.name !== 'preventScroll'
+	(opt) => opt.name !== 'preventScroll',
 );
 
 const menuBuilder = {

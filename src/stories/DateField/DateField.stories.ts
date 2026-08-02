@@ -1,7 +1,11 @@
+import {
+	CalendarDate,
+	CalendarDateTime,
+	getLocalTimeZone,
+	now,
+} from '@internationalized/date';
 import type { Meta, StoryObj } from '@storybook/svelte';
-
 import DateField from './DateField.svelte';
-import { CalendarDate, CalendarDateTime, getLocalTimeZone, now } from '@internationalized/date';
 
 const calendarDate = new CalendarDate(2021, 1, 1);
 const calendarDateTime = new CalendarDateTime(2021, 1, 1, 0, 0, 0);

@@ -18,12 +18,11 @@
 	import '@fontsource/inter/900.css';
 	import INTER_900 from '@fontsource/inter/files/inter-latin-900-normal.woff2';
 
-	import '../app.postcss';
-	import '../fonts.css';
+	import '$styles/app.scss';
 
 	import { dev } from '$app/environment';
 	import { page } from '$app/stores';
-	import { JsIndicator, SiteHeader, TailwindIndicator } from '$docs/components/index.js';
+	import { JsIndicator, SiteHeader } from '$docs/components/index.js';
 	import { cn } from '$docs/utils/index.js';
 
 	import { ModeWatcher } from 'mode-watcher';
@@ -47,25 +46,25 @@
 
 <a
 	href="#main"
-	class="force-dark fixed top-[-20rem] z-0 ml-56 rounded-br-xl rounded-tl-xl bg-neutral-900 px-2 py-1 text-neutral-100 focus:top-4 focus:z-[1000] max-sm:right-[6]"
+	class="force-dark surface-f89ebd55c9"
 	tabindex="0"
 >
 	Skip to main content
 </a>
-<div class="relative flex min-h-screen flex-col md:flex-col-reverse" id="page">
-	<div class="flex flex-1">
+<div class="surface-126436ebcd" id="page">
+	<div class="surface-be15640c06">
 		<slot />
 	</div>
 	<header
 		class={cn(
-			'sticky bottom-0 z-40 flex w-full flex-col gap-2 px-2 pb-2 md:bottom-[none] md:top-0 md:pb-0 md:pt-2',
-			!isRoot && 'bg-neutral-900'
+			'surface-6e5eb57b48',
+			!isRoot && 'surface-6cbd3303e8'
 		)}
 	>
 		<div
-			class="container rounded-md bg-magnum-400 py-2 text-center text-xs font-semibold text-magnum-800 lg:text-base"
+			class="container surface-e150b7c93e"
 		>
-			<a class="underline" href="https://next.melt-ui.com">
+			<a class="surface-5bbd64ba7b" href="https://next.melt-ui.com">
 				Check out the new version, with Runes!
 			</a>
 		</div>
@@ -73,7 +72,6 @@
 	</header>
 
 	{#if dev}
-		<TailwindIndicator />
 		<JsIndicator />
 	{/if}
 </div>

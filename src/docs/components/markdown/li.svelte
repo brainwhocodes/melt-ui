@@ -5,6 +5,6 @@
 	export { className as class };
 </script>
 
-<li class={cn('mt-2', className)} {...$$restProps}>
+<li class={cn('surface-0629ef9252', className)} {...$$restProps}>
 	<slot />
 </li>

@@ -1,14 +1,14 @@
+import { tick } from 'svelte';
+import { writable } from 'svelte/store';
 import { usePopper } from '$lib/internal/actions/index.js';
 import {
-	FIRST_LAST_KEYS,
-	SELECTION_KEYS,
 	addHighlight,
 	addMeltEventListener,
-	makeElement,
 	createElHelpers,
 	derivedVisible,
 	effect,
 	executeCallbacks,
+	FIRST_LAST_KEYS,
 	generateIds,
 	getNextFocusable,
 	getPortalDestination,
@@ -18,29 +18,29 @@ import {
 	isElement,
 	isHTMLElement,
 	kbd,
+	makeElement,
 	noop,
 	omit,
+	portalAttr,
 	removeHighlight,
 	removeScroll,
+	SELECTION_KEYS,
 	styleToString,
 	toWritableStores,
-	portalAttr,
 } from '$lib/internal/helpers/index.js';
 import { safeOnDestroy, safeOnMount } from '$lib/internal/helpers/lifecycle.js';
+import { withGet } from '$lib/internal/helpers/withGet.js';
 import type { MeltActionReturn } from '$lib/internal/types.js';
-import { tick } from 'svelte';
-import { writable } from 'svelte/store';
 import {
+	type _MenuParts,
 	applyAttrsIfDisabled,
 	createMenuBuilder,
 	getMenuItems,
 	handleMenuNavigation,
 	handleTabNavigation,
-	type _MenuParts,
 } from '../menu/index.js';
 import type { MenubarEvents } from './events.js';
 import type { CreateMenubarMenuProps, CreateMenubarProps } from './types.js';
-import { withGet } from '$lib/internal/helpers/withGet.js';
 
 const MENUBAR_NAV_KEYS = [kbd.ARROW_LEFT, kbd.ARROW_RIGHT, kbd.HOME, kbd.END];
 
@@ -68,7 +68,10 @@ export function createMenubar(props?: CreateMenubarProps) {
 	// const closeTimer = withGet(writable(0));
 	let scrollRemoved = false;
 
-	const ids = toWritableStores({ ...generateIds(menubarIdParts), ...withDefaults.ids });
+	const ids = toWritableStores({
+		...generateIds(menubarIdParts),
+		...withDefaults.ids,
+	});
 
 	const menubar = makeElement(name(), {
 		stores: [ids.menubar],
@@ -81,7 +84,9 @@ export function createMenubar(props?: CreateMenubarProps) {
 			} as const;
 		},
 		action: (node: HTMLElement) => {
-			const menuTriggers = Array.from(node.querySelectorAll('[data-melt-menubar-trigger]'));
+			const menuTriggers = Array.from(
+				node.querySelectorAll('[data-melt-menubar-trigger]'),
+			);
 			if (!isHTMLElement(menuTriggers[0])) return {};
 			menuTriggers[0].tabIndex = 0;
 
@@ -112,7 +117,10 @@ export function createMenubar(props?: CreateMenubarProps) {
 	} satisfies CreateMenubarMenuProps;
 
 	const createMenu = (props?: CreateMenubarMenuProps) => {
-		const withDefaults = { ...menuDefaults, ...props } satisfies CreateMenubarMenuProps;
+		const withDefaults = {
+			...menuDefaults,
+			...props,
+		} satisfies CreateMenubarMenuProps;
 		const rootOpen = withGet(writable(false));
 		const rootActiveTrigger = withGet(writable<HTMLElement | null>(null));
 
@@ -178,8 +186,20 @@ export function createMenubar(props?: CreateMenubarProps) {
 				let unsubPopper = noop;
 
 				const unsubDerived = effect(
-					[rootOpen, rootActiveTrigger, positioning, portal, closeOnOutsideClick],
-					([$rootOpen, $rootActiveTrigger, $positioning, $portal, $closeOnOutsideClick]) => {
+					[
+						rootOpen,
+						rootActiveTrigger,
+						positioning,
+						portal,
+						closeOnOutsideClick,
+					],
+					([
+						$rootOpen,
+						$rootActiveTrigger,
+						$positioning,
+						$portal,
+						$closeOnOutsideClick,
+					]) => {
 						unsubPopper();
 						if (!($rootOpen && $rootActiveTrigger)) return;
 
@@ -197,7 +217,9 @@ export function createMenubar(props?: CreateMenubarProps) {
 											onOutsideClick.get()?.(e);
 											if (e.defaultPrevented) return false;
 											const target = e.target;
-											const menubarEl = document.getElementById(ids.menubar.get());
+											const menubarEl = document.getElementById(
+												ids.menubar.get(),
+											);
 											if (!menubarEl || !isElement(target)) return true;
 											if (menubarEl.contains(target)) return false;
 											return true;
@@ -210,11 +232,13 @@ export function createMenubar(props?: CreateMenubarProps) {
 										behaviorType: escapeBehavior,
 										handler: () => activeMenu.set(''),
 									},
-									preventTextSelectionOverflow: { enabled: preventTextSelectionOverflow },
+									preventTextSelectionOverflow: {
+										enabled: preventTextSelectionOverflow,
+									},
 								},
 							}).destroy;
 						});
-					}
+					},
 				);
 
 				const unsubEvents = executeCallbacks(
@@ -258,7 +282,7 @@ export function createMenubar(props?: CreateMenubarProps) {
 						if (!isModifierKey && isCharacterKey) {
 							m.helpers.handleTypeaheadSearch(e.key, getMenuItems(menuEl));
 						}
-					})
+					}),
 				);
 				return {
 					destroy() {
@@ -283,27 +307,32 @@ export function createMenubar(props?: CreateMenubarProps) {
 					role: 'menuitem',
 				} as const;
 			},
-			action: (node: HTMLElement): MeltActionReturn<MenubarEvents['trigger']> => {
+			action: (
+				node: HTMLElement,
+			): MeltActionReturn<MenubarEvents['trigger']> => {
 				applyAttrsIfDisabled(node);
 
 				const menubarEl = document.getElementById(ids.menubar.get());
 				if (!menubarEl) return {};
 
 				const menubarTriggers = Array.from(
-					menubarEl.querySelectorAll('[data-melt-menubar-trigger]')
+					menubarEl.querySelectorAll('[data-melt-menubar-trigger]'),
 				);
 
 				if (!menubarTriggers.length) return {};
 
-				const unsubEffect = effect([lastFocusedMenuTrigger], ([$lastFocusedMenuTrigger]) => {
-					if (!$lastFocusedMenuTrigger && menubarTriggers[0] === node) {
-						node.tabIndex = 0;
-					} else if ($lastFocusedMenuTrigger === node) {
-						node.tabIndex = 0;
-					} else {
-						node.tabIndex = -1;
-					}
-				});
+				const unsubEffect = effect(
+					[lastFocusedMenuTrigger],
+					([$lastFocusedMenuTrigger]) => {
+						if (!$lastFocusedMenuTrigger && menubarTriggers[0] === node) {
+							node.tabIndex = 0;
+						} else if ($lastFocusedMenuTrigger === node) {
+							node.tabIndex = 0;
+						} else {
+							node.tabIndex = -1;
+						}
+					},
+				);
 
 				if (menubarTriggers[0] === node) {
 					node.tabIndex = 0;
@@ -351,7 +380,7 @@ export function createMenubar(props?: CreateMenubarProps) {
 							activeMenu.set(m.ids.menu.get());
 							rootActiveTrigger.set(triggerEl);
 						}
-					})
+					}),
 				);
 
 				return {
@@ -459,8 +488,11 @@ export function createMenubar(props?: CreateMenubarProps) {
 
 		if (!isHTMLElement(target) || !isHTMLElement(currentTarget)) return;
 
-		const targetIsSubTrigger = target.hasAttribute('data-melt-menubar-menu-subtrigger');
-		const isKeyDownInsideSubMenu = target.closest('[role="menu"]') !== currentTarget;
+		const targetIsSubTrigger = target.hasAttribute(
+			'data-melt-menubar-menu-subtrigger',
+		);
+		const isKeyDownInsideSubMenu =
+			target.closest('[role="menu"]') !== currentTarget;
 
 		const prevMenuKey = kbd.ARROW_LEFT;
 		const isPrevKey = e.key === prevMenuKey;
@@ -477,7 +509,9 @@ export function createMenubar(props?: CreateMenubarProps) {
 		const triggers = getMenuTriggers(menubarEl);
 		const currTriggerId = currentTarget.getAttribute('aria-labelledby');
 
-		const currIndex = triggers.findIndex((trigger) => trigger.id === currTriggerId);
+		const currIndex = triggers.findIndex(
+			(trigger) => trigger.id === currTriggerId,
+		);
 
 		let nextIndex: number;
 		switch (e.key) {
@@ -505,9 +539,9 @@ export function createMenubar(props?: CreateMenubarProps) {
 	function getMenuTriggers(el: HTMLElement) {
 		const menuEl = el.closest('[role="menubar"]');
 		if (!isHTMLElement(menuEl)) return [];
-		return Array.from(menuEl.querySelectorAll('[data-melt-menubar-trigger]')).filter(
-			(el): el is HTMLElement => isHTMLElement(el)
-		);
+		return Array.from(
+			menuEl.querySelectorAll('[data-melt-menubar-trigger]'),
+		).filter((el): el is HTMLElement => isHTMLElement(el));
 	}
 
 	/**
@@ -521,7 +555,8 @@ export function createMenubar(props?: CreateMenubarProps) {
 		const currentFocusedItem = document.activeElement;
 		// menu element being navigated
 		const currentTarget = e.currentTarget;
-		if (!isHTMLElement(currentTarget) || !isHTMLElement(currentFocusedItem)) return;
+		if (!isHTMLElement(currentTarget) || !isHTMLElement(currentFocusedItem))
+			return;
 
 		// menu items of the current menu
 		const menuTriggers = getMenuTriggers(currentTarget);
@@ -546,10 +581,19 @@ export function createMenubar(props?: CreateMenubarProps) {
 		switch (e.key) {
 			case kbd.ARROW_RIGHT:
 				nextIndex =
-					currentIndex < candidateNodes.length - 1 ? currentIndex + 1 : $loop ? 0 : currentIndex;
+					currentIndex < candidateNodes.length - 1
+						? currentIndex + 1
+						: $loop
+							? 0
+							: currentIndex;
 				break;
 			case kbd.ARROW_LEFT:
-				nextIndex = currentIndex > 0 ? currentIndex - 1 : $loop ? candidateNodes.length - 1 : 0;
+				nextIndex =
+					currentIndex > 0
+						? currentIndex - 1
+						: $loop
+							? candidateNodes.length - 1
+							: 0;
 				break;
 			case kbd.HOME:
 				nextIndex = 0;
@@ -582,13 +626,15 @@ export function createMenubar(props?: CreateMenubarProps) {
 				 * Submenu key events bubble through portals and
 				 * we only care about key events that happen inside this menu.
 				 */
-				const isTargetTrigger = target.hasAttribute('data-melt-menubar-trigger');
+				const isTargetTrigger = target.hasAttribute(
+					'data-melt-menubar-trigger',
+				);
 				if (!isTargetTrigger) return;
 
 				if (MENUBAR_NAV_KEYS.includes(e.key)) {
 					handleMenubarNavigation(e);
 				}
-			})
+			}),
 		);
 
 		return () => {

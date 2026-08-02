@@ -1,7 +1,7 @@
-import { render, act, waitFor } from '@testing-library/svelte';
+import { act, render, waitFor } from '@testing-library/svelte';
+import { userEvent } from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { describe } from 'vitest';
-import { userEvent } from '@testing-library/user-event';
 import { testKbd as kbd } from '../utils.js';
 import SelectTest from './SelectTest.svelte';
 
@@ -158,7 +158,9 @@ describe('Select', () => {
 		const trigger = getByTestId('trigger');
 
 		manualBtn.click();
-		await waitFor(() => expect(trigger).toHaveTextContent('Chocolate'), { timeout: 50 });
+		await waitFor(() => expect(trigger).toHaveTextContent('Chocolate'), {
+			timeout: 50,
+		});
 	});
 
 	test('Updating options and setting the value updates the label', async () => {
@@ -167,7 +169,9 @@ describe('Select', () => {
 		const trigger = getByTestId('trigger');
 
 		updateBtn.click();
-		await waitFor(() => expect(trigger).toHaveTextContent('Vanilla'), { timeout: 500 });
+		await waitFor(() => expect(trigger).toHaveTextContent('Vanilla'), {
+			timeout: 500,
+		});
 	});
 
 	test('Respects the `escapeBehavior` prop', async () => {

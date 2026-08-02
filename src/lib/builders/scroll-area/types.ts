@@ -1,6 +1,6 @@
 import type { IdObj } from '$lib/internal/helpers/index.js';
 import type { TextDirection } from '$lib/internal/types.js';
-import type { ScrollAreaIdParts, createScrollArea } from './index.js';
+import type { createScrollArea, ScrollAreaIdParts } from './index.js';
 
 export type ScrollAreaType = 'auto' | 'always' | 'scroll' | 'hover';
 

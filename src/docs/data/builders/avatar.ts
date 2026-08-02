@@ -16,7 +16,8 @@ const OPTION_PROPS = [
 		name: 'delayMs',
 		type: 'number',
 		default: '0',
-		description: 'The amount of time in milliseconds to wait before displaying the image.',
+		description:
+			'The amount of time in milliseconds to wait before displaying the image.',
 	},
 ];
 
@@ -27,13 +28,15 @@ const builder = builderSchema('avatar', {
 		{
 			name: 'loadingStatus',
 			type: 'Writable<"loading" | "loaded" | "error">',
-			description: 'An optional writable store used to control the loading status of the image.',
+			description:
+				'An optional writable store used to control the loading status of the image.',
 			see: SEE.BRING_YOUR_OWN_STORE,
 		},
 		{
 			name: 'onLoadingStatusChange',
 			type: 'ChangeFn<"loading" | "loaded" | "error">',
-			description: 'A callback invoked when the loading status store of the avatar changes.',
+			description:
+				'A callback invoked when the loading status store of the avatar changes.',
 			see: SEE.CHANGE_FUNCTIONS,
 		},
 	],
@@ -51,14 +54,16 @@ const builder = builderSchema('avatar', {
 		{
 			name: 'loadingStatus',
 			type: 'Writable<"loading" | "loaded" | "error">',
-			description: 'A writable store with the current loading status of the image.',
+			description:
+				'A writable store with the current loading status of the image.',
 		},
 	],
 	options: OPTION_PROPS,
 });
 
 const image = elementSchema('image', {
-	description: 'The image element that is rendered when the `src` prop is provided.',
+	description:
+		'The image element that is rendered when the `src` prop is provided.',
 	dataAttributes: [
 		{
 			name: 'data-melt-avatar-image',

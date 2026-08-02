@@ -1,11 +1,17 @@
-import { testKbd as kbd } from '../utils.js';
-import { render } from '@testing-library/svelte';
+import {
+	CalendarDate,
+	CalendarDateTime,
+	toZoned,
+} from '@internationalized/date';
+import { act, fireEvent, render, waitFor } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { axe } from 'jest-axe';
+import { writable } from 'svelte/store';
 import { describe } from 'vitest';
-import DateRangeFieldTest from './DateRangeFieldTest.svelte';
-import { CalendarDate, CalendarDateTime, toZoned } from '@internationalized/date';
 import type { CreateDateRangeFieldProps } from '$lib/index.js';
+import { testKbd as kbd } from '../utils.js';
+import DateRangeFieldShadowTest from './DateRangeFieldShadowTest.svelte';
+import DateRangeFieldTest from './DateRangeFieldTest.svelte';
 
 const exampleDate = {
 	start: new CalendarDate(2022, 1, 1),
@@ -51,9 +57,71 @@ describe('DateField', () => {
 		fields.forEach((field) => {
 			segments.forEach((segment) => {
 				const segmentEl = getByTestId(`${field}-${segment}`);
-				expect(segmentEl).toHaveTextContent(String(exampleDate[field][segment]));
+
+				expect(segmentEl).toHaveTextContent(
+					String(exampleDate[field][segment]),
+				);
 			});
 		});
+	});
+	test('propagates a replaceable ShadowRoot through both composed DateFields', async () => {
+		const { getByTestId, unmount } = render(DateRangeFieldShadowTest);
+		const firstHost = getByTestId('first-range-shadow-host');
+		const secondHost = getByTestId('second-range-shadow-host');
+		const firstRoot = firstHost.shadowRoot!;
+		const secondRoot = secondHost.shadowRoot!;
+		const field = firstRoot.querySelector<HTMLElement>(
+			'[data-testid="field"]',
+		)!;
+		const label = firstRoot.querySelector<HTMLElement>(
+			'[data-melt-datefield-label]',
+		)!;
+		const segments = Array.from(
+			firstRoot.querySelectorAll<HTMLElement>(
+				'[data-segment]:not([data-segment="literal"])',
+			),
+		);
+		const descriptionId = field.getAttribute('aria-describedby')!;
+
+		expect(firstRoot.querySelector(`[id="${descriptionId}"]`)).not.toBeNull();
+		expect(document.getElementById(descriptionId)).toBeNull();
+		for (const segment of segments) {
+			for (const id of segment.getAttribute('aria-describedby')!.split(' ')) {
+				expect(firstRoot.querySelector(`[id="${id}"]`)).not.toBeNull();
+			}
+		}
+
+		await fireEvent.click(label);
+		await waitFor(() => expect(firstRoot.activeElement).toBe(segments[0]));
+		await fireEvent.keyDown(segments[0], { key: 'ArrowRight' });
+		expect(firstRoot.activeElement).toBe(segments[1]);
+		segments[0].focus();
+		await fireEvent.keyDown(segments[0], { key: '2' });
+		expect(firstRoot.activeElement).toBe(segments[1]);
+
+		await fireEvent.click(getByTestId('move-date-range-field-root'));
+		const movedField = secondRoot.querySelector<HTMLElement>(
+			'[data-testid="field"]',
+		)!;
+		const movedLabel = secondRoot.querySelector<HTMLElement>(
+			'[data-melt-datefield-label]',
+		)!;
+		expect(movedField).toBe(field);
+		expect(firstRoot.querySelector(`[id="${descriptionId}"]`)).toBeNull();
+		expect(secondRoot.querySelector(`[id="${descriptionId}"]`)).not.toBeNull();
+		expect(document.getElementById(descriptionId)).toBeNull();
+
+		await fireEvent.click(movedLabel);
+		await waitFor(() =>
+			expect(secondRoot.activeElement).toBe(
+				secondRoot.querySelector(
+					'[data-segment]:not([data-segment="literal"])',
+				),
+			),
+		);
+
+		unmount();
+		expect(secondRoot.querySelector(`[id="${descriptionId}"]`)).toBeNull();
 	});
 	test('segments populated with defaultValue - CalendarDateTime', async () => {
 		const { getByTestId } = setup({
@@ -66,7 +134,9 @@ describe('DateField', () => {
 		fields.forEach((field) => {
 			segments.forEach((segment) => {
 				const segmentEl = getByTestId(`${field}-${segment}`);
-				expect(segmentEl).toHaveTextContent(String(exampleDateTime[field][segment]));
+				expect(segmentEl).toHaveTextContent(
+					String(exampleDateTime[field][segment]),
+				);
 			});
 		});
 
@@ -84,7 +154,9 @@ describe('DateField', () => {
 		fields.forEach((field) => {
 			segments.forEach((segment) => {
 				const segmentEl = getByTestId(`${field}-${segment}`);
-				expect(segmentEl).toHaveTextContent(String(exampleDateTime[field][segment]));
+				expect(segmentEl).toHaveTextContent(
+					String(exampleDateTime[field][segment]),
+				);
 			});
 		});
 		expect(getByTestId('start-dayPeriod')).toHaveTextContent('PM');
@@ -249,14 +321,22 @@ describe('DateField', () => {
 
 		const startDay = getByTestId('start-day');
 
-		expect(getByTestId('start-value')).toHaveTextContent(exampleDate.start.toString());
-		expect(getByTestId('end-value')).toHaveTextContent(exampleDate.end.toString());
+		expect(getByTestId('start-value')).toHaveTextContent(
+			exampleDate.start.toString(),
+		);
+		expect(getByTestId('end-value')).toHaveTextContent(
+			exampleDate.end.toString(),
+		);
 
 		await user.click(startDay);
 		await user.keyboard(kbd.ARROW_DOWN);
 
-		expect(getByTestId('start-value')).toHaveTextContent(overrideDay.start.toString());
-		expect(getByTestId('end-value')).toHaveTextContent(overrideDay.end.toString());
+		expect(getByTestId('start-value')).toHaveTextContent(
+			overrideDay.start.toString(),
+		);
+		expect(getByTestId('end-value')).toHaveTextContent(
+			overrideDay.end.toString(),
+		);
 	});
 
 	test('readonlySegments prop prevents modifying given segments', async () => {
@@ -272,11 +352,15 @@ describe('DateField', () => {
 		{
 			// start month should not change
 			const monthSegment = getByTestId('start-month');
-			expect(monthSegment).toHaveTextContent(String(exampleDate.start['month']));
+			expect(monthSegment).toHaveTextContent(
+				String(exampleDate.start['month']),
+			);
 			await user.click(monthSegment);
 			expect(monthSegment).toHaveFocus();
 			await user.keyboard(kbd.ARROW_UP);
-			expect(monthSegment).toHaveTextContent(String(exampleDate.start['month']));
+			expect(monthSegment).toHaveTextContent(
+				String(exampleDate.start['month']),
+			);
 
 			// start day should change
 			const daySegment = getByTestId('start-day');
@@ -284,7 +368,9 @@ describe('DateField', () => {
 			await user.click(daySegment);
 			expect(daySegment).toHaveFocus();
 			await user.keyboard(kbd.ARROW_UP);
-			expect(daySegment).toHaveTextContent(String(exampleDate.start['day'] + 1));
+			expect(daySegment).toHaveTextContent(
+				String(exampleDate.start['day'] + 1),
+			);
 
 			// start year should change
 			const yearSegment = getByTestId('start-year');
@@ -292,7 +378,9 @@ describe('DateField', () => {
 			await user.click(yearSegment);
 			expect(yearSegment).toHaveFocus();
 			await user.keyboard(kbd.ARROW_UP);
-			expect(yearSegment).toHaveTextContent(String(exampleDate.start['year'] + 1));
+			expect(yearSegment).toHaveTextContent(
+				String(exampleDate.start['year'] + 1),
+			);
 		}
 
 		// end field
@@ -321,5 +409,43 @@ describe('DateField', () => {
 			await user.keyboard(kbd.ARROW_UP);
 			expect(yearSegment).toHaveTextContent(String(exampleDate.end['year']));
 		}
+	});
+
+	test('controlled incomplete and cleared ranges reset both internal fields', async () => {
+		const value = writable({
+			start: exampleDate.start as CalendarDate | undefined,
+			end: exampleDate.end as CalendarDate | undefined,
+		});
+		const { getByTestId } = setup({ value });
+
+		expect(getByTestId('start-month')).toHaveTextContent('1');
+		expect(getByTestId('end-month')).toHaveTextContent('3');
+
+		await act(() =>
+			value.set({
+				start: new CalendarDate(2024, 2, 3),
+				end: undefined,
+			}),
+		);
+
+		expect(getByTestId('start-month')).toHaveTextContent('mm');
+		expect(getByTestId('start-day')).toHaveTextContent('dd');
+		expect(getByTestId('start-year')).toHaveTextContent('yyyy');
+		expect(getByTestId('end-month')).toHaveTextContent('mm');
+		expect(getByTestId('end-day')).toHaveTextContent('dd');
+		expect(getByTestId('end-year')).toHaveTextContent('yyyy');
+
+		await act(() =>
+			value.set({
+				start: new CalendarDate(2025, 5, 6),
+				end: new CalendarDate(2025, 7, 8),
+			}),
+		);
+		expect(getByTestId('start-month')).toHaveTextContent('5');
+		expect(getByTestId('end-month')).toHaveTextContent('7');
+
+		await act(() => value.set({ start: undefined, end: undefined }));
+		expect(getByTestId('start-month')).toHaveTextContent('mm');
+		expect(getByTestId('end-month')).toHaveTextContent('mm');
 	});
 });

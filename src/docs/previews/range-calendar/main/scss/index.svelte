@@ -1,0 +1,678 @@
+<script lang="ts">
+	import { ChevronRight, ChevronLeft } from '$icons/index.js';
+	import { melt } from '$lib/index.js';
+	import { createRangeCalendar } from '$lib/builders/range-calendar/index.js';
+	import LocaleCombobox from './LocaleCombobox.svelte';
+
+	const {
+		elements: { calendar, heading, grid, cell, prevButton, nextButton },
+		states: { months, headingValue, weekdays },
+		helpers: { isDateDisabled, isDateUnavailable },
+		options: { locale },
+	} = createRangeCalendar();
+</script>
+
+<section>
+	<LocaleCombobox
+		onSelectedChange={({ next }) => {
+			if (next) {
+				locale.set(next.value);
+			}
+			return next;
+		}}
+	/>
+	<div use:melt={$calendar}>
+		<header>
+			<button use:melt={$prevButton}>
+				<ChevronLeft />
+			</button>
+			<div use:melt={$heading}>
+				{$headingValue}
+			</div>
+			<button use:melt={$nextButton}>
+				<ChevronRight />
+			</button>
+		</header>
+		<div>
+			{#each $months as month}
+				<table use:melt={$grid}>
+					<thead aria-hidden="true">
+						<tr>
+							{#each $weekdays as day}
+								<th>
+									<div>
+										{day}
+									</div>
+								</th>
+							{/each}
+						</tr>
+					</thead>
+					<tbody>
+						{#each month.weeks as dates}
+							<tr>
+								{#each dates as date}
+									<td
+										role="gridcell"
+										aria-disabled={$isDateDisabled(date) ||
+											$isDateUnavailable(date)}
+									>
+										<div use:melt={$cell(date, month.value)}>
+											{date.day}
+										</div>
+									</td>
+								{/each}
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			{/each}
+		</div>
+	</div>
+</section>
+
+<style lang="scss">
+	[data-melt-calendar] {
+
+    width: 100%;
+
+    border-radius: 0.5rem;
+
+    
+
+    background-color: rgb(var(--color-white) / 1);
+
+    padding: 0.75rem;
+
+    
+
+    color: rgb(var(--color-magnum-800) / 1);
+
+    
+
+    
+
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)
+}
+
+	header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding-bottom: 0.5rem
+}
+
+	header + div {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 2rem
+}
+
+	[data-melt-calendar-prevbutton] {
+
+    border-radius: 0.5rem;
+
+    padding: 0.25rem;
+
+    transition-property: all;
+
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+    transition-duration: 150ms
+}
+
+	[data-melt-calendar-prevbutton]:hover {
+
+    
+
+    background-color: rgb(var(--color-magnum-100) / 1)
+}
+
+	[data-melt-calendar-nextbutton] {
+
+    border-radius: 0.5rem;
+
+    padding: 0.25rem;
+
+    transition-property: all;
+
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+    transition-duration: 150ms
+}
+
+	[data-melt-calendar-nextbutton]:hover {
+
+    
+
+    background-color: rgb(var(--color-magnum-100) / 1)
+}
+
+	[data-melt-calendar-heading] {
+
+    font-weight: 600;
+
+    
+
+    color: rgb(var(--color-magnum-800) / 1)
+}
+
+	th {
+
+    font-size: 0.875rem;
+
+    line-height: 1.25rem;
+
+    font-weight: 600;
+
+    
+
+    color: rgb(var(--color-magnum-800) / 1)
+}
+
+	th div {
+
+    display: flex;
+
+    height: 1.5rem;
+
+    width: 1.5rem;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 1rem
+}
+
+	[data-melt-calendar-grid] {
+
+    width: 100%
+}
+
+	[data-melt-calendar-cell] {
+
+    display: flex;
+
+    height: 1.5rem;
+
+    width: 1.5rem;
+
+    cursor: pointer;
+
+    user-select: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 0.5rem;
+
+    padding: 1rem
+}
+
+	[data-melt-calendar-cell]:hover {
+
+    
+
+    background-color: rgb(var(--color-magnum-100) / 1)
+}
+
+	[data-melt-calendar-cell]:focus {
+
+    
+
+    
+
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+    
+
+    }
+
+	[data-melt-calendar-cell][data-outside-month] {
+
+    pointer-events: none
+}
+
+	[data-melt-calendar-cell][data-outside-visible-months] {
+
+    pointer-events: none
+}
+
+	[data-melt-calendar-cell][data-outside-month] {
+
+    cursor: default
+}
+
+	[data-melt-calendar-cell][data-outside-visible-months] {
+
+    cursor: default
+}
+
+	[data-melt-calendar-cell][data-highlighted] {
+
+    
+
+    background-color: rgb(var(--color-magnum-200) / 1)
+}
+
+	[data-melt-calendar-cell][data-range-highlighted] {
+
+    
+
+    background-color: rgb(var(--color-magnum-200) / 1)
+}
+
+	[data-melt-calendar-cell][data-selected] {
+
+    
+
+    background-color: rgb(var(--color-magnum-300) / 1);
+
+    
+
+    color: rgb(var(--color-magnum-900) / 1)
+}
+
+	[data-melt-calendar-cell][data-disabled] {
+
+    opacity: 0.4
+}
+
+	[data-melt-calendar-cell][data-outside-month] {
+
+    opacity: 0.4
+}
+
+	[data-melt-calendar-cell][data-outside-visible-months] {
+
+    opacity: 0.4
+}
+
+	[data-melt-calendar-cell]:hover[data-outside-month] {
+
+    background-color: transparent
+}
+
+	[data-melt-calendar-cell]:hover[data-outside-visible-months] {
+
+    background-color: transparent
+}
+
+	[data-melt-calendar-cell][data-outside-month='true'][data-outside-visible-months='true'] {
+
+    opacity: 0
+}
+
+	.input {
+
+    display: flex;
+
+    height: 2rem;
+
+    width: 100%;
+
+    border-radius: 0.375rem;
+
+    border-width: 1px;
+
+    
+
+    border-color: rgb(var(--color-magnum-800) / 1);
+
+    background-color: transparent;
+
+    padding-left: 0.625rem;
+
+    padding-right: 0.625rem;
+
+    font-size: 0.875rem;
+
+    line-height: 1.25rem;
+
+    }
+
+	.input:focus-visible {
+
+    
+
+    
+
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+    
+
+    
+
+    }
+
+	.input {
+
+    flex: 1 1 0%;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding-left: 0.625rem;
+
+    padding-right: 0.625rem;
+
+    font-size: 0.875rem;
+
+    line-height: 1.25rem;
+
+    line-height: 1;
+
+    
+
+    color: rgb(var(--color-magnum-700) / 1)
+}
+
+	.trigger {
+
+    display: inline-flex;
+
+    width: 16rem;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 0.25rem;
+
+    
+
+    background-color: rgb(var(--color-white) / 1);
+
+    padding: 0px;
+
+    padding-left: 0.5rem;
+
+    padding-right: 0.5rem;
+
+    padding-top: 0.25rem;
+
+    padding-bottom: 0.25rem;
+
+    font-size: 0.875rem;
+
+    line-height: 1.25rem;
+
+    font-weight: 500;
+
+    
+
+    color: rgb(var(--color-magnum-900) / 1);
+
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+    transition-duration: 150ms
+}
+
+	.trigger:hover {
+
+    background-color: rgb(var(--color-white) / 0.9)
+}
+
+	.trigger:focus-visible {
+
+    
+
+    
+
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+    
+
+    
+
+    }
+
+	.close {
+
+    position: absolute;
+
+    right: 0.375rem;
+
+    top: 0.375rem;
+
+    display: flex;
+
+    height: 1.75rem;
+
+    width: 1.75rem;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 9999px;
+
+    
+
+    color: rgb(var(--color-magnum-900) / 1);
+
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+    transition-duration: 150ms
+}
+
+	.close:hover {
+
+    background-color: rgb(var(--color-magnum-500) / 0.1)
+}
+
+	.close:focus-visible {
+
+    
+
+    
+
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+    
+
+    
+
+    }
+
+	.close {
+
+    
+
+    background-color: rgb(var(--color-white) / 1);
+
+    padding: 0px;
+
+    font-size: 0.875rem;
+
+    line-height: 1.25rem;
+
+    font-weight: 500
+}
+
+	.button {
+
+    display: flex;
+
+    height: 1.5rem;
+
+    width: 1.5rem;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 9999px;
+
+    
+
+    color: rgb(var(--color-magnum-900) / 1);
+
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+    transition-duration: 150ms
+}
+
+	.button:hover {
+
+    background-color: rgb(var(--color-magnum-500) / 0.1)
+}
+
+	.button:focus-visible {
+
+    
+
+    
+
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+    
+
+    }
+
+	.button {
+
+    
+
+    background-color: rgb(var(--color-white) / 1);
+
+    padding: 0px;
+
+    font-size: 0.875rem;
+
+    line-height: 1.25rem;
+
+    font-weight: 500
+}
+
+	.content {
+
+    z-index: 10;
+
+    width: 15rem;
+
+    border-radius: 4px;
+
+    
+
+    background-color: rgb(var(--color-white) / 1);
+
+    padding: 1.25rem;
+
+    
+
+    
+
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)
+}
+
+	.buttons-wrapper {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-top-width: 1px;
+
+    border-bottom-width: 1px;
+
+    
+
+    border-color: rgb(var(--color-magnum-700) / 1);
+
+    padding-top: 0.25rem;
+
+    padding-bottom: 0.25rem
+}
+
+	.cell {
+
+    display: flex;
+
+    height: 1.5rem;
+
+    width: 1.5rem;
+
+    cursor: pointer;
+
+    user-select: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 0.25rem;
+
+    padding: 1rem
+}
+
+	.cell:hover {
+
+    
+
+    background-color: rgb(var(--color-magnum-100) / 1)
+}
+
+	.cell:focus {
+
+    
+
+    
+
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+    
+
+    }
+
+	.segment[data-segment="dayPeriod"] {
+
+    padding-left: 0.125rem
+}
+
+	.segment[data-segment="hour"] {
+
+    padding-left: 0.25rem
+}
+
+	.segment[data-segment="timeZoneName"] {
+
+    padding-left: 0.25rem
+}
+
+	.btn {
+
+    border-radius: 0.25rem;
+
+    
+
+    background-color: rgb(var(--color-magnum-600) / 1);
+
+    padding: 0.25rem;
+
+    font-size: 0.75rem;
+
+    line-height: 1rem;
+
+    
+
+    color: rgb(var(--color-white) / 1)
+}
+</style>

@@ -1,11 +1,13 @@
-import { highlightCode } from '$docs/highlighter.js';
-import { isBrowser } from '$lib/internal/helpers/index.js';
 import { error } from '@sveltejs/kit';
 import type { SvelteComponent } from 'svelte';
 import { writable } from 'svelte/store';
-import rawGlobalCSS from '../../../other/globalcss.html?raw';
-import rawTailwindConfig from '../../../other/tailwindconfig.html?raw';
-import { builderMap, isBuilderName, type Builder } from '../data/builders/index.js';
+import { highlightCode } from '$docs/highlighter.js';
+import { isBrowser } from '$lib/internal/helpers/index.js';
+import {
+	type Builder,
+	builderMap,
+	isBuilderName,
+} from '../data/builders/index.js';
 import { processMeltAttributes } from '../pp.js';
 import type { DocResolver, PreviewFile, PreviewResolver } from '../types.js';
 
@@ -21,15 +23,13 @@ function previewPathMatcher(path: string, builder: string) {
 
 interface PreviewObj {
 	[cmpName: string]: {
-		[codingStyle: string]: {
+		scss: {
 			[fileName: `${string}.svelte`]:
 				| {
 						pp: string;
 						base: string;
 				  }
 				| undefined;
-			'globals.css'?: string;
-			'tailwind.config.ts'?: string;
 		};
 	};
 }
@@ -51,29 +51,22 @@ async function createPreviewsObject({
 }: CreatePreviewsObjectArgs): Promise<PreviewObj> {
 	const returnedObj: PreviewObj = {};
 
-	// initialize regex early to avoid re-creating it in the loop
-	const regex = new RegExp(`${component}/(.+?)/(.+?)/(.*?\\.svelte)$`);
+	// The documentation exposes one authored style path: SCSS.
+	const regex = new RegExp(`${component}/(.+?)/scss/(.*?\\.svelte)$`);
 
-	// Create an array of promises, iterating through the objects in the array
 	const promises = objArr.map(async (obj) => {
-		// Extract the parts from the path
 		const match = regex.exec(obj.path);
 		if (!match) return;
 
-		const [, groupKey, styleKey, fileKey] = match; // Destructure the matched parts
-
+		const [, groupKey, fileKey] = match;
 		if (!isSvelteFile(fileKey)) return;
 
 		const content = obj.content
 			.replace(/\n\t\t\tclass="force-dark"|\bforce-dark\b/g, '')
 			.replace(/class="force-dark /g, 'class="');
 
-		// Create the structure in the returnedObj
 		if (!returnedObj[groupKey]) {
-			returnedObj[groupKey] = {};
-		}
-		if (!returnedObj[groupKey][styleKey]) {
-			returnedObj[groupKey][styleKey] = {};
+			returnedObj[groupKey] = { scss: {} };
 		}
 
 		const [highlightedCode, processedCode] = await Promise.all([
@@ -81,32 +74,13 @@ async function createPreviewsObject({
 			highlightCode({ code: processMeltAttributes(content), lang: 'svelte' }),
 		]);
 
-		returnedObj[groupKey][styleKey][fileKey] = {
+		returnedObj[groupKey].scss[fileKey] = {
 			pp: highlightedCode ?? content,
 			base: processedCode ?? content,
 		};
 	});
 
-	// Wait for all the promises to resolve
 	await Promise.all(promises);
-
-	// Manually add values for 'tailwind.config.ts' and 'globals.css'
-	for (const groupKey in returnedObj) {
-		if (!Object.prototype.hasOwnProperty.call(returnedObj, groupKey)) continue;
-
-		const group = returnedObj[groupKey];
-
-		for (const styleKey in group) {
-			if (!Object.prototype.hasOwnProperty.call(group, styleKey)) continue;
-
-			if (styleKey === 'tailwind') {
-				group[styleKey]['tailwind.config.ts'] = rawTailwindConfig;
-			} else if (styleKey === 'css') {
-				group[styleKey]['globals.css'] = rawGlobalCSS;
-			}
-		}
-	}
-
 	return returnedObj;
 }
 
@@ -114,7 +88,7 @@ const regexMap = new Map<string, RegExp>();
 
 function isMainPreviewComponent(builder: string, path: string): boolean {
 	if (!regexMap.has(builder)) {
-		const regexPattern = `${builder}/main/tailwind/index\\.svelte$`;
+		const regexPattern = `${builder}/main/scss/index\\.svelte$`;
 		regexMap.set(builder, new RegExp(regexPattern));
 	}
 
@@ -176,19 +150,23 @@ const getPreviewName = (path: string, slug: string) => {
 };
 
 export async function getAllPreviewComponents(slug: string) {
-	const previewComponents = import.meta.glob('/src/docs/previews/**/tailwind/index.svelte');
+	const previewComponents = import.meta.glob(
+		'/src/docs/previews/**/scss/index.svelte',
+	);
 
 	const previewCodeMatches: { [key: string]: SvelteComponent } = {};
 
-	const promises = Object.entries(previewComponents).map(async ([path, resolver]) => {
-		const isMatch = previewPathMatcher(path, slug);
-		if (!isMatch) return;
-		const previewName = getPreviewName(path, slug);
+	const promises = Object.entries(previewComponents).map(
+		async ([path, resolver]) => {
+			const isMatch = previewPathMatcher(path, slug);
+			if (!isMatch) return;
+			const previewName = getPreviewName(path, slug);
 
-		const previewComp = (await resolver?.()) as PreviewFile;
-		if (!previewComp) return;
-		previewCodeMatches[previewName] = previewComp.default;
-	});
+			const previewComp = (await resolver?.()) as PreviewFile;
+			if (!previewComp) return;
+			previewCodeMatches[previewName] = previewComp.default;
+		},
+	);
 	await Promise.all(promises);
 
 	return previewCodeMatches;
@@ -203,7 +181,10 @@ export async function getMainPreviewComponent(slug: string) {
 	let mainPreviewObj: { path?: string; resolver?: PreviewResolver } = {};
 	for (const [path, resolver] of Object.entries(previewComponents)) {
 		if (isMainPreviewComponent(slug, path)) {
-			mainPreviewObj = { path, resolver: resolver as unknown as PreviewResolver };
+			mainPreviewObj = {
+				path,
+				resolver: resolver as unknown as PreviewResolver,
+			};
 			break;
 		}
 	}
@@ -250,13 +231,19 @@ export async function getBuilderData(slug: Builder) {
 	return builderData;
 }
 
-export function transformAPIString(text: string | string[], defaultCodeColor = false) {
+export function transformAPIString(
+	text: string | string[],
+	defaultCodeColor = false,
+) {
 	if (Array.isArray(text)) {
 		text = text.join(' | ');
 	}
 	text = text.replaceAll('"', "'");
 	const regex = /`(.+?)`/g;
-	return text.replace(regex, `<code class="${defaultCodeColor ? '' : 'neutral'}">$1</code>`);
+	return text.replace(
+		regex,
+		`<code class="${defaultCodeColor ? '' : 'neutral'}">$1</code>`,
+	);
 }
 
 export async function getDoc(slug: string) {

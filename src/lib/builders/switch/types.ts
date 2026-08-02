@@ -1,7 +1,8 @@
-import type { BuilderReturn } from '$lib/internal/types.js';
 import type { Writable } from 'svelte/store';
-import type { createSwitch } from './create.js';
 import type { ChangeFn } from '$lib/internal/helpers/index.js';
+import type { BuilderReturn } from '$lib/internal/types.js';
+import type { createSwitch } from './create.js';
+
 export type { SwitchComponentEvents } from './events.js';
 export type CreateSwitchProps = {
 	/**

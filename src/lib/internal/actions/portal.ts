@@ -31,7 +31,7 @@ export const usePortal = ((el, target = 'body') => {
 			throw new TypeError(
 				`Unknown portal target type: ${
 					target === null ? 'null' : typeof target
-				}. Allowed types: string (CSS selector) or HTMLElement.`
+				}. Allowed types: string (CSS selector) or HTMLElement.`,
 			);
 		}
 		el.dataset.portal = '';

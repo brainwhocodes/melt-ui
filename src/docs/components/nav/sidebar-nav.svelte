@@ -4,25 +4,25 @@
 	import { navConfig } from '$docs/config.js';
 </script>
 
-<nav class="flex w-full flex-col gap-4">
+<nav class="surface-f4c35668da">
 	{#each navConfig.sidebarNav as navItem, index (index)}
 		<div>
 			<span
-				class="block whitespace-nowrap rounded-lg border border-transparent px-3 pb-2 text-sm font-semibold uppercase tracking-wider text-zinc-400"
+				class="surface-985baacfce"
 			>
 				{navItem.title}
 			</span>
-			<div class="grid grid-flow-row auto-rows-max">
+			<div class="surface-6e54d2a472">
 				{#if navItem?.items?.length}
 					{#each navItem.items as item}
 						{#if !item.disabled && item.href}
-							<div class="px-1">
+							<div class="surface-e8809b62ed">
 								<a
 									href={item.href}
 									class={cn(
-										'block whitespace-nowrap rounded-lg border-2 border-transparent px-2.5 py-1.5 font-medium capitalize',
-										'text-sm hover:bg-magnum-900/25',
-										'data-[active=true]:border-magnum-400 data-[active=true]:bg-magnum-900/50'
+										'surface-32d77c5be9',
+										'preview-hover-surface-magnum-900-25 surface-90e3ce4f3c',
+										'preview-state-active-surface-magnum-900-50 surface-0f181d56f4'
 									)}
 									data-active={$page.url.pathname === item.href}
 								>

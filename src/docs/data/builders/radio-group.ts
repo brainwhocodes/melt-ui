@@ -37,13 +37,15 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'value',
 			type: 'Writable<string>',
-			description: 'A writable store that can be used to update the radio group value.',
+			description:
+				'A writable store that can be used to update the radio group value.',
 			see: SEE.BRING_YOUR_OWN_STORE,
 		},
 		{
 			name: 'onValueChange',
 			type: 'ChangeFn<string>',
-			description: 'A callback that is called when the value of the radio group changes.',
+			description:
+				'A callback that is called when the value of the radio group changes.',
 			see: SEE.CHANGE_FUNCTIONS,
 		},
 	],
@@ -58,14 +60,16 @@ const builder = builderSchema(BUILDER_NAME, {
 		},
 		{
 			name: 'hidden-input',
-			description: 'The builder store used to create the radio group hidden input.',
+			description:
+				'The builder store used to create the radio group hidden input.',
 		},
 	],
 	states: [
 		{
 			name: 'value',
 			type: 'Writable<string>',
-			description: 'A writable store with the current value of the radio group.',
+			description:
+				'A writable store with the current value of the radio group.',
 		},
 	],
 	helpers: [
@@ -141,7 +145,8 @@ const hiddenInput = elementSchema('hiddenInput', {
 const keyboard: KeyboardSchema = [
 	{
 		key: KBD.TAB,
-		behavior: 'Moves focus to either the checked radio item or the first radio item.',
+		behavior:
+			'Moves focus to either the checked radio item or the first radio item.',
 	},
 	{
 		key: KBD.SPACE,

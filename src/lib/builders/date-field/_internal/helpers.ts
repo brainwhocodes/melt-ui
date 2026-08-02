@@ -1,42 +1,43 @@
+import type { DateValue } from '@internationalized/date';
+import { get, type Writable } from 'svelte/store';
 import {
-	getPlaceholder,
 	type Formatter,
 	type Granularity,
-	toDate,
-	isZonedDateTime,
-	hasTime,
+	getPlaceholder,
 	getSegments,
+	hasTime,
+	isZonedDateTime,
+	toDate,
 } from '$lib/internal/helpers/date/index.js';
-import type { DateValue } from '@internationalized/date';
-import type {
-	DateSegmentPart,
-	SegmentContentObj,
-	EditableSegmentPart,
-	SegmentStateMap,
-	SegmentValueObj,
-	TimeSegmentPart,
-	DateAndTimeSegmentObj,
-	DayPeriod,
-	SegmentPart,
-	HourCycle,
-} from './types.js';
+import type { IdObj } from '$lib/internal/helpers/index.js';
+import {
+	generateId,
+	getElementById,
+	isBrowser,
+	isNull,
+	isNumberString,
+	kbd,
+	styleToString,
+} from '$lib/internal/helpers/index.js';
+import type { DateFieldIdParts } from '../create.js';
 import {
 	ALL_SEGMENT_PARTS,
 	DATE_SEGMENT_PARTS,
 	EDITABLE_SEGMENT_PARTS,
 	TIME_SEGMENT_PARTS,
 } from './parts.js';
-import {
-	isBrowser,
-	isNull,
-	generateId,
-	kbd,
-	isNumberString,
-	styleToString,
-} from '$lib/internal/helpers/index.js';
-import { get, type Writable } from 'svelte/store';
-import type { IdObj } from '$lib/internal/helpers/index.js';
-import type { DateFieldIdParts } from '../create.js';
+import type {
+	DateAndTimeSegmentObj,
+	DateSegmentPart,
+	DayPeriod,
+	EditableSegmentPart,
+	HourCycle,
+	SegmentContentObj,
+	SegmentPart,
+	SegmentStateMap,
+	SegmentValueObj,
+	TimeSegmentPart,
+} from './types.js';
 
 export function initializeSegmentValues(granularity: Granularity) {
 	const calendarDateTimeGranularities = ['hour', 'minute', 'second'];
@@ -97,7 +98,7 @@ function createContentObj(props: CreateContentObjProps) {
 			const value = segmentValues[part];
 			if (!isNull(value)) {
 				return formatter.part(dateRef.set({ [part]: value }), part, {
-					hourCycle: props.hourCycle === 24 ? 'h24' : undefined,
+					hourCycle: props.hourCycle === 24 ? 'h24' : 'h12',
 				});
 			} else {
 				return getPlaceholder(part, '', locale);
@@ -119,8 +120,18 @@ function createContentObj(props: CreateContentObjProps) {
 }
 
 function createContentArr(props: CreateContentArrProps) {
-	const { granularity, dateRef, formatter, contentObj, hideTimeZone, hourCycle } = props;
-	const parts = formatter.toParts(dateRef, getOptsByGranularity(granularity, hourCycle));
+	const {
+		granularity,
+		dateRef,
+		formatter,
+		contentObj,
+		hideTimeZone,
+		hourCycle,
+	} = props;
+	const parts = formatter.toParts(
+		dateRef,
+		getOptsByGranularity(granularity, hourCycle),
+	);
 	const segmentContentArr = parts
 		.map((part) => {
 			const defaultParts = ['literal', 'dayPeriod', 'timeZoneName', null];
@@ -138,7 +149,10 @@ function createContentArr(props: CreateContentArrProps) {
 		})
 		.filter((segment): segment is { part: SegmentPart; value: string } => {
 			if (isNull(segment.part) || isNull(segment.value)) return false;
-			if (segment.part === 'timeZoneName' && (!isZonedDateTime(dateRef) || hideTimeZone)) {
+			if (
+				segment.part === 'timeZoneName' &&
+				(!isZonedDateTime(dateRef) || hideTimeZone)
+			) {
 				return false;
 			}
 			return true;
@@ -169,8 +183,8 @@ function getOptsByGranularity(granularity: Granularity, hourCycle: HourCycle) {
 		minute: '2-digit',
 		second: '2-digit',
 		timeZoneName: 'short',
-		hourCycle: hourCycle === 24 ? 'h24' : undefined,
-		hour12: hourCycle === 24 ? false : undefined,
+		hourCycle: hourCycle === 24 ? 'h24' : 'h12',
+		hour12: hourCycle === 12,
 	};
 
 	if (granularity === 'day') {
@@ -204,7 +218,7 @@ export function initSegmentIds() {
 	return Object.fromEntries(
 		ALL_SEGMENT_PARTS.map((part) => {
 			return [part, generateId()];
-		}).filter(([key]) => key !== 'literal')
+		}).filter(([key]) => key !== 'literal'),
 	) as IdObj<DateFieldIdParts>;
 }
 
@@ -226,9 +240,9 @@ export function isAnySegmentPart(part: unknown): part is SegmentPart {
  * the date picker, which is when all the segments have
  * been filled.
  */
-function getUsedSegments(id: string) {
+function getUsedSegments(id: string, rootElement?: ParentNode) {
 	if (!isBrowser) return [];
-	const usedSegments = getSegments(id)
+	const usedSegments = getSegments(id, rootElement)
 		.map((el) => el.dataset.segment)
 		.filter((part): part is EditableSegmentPart => {
 			return EDITABLE_SEGMENT_PARTS.includes(part as EditableSegmentPart);
@@ -242,9 +256,12 @@ type GetValueFromSegments = {
 	dateRef: DateValue;
 };
 
-export function getValueFromSegments(props: GetValueFromSegments) {
+export function getValueFromSegments(
+	props: GetValueFromSegments,
+	rootElement?: ParentNode,
+) {
 	const { segmentObj, id, dateRef } = props;
-	const usedSegments = getUsedSegments(id);
+	const usedSegments = getUsedSegments(id, rootElement);
 	let date = dateRef;
 	usedSegments.forEach((part) => {
 		if ('hour' in segmentObj) {
@@ -270,8 +287,12 @@ export function getValueFromSegments(props: GetValueFromSegments) {
  * @param segmentValues - The current `SegmentValueObj`
  * @param id  - The id of the date field
  */
-export function areAllSegmentsFilled(segmentValues: SegmentValueObj, id: string) {
-	const usedSegments = getUsedSegments(id);
+export function areAllSegmentsFilled(
+	segmentValues: SegmentValueObj,
+	id: string,
+	rootElement?: ParentNode,
+) {
+	const usedSegments = getUsedSegments(id, rootElement);
 	return usedSegments.every((part) => {
 		if ('hour' in segmentValues) {
 			return segmentValues[part] !== null;
@@ -295,7 +316,9 @@ export function getPartFromNode(node: HTMLElement) {
  * Determines if the provided object is a valid `DateAndTimeSegmentObj`
  * by checking if it has the correct keys and values for each key.
  */
-export function isDateAndTimeSegmentObj(obj: unknown): obj is DateAndTimeSegmentObj {
+export function isDateAndTimeSegmentObj(
+	obj: unknown,
+): obj is DateAndTimeSegmentObj {
 	if (typeof obj !== 'object' || obj === null) {
 		return false;
 	}
@@ -318,7 +341,7 @@ export function isDateAndTimeSegmentObj(obj: unknown): obj is DateAndTimeSegment
  */
 export function inferGranularity(
 	value: DateValue,
-	granularity: Granularity | undefined
+	granularity: Granularity | undefined,
 ): Granularity {
 	if (granularity) {
 		return granularity;
@@ -377,7 +400,9 @@ export function syncSegmentValues(props: SyncSegmentValuesProps) {
 		});
 
 		const mergedSegmentValues = [...dateValues, ...timeValues];
-		segmentValues.set(Object.fromEntries(mergedSegmentValues) as SegmentValueObj);
+		segmentValues.set(
+			Object.fromEntries(mergedSegmentValues) as SegmentValueObj,
+		);
 		updatingDayPeriod.set(null);
 		return;
 	}
@@ -392,9 +417,13 @@ export function syncSegmentValues(props: SyncSegmentValuesProps) {
  * @param id - The id of the element to check if it's the first segment
  * @param fieldId - The id of the date field associated with the segment
  */
-export function isFirstSegment(id: string, fieldId: string) {
+export function isFirstSegment(
+	id: string,
+	fieldId: string,
+	rootElement?: ParentNode,
+) {
 	if (!isBrowser) return false;
-	const segments = getSegments(fieldId);
+	const segments = getSegments(fieldId, rootElement);
 	return segments.length ? segments[0].id === id : false;
 }
 
@@ -406,21 +435,36 @@ export function isFirstSegment(id: string, fieldId: string) {
  * so it can be associated via `aria-describedby` and read by
  * screen readers as the user interacts with the date field.
  */
-export function setDescription(id: string, formatter: Formatter, value: DateValue) {
+export function setDescription(
+	id: string,
+	formatter: Formatter,
+	value: DateValue,
+	rootElement?: ParentNode,
+) {
 	if (!isBrowser) return;
+	const scope = rootElement ?? document;
 	const valueString = formatter.selectedDate(value);
-	const el = document.getElementById(id);
-	if (!el) {
-		const div = document.createElement('div');
-		div.style.cssText = styleToString({
-			display: 'none',
-		});
-		div.id = id;
-		div.innerText = `Selected Date: ${valueString}`;
-		document.body.appendChild(div);
-	} else {
+	const el = getElementById(id, scope);
+	if (el) {
 		el.innerText = `Selected Date: ${valueString}`;
+		return;
 	}
+
+	const ownerDocument =
+		scope.nodeType === Node.DOCUMENT_NODE
+			? (scope as Document)
+			: (scope.ownerDocument ?? document);
+	const div = ownerDocument.createElement('div');
+	div.style.cssText = styleToString({
+		display: 'none',
+	});
+	div.id = id;
+	div.innerText = `Selected Date: ${valueString}`;
+	const container =
+		scope.nodeType === Node.DOCUMENT_NODE
+			? ((scope as Document).body ?? (scope as Document).documentElement)
+			: scope;
+	container.appendChild(div);
 }
 
 /**
@@ -428,9 +472,7 @@ export function setDescription(id: string, formatter: Formatter, value: DateValu
  * the provided ID. This function should be called when the
  * date field is unmounted.
  */
-export function removeDescriptionElement(id: string) {
+export function removeDescriptionElement(id: string, rootElement?: ParentNode) {
 	if (!isBrowser) return;
-	const el = document.getElementById(id);
-	if (!el) return;
-	document.body.removeChild(el);
+	getElementById(id, rootElement)?.remove();
 }

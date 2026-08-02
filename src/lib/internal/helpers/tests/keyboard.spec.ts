@@ -1,5 +1,10 @@
 import { describe, expect, test } from 'vitest';
-import { kbd, getNextKey, getPrevKey, getDirectionalKeys } from '../keyboard.js';
+import {
+	getDirectionalKeys,
+	getNextKey,
+	getPrevKey,
+	kbd,
+} from '../keyboard.js';
 
 describe('getNextKey', () => {
 	test.each([
@@ -7,9 +12,12 @@ describe('getNextKey', () => {
 		{ dir: 'rtl', expected: kbd.ARROW_LEFT },
 		{ orientation: 'vertical', expected: kbd.ARROW_DOWN },
 		{ dir: 'rtl', orientation: 'vertical', expected: kbd.ARROW_DOWN },
-	] as const)('getNextKey($dir, $orientation) -> $expected', ({ dir, orientation, expected }) => {
-		expect(getNextKey(dir, orientation)).toBe(expected);
-	});
+	] as const)(
+		'getNextKey($dir, $orientation) -> $expected',
+		({ dir, orientation, expected }) => {
+			expect(getNextKey(dir, orientation)).toBe(expected);
+		},
+	);
 });
 
 describe('getPrevKey', () => {
@@ -18,9 +26,12 @@ describe('getPrevKey', () => {
 		{ dir: 'rtl', expected: kbd.ARROW_RIGHT },
 		{ orientation: 'vertical', expected: kbd.ARROW_UP },
 		{ dir: 'rtl', orientation: 'vertical', expected: kbd.ARROW_UP },
-	] as const)('getPrevKey($dir, $orientation) -> $expected', ({ dir, orientation, expected }) => {
-		expect(getPrevKey(dir, orientation)).toBe(expected);
-	});
+	] as const)(
+		'getPrevKey($dir, $orientation) -> $expected',
+		({ dir, orientation, expected }) => {
+			expect(getPrevKey(dir, orientation)).toBe(expected);
+		},
+	);
 });
 
 describe('getDirectionalKeys', () => {
@@ -40,6 +51,6 @@ describe('getDirectionalKeys', () => {
 		'getDirectionalKeys($dir, $orientation) -> $expected',
 		({ dir, orientation, expected }) => {
 			expect(getDirectionalKeys(dir, orientation)).toStrictEqual(expected);
-		}
+		},
 	);
 });

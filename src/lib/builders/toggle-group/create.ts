@@ -1,6 +1,6 @@
+import { derived, writable } from 'svelte/store';
 import {
 	addMeltEventListener,
-	makeElement,
 	createElHelpers,
 	disabledAttr,
 	executeCallbacks,
@@ -8,15 +8,19 @@ import {
 	handleRovingFocus,
 	isHTMLElement,
 	kbd,
+	makeElement,
 	noop,
 	omit,
 	overridable,
 	toWritableStores,
 } from '$lib/internal/helpers/index.js';
 import type { Defaults, MeltActionReturn } from '$lib/internal/types.js';
-import { derived, writable } from 'svelte/store';
 import type { ToggleGroupEvents } from './events.js';
-import type { CreateToggleGroupProps, ToggleGroupItemProps, ToggleGroupType } from './types.js';
+import type {
+	CreateToggleGroupProps,
+	ToggleGroupItemProps,
+	ToggleGroupType,
+} from './types.js';
 
 const defaults = {
 	type: 'single',
@@ -31,7 +35,7 @@ type ToggleGroupParts = 'item';
 const { name, selector } = createElHelpers<ToggleGroupParts>('toggle-group');
 
 export const createToggleGroup = <T extends ToggleGroupType = 'single'>(
-	props?: CreateToggleGroupProps<T>
+	props?: CreateToggleGroupProps<T>,
 ) => {
 	const withDefaults = { ...defaults, ...props };
 
@@ -41,8 +45,8 @@ export const createToggleGroup = <T extends ToggleGroupType = 'single'>(
 	const defaultValue = withDefaults.defaultValue
 		? withDefaults.defaultValue
 		: withDefaults.type === 'single'
-		? undefined
-		: [];
+			? undefined
+			: [];
 
 	const valueWritable = withDefaults.value ?? writable(defaultValue);
 	const value = overridable(valueWritable, withDefaults?.onValueChange);
@@ -62,9 +66,12 @@ export const createToggleGroup = <T extends ToggleGroupType = 'single'>(
 		returned: ([$value, $disabled, $orientation, $type]) => {
 			return (props: ToggleGroupItemProps) => {
 				const itemValue = typeof props === 'string' ? props : props.value;
-				const argDisabled = typeof props === 'string' ? false : !!props.disabled;
+				const argDisabled =
+					typeof props === 'string' ? false : !!props.disabled;
 				const disabled = $disabled || argDisabled;
-				const pressed = Array.isArray($value) ? $value.includes(itemValue) : $value === itemValue;
+				const pressed = Array.isArray($value)
+					? $value.includes(itemValue)
+					: $value === itemValue;
 				const isSingle = $type === 'single';
 				const isMultiple = $type === 'multiple' || $type === undefined;
 				return {
@@ -82,7 +89,9 @@ export const createToggleGroup = <T extends ToggleGroupType = 'single'>(
 				} as const;
 			};
 		},
-		action: (node: HTMLElement): MeltActionReturn<ToggleGroupEvents['item']> => {
+		action: (
+			node: HTMLElement,
+		): MeltActionReturn<ToggleGroupEvents['item']> => {
 			let unsub = noop;
 
 			const parentGroup = node.closest(selector());
@@ -90,7 +99,11 @@ export const createToggleGroup = <T extends ToggleGroupType = 'single'>(
 
 			const items = Array.from(parentGroup.querySelectorAll(selector('item')));
 			const $value = value.get();
-			const anyPressed = Array.isArray($value) ? $value.length > 0 : $value ? true : false;
+			const anyPressed = Array.isArray($value)
+				? $value.length > 0
+				: $value
+					? true
+					: false;
 
 			if (!anyPressed && items[0] === node) {
 				node.tabIndex = 0;
@@ -138,7 +151,7 @@ export const createToggleGroup = <T extends ToggleGroupType = 'single'>(
 					if (!isHTMLElement(root)) return;
 
 					const items = Array.from(
-						root.querySelectorAll(selector('item') + ':not([data-disabled])')
+						root.querySelectorAll(selector('item') + ':not([data-disabled])'),
 					).filter((item): item is HTMLElement => isHTMLElement(item));
 
 					const currentIndex = items.indexOf(el);
@@ -180,7 +193,7 @@ export const createToggleGroup = <T extends ToggleGroupType = 'single'>(
 						e.preventDefault();
 						handleRovingFocus(items[items.length - 1]);
 					}
-				})
+				}),
 			);
 
 			return {
@@ -191,7 +204,9 @@ export const createToggleGroup = <T extends ToggleGroupType = 'single'>(
 
 	const isPressed = derived(value, ($value) => {
 		return (itemValue: string) => {
-			return Array.isArray($value) ? $value.includes(itemValue) : $value === itemValue;
+			return Array.isArray($value)
+				? $value.includes(itemValue)
+				: $value === itemValue;
 		};
 	});
 

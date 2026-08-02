@@ -55,20 +55,20 @@
 
 <Tooltip text="Switch theme">
 	<button
-		class="transition-colors hover:text-neutral-50"
+		class="surface-14af4fdc7f"
 		aria-label="Open theme switcher"
 		data-open={$open ? '' : undefined}
 		use:melt={$trigger}
 	>
 		<ThemeIcon theme={$mode} />
-		<span class="sr-only">Open popover</span>
+		<span class="surface-b08420e185">Open popover</span>
 	</button>
 </Tooltip>
 
 {#if $open}
 	<div
 		use:melt={$menu}
-		class="z-50 flex w-32 flex-col rounded-md bg-neutral-700 px-1 py-1 shadow-sm shadow-neutral-800"
+		class="surface-5968373bdf"
 		transition:flyAndScale={{
 			duration: 150,
 			y: 0,

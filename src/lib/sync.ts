@@ -1,8 +1,8 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { effect } from '$lib/internal/helpers/index.js';
+
 import { dequal } from 'dequal';
 import type { Writable } from 'svelte/store';
+import { effect } from '$lib/internal/helpers/index.js';
 
 type WritableValue<T> = T extends Writable<infer V> ? V : never;
 
@@ -18,7 +18,9 @@ function keys<T extends Record<string, unknown>>(obj: T): (keyof T)[] {
 	return Object.keys(obj);
 }
 
-export function createSync<Stores extends Record<string, Writable<unknown>>>(stores: Stores) {
+export function createSync<Stores extends Record<string, Writable<unknown>>>(
+	stores: Stores,
+) {
 	let setters = {} as {
 		[K in keyof Stores]?: (value: WritableValue<Stores[K]>) => void;
 	};
@@ -26,7 +28,6 @@ export function createSync<Stores extends Record<string, Writable<unknown>>>(sto
 		const store = stores[key];
 		effect(store, (value) => {
 			if (key in setters) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				setters[key]?.(value as any);
 			}
 		});
@@ -51,8 +52,8 @@ export function createSync<Stores extends Record<string, Writable<unknown>>>(sto
 		{} as {
 			[K in keyof Stores]: (
 				value: WritableValue<Stores[K]>,
-				setter?: (value: WritableValue<Stores[K]>) => void
+				setter?: (value: WritableValue<Stores[K]>) => void,
 			) => void;
-		}
+		},
 	);
 }

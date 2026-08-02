@@ -1,8 +1,11 @@
 import { render, screen, waitFor } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
-import PortalNestedTest, { structure, type Structure } from './PortalNested.svelte';
-import { testKbd as kbd } from '../utils.js';
 import type { CreateDialogProps } from '$lib/index.js';
+import { testKbd as kbd } from '../utils.js';
+import PortalNestedTest, {
+	type Structure,
+	structure,
+} from './PortalNested.svelte';
 
 type UserEventUser = ReturnType<typeof userEvent.setup>;
 
@@ -15,11 +18,18 @@ const assertNotVisibleOrNull = async (element: HTMLElement | null) => {
 };
 
 // Recursive function to test the components
-const testComponent = async (component: Structure, level: number, user: UserEventUser) => {
+const testComponent = async (
+	component: Structure,
+	level: number,
+	user: UserEventUser,
+) => {
 	// Get the elements
-	const getTrigger = () => screen.getByTestId(`${component.name}-trigger-${level}`);
-	const getContent = () => screen.queryByTestId(`${component.name}-content-${level}`);
-	const getOutside = () => screen.getByTestId(`${component.name}-outside-${level}`);
+	const getTrigger = () =>
+		screen.getByTestId(`${component.name}-trigger-${level}`);
+	const getContent = () =>
+		screen.queryByTestId(`${component.name}-content-${level}`);
+	const getOutside = () =>
+		screen.getByTestId(`${component.name}-outside-${level}`);
 
 	// At the root, the root trigger and outside should be visible, and the content  must not be.
 	expect(getTrigger()).toBeVisible();
@@ -36,12 +46,16 @@ const testComponent = async (component: Structure, level: number, user: UserEven
 
 	// And all its immediate children triggers must be visible
 	for (const child of component.children ?? []) {
-		const childTrigger = screen.getByTestId(`${child.name}-trigger-${level + 1}`);
+		const childTrigger = screen.getByTestId(
+			`${child.name}-trigger-${level + 1}`,
+		);
 		expect(childTrigger).toBeVisible();
 
 		// The children of its children must all be invisible still
 		for (const grandChild of child.children ?? []) {
-			const grandChildTrigger = screen.queryByTestId(`${grandChild.name}-trigger-${level + 2}`);
+			const grandChildTrigger = screen.queryByTestId(
+				`${grandChild.name}-trigger-${level + 2}`,
+			);
 			await assertNotVisibleOrNull(grandChildTrigger);
 		}
 
@@ -77,10 +91,26 @@ type PortalTestOption = {
 };
 
 const portalTestOptions = [
-	{ label: 'Sibling portals & forceVisible true', portalType: 'body', forceVisible: true },
-	{ label: 'Sibling portals & forceVisible false', portalType: 'body', forceVisible: false },
-	{ label: 'Single portal & forceVisible true', portalType: undefined, forceVisible: true },
-	{ label: 'Single portal & forceVisible false', portalType: undefined, forceVisible: false },
+	{
+		label: 'Sibling portals & forceVisible true',
+		portalType: 'body',
+		forceVisible: true,
+	},
+	{
+		label: 'Sibling portals & forceVisible false',
+		portalType: 'body',
+		forceVisible: false,
+	},
+	{
+		label: 'Single portal & forceVisible true',
+		portalType: undefined,
+		forceVisible: true,
+	},
+	{
+		label: 'Single portal & forceVisible false',
+		portalType: undefined,
+		forceVisible: false,
+	},
 ] satisfies PortalTestOption[];
 
 // Execute the test
@@ -90,5 +120,5 @@ test.each(portalTestOptions)(
 		const user = userEvent.setup();
 		render(PortalNestedTest, { portal: portalType, forceVisible });
 		await testComponent(structure, 0, user);
-	}
+	},
 );

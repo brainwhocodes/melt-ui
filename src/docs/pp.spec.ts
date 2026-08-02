@@ -1,4 +1,4 @@
-import { test, expect } from 'vitest';
+import { expect, test } from 'vitest';
 import { extractMeltAttribute, processMeltAttributes } from './pp.js';
 
 const extractMeltAttributeCases = [

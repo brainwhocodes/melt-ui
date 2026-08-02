@@ -13,12 +13,12 @@
 	export { className as class };
 </script>
 
-<span use:melt={$root} class={cn('relative flex w-[15rem] items-center', className)}>
-	<span class="block h-1.5 w-full rounded-full bg-neutral-400 dark:bg-neutral-700">
-		<span use:melt={$range} class="h-1.5 rounded-full bg-magnum-400" />
+<span use:melt={$root} class={cn('surface-e7e7008d6e', className)}>
+	<span class="surface-dd799cd8e6">
+		<span use:melt={$range} class="surface-62c465f8a3" />
 	</span>
 	<span
 		use:melt={$thumbs[0]}
-		class="block size-6 rounded-full bg-white shadow focus:ring-4 focus:ring-magnum-600 dark:bg-white dark:shadow-none"
+		class="surface-fef5b8e900"
 	/>
 </span>

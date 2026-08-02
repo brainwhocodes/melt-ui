@@ -1,12 +1,15 @@
+import type { Writable } from 'svelte/store';
 import {
 	getElementByMeltId,
 	isHTMLElement,
 	isHTMLInputElement,
 } from '$lib/internal/helpers/index.js';
-import type { Writable } from 'svelte/store';
 import type { Tag } from './types.js';
 
-export function focusInput(id: string, pos: 'default' | 'start' | 'end' = 'default') {
+export function focusInput(
+	id: string,
+	pos: 'default' | 'start' | 'end' = 'default',
+) {
 	const inputEl = getElementByMeltId(id);
 	if (!isHTMLInputElement(inputEl)) return;
 
@@ -18,7 +21,10 @@ export function focusInput(id: string, pos: 'default' | 'start' | 'end' = 'defau
 	}
 }
 
-export function setSelectedFromEl(el: Element | null, selected: Writable<Tag | null>) {
+export function setSelectedFromEl(
+	el: Element | null,
+	selected: Writable<Tag | null>,
+) {
 	if (!el) {
 		selected.set(null);
 		return;

@@ -12,7 +12,11 @@ export function handleRovingFocus(nextElement: HTMLElement) {
 
 	sleep(1).then(() => {
 		const currentFocusedElement = document.activeElement;
-		if (!isHTMLElement(currentFocusedElement) || currentFocusedElement === nextElement) return;
+		if (
+			!isHTMLElement(currentFocusedElement) ||
+			currentFocusedElement === nextElement
+		)
+			return;
 
 		currentFocusedElement.tabIndex = -1;
 		if (nextElement) {
@@ -25,12 +29,14 @@ export function handleRovingFocus(nextElement: HTMLElement) {
 function getFocusableElements() {
 	return Array.from(
 		document.querySelectorAll(
-			'a[href]:not([tabindex="-1"]), button:not([disabled]):not([tabindex="-1"]), input:not([disabled]):not([tabindex="-1"]), select:not([disabled]):not([tabindex="-1"]), textarea:not([disabled]):not([tabindex="-1"]), [tabindex]:not([tabindex="-1"])'
-		)
+			'a[href]:not([tabindex="-1"]), button:not([disabled]):not([tabindex="-1"]), input:not([disabled]):not([tabindex="-1"]), select:not([disabled]):not([tabindex="-1"]), textarea:not([disabled]):not([tabindex="-1"]), [tabindex]:not([tabindex="-1"])',
+		),
 	);
 }
 
-export function getNextFocusable(currentElement: HTMLElement): HTMLElement | null {
+export function getNextFocusable(
+	currentElement: HTMLElement,
+): HTMLElement | null {
 	const focusableElements = getFocusableElements();
 
 	const currentIndex = focusableElements.indexOf(currentElement);
@@ -42,7 +48,9 @@ export function getNextFocusable(currentElement: HTMLElement): HTMLElement | nul
 	return null;
 }
 
-export function getPreviousFocusable(currentElement: HTMLElement): HTMLElement | null {
+export function getPreviousFocusable(
+	currentElement: HTMLElement,
+): HTMLElement | null {
 	const focusableElements = getFocusableElements();
 	const currentIndex = focusableElements.indexOf(currentElement);
 	const previousIndex = currentIndex - 1;

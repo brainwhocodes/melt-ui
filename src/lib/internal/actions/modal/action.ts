@@ -1,15 +1,16 @@
-import { isElement, noop } from '$lib/internal/helpers/index.js';
-import type { InteractOutsideEvent } from '../interact-outside/types.js';
-import { useInteractOutside } from '../index.js';
-import type { ModalConfig } from './types.js';
 import type { Action } from 'svelte/action';
+import { isElement, noop } from '$lib/internal/helpers/index.js';
+import { useInteractOutside } from '../index.js';
+import type { InteractOutsideEvent } from '../interact-outside/types.js';
+import type { ModalConfig } from './types.js';
 
 export const useModal = ((node, config) => {
 	let unsubInteractOutside = noop;
 
 	function update(config: ModalConfig) {
 		unsubInteractOutside();
-		const { onClose, shouldCloseOnInteractOutside, closeOnInteractOutside } = config;
+		const { onClose, shouldCloseOnInteractOutside, closeOnInteractOutside } =
+			config;
 
 		function closeModal() {
 			onClose?.();

@@ -123,13 +123,15 @@ const groupBuilder = builderSchema('toolbar group', {
 		{
 			name: 'value',
 			type: 'Writable<string | string[] | undefined>',
-			description: 'A writable store that can be used to update the toolbar group value.',
+			description:
+				'A writable store that can be used to update the toolbar group value.',
 			see: SEE.BRING_YOUR_OWN_STORE,
 		},
 		{
 			name: 'onValueChange',
 			type: 'ChangeFn<string | string[] | undefined>',
-			description: 'A callback function that is called when the toolbar group value changes.',
+			description:
+				'A callback function that is called when the toolbar group value changes.',
 			see: SEE.CHANGE_FUNCTIONS,
 		},
 	],
@@ -147,7 +149,8 @@ const groupBuilder = builderSchema('toolbar group', {
 		{
 			name: 'value',
 			type: 'Writable<string | string[] | undefined>',
-			description: 'A Writable store that returns the current value of the toolbar group.',
+			description:
+				'A Writable store that returns the current value of the toolbar group.',
 		},
 	],
 	helpers: [
@@ -251,7 +254,16 @@ const keyboard: KeyboardSchema = [
 	},
 ];
 
-const schemas = [builder, root, button, link, separator, groupBuilder, group, item];
+const schemas = [
+	builder,
+	root,
+	button,
+	link,
+	separator,
+	groupBuilder,
+	group,
+	item,
+];
 
 const features = [
 	'Full keyboard navigation',

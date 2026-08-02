@@ -13,10 +13,10 @@
 	export { className as class };
 </script>
 
-<div use:melt={$root} class={cn('flex items-center gap-2', className)}>
+<div use:melt={$root} class={cn('surface-b530640d7f', className)}>
 	{#each Array.from({ length: 5 }) as _}
 		<input
-			class="size-12 rounded-xl bg-white text-center text-lg text-magnum-900 shadow-sm"
+			class="surface-fe6ff160de"
 			use:melt={$input()}
 		/>
 	{/each}

@@ -1,7 +1,10 @@
 <script lang="ts">
-	import { createCalendar, type CreateCalendarProps } from '$lib/builders/index.js';
+	import {
+		createCalendar,
+		melt,
+		type CreateCalendarProps,
+	} from '$lib/index.js';
 	import { ChevronRight, ChevronLeft } from '$icons/index.js';
-	import { melt } from '$lib/index.js';
 	import { removeUndefined } from '../utils.js';
 
 	export let value: CreateCalendarProps['value'] = undefined;
@@ -32,7 +35,6 @@
 		states: { value: insideValue, months, headingValue, weekdays },
 		options: {
 			weekdayFormat: weekdayFormatOption,
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			numberOfMonths: numberOfMonthsOption,
 			fixedWeeks: fixedWeeksOption,
 			weekStartsOn: weekStartsOnOption,
@@ -83,19 +85,19 @@
 	}
 </script>
 
-<main class="flex h-full">
-	<div class="flex w-full flex-col items-center gap-3">
-		<div class="flex w-full items-center justify-center">
-			<p class="text-xs" data-testid="inside-value">{$insideValue}</p>
+<main class="surface-d7c2a7f47a">
+	<div class="surface-21a2eeac26">
+		<div class="surface-d39f1a0ddd">
+			<p class="surface-e7163661c8" data-testid="inside-value">{$insideValue}</p>
 		</div>
 
-		<div class="z-10 w-80 rounded-[4px] bg-white p-3 shadow-sm">
-			<div class="w-full text-magnum-800" use:melt={$calendar} data-testid="calendar">
-				<header class="flex items-center justify-between pb-4">
+		<div class="surface-8137693dd8">
+			<div class="surface-cd44bf9b37" use:melt={$calendar} data-testid="calendar">
+				<header class="surface-f51db752b9">
 					<button use:melt={$prevButton} data-testid="prev-button">
 						<ChevronLeft />
 					</button>
-					<h2 class="font-semibold text-magnum-800" use:melt={$heading} data-testid="heading">
+					<h2 class="surface-422643ec2c" use:melt={$heading} data-testid="heading">
 						{$headingValue}
 					</h2>
 					<button use:melt={$nextButton} data-testid="next-button">
@@ -104,13 +106,13 @@
 				</header>
 				<div>
 					{#each $months as month, i}
-						<table use:melt={$grid} class="w-full" data-testid="grid-{i}">
+						<table use:melt={$grid} class="surface-29d08cef74" data-testid="grid-{i}">
 							<thead aria-hidden="true">
 								<tr data-testid="weekdays">
 									{#each $weekdays as day, idx}
-										<th class="text-sm font-semibold text-magnum-800">
+										<th class="surface-0fae47a5af">
 											<div
-												class="flex h-6 w-6 items-center justify-center p-4"
+												class="surface-f9c8faf235"
 												data-testid="weekday-{idx}"
 											>
 												{day}
@@ -169,48 +171,214 @@
 	>
 </main>
 
-<style lang="postcss">
+<style lang="scss">
 	[data-melt-calendar] {
-		@apply w-full rounded-lg bg-white p-3 text-magnum-800 shadow-sm;
-	}
+
+    width: 100%;
+
+    border-radius: 0.5rem;
+
+    
+
+    background-color: rgb(var(--color-white) / 1);
+
+    padding: 0.75rem;
+
+    
+
+    color: rgb(var(--color-magnum-800) / 1);
+
+    
+
+    
+
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)
+}
 
 	header {
-		@apply flex items-center justify-between pb-2;
-	}
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding-bottom: 0.5rem
+}
 
 	header + div {
-		@apply flex items-center gap-8;
-	}
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 2rem
+}
 
 	[data-melt-calendar-prevbutton] {
-		@apply rounded-lg p-1 transition-all hover:bg-magnum-100;
-	}
+
+    border-radius: 0.5rem;
+
+    padding: 0.25rem;
+
+    transition-property: all;
+
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+    transition-duration: 150ms
+}
+
+	[data-melt-calendar-prevbutton]:hover {
+
+    
+
+    background-color: rgb(var(--color-magnum-100) / 1)
+}
 
 	[data-melt-calendar-nextbutton] {
-		@apply rounded-lg p-1 transition-all hover:bg-magnum-100;
-	}
+
+    border-radius: 0.5rem;
+
+    padding: 0.25rem;
+
+    transition-property: all;
+
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+    transition-duration: 150ms
+}
+
+	[data-melt-calendar-nextbutton]:hover {
+
+    
+
+    background-color: rgb(var(--color-magnum-100) / 1)
+}
 
 	[data-melt-calendar-heading] {
-		@apply font-semibold text-magnum-800;
-	}
+
+    font-weight: 600;
+
+    
+
+    color: rgb(var(--color-magnum-800) / 1)
+}
 
 	th {
-		@apply text-sm font-semibold text-magnum-800;
 
-		& div {
-			@apply flex h-6 w-6 items-center justify-center p-4;
-		}
-	}
+    font-size: 0.875rem;
+
+    line-height: 1.25rem;
+
+    font-weight: 600;
+
+    
+
+    color: rgb(var(--color-magnum-800) / 1)
+}
+
+	th div {
+
+    display: flex;
+
+    height: 1.5rem;
+
+    width: 1.5rem;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 1rem
+}
 
 	[data-melt-calendar-grid] {
-		@apply w-full;
-	}
+
+    width: 100%
+}
 
 	[data-melt-calendar-cell] {
-		@apply flex h-6 w-6 cursor-pointer select-none items-center justify-center rounded-lg p-4 hover:bg-magnum-100 focus:ring focus:ring-magnum-400 data-[outside-visible-months]:pointer-events-none data-[outside-visible-months]:cursor-default data-[range-highlighted]:bg-magnum-200 data-[selected]:bg-magnum-300 data-[selected]:text-magnum-900 data-[disabled]:opacity-40 data-[outside-visible-months]:opacity-40 data-[outside-visible-months]:hover:bg-transparent;
-	}
+
+    display: flex;
+
+    height: 1.5rem;
+
+    width: 1.5rem;
+
+    cursor: pointer;
+
+    user-select: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 0.5rem;
+
+    padding: 1rem
+}
+
+	[data-melt-calendar-cell]:hover {
+
+    
+
+    background-color: rgb(var(--color-magnum-100) / 1)
+}
+
+	[data-melt-calendar-cell]:focus {
+
+    
+
+    
+
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+    
+
+    }
+
+	[data-melt-calendar-cell][data-outside-visible-months] {
+
+    pointer-events: none;
+
+    cursor: default
+}
+
+	[data-melt-calendar-cell][data-range-highlighted] {
+
+    
+
+    background-color: rgb(var(--color-magnum-200) / 1)
+}
+
+	[data-melt-calendar-cell][data-selected] {
+
+    
+
+    background-color: rgb(var(--color-magnum-300) / 1);
+
+    
+
+    color: rgb(var(--color-magnum-900) / 1)
+}
+
+	[data-melt-calendar-cell][data-disabled] {
+
+    opacity: 0.4
+}
+
+	[data-melt-calendar-cell][data-outside-visible-months] {
+
+    opacity: 0.4
+}
+
+	[data-melt-calendar-cell]:hover[data-outside-visible-months] {
+
+    background-color: transparent
+}
 
 	[data-melt-calendar-cell][data-outside-month='true'][data-outside-visible-months='true'] {
-		@apply opacity-0;
-	}
+
+    opacity: 0
+}
 </style>

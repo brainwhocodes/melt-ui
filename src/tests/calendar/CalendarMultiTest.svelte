@@ -53,19 +53,19 @@
 	);
 </script>
 
-<main class="flex h-full">
-	<div class="flex w-full flex-col items-center gap-3">
-		<div class="flex w-full items-center justify-center">
-			<p class="text-xs" data-testid="inside-value">{$insideValue}</p>
+<main class="surface-dc4c73e62f">
+	<div class="surface-784f6d35ab">
+		<div class="surface-ecab0125fb">
+			<p class="surface-96802889e9" data-testid="inside-value">{$insideValue}</p>
 		</div>
 
-		<div class="z-10 w-80 rounded-[4px] bg-white p-3 shadow-sm">
-			<div class="w-full text-magnum-800" use:melt={$calendar} data-testid="calendar">
-				<header class="flex items-center justify-between pb-4">
+		<div class="surface-993ac9b0fc">
+			<div class="surface-4c934c14fc" use:melt={$calendar} data-testid="calendar">
+				<header class="surface-d6ef1ac3fc">
 					<button use:melt={$prevButton} data-testid="prev-button">
 						<ChevronLeft />
 					</button>
-					<h2 class="font-semibold text-magnum-800" use:melt={$heading} data-testid="heading">
+					<h2 class="surface-200ac3de12" use:melt={$heading} data-testid="heading">
 						{$headingValue}
 					</h2>
 					<button use:melt={$nextButton} data-testid="next-button">
@@ -74,13 +74,13 @@
 				</header>
 				{#each $months as month, i (i)}
 					{@const { weeks } = month}
-					<table use:melt={$grid} class="w-full" data-testid="grid-{i}">
+					<table use:melt={$grid} class="surface-959887a6f8" data-testid="grid-{i}">
 						<thead aria-hidden="true">
 							<tr>
 								{#each $weekdays as day, idx}
-									<th class="text-sm font-semibold text-magnum-800">
+									<th class="surface-6856405515">
 										<div
-											class="flex h-6 w-6 items-center justify-center p-4"
+											class="surface-add3534651"
 											data-testid="day-of-week-{idx}"
 										>
 											{day}
@@ -113,52 +113,243 @@
 	</div>
 </main>
 
-<style lang="postcss">
+<style lang="scss">
 	.input {
-		@apply flex h-8 w-full rounded-md border border-magnum-800 bg-transparent px-2.5 text-sm;
-		@apply ring-offset-magnum-300 focus-visible:ring;
-		@apply focus-visible:ring-magnum-400 focus-visible:ring-offset-1;
-		@apply flex-1 items-center justify-center;
-		@apply px-2.5 text-sm leading-none text-magnum-700;
-	}
+    display: flex;
+    height: 2rem;
+    width: 100%;
+    border-radius: 0.375rem;
+    border-width: 1px;
+    
+    border-color: rgb(var(--color-magnum-800) / 1);
+    background-color: transparent;
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    }
+	.input:focus-visible {
+    
+    
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    
+    
+    }
+	.input {
+    flex: 1 1 0%;
+    align-items: center;
+    justify-content: center;
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    line-height: 1;
+    
+    color: rgb(var(--color-magnum-700) / 1)
+}
 
 	.trigger {
-		@apply inline-flex w-64 items-center  justify-center rounded bg-white p-0 px-2 py-1 text-sm font-medium;
-		@apply text-magnum-900 transition-colors hover:bg-white/90;
-		@apply focus-visible:ring focus-visible:ring-magnum-400 focus-visible:ring-offset-2;
-	}
+    display: inline-flex;
+    width: 16rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem;
+    
+    background-color: rgb(var(--color-white) / 1);
+    padding: 0px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    
+    color: rgb(var(--color-magnum-900) / 1);
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms
+}
+
+	.trigger:hover {
+    background-color: rgb(var(--color-white) / 0.9)
+}
+
+	.trigger:focus-visible {
+    
+    
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    
+    
+    }
 
 	.close {
-		@apply absolute right-1.5 top-1.5 flex h-7 w-7 items-center justify-center rounded-full;
-		@apply text-magnum-900 transition-colors hover:bg-magnum-500/10;
-		@apply focus-visible:ring focus-visible:ring-magnum-400 focus-visible:ring-offset-2;
-		@apply bg-white p-0 text-sm font-medium;
-	}
+    position: absolute;
+    right: 0.375rem;
+    top: 0.375rem;
+    display: flex;
+    height: 1.75rem;
+    width: 1.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    
+    color: rgb(var(--color-magnum-900) / 1);
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms
+}
+
+	.close:hover {
+    background-color: rgb(var(--color-magnum-500) / 0.1)
+}
+
+	.close:focus-visible {
+    
+    
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    
+    
+    }
+
+	.close {
+    
+    background-color: rgb(var(--color-white) / 1);
+    padding: 0px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500
+}
 
 	.button {
-		@apply flex h-6 w-6 items-center justify-center rounded-full;
-		@apply text-magnum-900 transition-colors hover:bg-magnum-500/10;
-		@apply focus-visible:ring-1 focus-visible:ring-magnum-400;
-		@apply bg-white p-0 text-sm font-medium;
-	}
+    display: flex;
+    height: 1.5rem;
+    width: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    
+    color: rgb(var(--color-magnum-900) / 1);
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms
+}
+
+	.button:hover {
+    background-color: rgb(var(--color-magnum-500) / 0.1)
+}
+
+	.button:focus-visible {
+    
+    
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    
+    }
+
+	.button {
+    
+    background-color: rgb(var(--color-white) / 1);
+    padding: 0px;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500
+}
 
 	.content {
-		@apply z-10 w-60 rounded-[4px] bg-white p-5 shadow-sm;
-	}
+    z-index: 10;
+    width: 15rem;
+    border-radius: 4px;
+    
+    background-color: rgb(var(--color-white) / 1);
+    padding: 1.25rem;
+    
+    
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)
+}
 
 	.buttons-wrapper {
-		@apply flex items-center justify-between border-y border-magnum-700 py-1;
-	}
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    
+    border-color: rgb(var(--color-magnum-700) / 1);
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem
+}
 
 	.cell {
-		@apply flex h-6 w-6 cursor-pointer select-none items-center justify-center rounded p-4 hover:bg-magnum-100 focus:ring focus:ring-magnum-400 data-[outside-month]:pointer-events-none data-[outside-month]:cursor-default data-[range-highlighted]:bg-magnum-200 data-[selected]:bg-magnum-300 data-[disabled]:opacity-40 data-[outside-month]:opacity-40 data-[outside-month]:hover:bg-transparent;
-	}
+    display: flex;
+    height: 1.5rem;
+    width: 1.5rem;
+    cursor: pointer;
+    user-select: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem;
+    padding: 1rem
+}
 
-	.segment {
-		@apply data-[segment="dayPeriod"]:pl-0.5 data-[segment="hour"]:pl-1 data-[segment="timeZoneName"]:pl-1;
-	}
+	.cell:hover {
+    
+    background-color: rgb(var(--color-magnum-100) / 1)
+}
+
+	.cell:focus {
+    
+    
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    
+    }
+
+	.cell[data-outside-month] {
+    pointer-events: none;
+    cursor: default
+}
+
+	.cell[data-range-highlighted] {
+    
+    background-color: rgb(var(--color-magnum-200) / 1)
+}
+
+	.cell[data-selected] {
+    
+    background-color: rgb(var(--color-magnum-300) / 1)
+}
+
+	.cell[data-disabled] {
+    opacity: 0.4
+}
+
+	.cell[data-outside-month] {
+    opacity: 0.4
+}
+
+	.cell:hover[data-outside-month] {
+    background-color: transparent
+}
+
+	.segment[data-segment="dayPeriod"] {
+    padding-left: 0.125rem
+}
+
+	.segment[data-segment="hour"] {
+    padding-left: 0.25rem
+}
+
+	.segment[data-segment="timeZoneName"] {
+    padding-left: 0.25rem
+}
 
 	.btn {
-		@apply rounded bg-magnum-600 p-1 text-xs text-white;
-	}
+    border-radius: 0.25rem;
+    
+    background-color: rgb(var(--color-magnum-600) / 1);
+    padding: 0.25rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    
+    color: rgb(var(--color-white) / 1)
+}
 </style>

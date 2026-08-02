@@ -49,34 +49,33 @@
 </script>
 
 <main>
-	<div class="flex w-full flex-col items-center gap-3">
-		<div class="flex w-full items-center justify-center">
-			<p class="text-xs" data-testid="inside-value">{$insideValue.start} - {$insideValue.end}</p>
+	<div class="surface-0340c5e256">
+		<div class="surface-04684a15e4">
+			<p class="surface-b357026307" data-testid="inside-value">{$insideValue.start} - {$insideValue.end}</p>
 			<p data-testid="start-value">{$insideValue?.start}</p>
 			<p data-testid="end-value">{$insideValue?.end}</p>
 		</div>
 		<div>
-			<span use:melt={$label} data-testid="label" class="text-magnum-800">Booking Dates</span>
+			<span use:melt={$label} data-testid="label" class="surface-2fd60da88b">Booking Dates</span>
 			<div
 				use:melt={$field}
 				data-testid="field"
-				class="flex w-full max-w-[300px] items-center rounded-md border bg-white p-1.5 text-magnum-800 {$isInvalid &&
-					'border-2 border-red-600'}"
+				class="{$isInvalid && 'preview-border-2 preview-border-red-600'} surface-633adce4a6"
 			>
 				{#each $segmentContents.start as seg, i (i)}
 					<div
 						use:melt={$startSegment(seg.part)}
-						class="segment {$isInvalid && 'text-red-600'}"
+						class="segment {$isInvalid && 'preview-text-red-600'}"
 						data-testid="start-{seg.part}"
 					>
 						{seg.value}
 					</div>
 				{/each}
-				<div aria-hidden="true" class="px-2">-</div>
+				<div aria-hidden="true" class="surface-a1d6671556">-</div>
 				{#each $segmentContents.end as seg, i (i)}
 					<div
 						use:melt={$endSegment(seg.part)}
-						class="segment {$isInvalid && 'text-red-600'}"
+						class="segment {$isInvalid && 'preview-text-red-600'}"
 						data-testid="end-{seg.part}"
 					>
 						{seg.value}

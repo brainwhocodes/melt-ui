@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test';
+import { expect, type Page, test } from '@playwright/test';
 import { jsAvailable } from './utils.js';
 
 const locators = {
@@ -16,60 +16,70 @@ async function nav(page: Page) {
 
 test.describe.configure({ mode: 'parallel' });
 
-test.describe.skip('menu', () => {
-	test.beforeEach(async ({ page }) => {
-		await nav(page);
-	});
+test.describe
+	.skip('menu', () => {
+		test.beforeEach(async ({ page }) => {
+			await nav(page);
+		});
 
-	test('should open on click', async ({ page }) => {
-		const trigger = page.locator(locators.trigger);
-		await trigger.click();
-
-		const menu = page.locator(locators.menu);
-		await expect(menu).toBeVisible();
-	});
-
-	for (const key of menuOpenKeys) {
-		test(`should open on ${key}`, async ({ page }) => {
+		test('should open on click', async ({ page }) => {
 			const trigger = page.locator(locators.trigger);
-			await trigger.press(key);
+			await trigger.click();
 
 			const menu = page.locator(locators.menu);
 			await expect(menu).toBeVisible();
 		});
-	}
-});
 
-test.describe.skip('first menu item', () => {
-	test.beforeEach(async ({ page }) => {
-		await nav(page);
+		for (const key of menuOpenKeys) {
+			test(`should open on ${key}`, async ({ page }) => {
+				const trigger = page.locator(locators.trigger);
+				await trigger.press(key);
+
+				const menu = page.locator(locators.menu);
+				await expect(menu).toBeVisible();
+			});
+		}
 	});
 
-	test('should not be focused on click open', async ({ page }) => {
-		const trigger = page.locator(locators.trigger);
-		await trigger.click();
+test.describe
+	.skip('first menu item', () => {
+		test.beforeEach(async ({ page }) => {
+			await nav(page);
+		});
 
-		const item = page.locator(locators.item).first();
-		await expect(item).not.toBeFocused();
-	});
-
-	for (const key of menuOpenKeys) {
-		test(`should be focused on ${key} open`, async ({ page }) => {
+		test('should not be focused on click open', async ({ page }) => {
 			const trigger = page.locator(locators.trigger);
-			await trigger.press(key);
+			await trigger.click();
 
 			const item = page.locator(locators.item).first();
-			await expect(item).toBeFocused();
+			await expect(item).not.toBeFocused();
 		});
-	}
-	test('should be focused on arrow down after click open', async ({ page }) => {
-		await page.locator(locators.trigger).click();
-		await page.locator(locators.menu).press('ArrowDown');
-		await expect(page.getByRole('menuitem', { name: 'About Melt UI' })).toBeFocused();
-	});
 
-	test('should not be focused on arrow down after keyed open', async ({ page }) => {
-		await page.locator(locators.trigger).press('ArrowDown');
-		await expect(page.getByRole('menuitem', { name: 'About Melt UI' })).toBeFocused();
+		for (const key of menuOpenKeys) {
+			test(`should be focused on ${key} open`, async ({ page }) => {
+				const trigger = page.locator(locators.trigger);
+				await trigger.press(key);
+
+				const item = page.locator(locators.item).first();
+				await expect(item).toBeFocused();
+			});
+		}
+		test('should be focused on arrow down after click open', async ({
+			page,
+		}) => {
+			await page.locator(locators.trigger).click();
+			await page.locator(locators.menu).press('ArrowDown');
+			await expect(
+				page.getByRole('menuitem', { name: 'About Melt UI' }),
+			).toBeFocused();
+		});
+
+		test('should not be focused on arrow down after keyed open', async ({
+			page,
+		}) => {
+			await page.locator(locators.trigger).press('ArrowDown');
+			await expect(
+				page.getByRole('menuitem', { name: 'About Melt UI' }),
+			).toBeFocused();
+		});
 	});
-});

@@ -72,7 +72,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'value',
 			type: 'Writable<string | string[] | undefined>',
-			description: 'A writable store that returns the value of the currently selected item.',
+			description:
+				'A writable store that returns the value of the currently selected item.',
 		},
 	],
 	helpers: [
@@ -144,7 +145,8 @@ const item = elementSchema('item', {
 const keyboard: KeyboardSchema = [
 	{
 		key: KBD.TAB,
-		behavior: 'Moves focus to either the pressed item or the first item in the group.',
+		behavior:
+			'Moves focus to either the pressed item or the first item in the group.',
 	},
 	{
 		key: KBD.SPACE,

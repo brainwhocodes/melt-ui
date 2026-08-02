@@ -14,6 +14,7 @@ export function derivedVisible(obj: DerivedVisibleObj) {
 	const { open, forceVisible, activeTrigger } = obj;
 	return derived(
 		[open, forceVisible, activeTrigger],
-		([$open, $forceVisible, $activeTrigger]) => ($open || $forceVisible) && $activeTrigger !== null
+		([$open, $forceVisible, $activeTrigger]) =>
+			($open || $forceVisible) && $activeTrigger !== null,
 	);
 }

@@ -1,4 +1,7 @@
-import type { GroupedEvents, MeltComponentEvents } from '$lib/internal/types.js';
+import type {
+	GroupedEvents,
+	MeltComponentEvents,
+} from '$lib/internal/types.js';
 
 export const tabsEvents = {
 	trigger: ['focus', 'click', 'keydown'] as const,

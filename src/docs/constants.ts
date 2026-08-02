@@ -35,17 +35,22 @@ export const DESCRIPTIONS = {
 	LOOP: 'Whether or not the focus should loop back to the first item when the last item is reached.',
 	ESCAPE_BEHAVIOR: (name = 'element') =>
 		`Defines how the ${name} reacts when the Escape key is pressed. ${createBulletsHTML(
-			ESCAPE_BEHAVIOR_BULLETS(name)
+			ESCAPE_BEHAVIOR_BULLETS(name),
 		)}`,
 	CLOSE_ON_CLICK_OUTSIDE: (name = 'element') =>
 		`Whether or not to close the ${name} when the user clicks outside of it.`,
-	BUILDER: (name: string) => `The builder function used to create the ${name} component.`,
+	BUILDER: (name: string) =>
+		`The builder function used to create the ${name} component.`,
 	PORTAL: (name = 'floating element') =>
 		`The element or selector to render the ${name} into. Nested floating elements are automatically rendered into their own portal if not specified. Pass in \`null\` to disable portalling. Pass in \`undefined\` to use parent portal.`,
 	FORCE_VISIBLE: (name = 'element') =>
 		`Whether or not to force the ${name} to always be visible. This is useful for custom transitions and animations using conditional blocks.`,
 	ON_CHANGE: (store: string) =>
-		'A callback called when the value of the' + '`' + store + '`' + 'store should be changed.',
+		'A callback called when the value of the' +
+		'`' +
+		store +
+		'`' +
+		'store should be changed.',
 	PREVENT_TEXT_SELECTION_OVERFLOW: (name = 'element') =>
 		`Whether to prevent text selection overflowing the ${name} when it is the top layer.`,
 };
@@ -105,7 +110,9 @@ export const PROPS = {
 	CLOSE_ON_OUTSIDE_CLICK: (args: PropArgs = {}): Prop => ({
 		name: 'closeOnOutsideClick',
 		type: 'boolean',
-		description: DESCRIPTIONS.CLOSE_ON_CLICK_OUTSIDE(args.name ?? 'floating element'),
+		description: DESCRIPTIONS.CLOSE_ON_CLICK_OUTSIDE(
+			args.name ?? 'floating element',
+		),
 		default: args.default ?? 'true',
 	}),
 	PREVENT_SCROLL: (args: PropArgs = {}): Prop => ({
@@ -117,7 +124,9 @@ export const PROPS = {
 	PREVENT_TEXT_SELECTION_OVERFLOW: (args: PropArgs = {}): Prop => ({
 		name: 'preventTextSelectionOverflow',
 		type: 'boolean',
-		description: DESCRIPTIONS.PREVENT_TEXT_SELECTION_OVERFLOW(args.name ?? 'floating element'),
+		description: DESCRIPTIONS.PREVENT_TEXT_SELECTION_OVERFLOW(
+			args.name ?? 'floating element',
+		),
 		default: args.default ?? 'true',
 	}),
 	ARROW_SIZE: {
@@ -156,7 +165,8 @@ export const PROPS = {
 	ON_OPEN_CHANGE: {
 		name: 'onOpenChange',
 		type: 'ChangeFn<boolean>',
-		description: 'A callback called when the value of the `open` store should be changed.',
+		description:
+			'A callback called when the value of the `open` store should be changed.',
 		see: SEE.CHANGE_FUNCTIONS,
 	},
 	OPEN: (args: PropArgs = {}): Prop => ({

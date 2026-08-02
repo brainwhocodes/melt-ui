@@ -60,7 +60,7 @@ describe('effect', () => {
 			() => {
 				calls++;
 			},
-			{ skipFirstRun: true }
+			{ skipFirstRun: true },
 		);
 		expect(calls).toBe(0);
 

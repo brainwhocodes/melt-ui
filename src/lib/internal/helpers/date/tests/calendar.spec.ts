@@ -1,6 +1,6 @@
+import { CalendarDate } from '@internationalized/date';
 import { describe, expect, it } from 'vitest';
 import { createMonths } from '../calendar.js';
-import { CalendarDate } from '@internationalized/date';
 
 const calendarDate = new CalendarDate(2024, 1, 1);
 
@@ -29,6 +29,6 @@ describe('Calendar', () => {
 			const dateStringArray = month[0].dates.map((date) => date.toString());
 			const dateStringSet = new Set(dateStringArray);
 			expect(dateStringArray.length).toBe(dateStringSet.size);
-		}
+		},
 	);
 });

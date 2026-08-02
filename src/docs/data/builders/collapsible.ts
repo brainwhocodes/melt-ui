@@ -35,7 +35,8 @@ const builder = builderSchema('collapsible', {
 		{
 			name: 'open',
 			type: 'Writable<boolean>',
-			description: 'A writable store with the current open state of the collapsible.',
+			description:
+				'A writable store with the current open state of the collapsible.',
 		},
 	],
 	options: OPTION_PROPS,
@@ -99,11 +100,13 @@ const content = elementSchema('content', {
 const keyboard: KeyboardSchema = [
 	{
 		key: KBD.SPACE,
-		behavior: 'Activates the trigger and toggles the visibility of the collapsible content',
+		behavior:
+			'Activates the trigger and toggles the visibility of the collapsible content',
 	},
 	{
 		key: KBD.ENTER,
-		behavior: 'Activates the trigger and toggles the visibility of the collapsible content',
+		behavior:
+			'Activates the trigger and toggles the visibility of the collapsible content',
 	},
 ];
 

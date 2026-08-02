@@ -1,3 +1,4 @@
+import type { Writable } from 'svelte/store';
 import type {
 	EscapeBehaviorType,
 	FloatingConfig,
@@ -6,8 +7,8 @@ import type {
 } from '$lib/internal/actions/index.js';
 import type { ChangeFn, IdObj } from '$lib/internal/helpers/index.js';
 import type { BuilderReturn, WhenTrue } from '$lib/internal/types.js';
-import type { Writable } from 'svelte/store';
-import type { ListboxIdParts, createListbox } from './create.js';
+import type { createListbox, ListboxIdParts } from './create.js';
+
 export type { ListboxComponentEvents } from './events.js';
 
 export type ListboxOption<Value = unknown> = {
@@ -24,7 +25,7 @@ export type ListboxSelected<Multiple extends boolean, Value> = WhenTrue<
 export type CreateListboxProps<
 	Value = unknown,
 	Multiple extends boolean = false,
-	S extends ListboxSelected<Multiple, Value> = ListboxSelected<Multiple, Value>
+	S extends ListboxSelected<Multiple, Value> = ListboxSelected<Multiple, Value>,
 > = {
 	/**
 	 * Options for positioning the popover menu.
@@ -205,29 +206,29 @@ export type ListboxOptionProps<Value = unknown> = ListboxOption<Value> & {
 export type Listbox<
 	Value = unknown,
 	Multiple extends boolean = false,
-	S extends ListboxSelected<Multiple, Value> = ListboxSelected<Multiple, Value>
+	S extends ListboxSelected<Multiple, Value> = ListboxSelected<Multiple, Value>,
 > = BuilderReturn<typeof createListbox<Value, Multiple, S>>;
 
 export type ListboxElements<
 	Value = unknown,
 	Multiple extends boolean = false,
-	S extends ListboxSelected<Multiple, Value> = ListboxSelected<Multiple, Value>
+	S extends ListboxSelected<Multiple, Value> = ListboxSelected<Multiple, Value>,
 > = Listbox<Value, Multiple, S>['elements'];
 
 export type ListboxOptions<
 	Value = unknown,
 	Multiple extends boolean = false,
-	S extends ListboxSelected<Multiple, Value> = ListboxSelected<Multiple, Value>
+	S extends ListboxSelected<Multiple, Value> = ListboxSelected<Multiple, Value>,
 > = Listbox<Value, Multiple, S>['options'];
 
 export type ListboxStates<
 	Value = unknown,
 	Multiple extends boolean = false,
-	S extends ListboxSelected<Multiple, Value> = ListboxSelected<Multiple, Value>
+	S extends ListboxSelected<Multiple, Value> = ListboxSelected<Multiple, Value>,
 > = Listbox<Value, Multiple, S>['states'];
 
 export type ListboxHelpers<
 	Value = unknown,
 	Multiple extends boolean = false,
-	S extends ListboxSelected<Multiple, Value> = ListboxSelected<Multiple, Value>
+	S extends ListboxSelected<Multiple, Value> = ListboxSelected<Multiple, Value>,
 > = Listbox<Value, Multiple, S>['helpers'];

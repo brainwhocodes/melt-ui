@@ -9,10 +9,9 @@ export type InteractOutsideInterceptEventType =
 	| 'touchend'
 	| 'click';
 
-export type InteractOutsideInterceptHandler<E extends InteractOutsideInterceptEventType> = (
-	ev: HTMLElementEventMap[E],
-	computedEventData?: ComputedEventData
-) => void;
+export type InteractOutsideInterceptHandler<
+	E extends InteractOutsideInterceptEventType,
+> = (ev: HTMLElementEventMap[E], computedEventData?: ComputedEventData) => void;
 
 /**
  * Some event data is lost when the event is delayed, debounced or throttled
@@ -20,7 +19,10 @@ export type InteractOutsideInterceptHandler<E extends InteractOutsideInterceptEv
  * For this reason we can pre-save any needed data and store
  * it here before being passed on the related events
  * */
-export type ComputedEventData = { shadowTarget?: EventTarget };
+export type ComputedEventData = {
+	path: EventTarget[];
+	originalTarget?: Node;
+};
 
 export type InteractOutsideConfig = {
 	/**
@@ -28,7 +30,10 @@ export type InteractOutsideConfig = {
 	 * which is either a `pointerup`, `mouseup`, or `touchend`
 	 * event, depending on the user's input device.
 	 */
-	onInteractOutside?: (e: InteractOutsideEvent, computedEventData?: ComputedEventData) => void;
+	onInteractOutside?: (
+		e: InteractOutsideEvent,
+		computedEventData?: ComputedEventData,
+	) => void;
 
 	/**
 	 * Callback fired when an outside interaction event starts,

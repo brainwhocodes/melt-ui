@@ -13,52 +13,52 @@
 
 <div
 	class={cn(
-		'container flex h-14 items-center rounded-md bg-neutral-800 text-white !outline outline-2 !outline-neutral-700 dark:!outline-none',
-		isRoot && '!outline-0 md:bg-transparent'
+		'container docs-site-header surface-49205795f2',
+		isRoot && 'docs-site-header--root surface-56732f82ec'
 	)}
 >
-	<div class="flex">
-		<a href="/" class="mr-6 flex items-center transition-opacity hover:opacity-75">
-			<Logo class="h-9" withText textColor={$mode === 'light' ? 'black' : 'white'} />
+	<div class="surface-6de2eb0a86">
+		<a href="/" class="surface-eb6a58f1fb">
+			<Logo class="surface-4fb3e89fb7" withText textColor={$mode === 'light' ? 'black' : 'white'} />
 		</a>
 	</div>
 
-	<div class="flex flex-1 items-center justify-between space-x-2 sm:space-x-4 md:justify-end">
-		<div class="w-full flex-1 md:w-auto md:flex-none">
+	<div class="surface-79973f3af0">
+		<div class="surface-864ea02bfa">
 			<!-- Search/CMDK here eventually -->
 		</div>
 	</div>
-	<nav class="flex items-center text-sm font-semibold leading-6">
+	<nav class="surface-75aee966cd">
 		<!-- Top Navbar -->
-		<ul class="hidden space-x-8 md:flex">
+		<ul class="surface-8c5ae59952">
 			{#each navConfig.mainNav as navItem}
 				<li>
-					<a href={navItem.href} class="transition-colors hover:text-magnum-500">
+					<a href={navItem.href} class="surface-1f80bc631f">
 						{navItem.title}
 					</a>
 				</li>
 			{/each}
 		</ul>
 		<div
-			class="flex items-center gap-6 border-neutral-700 text-neutral-400 sm:ml-6 sm:pl-6 md:border-l"
+			class="surface-27ffc9e23f"
 		>
 			<a
 				href={siteConfig.links.discord}
 				target="_blank"
 				rel="noopener noreferrer"
-				class="transition-colors hover:text-neutral-50"
+				class="surface-3a7d340664"
 			>
-				<Discord class="h-5 w-5" />
-				<span class="sr-only">Join the Melt UI Discord</span>
+				<Discord class="surface-506ec44831" />
+				<span class="surface-7363caeebe">Join the Melt UI Discord</span>
 			</a>
 			<a
 				href={siteConfig.links.github}
 				target="_blank"
 				rel="noopener noreferrer"
-				class="transition-colors hover:text-neutral-50"
+				class="surface-7992c2c2ae"
 			>
-				<GitHub class="h-5 w-5" />
-				<span class="sr-only">View the Melt UI GitHub Repository</span>
+				<GitHub class="surface-372ac12cd5" />
+				<span class="surface-8372938382">View the Melt UI GitHub Repository</span>
 			</a>
 			<ThemeSwitch />
 			<Search />

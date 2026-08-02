@@ -1,8 +1,6 @@
-import { isBrowser } from '$lib/internal/helpers/index.js';
+import { getElementById, isBrowser } from '$lib/internal/helpers/index.js';
 
-export function removeDescriptionElement(id: string) {
+export function removeDescriptionElement(id: string, rootElement?: ParentNode) {
 	if (!isBrowser) return;
-	const el = document.getElementById(id);
-	if (!el) return;
-	document.body.removeChild(el);
+	getElementById(id, rootElement)?.remove();
 }

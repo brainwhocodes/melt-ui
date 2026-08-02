@@ -9,11 +9,9 @@
 </script>
 
 <div use:melt={$portalled}>
-	<div use:melt={$overlay} class="fixed inset-0 z-40 bg-black/50" />
+	<div use:melt={$overlay} class="surface-0538d9877a" />
 	<div
-		class="fixed left-1/2 top-1/2 z-50 max-h-[85vh] w-[90vw] max-w-[450px]
-				-translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-6
-				shadow-lg"
+		class="preview-limit-w-450px preview-motion-x-1-2 preview-space-6 preview-elevation-lg surface-59b875ab88"
 		use:melt={$content}
 	>
 		<slot title={$title} description={$description} close={$close} name="content" />

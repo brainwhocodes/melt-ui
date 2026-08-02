@@ -1,12 +1,12 @@
-import { kbd } from '$lib/internal/helpers/keyboard.js';
 import { vi } from 'vitest';
-import { useEscapeKeydown } from '../../actions/escape-keydown/action.js';
 import { noop } from '$lib/internal/helpers/callbacks.js';
+import { kbd } from '$lib/internal/helpers/keyboard.js';
+import { withGet } from '$lib/internal/helpers/withGet.js';
+import { useEscapeKeydown } from '../../actions/escape-keydown/action.js';
 import type {
 	EscapeBehaviorType,
 	EscapeKeydownConfig,
 } from '../../actions/escape-keydown/types.js';
-import { withGet } from '$lib/internal/helpers/withGet.js';
 
 const dispatchKeydownEvent = (key: string) => {
 	const event = new KeyboardEvent('keydown', { key, bubbles: true });
@@ -66,7 +66,10 @@ const nestedEscapeAssertions = [
 		behaviors: ['defer-otherwise-ignore', 'defer-otherwise-ignore'],
 		expectedInvocations: [false, false],
 	},
-] satisfies { behaviors: EscapeBehaviorType[]; expectedInvocations: boolean[] }[];
+] satisfies {
+	behaviors: EscapeBehaviorType[];
+	expectedInvocations: boolean[];
+}[];
 
 describe('escape keydown', () => {
 	describe('single layers', () => {
@@ -84,7 +87,9 @@ describe('escape keydown', () => {
 	describe('nested layers', () => {
 		for (const { behaviors, expectedInvocations } of nestedEscapeAssertions) {
 			it(`provided behaviors '${behaviors}', expected invocations '${expectedInvocations}'`, () => {
-				const layers = behaviors.map((behaviorType) => mountLayer({ behaviorType }));
+				const layers = behaviors.map((behaviorType) =>
+					mountLayer({ behaviorType }),
+				);
 				layers.forEach(({ handler }) => expect(handler).not.toHaveBeenCalled());
 
 				dispatchEscape();
@@ -113,8 +118,12 @@ describe('escape keydown', () => {
 	});
 
 	it('correctly unmounts event listener and calls handler of top-most layer', () => {
-		const { handler: handler1, action: action1 } = mountLayer({ behaviorType: 'close' });
-		const { handler: handler2, action: action2 } = mountLayer({ behaviorType: 'close' });
+		const { handler: handler1, action: action1 } = mountLayer({
+			behaviorType: 'close',
+		});
+		const { handler: handler2, action: action2 } = mountLayer({
+			behaviorType: 'close',
+		});
 		dispatchEscape();
 		expect(handler1).toHaveBeenCalledTimes(0);
 		expect(handler2).toHaveBeenCalledTimes(1);
@@ -127,8 +136,12 @@ describe('escape keydown', () => {
 	});
 
 	it('does not change position of layer in the stack when options update', () => {
-		const { handler: handler1, action: action1 } = mountLayer({ behaviorType: 'close' });
-		const { handler: handler2, action: action2 } = mountLayer({ behaviorType: 'close' });
+		const { handler: handler1, action: action1 } = mountLayer({
+			behaviorType: 'close',
+		});
+		const { handler: handler2, action: action2 } = mountLayer({
+			behaviorType: 'close',
+		});
 		dispatchEscape();
 		expect(handler1).toHaveBeenCalledTimes(0);
 		expect(handler2).toHaveBeenCalledTimes(1);
@@ -143,8 +156,12 @@ describe('escape keydown', () => {
 
 	it('does not change position of layer in the stack when updating behaviorType store', () => {
 		const w1 = withGet.writable<EscapeBehaviorType>('close');
-		const { handler: handler1, action: action1 } = mountLayer({ behaviorType: w1 });
-		const { handler: handler2, action: action2 } = mountLayer({ behaviorType: 'close' });
+		const { handler: handler1, action: action1 } = mountLayer({
+			behaviorType: w1,
+		});
+		const { handler: handler2, action: action2 } = mountLayer({
+			behaviorType: 'close',
+		});
 		dispatchEscape();
 		expect(handler1).toHaveBeenCalledTimes(0);
 		expect(handler2).toHaveBeenCalledTimes(1);
@@ -158,7 +175,9 @@ describe('escape keydown', () => {
 	});
 
 	it('respects updated behaviorType', () => {
-		const { handler: handler1, action: action1 } = mountLayer({ behaviorType: 'close' });
+		const { handler: handler1, action: action1 } = mountLayer({
+			behaviorType: 'close',
+		});
 		const { handler: handler2, action: action2 } = mountLayer({
 			behaviorType: 'defer-otherwise-close',
 		});
@@ -176,8 +195,12 @@ describe('escape keydown', () => {
 
 	it('respects updated behaviorType store', () => {
 		const w2 = withGet.writable<EscapeBehaviorType>('defer-otherwise-close');
-		const { handler: handler1, action: action1 } = mountLayer({ behaviorType: 'close' });
-		const { handler: handler2, action: action2 } = mountLayer({ behaviorType: w2 });
+		const { handler: handler1, action: action1 } = mountLayer({
+			behaviorType: 'close',
+		});
+		const { handler: handler2, action: action2 } = mountLayer({
+			behaviorType: w2,
+		});
 		dispatchEscape();
 		expect(handler1).toHaveBeenCalledTimes(1);
 		expect(handler2).toHaveBeenCalledTimes(0);
@@ -191,8 +214,12 @@ describe('escape keydown', () => {
 	});
 
 	it('respects updating behaviorType from string value to store', () => {
-		const { handler: handler1, action: action1 } = mountLayer({ behaviorType: 'close' });
-		const { handler: handler2, action: action2 } = mountLayer({ behaviorType: 'close' });
+		const { handler: handler1, action: action1 } = mountLayer({
+			behaviorType: 'close',
+		});
+		const { handler: handler2, action: action2 } = mountLayer({
+			behaviorType: 'close',
+		});
 		dispatchEscape();
 		expect(handler1).toHaveBeenCalledTimes(0);
 		expect(handler2).toHaveBeenCalledTimes(1);

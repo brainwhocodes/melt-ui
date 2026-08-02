@@ -1,8 +1,7 @@
+import { derived, writable } from 'svelte/store';
 import {
 	addEventListener,
 	addMeltEventListener,
-	makeElement,
-	makeElementArray,
 	createElHelpers,
 	disabledAttr,
 	effect,
@@ -12,18 +11,18 @@ import {
 	isBrowser,
 	isHTMLElement,
 	kbd,
+	makeElement,
+	makeElementArray,
 	omit,
 	overridable,
+	type StyleObject,
 	snapValueToStep,
 	styleToString,
 	toWritableStores,
-	type StyleObject,
 } from '$lib/internal/helpers/index.js';
-import type { MeltActionReturn, NonEmptyArray } from '$lib/internal/types.js';
-import { derived, writable } from 'svelte/store';
-import type { SliderEvents } from './events.js';
-
 import { withGet } from '$lib/internal/helpers/withGet.js';
+import type { MeltActionReturn, NonEmptyArray } from '$lib/internal/types.js';
+import type { SliderEvents } from './events.js';
 import type { CreateSliderProps } from './types.js';
 
 const defaults = {
@@ -38,22 +37,52 @@ const defaults = {
 	rootElement: undefined,
 } satisfies CreateSliderProps;
 
+const invalidConfigurationMessage =
+	'Invalid slider configuration: min, max, and every value must be finite numbers, and step must be a finite number greater than 0.';
+
+function assertValidConfiguration(
+	min: number,
+	max: number,
+	step: number,
+	value: number[],
+) {
+	if (
+		!Number.isFinite(min) ||
+		!Number.isFinite(max) ||
+		!Number.isFinite(step) ||
+		step <= 0 ||
+		value.some((item) => !Number.isFinite(item))
+	) {
+		throw new Error(invalidConfigurationMessage);
+	}
+}
+
 const { name } = createElHelpers('slider');
 
 export const createSlider = (props?: CreateSliderProps) => {
 	const withDefaults = { ...defaults, ...props } satisfies CreateSliderProps;
 
 	const options = toWritableStores(
-		omit(withDefaults, 'value', 'onValueChange', 'onValueCommitted', 'defaultValue')
+		omit(
+			withDefaults,
+			'value',
+			'onValueChange',
+			'onValueCommitted',
+			'defaultValue',
+		),
 	);
-	const { min, max, step, orientation, dir, disabled, autoSort, rootElement } = options;
+	const { min, max, step, orientation, dir, disabled, autoSort, rootElement } =
+		options;
 
-	const valueWritable = withDefaults.value ?? writable(withDefaults.defaultValue);
+	const valueWritable =
+		withDefaults.value ?? writable(withDefaults.defaultValue);
 	const value = overridable(valueWritable, withDefaults?.onValueChange);
 
 	const isActive = withGet(writable(false));
 	const currentThumbIndex = withGet(writable<number>(0));
-	const activeThumb = withGet(writable<{ thumb: HTMLElement; index: number } | null>(null));
+	const activeThumb = withGet(
+		writable<{ thumb: HTMLElement; index: number } | null>(null),
+	);
 
 	const meltIds = generateIds(['root'] as const);
 
@@ -72,7 +101,10 @@ export const createSlider = (props?: CreateSliderProps) => {
 				const thumbs = getAllThumbs();
 				if (thumbs) {
 					thumbs[index + direction].focus();
-					activeThumb.set({ thumb: thumbs[index + direction], index: index + direction });
+					activeThumb.set({
+						thumb: thumbs[index + direction],
+						index: index + direction,
+					});
 				}
 			}
 
@@ -99,7 +131,7 @@ export const createSlider = (props?: CreateSliderProps) => {
 		if (!root) return null;
 
 		return Array.from(root.querySelectorAll('[data-melt-part="thumb"]')).filter(
-			(thumb): thumb is HTMLElement => isHTMLElement(thumb)
+			(thumb): thumb is HTMLElement => isHTMLElement(thumb),
 		);
 	};
 
@@ -111,13 +143,16 @@ export const createSlider = (props?: CreateSliderProps) => {
 		};
 	});
 
-	const direction = withGet.derived([orientation, dir], ([$orientation, $dir]) => {
-		if ($orientation === 'horizontal') {
-			return $dir === 'rtl' ? 'rl' : 'lr';
-		} else {
-			return $dir === 'rtl' ? 'tb' : 'bt';
-		}
-	});
+	const direction = withGet.derived(
+		[orientation, dir],
+		([$orientation, $dir]) => {
+			if ($orientation === 'horizontal') {
+				return $dir === 'rtl' ? 'rl' : 'lr';
+			} else {
+				return $dir === 'rtl' ? 'tb' : 'bt';
+			}
+		},
+	);
 
 	// Elements
 	const root = makeElement(name(), {
@@ -140,7 +175,8 @@ export const createSlider = (props?: CreateSliderProps) => {
 	const range = makeElement(name('range'), {
 		stores: [value, direction, position],
 		returned: ([$value, $direction, $position]) => {
-			const minimum = $value.length > 1 ? $position(Math.min(...$value) ?? 0) : 0;
+			const minimum =
+				$value.length > 1 ? $position(Math.min(...$value) ?? 0) : 0;
 			const maximum = 100 - $position(Math.max(...$value) ?? 0);
 
 			const style: StyleObject = {
@@ -178,7 +214,15 @@ export const createSlider = (props?: CreateSliderProps) => {
 
 	const thumbs = makeElementArray(name('thumb'), {
 		stores: [value, position, min, max, disabled, orientation, direction],
-		returned: ([$value, $position, $min, $max, $disabled, $orientation, $direction]) => {
+		returned: ([
+			$value,
+			$position,
+			$min,
+			$max,
+			$disabled,
+			$orientation,
+			$direction,
+		]) => {
 			const result = Array.from({ length: $value.length || 1 }, (_, i) => {
 				const currentThumb = currentThumbIndex.get();
 
@@ -421,7 +465,7 @@ export const createSlider = (props?: CreateSliderProps) => {
 				clientXY: number,
 				activeThumbIdx: number,
 				start: number,
-				end: number
+				end: number,
 			) => {
 				const percent = (clientXY - start) / (end - start);
 				const val = percent * ($max - $min) + $min;
@@ -474,7 +518,10 @@ export const createSlider = (props?: CreateSliderProps) => {
 				e.preventDefault();
 				e.stopPropagation();
 
-				const sliderEl = getElementByMeltId($root['data-melt-id'], rootElement.get());
+				const sliderEl = getElementByMeltId(
+					$root['data-melt-id'],
+					rootElement.get(),
+				);
 				const closestThumb = activeThumb.get();
 				if (!sliderEl || !closestThumb) return;
 
@@ -504,7 +551,10 @@ export const createSlider = (props?: CreateSliderProps) => {
 			const pointerDown = (e: PointerEvent) => {
 				if (e.button !== 0) return;
 
-				const sliderEl = getElementByMeltId($root['data-melt-id'], rootElement.get());
+				const sliderEl = getElementByMeltId(
+					$root['data-melt-id'],
+					rootElement.get(),
+				);
 				const closestThumb = getClosestThumb(e);
 				if (!closestThumb || !sliderEl) return;
 
@@ -535,31 +585,36 @@ export const createSlider = (props?: CreateSliderProps) => {
 				addEventListener($rootElement, 'pointerdown', pointerDown),
 				addEventListener($rootElement, 'pointerup', pointerUp),
 				addEventListener($rootElement, 'pointerleave', pointerUp),
-				addEventListener($rootElement, 'pointermove', pointerMove)
+				addEventListener($rootElement, 'pointermove', pointerMove),
 			);
 
 			return () => {
 				unsub();
 			};
-		}
+		},
 	);
 
-	effect([step, min, max, value], function fixValue([$step, $min, $max, $value]) {
-		const isValidValue = (v: number) => {
-			const snappedValue = snapValueToStep(v, $min, $max, $step);
-			return snappedValue === v;
-		};
+	effect(
+		[step, min, max, value],
+		function fixValue([$step, $min, $max, $value]) {
+			assertValidConfiguration($min, $max, $step, $value);
 
-		const gcv = (v: number) => {
-			return snapValueToStep(v, $min, $max, $step);
-		};
+			const isValidValue = (v: number) => {
+				const snappedValue = snapValueToStep(v, $min, $max, $step);
+				return snappedValue === v;
+			};
 
-		if ($value.some((v) => !isValidValue(v))) {
-			value.update((prev) => {
-				return prev.map(gcv);
-			});
-		}
-	});
+			const gcv = (v: number) => {
+				return snapValueToStep(v, $min, $max, $step);
+			};
+
+			if ($value.some((v) => !isValidValue(v))) {
+				value.update((prev) => {
+					return prev.map(gcv);
+				});
+			}
+		},
+	);
 
 	return {
 		elements: {

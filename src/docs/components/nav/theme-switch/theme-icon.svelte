@@ -6,9 +6,9 @@
 	export let size: 'sm' | 'md' | 'lg' = 'md';
 
 	const sizeMap = {
-		sm: 'h-3 w-3',
-		md: 'h-5 w-5',
-		lg: 'h-7 w-7',
+		sm: 'preview-height-3 preview-width-3',
+		md: 'preview-height-5 preview-width-5',
+		lg: 'preview-height-7 preview-width-7',
 	};
 
 	$: component = theme === 'dark' ? Moon : theme === 'light' ? Sun : Monitor;

@@ -1,3 +1,5 @@
+import type { DateValue } from '@internationalized/date';
+import { derived, writable } from 'svelte/store';
 import { createDateField } from '$lib/index.js';
 import {
 	areAllDaysBetweenValid,
@@ -9,10 +11,10 @@ import {
 } from '$lib/internal/helpers/date/index.js';
 import {
 	addMeltEventListener,
-	makeElement,
 	createElHelpers,
 	effect,
 	executeCallbacks,
+	makeElement,
 	omit,
 	overridable,
 	sleep,
@@ -20,8 +22,6 @@ import {
 	toWritableStores,
 } from '$lib/internal/helpers/index.js';
 import { withGet } from '$lib/internal/helpers/withGet.js';
-import type { DateValue } from '@internationalized/date';
-import { derived, writable } from 'svelte/store';
 import { generateIds } from '../../internal/helpers/id.js';
 import { removeDescriptionElement } from './_internal/helpers.js';
 import type { CreateDateRangeFieldProps } from './types.js';
@@ -44,12 +44,18 @@ const defaults = {
 	readonlySegments: undefined,
 	minValue: undefined,
 	maxValue: undefined,
+	rootElement: undefined,
 } satisfies CreateDateRangeFieldProps;
 
 type DateFieldParts = 'segment' | 'label' | 'field' | 'validation';
 const { name } = createElHelpers<DateFieldParts>('dateField');
 
-const rangeFieldIdParts = ['field', 'label', 'description', 'validation'] as const;
+const rangeFieldIdParts = [
+	'field',
+	'label',
+	'description',
+	'validation',
+] as const;
 export type DateRangeFieldIdParts = typeof rangeFieldIdParts;
 
 export function createDateRangeField(props?: CreateDateRangeFieldProps) {
@@ -66,14 +72,15 @@ export function createDateRangeField(props?: CreateDateRangeFieldProps) {
 		granularity: withDefaults.granularity,
 	});
 
-	const valueWritable = withDefaults.value ?? writable(withDefaults.defaultValue);
+	const valueWritable =
+		withDefaults.value ?? writable(withDefaults.defaultValue);
 	const value = overridable(valueWritable, withDefaults.onValueChange);
 
 	const startValue = withGet.writable<DateValue | undefined>(
-		value.get()?.start ?? withDefaults.defaultValue?.start
+		value.get()?.start ?? withDefaults.defaultValue?.start,
 	);
 	const endValue = withGet.writable<DateValue | undefined>(
-		value.get()?.end ?? withDefaults.defaultValue?.end
+		value.get()?.end ?? withDefaults.defaultValue?.end,
 	);
 
 	const isCompleted = derived(value, ($value) => {
@@ -81,10 +88,11 @@ export function createDateRangeField(props?: CreateDateRangeFieldProps) {
 	});
 
 	const placeholderWritable =
-		withDefaults.placeholder ?? writable(withDefaults.defaultPlaceholder ?? defaultDate);
+		withDefaults.placeholder ??
+		writable(withDefaults.defaultPlaceholder ?? defaultDate);
 	const placeholder = dateStore(
 		overridable(placeholderWritable, withDefaults.onPlaceholderChange),
-		withDefaults.defaultPlaceholder ?? defaultDate
+		withDefaults.defaultPlaceholder ?? defaultDate,
 	);
 
 	const startField = createDateField({
@@ -94,7 +102,7 @@ export function createDateRangeField(props?: CreateDateRangeFieldProps) {
 			'onValueChange',
 			'startName',
 			'endName',
-			'readonlySegments'
+			'readonlySegments',
 		),
 		value: startValue,
 		name: withDefaults.startName,
@@ -113,7 +121,7 @@ export function createDateRangeField(props?: CreateDateRangeFieldProps) {
 			'onValueChange',
 			'endName',
 			'startName',
-			'readonlySegments'
+			'readonlySegments',
 		),
 		value: endValue,
 		name: withDefaults.endName,
@@ -163,7 +171,7 @@ export function createDateRangeField(props?: CreateDateRangeFieldProps) {
 					$value?.start,
 					$value?.end,
 					$isDateUnavailable,
-					undefined
+					undefined,
 				);
 				if (!allValid) {
 					return true;
@@ -171,7 +179,7 @@ export function createDateRangeField(props?: CreateDateRangeFieldProps) {
 			}
 
 			return false;
-		}
+		},
 	);
 
 	const label = makeElement(name('label'), {
@@ -186,7 +194,10 @@ export function createDateRangeField(props?: CreateDateRangeFieldProps) {
 		action: (node: HTMLElement) => {
 			const unsub = executeCallbacks(
 				addMeltEventListener(node, 'click', () => {
-					const firstSegment = getFirstSegment(ids.field.get());
+					const firstSegment = getFirstSegment(
+						ids.field.get(),
+						options.rootElement.get(),
+					);
 					if (!firstSegment) return;
 					sleep(1).then(() => firstSegment.focus());
 				}),
@@ -194,7 +205,7 @@ export function createDateRangeField(props?: CreateDateRangeFieldProps) {
 					if (!e.defaultPrevented && e.detail > 1) {
 						e.preventDefault();
 					}
-				})
+				}),
 			);
 
 			return {
@@ -212,7 +223,7 @@ export function createDateRangeField(props?: CreateDateRangeFieldProps) {
 				description: $descriptionId,
 				validation: $validationId,
 			};
-		}
+		},
 	);
 
 	const field = makeElement(name('field'), {
@@ -234,7 +245,10 @@ export function createDateRangeField(props?: CreateDateRangeFieldProps) {
 			getAnnouncer();
 			return {
 				destroy() {
-					removeDescriptionElement(ids.description.get());
+					removeDescriptionElement(
+						ids.description.get(),
+						options.rootElement.get(),
+					);
 				},
 			};
 		},
@@ -273,7 +287,7 @@ export function createDateRangeField(props?: CreateDateRangeFieldProps) {
 				start: $startSegmentContents,
 				end: $endSegmentContents,
 			};
-		}
+		},
 	);
 
 	/**
@@ -300,12 +314,20 @@ export function createDateRangeField(props?: CreateDateRangeFieldProps) {
 			}
 			return;
 		}
+
+		if ($startValue !== undefined) {
+			startValue.set(undefined);
+		}
+		if ($endValue !== undefined) {
+			endValue.set(undefined);
+		}
 	});
 
 	effect([startValue, endValue], ([$startValue, $endValue]) => {
 		const $value = value.get();
 
-		if ($value && $value?.start === $startValue && $value?.end === $endValue) return;
+		if ($value && $value?.start === $startValue && $value?.end === $endValue)
+			return;
 
 		if ($startValue && $endValue) {
 			value.update((prev) => {
@@ -360,6 +382,10 @@ export function createDateRangeField(props?: CreateDateRangeFieldProps) {
 	effect([options.locale], ([$locale]) => {
 		startField.options.locale.set($locale);
 		endField.options.locale.set($locale);
+	});
+	effect([options.rootElement], ([$rootElement]) => {
+		startField.options.rootElement.set($rootElement);
+		endField.options.rootElement.set($rootElement);
 	});
 
 	return {

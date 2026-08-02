@@ -48,7 +48,7 @@
 	{/if}
 </main>
 
-<style>
+<style lang="scss">
 	[data-testid='overlay'] {
 		position: fixed;
 		inset: 0;

@@ -1,3 +1,4 @@
+import type { Writable } from 'svelte/store';
 import type {
 	EscapeBehaviorType,
 	FloatingConfig,
@@ -5,8 +6,8 @@ import type {
 } from '$lib/internal/actions/index.js';
 import type { ChangeFn, IdObj } from '$lib/internal/helpers/index.js';
 import type { BuilderReturn } from '$lib/internal/types.js';
-import type { Writable } from 'svelte/store';
-import type { TooltipIdParts, createTooltip } from './create.js';
+import type { createTooltip, TooltipIdParts } from './create.js';
+
 export type { TooltipComponentEvents } from './events.js';
 export type CreateTooltipProps = {
 	positioning?: FloatingConfig;

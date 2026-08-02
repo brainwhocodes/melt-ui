@@ -67,7 +67,7 @@ export function getAnnouncer() {
 	function announce(
 		value: string | null | number,
 		kind: 'assertive' | 'polite' = 'assertive',
-		timeout = 7500
+		timeout = 7500,
 	) {
 		if (!announcer || !isBrowser) return;
 		const log = announcer.getLog(kind);

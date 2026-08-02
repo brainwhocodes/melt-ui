@@ -1,15 +1,17 @@
+import { writable } from 'svelte/store';
 import {
 	addMeltEventListener,
-	makeElement,
 	createElHelpers,
 	disabledAttr,
 	executeCallbacks,
+	generateIds,
 	getDirectionalKeys,
 	getElemDirection,
 	isBrowser,
 	isHTMLElement,
 	kbd,
 	last,
+	makeElement,
 	next,
 	omit,
 	overridable,
@@ -17,7 +19,6 @@ import {
 	toWritableStores,
 } from '$lib/internal/helpers/index.js';
 import type { Defaults, MeltActionReturn } from '$lib/internal/types.js';
-import { writable } from 'svelte/store';
 import type { TabsEvents } from './events.js';
 import type { CreateTabsProps, TabsTriggerProps } from './types.js';
 
@@ -35,14 +36,25 @@ export function createTabs(props?: CreateTabsProps) {
 	const withDefaults = { ...defaults, ...props } satisfies CreateTabsProps;
 
 	const options = toWritableStores(
-		omit(withDefaults, 'defaultValue', 'value', 'onValueChange', 'autoSet')
+		omit(withDefaults, 'defaultValue', 'value', 'onValueChange', 'autoSet'),
 	);
 	const { orientation, activateOnFocus, loop } = options;
 
-	const valueWritable = withDefaults.value ?? writable(withDefaults.defaultValue);
+	const valueWritable =
+		withDefaults.value ?? writable(withDefaults.defaultValue);
 	const value = overridable(valueWritable, withDefaults?.onValueChange);
 
 	let ssrValue = withDefaults.defaultValue ?? value.get();
+
+	const tabIds = new Map<string, { triggerId: string; contentId: string }>();
+	const getTabIds = (tabValue: string) => {
+		const existing = tabIds.get(tabValue);
+		if (existing) return existing;
+
+		const generated = generateIds(['triggerId', 'contentId'] as const);
+		tabIds.set(tabValue, generated);
+		return generated;
+	};
 
 	// Root
 	const root = makeElement(name(), {
@@ -79,6 +91,7 @@ export function createTabs(props?: CreateTabsProps) {
 		returned: ([$value, $orientation]) => {
 			return (props: TabsTriggerProps) => {
 				const { value: tabValue, disabled } = parseTriggerProps(props);
+				const { triggerId, contentId } = getTabIds(tabValue);
 
 				if (!$value && !ssrValue && withDefaults.autoSet) {
 					ssrValue = tabValue;
@@ -88,10 +101,14 @@ export function createTabs(props?: CreateTabsProps) {
 
 				const sourceOfTruth = isBrowser ? $value : ssrValue;
 				const isActive = sourceOfTruth === tabValue;
+				const isSelected = isActive && !disabled;
 
 				return {
 					type: 'button',
 					role: 'tab',
+					id: triggerId,
+					'aria-selected': isSelected,
+					'aria-controls': contentId,
 					'data-state': isActive ? 'active' : 'inactive',
 					tabindex: isActive ? 0 : -1,
 					'data-value': tabValue,
@@ -139,14 +156,19 @@ export function createTabs(props?: CreateTabsProps) {
 
 					const $loop = loop.get();
 
-					const triggers = Array.from(rootEl.querySelectorAll('[role="tab"]')).filter(
-						(trigger): trigger is HTMLElement => isHTMLElement(trigger)
+					const triggers = Array.from(
+						rootEl.querySelectorAll('[role="tab"]'),
+					).filter((trigger): trigger is HTMLElement => isHTMLElement(trigger));
+					const enabledTriggers = triggers.filter(
+						(el) => !el.hasAttribute('data-disabled'),
 					);
-					const enabledTriggers = triggers.filter((el) => !el.hasAttribute('data-disabled'));
 					const triggerIdx = enabledTriggers.findIndex((el) => el === e.target);
 
 					const dir = getElemDirection(rootEl);
-					const { nextKey, prevKey } = getDirectionalKeys(dir, orientation.get());
+					const { nextKey, prevKey } = getDirectionalKeys(
+						dir,
+						orientation.get(),
+					);
 
 					if (e.key === nextKey) {
 						e.preventDefault();
@@ -168,7 +190,7 @@ export function createTabs(props?: CreateTabsProps) {
 						const lastTrigger = last(enabledTriggers);
 						lastTrigger.focus();
 					}
-				})
+				}),
 			);
 
 			return {
@@ -182,17 +204,18 @@ export function createTabs(props?: CreateTabsProps) {
 		stores: value,
 		returned: ($value) => {
 			return (tabValue: string) => {
+				const { triggerId, contentId } = getTabIds(tabValue);
 				return {
 					role: 'tabpanel',
-					// TODO: improve
-					'aria-labelledby': tabValue,
+					id: contentId,
+					'aria-labelledby': triggerId,
 					hidden: isBrowser
 						? $value === tabValue
 							? undefined
 							: true
 						: ssrValue === tabValue
-						? undefined
-						: true,
+							? undefined
+							: true,
 					tabindex: 0,
 				} as const;
 			};

@@ -1,9 +1,14 @@
-import type { Writable } from 'svelte/store';
-import type { ChangeFn, IdObj } from '$lib/internal/helpers/index.js';
-import type { DateRangeFieldIdParts, createDateRangeField } from './create.js';
 import type { DateValue } from '@internationalized/date';
-import type { CreateDateFieldProps, DateFieldIdParts, DateRange, Matcher } from '$lib/index.js';
+import type { Writable } from 'svelte/store';
+import type {
+	CreateDateFieldProps,
+	DateFieldIdParts,
+	DateRange,
+	Matcher,
+} from '$lib/index.js';
+import type { ChangeFn, IdObj } from '$lib/internal/helpers/index.js';
 import type { EditableSegmentPart } from '$lib/shared/index.js';
+import type { createDateRangeField, DateRangeFieldIdParts } from './create.js';
 
 export type DateRangeFieldProps = {
 	/**
@@ -106,7 +111,10 @@ export type DateRangeFieldProps = {
 	 *
 	 * @default undefined
 	 */
-	readonlySegments?: { start: EditableSegmentPart[]; end: EditableSegmentPart[] };
+	readonlySegments?: {
+		start: EditableSegmentPart[];
+		end: EditableSegmentPart[];
+	};
 
 	/**
 	 * Override any of the element IDs set by the builder.
@@ -125,7 +133,12 @@ export type CreateDateRangeFieldProps = Expand<
 	DateRangeFieldProps &
 		Omit<
 			CreateDateFieldProps,
-			'value' | 'defaultValue' | 'onValueChange' | 'ids' | 'name' | 'readonlySegments'
+			| 'value'
+			| 'defaultValue'
+			| 'onValueChange'
+			| 'ids'
+			| 'name'
+			| 'readonlySegments'
 		>
 >;
 export type DateRangeField = ReturnType<typeof createDateRangeField>;

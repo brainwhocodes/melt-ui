@@ -1,7 +1,11 @@
 import { render } from '@testing-library/svelte';
 import { describe } from 'vitest';
+import {
+	getNextSegment,
+	getPrevSegment,
+	getSegments,
+} from '$lib/internal/helpers/date/index.js';
 import FieldTest from './FieldTest.svelte';
-import { getSegments, getNextSegment, getPrevSegment } from '$lib/internal/helpers/date/index.js';
 
 describe('Field', () => {
 	it('should select only the segments we can navigate to', async () => {
@@ -18,7 +22,7 @@ describe('Field', () => {
 
 		const segments = getSegments(field.id);
 		const yearSegment = segments.find(
-			(segment) => segment.dataset.segment === 'year'
+			(segment) => segment.dataset.segment === 'year',
 		) as HTMLElement;
 		expect(yearSegment).toBeDefined();
 		const nextEl = yearSegment.nextElementSibling;
@@ -34,7 +38,7 @@ describe('Field', () => {
 
 		const segments = getSegments(field.id);
 		const hourSegment = segments.find(
-			(segment) => segment.dataset.segment === 'hour'
+			(segment) => segment.dataset.segment === 'hour',
 		) as HTMLElement;
 		expect(hourSegment).toBeDefined();
 		const prevEl = hourSegment.previousElementSibling;

@@ -12,7 +12,8 @@ const OPTION_PROPS = [
 		name: 'multiple',
 		type: 'boolean',
 		default: 'false',
-		description: 'If `true`, multiple accordion items can be open at the same time.',
+		description:
+			'If `true`, multiple accordion items can be open at the same time.',
 	},
 	PROPS.DISABLED,
 	PROPS.FORCE_VISIBLE,
@@ -70,7 +71,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'value',
 			type: 'Writable<string | string[] | undefined>',
-			description: 'A writable store with the value of the currently open item.',
+			description:
+				'A writable store with the value of the currently open item.',
 		},
 	],
 	helpers: [
@@ -224,11 +226,13 @@ const heading = elementSchema('heading', {
 const keyboard: KeyboardSchema = [
 	{
 		key: KBD.SPACE,
-		behavior: 'When the `trigger` of a collapsed section is focused, expands the section.',
+		behavior:
+			'When the `trigger` of a collapsed section is focused, expands the section.',
 	},
 	{
 		key: KBD.ENTER,
-		behavior: 'When the `trigger` of a collapsed section is focused, expands the section.',
+		behavior:
+			'When the `trigger` of a collapsed section is focused, expands the section.',
 	},
 	{
 		key: KBD.TAB,
@@ -248,15 +252,24 @@ const keyboard: KeyboardSchema = [
 	},
 	{
 		key: KBD.HOME,
-		behavior: 'When focus is on a `trigger`, moves focus to the first `trigger`.',
+		behavior:
+			'When focus is on a `trigger`, moves focus to the first `trigger`.',
 	},
 	{
 		key: KBD.END,
-		behavior: 'When focus is on a `trigger`, moves focus to the last `trigger`.',
+		behavior:
+			'When focus is on a `trigger`, moves focus to the last `trigger`.',
 	},
 ];
 
-const schemas: BuilderData['schemas'] = [builder, root, trigger, item, content, heading];
+const schemas: BuilderData['schemas'] = [
+	builder,
+	root,
+	trigger,
+	item,
+	content,
+	heading,
+];
 
 const features: BuilderData['features'] = [
 	'Full keyboard navigation',

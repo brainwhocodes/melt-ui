@@ -12,16 +12,15 @@
 	} = createSeparator();
 
 	export let data: PageData;
-	// eslint-disable-next-line no-undef, @typescript-eslint/no-explicit-any
 	type Component = $$Generic<typeof SvelteComponent>;
 	$: component = data.component as unknown as Component;
 	$: doc = data.metadata;
 </script>
 
-<main class="relative px-2 py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_240px]">
-	<div class="mx-auto w-full min-w-0">
-		<div class="mb-4 space-y-2 md:mb-6">
-			<h1 class={cn('scroll-m-20 text-4xl font-bold tracking-tight')}>
+<main class="surface-e882db926c">
+	<div class="surface-e071a68f3c">
+		<div class="surface-c87177e4d2">
+			<h1 class={cn('surface-b43ae3fd2b')}>
 				{doc.title}
 			</h1>
 			{#if doc.description}
@@ -33,11 +32,11 @@
 		<div class="mdsvex" id="mdsvex">
 			<svelte:component this={component} />
 		</div>
-		<div use:melt={$separator} class="my-4 md:my-6" />
+		<div use:melt={$separator} class="surface-1a7fe491c8" />
 		<!-- <DocsPager /> -->
 	</div>
-	<div class="hidden text-sm xl:block">
-		<div class="fixed top-16 h-[calc(100vh-4rem)] overflow-visible pt-6">
+	<div class="surface-e2879166ce">
+		<div class="surface-9c880fee92">
 			{#key $page.url.pathname}
 				<TOC />
 			{/key}

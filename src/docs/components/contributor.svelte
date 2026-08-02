@@ -47,31 +47,31 @@
 
 {#if $open}
 	<div
-		class="z-50 w-[320px] rounded-xl border border-neutral-700/50 bg-neutral-800 p-4 shadow"
+		class="surface-a987fff884"
 		use:melt={$content}
 		transition:fly={{ duration: 150, y: 4 }}
 	>
-		<div class="flex flex-col gap-4">
+		<div class="surface-e98d851435">
 			<img
-				class="h-16 w-16 rounded-full"
+				class="surface-b86068b6e4"
 				src={contributor.avatar_url}
 				alt="{contributor.login}'s avatar"
 			/>
-			<div class="flex flex-col">
-				<h3 class="text-lg font-medium">{contributor.name ?? contributor.login}</h3>
-				<p class="mb-2 text-sm text-neutral-400">{contributor.login}</p>
+			<div class="surface-8a0d44b09e">
+				<h3 class="surface-def94565a3">{contributor.name ?? contributor.login}</h3>
+				<p class="surface-4ea9bcdc8d">{contributor.login}</p>
 				{#if contributor.bio}
-					<p class="mb-2 text-sm text-neutral-300">{contributor.bio}</p>
+					<p class="surface-a7d3552cf2">{contributor.bio}</p>
 				{/if}
-				<p class="text-xs text-neutral-400">
-					<span class="font-semibold">{contributor.contributions}</span> contributions
+				<p class="surface-8fe9f24f28">
+					<span class="surface-b70da0ecb9">{contributor.contributions}</span> contributions
 				</p>
 			</div>
 		</div>
 	</div>
 {/if}
 
-<style lang="postcss">
+<style lang="scss">
 	.avatar {
 		display: block;
 
@@ -79,25 +79,26 @@
 		width: var(--size);
 		height: var(--size);
 
-		background: theme('colors.neutral.900');
+		background: rgb(var(--color-neutral-900) / 1);
 		border-radius: 100%;
-		border: 2px solid theme('colors.neutral.900');
+		border: 2px solid rgb(var(--color-neutral-900) / 1);
 
 		display: grid;
 		place-items: center;
+	}
 
-		img {
+		.avatar img {
 			border-radius: 100%;
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
 		}
 
-		.fallback {
+		.avatar .fallback {
 			font-size: 1.25rem;
 			font-weight: 600;
-			background-color: theme('colors.neutral.700');
-			color: theme('colors.magnum.300');
+			background-color: rgb(var(--color-neutral-700) / 1);
+			color: rgb(var(--color-magnum-300) / 1);
 
 			width: 100%;
 			height: 100%;
@@ -105,5 +106,4 @@
 			display: grid;
 			place-items: center;
 		}
-	}
 </style>

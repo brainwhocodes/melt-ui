@@ -9,47 +9,42 @@
 	<BaseDialog let:trigger>
 		<button
 			use:melt={trigger}
-			class="inline-flex items-center justify-center rounded-md bg-white px-4 py-2
-		font-medium leading-none text-magnum-700 shadow-lg hover:opacity-75"
+			class="preview-space-y-2   preview-type-medium surface-e8faf32479"
 		>
 			Open Dialog
 		</button>
 		<svelte:fragment slot="content" let:title let:description let:close>
-			<h2 use:melt={title} class="m-0 text-lg font-medium text-black">Edit profile</h2>
-			<p use:melt={description} class="mb-5 mt-2 leading-normal text-zinc-600">
+			<h2 use:melt={title} class="surface-a6d942e8eb">Edit profile</h2>
+			<p use:melt={description} class="surface-0c39c88064">
 				Make changes to your profile here. Click save when you're done.
 			</p>
 
-			<fieldset class="mb-4 flex items-center gap-5">
-				<label class="w-[90px] text-right text-magnum-800" for="name"> Name </label>
+			<fieldset class="surface-95c5f9be8b">
+				<label class="surface-9436b080db" for="name"> Name </label>
 				<input
-					class="inline-flex h-8 w-full flex-1 items-center justify-center rounded-sm border
-						border-solid px-3 leading-none text-magnum-800"
+					class="preview-border preview-border-solid surface-79b067a8ce"
 					id="name"
 					value="Thomas G. Lopes"
 				/>
 			</fieldset>
-			<fieldset class="mb-4 flex items-center gap-5">
-				<label class="w-[90px] text-right text-magnum-800" for="username"> Username </label>
+			<fieldset class="surface-1f9e60bb92">
+				<label class="surface-2016627d97" for="username"> Username </label>
 				<input
-					class="inline-flex h-8 w-full flex-1 items-center justify-center rounded-sm border
-						border-solid px-3 leading-none text-magnum-800"
+					class="preview-border preview-border-solid surface-8e5b7c8925"
 					id="username"
 					value="@thomasglopes"
 				/>
 			</fieldset>
-			<div class="mt-6 flex justify-end gap-4">
+			<div class="surface-3ff63eee4c">
 				<button
 					use:melt={close}
-					class="inline-flex h-8 items-center justify-center rounded-[4px] bg-zinc-100
-					px-4 font-medium leading-none text-zinc-600"
+					class="preview-surface-zinc-100      preview-space-x-4 surface-914c2735d6"
 				>
 					Cancel
 				</button>
 				<button
 					use:melt={close}
-					class="inline-flex h-8 items-center justify-center rounded-[4px] bg-magnum-100
-					px-4 font-medium leading-none text-magnum-900"
+					class="preview-surface-magnum-100      preview-space-x-4 surface-11e8de979b"
 				>
 					Save changes
 				</button>

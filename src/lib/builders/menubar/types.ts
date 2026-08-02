@@ -2,7 +2,8 @@ import type { EscapeBehaviorType } from '$lib/internal/actions/index.js';
 import type { IdObj } from '$lib/internal/helpers/id.js';
 import type { BuilderReturn } from '$lib/internal/types.js';
 import type { _Menu } from '../menu/index.js';
-import type { MenubarIdParts, createMenubar } from './create.js';
+import type { createMenubar, MenubarIdParts } from './create.js';
+
 export type { MenubarComponentEvents } from './events.js';
 
 // Props
@@ -60,17 +61,24 @@ export type MenubarMenuOptions = MenubarMenu['options'];
 export type MenubarMenuStates = MenubarMenu['states'];
 export type MenubarMenuBuilders = MenubarMenu['builders'];
 
-export type MenubarMenuSubmenu = BuilderReturn<MenubarMenuBuilders['createSubmenu']>;
+export type MenubarMenuSubmenu = BuilderReturn<
+	MenubarMenuBuilders['createSubmenu']
+>;
 export type MenubarMenuSubmenuElements = MenubarMenuSubmenu['elements'];
 export type MenubarMenuSubmenuOptions = MenubarMenuSubmenu['options'];
 export type MenubarMenuSubmenuStates = MenubarMenuSubmenu['states'];
 
-export type MenubarMenuRadioGroup = BuilderReturn<MenubarMenuBuilders['createMenuRadioGroup']>;
+export type MenubarMenuRadioGroup = BuilderReturn<
+	MenubarMenuBuilders['createMenuRadioGroup']
+>;
 export type MenubarMenuRadioGroupElements = MenubarMenuRadioGroup['elements'];
 export type MenubarMenuRadioGroupStates = MenubarMenuRadioGroup['states'];
 export type MenubarMenuRadioGroupHelpers = MenubarMenuRadioGroup['helpers'];
 
-export type MenubarMenuCheckboxItem = BuilderReturn<MenubarMenuBuilders['createCheckboxItem']>;
-export type MenubarMenuCheckboxItemElements = MenubarMenuCheckboxItem['elements'];
+export type MenubarMenuCheckboxItem = BuilderReturn<
+	MenubarMenuBuilders['createCheckboxItem']
+>;
+export type MenubarMenuCheckboxItemElements =
+	MenubarMenuCheckboxItem['elements'];
 export type MenubarMenuCheckboxItemStates = MenubarMenuCheckboxItem['states'];
 export type MenubarMenuCheckboxItemHelpers = MenubarMenuCheckboxItem['helpers'];

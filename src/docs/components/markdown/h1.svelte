@@ -4,4 +4,4 @@
 	export { className as class };
 </script>
 
-<h1 class={cn('mt-2 scroll-m-20 text-4xl font-bold', className)} {...$$restProps}><slot /></h1>
+<h1 class={cn('surface-778300e8e5', className)} {...$$restProps}><slot /></h1>

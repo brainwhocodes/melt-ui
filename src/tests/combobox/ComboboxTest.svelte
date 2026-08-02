@@ -20,6 +20,10 @@
 	export let onOutsideClick: CreateComboboxProps<unknown>['onOutsideClick'] = undefined;
 	export let escapeBehavior: CreateComboboxProps<unknown>['escapeBehavior'] = undefined;
 
+	export let filterOnInput = false;
+	export let hiddenLabels: string[] = [];
+	export let showHideControl = false;
+	let fixtureHiddenLabels: string[] = [];
 	const {
 		elements: { menu, input, option, label },
 		states: { open, inputValue, selected },
@@ -38,6 +42,10 @@
 		})
 	);
 
+	$: visibleOptions = filterOnInput
+		? options.filter((option) => option.label?.toLowerCase().includes($inputValue.toLowerCase()) ?? false)
+		: options;
+
 	$: if (!$open) {
 		$inputValue = $selected?.label || '';
 	}
@@ -54,8 +62,14 @@
 	<ul use:melt={$menu} data-testid="menu">
 		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 		<div tabindex="0">
-			{#each options as o, index (index)}
-				<li use:melt={$option(o)}>
+			{#each visibleOptions as o (o.value)}
+				<li
+					use:melt={$option(o)}
+					data-hidden={hiddenLabels.includes(o.label ?? '') ||
+					fixtureHiddenLabels.includes(o.label ?? '')
+						? ''
+						: undefined}
+				>
 					<div>
 						<span>{o.label}</span>
 						<span>{o.value}</span>
@@ -64,8 +78,14 @@
 			{:else}
 				<li>No results found</li>
 			{/each}
+			{#if showHideControl}
+				<button on:click={() => (fixtureHiddenLabels = [options[0]?.label ?? ''])}>
+					Hide first option
+				</button>
+			{/if}
 		</div>
 	</ul>
+	<output aria-label="Selected option">{$selected?.label ?? ''}</output>
 	<div data-testid="outside-click" />
 
 	<input type="text" data-testid="other-input" aria-label="other input" />

@@ -1,9 +1,3 @@
-import { testKbd as kbd } from '../utils.js';
-import { render, waitFor } from '@testing-library/svelte';
-import { userEvent } from '@testing-library/user-event';
-import { axe } from 'jest-axe';
-import { describe } from 'vitest';
-import DateFieldTest from './DateFieldTest.svelte';
 import {
 	CalendarDate,
 	CalendarDateTime,
@@ -11,7 +5,15 @@ import {
 	parseAbsoluteToLocal,
 	toZoned,
 } from '@internationalized/date';
-import type { CreateDateFieldProps } from '$lib/index.js';
+import { fireEvent, render, waitFor } from '@testing-library/svelte';
+import { userEvent } from '@testing-library/user-event';
+import { axe } from 'jest-axe';
+import { get } from 'svelte/store';
+import { describe } from 'vitest';
+import { type CreateDateFieldProps, createDateField } from '$lib/index.js';
+import { testKbd as kbd } from '../utils.js';
+import DateFieldShadowTest from './DateFieldShadowTest.svelte';
+import DateFieldTest from './DateFieldTest.svelte';
 
 const calendarDateOther = new CalendarDate(1980, 1, 20);
 const calendarDateTimeOther = new CalendarDateTime(1980, 1, 20, 12, 30, 30, 0);
@@ -33,6 +35,94 @@ describe('DateField', () => {
 
 			expect(await axe(container)).toHaveNoViolations();
 		});
+	});
+
+	test('scopes descriptions, focus, editing, and navigation to a replaceable ShadowRoot', async () => {
+		const { getByTestId, unmount } = render(DateFieldShadowTest);
+		const firstHost = getByTestId('first-shadow-host');
+		const secondHost = getByTestId('second-shadow-host');
+		const firstRoot = firstHost.shadowRoot!;
+		const secondRoot = secondHost.shadowRoot!;
+		const field = firstRoot.querySelector<HTMLElement>(
+			'[data-testid="field"]',
+		)!;
+		const label = firstRoot.querySelector<HTMLElement>(
+			'[data-melt-datefield-label]',
+		)!;
+		const segments = Array.from(
+			firstRoot.querySelectorAll<HTMLElement>(
+				'[data-segment]:not([data-segment="literal"])',
+			),
+		);
+		const descriptionId = field.getAttribute('aria-describedby')!;
+
+		expect(firstRoot.querySelector(`[id="${descriptionId}"]`)).not.toBeNull();
+		expect(document.getElementById(descriptionId)).toBeNull();
+		for (const segment of segments) {
+			for (const id of segment.getAttribute('aria-describedby')!.split(' ')) {
+				expect(firstRoot.querySelector(`[id="${id}"]`)).not.toBeNull();
+			}
+		}
+
+		await fireEvent.click(label);
+		await waitFor(() => expect(firstRoot.activeElement).toBe(segments[0]));
+		await fireEvent.keyDown(segments[0], { key: 'ArrowRight' });
+		expect(firstRoot.activeElement).toBe(segments[1]);
+		segments[0].focus();
+		await fireEvent.keyDown(segments[0], { key: '2' });
+		expect(firstRoot.activeElement).toBe(segments[1]);
+
+		await fireEvent.click(getByTestId('move-date-field-root'));
+		const movedField = secondRoot.querySelector<HTMLElement>(
+			'[data-testid="field"]',
+		)!;
+		const movedLabel = secondRoot.querySelector<HTMLElement>(
+			'[data-melt-datefield-label]',
+		)!;
+		expect(movedField).toBe(field);
+		expect(firstRoot.querySelector(`[id="${descriptionId}"]`)).toBeNull();
+		expect(secondRoot.querySelector(`[id="${descriptionId}"]`)).not.toBeNull();
+		expect(document.getElementById(descriptionId)).toBeNull();
+
+		await fireEvent.click(movedLabel);
+		await waitFor(() =>
+			expect(secondRoot.activeElement).toBe(
+				secondRoot.querySelector(
+					'[data-segment]:not([data-segment="literal"])',
+				),
+			),
+		);
+
+		unmount();
+		expect(secondRoot.querySelector(`[id="${descriptionId}"]`)).toBeNull();
+	});
+
+	test('creates hidden descriptions with each supplied scope owning document', () => {
+		const scopedDocument =
+			document.implementation.createHTMLDocument('Date field scope');
+		const elementRoot = scopedDocument.createElement('section');
+		scopedDocument.body.append(elementRoot);
+		const fragmentRoot = scopedDocument.createDocumentFragment();
+		const roots: ParentNode[] = [scopedDocument, elementRoot, fragmentRoot];
+
+		for (const rootElement of roots) {
+			const dateField = createDateField({
+				defaultValue: calendarDateOther,
+				rootElement,
+			});
+			const descriptionId = get(dateField.ids.description);
+			const description = rootElement.querySelector<HTMLElement>(
+				`[id="${descriptionId}"]`,
+			)!;
+			const expectedParent =
+				rootElement.nodeType === Node.DOCUMENT_NODE
+					? scopedDocument.body
+					: rootElement;
+
+			expect(description.ownerDocument).toBe(scopedDocument);
+			expect(description.parentNode).toBe(expectedParent);
+			expect(document.getElementById(descriptionId)).toBeNull();
+		}
 	});
 
 	test('segments populated with defaultValue - CalendarDate', async () => {
@@ -67,7 +157,9 @@ describe('DateField', () => {
 		expect(daySegment).toHaveTextContent(String(calendarDateTimeOther.day));
 		expect(yearSegment).toHaveTextContent(String(calendarDateTimeOther.year));
 		expect(hourSegment).toHaveTextContent(String(calendarDateTimeOther.hour));
-		expect(minuteSegment).toHaveTextContent(String(calendarDateTimeOther.minute));
+		expect(minuteSegment).toHaveTextContent(
+			String(calendarDateTimeOther.minute),
+		);
 		expect(insideValue).toHaveTextContent(calendarDateTimeOther.toString());
 	});
 
@@ -257,7 +349,9 @@ describe('DateField', () => {
 			await user.click(el);
 			await waitFor(() => expect(el).toHaveFocus());
 			await user.keyboard(kbd.ARROW_UP);
-			await waitFor(() => expect(el).toHaveTextContent(String(calendarDateOther[segment])));
+			await waitFor(() =>
+				expect(el).toHaveTextContent(String(calendarDateOther[segment])),
+			);
 		}
 	});
 
@@ -273,15 +367,25 @@ describe('DateField', () => {
 		await user.click(monthSegment);
 		await waitFor(() => expect(monthSegment).toHaveFocus());
 		await user.keyboard(kbd.ARROW_UP);
-		await waitFor(() => expect(monthSegment).toHaveTextContent(String(calendarDateOther['month'])));
+		await waitFor(() =>
+			expect(monthSegment).toHaveTextContent(
+				String(calendarDateOther['month']),
+			),
+		);
 
 		// day should change
 		const daySegment = getByTestId('day');
-		await waitFor(() => expect(daySegment).toHaveTextContent(String(calendarDateOther['day'])));
+		await waitFor(() =>
+			expect(daySegment).toHaveTextContent(String(calendarDateOther['day'])),
+		);
 		await user.click(daySegment);
 		await waitFor(() => expect(daySegment).toHaveFocus());
 		await user.keyboard(kbd.ARROW_UP);
-		await waitFor(() => expect(daySegment).toHaveTextContent(String(calendarDateOther['day'] + 1)));
+		await waitFor(() =>
+			expect(daySegment).toHaveTextContent(
+				String(calendarDateOther['day'] + 1),
+			),
+		);
 	});
 
 	test('if selected date unavailable, mark field as invalid', async () => {
@@ -329,6 +433,132 @@ describe('DateField', () => {
 		expect(hourSegment).toHaveFocus();
 		await user.keyboard(kbd.ARROW_UP);
 		expect(hourSegment).toHaveTextContent('13');
+	});
+
+	test('derives 12-hour attributes and arrow behavior from locale', async () => {
+		const initial = calendarDateTimeOther.set({ hour: 23 });
+		const { getByTestId, user } = setup({
+			defaultValue: initial,
+			locale: 'en-US',
+		});
+		const hourSegment = getByTestId('hour');
+
+		expect(hourSegment).toHaveAttribute('aria-valuemin', '1');
+		expect(hourSegment).toHaveAttribute('aria-valuemax', '12');
+		expect(hourSegment).toHaveAttribute('aria-valuenow', '11');
+		await user.click(hourSegment);
+		await user.keyboard(kbd.ARROW_UP);
+
+		expect(getByTestId('inside-value')).toHaveTextContent(
+			initial.set({ hour: 12 }).toString(),
+		);
+		expect(getByTestId('dayPeriod')).toHaveTextContent('PM');
+	});
+
+	test('keeps a leading zero pending in 12-hour mode', async () => {
+		const { getByTestId, user } = setup({
+			defaultValue: calendarDateTimeOther,
+			hourCycle: 12,
+		});
+		const hourSegment = getByTestId('hour');
+
+		await user.click(hourSegment);
+		await user.keyboard('0');
+
+		expect(hourSegment).toHaveAttribute('aria-valuetext', 'Empty');
+		expect(getByTestId('inside-value')).toHaveTextContent('undefined');
+	});
+
+	test('commits zero as an underlying hour in 24-hour mode', async () => {
+		const initial = calendarDateTimeOther.set({ hour: 5 });
+		const { getByTestId, user } = setup({
+			defaultValue: initial,
+			hourCycle: 24,
+		});
+		const hourSegment = getByTestId('hour');
+
+		await user.click(hourSegment);
+		await user.keyboard('0');
+
+		expect(hourSegment).toHaveAttribute('aria-valuemin', '0');
+		expect(hourSegment).toHaveAttribute('aria-valuemax', '23');
+		expect(hourSegment).toHaveAttribute('aria-valuenow', '0');
+		expect(getByTestId('inside-value')).toHaveTextContent(
+			initial.set({ hour: 0 }).toString(),
+		);
+	});
+
+	test('updates attributes, layout, and arrows when locale and hourCycle stores change', async () => {
+		const initial = calendarDateTimeOther.set({ hour: 23 });
+		const { getByTestId, queryByTestId, user } = setup({
+			defaultValue: initial,
+			locale: 'en-US',
+		});
+
+		expect(getByTestId('hour')).toHaveAttribute('aria-valuemax', '12');
+		expect(queryByTestId('dayPeriod')).not.toBeNull();
+
+		await user.click(getByTestId('set-locale-en-gb'));
+		await waitFor(() => {
+			expect(getByTestId('hour')).toHaveAttribute('aria-valuemax', '23');
+			expect(queryByTestId('dayPeriod')).toBeNull();
+		});
+
+		await user.click(getByTestId('set-hour-cycle-12'));
+		await waitFor(() => {
+			expect(getByTestId('hour')).toHaveAttribute('aria-valuemax', '12');
+			expect(queryByTestId('dayPeriod')).not.toBeNull();
+		});
+
+		await user.click(getByTestId('set-hour-cycle-24'));
+		await waitFor(() => {
+			expect(getByTestId('hour')).toHaveAttribute('aria-valuemax', '23');
+			expect(queryByTestId('dayPeriod')).toBeNull();
+		});
+
+		await user.click(getByTestId('clear-hour-cycle'));
+		await user.click(getByTestId('set-locale-en-us'));
+		await waitFor(() => {
+			expect(getByTestId('hour')).toHaveAttribute('aria-valuemax', '12');
+			expect(queryByTestId('dayPeriod')).not.toBeNull();
+		});
+
+		await user.click(getByTestId('hour'));
+		await user.keyboard(kbd.ARROW_UP);
+		expect(getByTestId('inside-value')).toHaveTextContent(
+			initial.set({ hour: 12 }).toString(),
+		);
+
+		await user.click(getByTestId('set-locale-en-gb'));
+		await waitFor(() => {
+			expect(getByTestId('hour')).toHaveAttribute('aria-valuemax', '23');
+		});
+		await user.click(getByTestId('hour'));
+		await user.keyboard('0');
+		expect(getByTestId('inside-value')).toHaveTextContent(
+			initial.set({ hour: 0 }).toString(),
+		);
+	});
+
+	test('an explicit hourCycle overrides the locale default', () => {
+		const { getByTestId, queryByTestId } = setup({
+			defaultValue: calendarDateTimeOther,
+			locale: 'en-GB',
+			hourCycle: 12,
+		});
+
+		expect(getByTestId('hour')).toHaveAttribute('aria-valuemin', '1');
+		expect(getByTestId('hour')).toHaveAttribute('aria-valuemax', '12');
+		expect(queryByTestId('dayPeriod')).not.toBeNull();
+	});
+
+	test('retains the formatter error for an invalid locale', () => {
+		expect(() =>
+			createDateField({
+				defaultValue: calendarDateTimeOther,
+				locale: 'not_a_locale',
+			}),
+		).toThrow(RangeError);
 	});
 
 	test('day granularity overrides default displayed segments', async () => {
@@ -609,7 +839,9 @@ describe('DateField', () => {
 
 		const timeZoneSegment = getByTestId('timeZoneName');
 
-		expect(timeZoneSegment).toHaveTextContent(thisTimeZone('2023-10-12T12:30:00Z'));
+		expect(timeZoneSegment).toHaveTextContent(
+			thisTimeZone('2023-10-12T12:30:00Z'),
+		);
 	});
 
 	test('clicking the label focuses the first segment', async () => {

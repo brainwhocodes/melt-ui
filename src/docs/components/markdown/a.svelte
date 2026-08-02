@@ -11,13 +11,13 @@
 </script>
 
 <a
-	class="inline-flex items-center gap-1 underline underline-offset-2 transition-colors hover:text-neutral-100/80"
+	class="surface-3e98888f3b"
 	{href}
 	{target}
 	{rel}
 >
 	<slot />
 	{#if !internal}
-		<ExternalLink class="size-4" />
+		<ExternalLink class="surface-0ea1a882f3" />
 	{/if}
 </a>

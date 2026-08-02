@@ -1,12 +1,12 @@
+import { writable } from 'svelte/store';
 import {
-	makeElement,
 	createElHelpers,
+	makeElement,
 	omit,
 	overridable,
 	toWritableStores,
 } from '$lib/internal/helpers/index.js';
 import type { Defaults } from '$lib/internal/types.js';
-import { writable } from 'svelte/store';
 import type { CreateProgressProps } from './types.js';
 
 const defaults = {
@@ -21,7 +21,8 @@ export const createProgress = (props?: CreateProgressProps) => {
 
 	const options = toWritableStores(omit(withDefaults, 'value'));
 	const { max } = options;
-	const valueWritable = withDefaults.value ?? writable(withDefaults.defaultValue);
+	const valueWritable =
+		withDefaults.value ?? writable(withDefaults.defaultValue);
 	const value = overridable(valueWritable, withDefaults?.onValueChange);
 
 	const root = makeElement(name(), {
@@ -35,7 +36,12 @@ export const createProgress = (props?: CreateProgressProps) => {
 				'aria-valuemax': $max,
 				'aria-valuenow': $value,
 				'data-value': $value,
-				'data-state': $value === null ? 'indeterminate' : $value === $max ? 'complete' : 'loading',
+				'data-state':
+					$value === null
+						? 'indeterminate'
+						: $value === $max
+							? 'complete'
+							: 'loading',
 				'data-max': $max,
 			} as const;
 		},

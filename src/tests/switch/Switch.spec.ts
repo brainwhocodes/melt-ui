@@ -1,11 +1,11 @@
 import { render } from '@testing-library/svelte';
-import { axe } from 'jest-axe';
-import { describe, it } from 'vitest';
-import SwitchTest from './SwitchTest.svelte';
 import { userEvent } from '@testing-library/user-event';
-import { testKbd as kbd } from '../utils.js';
-import { writable } from 'svelte/store';
+import { axe } from 'jest-axe';
 import { tick } from 'svelte';
+import { writable } from 'svelte/store';
+import { describe, it } from 'vitest';
+import { testKbd as kbd } from '../utils.js';
+import SwitchTest from './SwitchTest.svelte';
 
 describe('Switch', () => {
 	it('No accessibility violations', async () => {

@@ -1,7 +1,8 @@
+import { tick } from 'svelte';
+import { type Readable, writable } from 'svelte/store';
 import { usePopper } from '$lib/internal/actions/index.js';
 import {
 	addMeltEventListener,
-	makeElement,
 	createElHelpers,
 	derivedVisible,
 	effect,
@@ -13,21 +14,20 @@ import {
 	isFocusVisible,
 	isHTMLElement,
 	isTouch,
+	makeElement,
 	noop,
 	overridable,
+	portalAttr,
 	sleep,
 	styleToString,
 	toWritableStores,
-	portalAttr,
 } from '$lib/internal/helpers/index.js';
-import { withGet, type WithGet } from '$lib/internal/helpers/withGet.js';
+import { type WithGet, withGet } from '$lib/internal/helpers/withGet.js';
 import type { MeltActionReturn } from '$lib/internal/types.js';
-import { writable, type Readable } from 'svelte/store';
 import { generateIds } from '../../internal/helpers/id.js';
 import { omit } from '../../internal/helpers/object.js';
 import type { LinkPreviewEvents } from './events.js';
 import type { CreateLinkPreviewProps } from './types.js';
-import { tick } from 'svelte';
 
 type LinkPreviewParts = 'trigger' | 'content' | 'arrow';
 const { name } = createElHelpers<LinkPreviewParts>('hover-card');
@@ -52,7 +52,10 @@ export const linkPreviewIdParts = ['trigger', 'content'] as const;
 export type LinkPreviewIdParts = typeof linkPreviewIdParts;
 
 export function createLinkPreview(props: CreateLinkPreviewProps = {}) {
-	const withDefaults = { ...defaults, ...props } satisfies CreateLinkPreviewProps;
+	const withDefaults = {
+		...defaults,
+		...props,
+	} satisfies CreateLinkPreviewProps;
 
 	const openWritable = withDefaults.open ?? writable(withDefaults.defaultOpen);
 	const open = overridable(openWritable, withDefaults?.onOpenChange);
@@ -79,7 +82,10 @@ export function createLinkPreview(props: CreateLinkPreviewProps = {}) {
 		preventTextSelectionOverflow,
 	} = options;
 
-	const ids = toWritableStores({ ...generateIds(linkPreviewIdParts), ...withDefaults.ids });
+	const ids = toWritableStores({
+		...generateIds(linkPreviewIdParts),
+		...withDefaults.ids,
+	});
 	let timeout: number | null = null;
 
 	const handleOpen = withGet.derived(openDelay, ($openDelay) => {
@@ -109,7 +115,7 @@ export function createLinkPreview(props: CreateLinkPreviewProps = {}) {
 					}, $closeDelay);
 				}
 			};
-		}
+		},
 	) as WithGet<Readable<() => void>>;
 
 	const trigger = makeElement(name('trigger'), {
@@ -124,7 +130,9 @@ export function createLinkPreview(props: CreateLinkPreviewProps = {}) {
 				id: $triggerId,
 			} as const;
 		},
-		action: (node: HTMLElement): MeltActionReturn<LinkPreviewEvents['trigger']> => {
+		action: (
+			node: HTMLElement,
+		): MeltActionReturn<LinkPreviewEvents['trigger']> => {
 			activeTrigger.set(node);
 			const unsub = executeCallbacks(
 				addMeltEventListener(node, 'pointerenter', (e) => {
@@ -136,10 +144,11 @@ export function createLinkPreview(props: CreateLinkPreviewProps = {}) {
 					handleClose.get()();
 				}),
 				addMeltEventListener(node, 'focus', (e) => {
-					if (!isElement(e.currentTarget) || !isFocusVisible(e.currentTarget)) return;
+					if (!isElement(e.currentTarget) || !isFocusVisible(e.currentTarget))
+						return;
 					handleOpen.get()();
 				}),
-				addMeltEventListener(node, 'blur', () => handleClose.get()())
+				addMeltEventListener(node, 'blur', () => handleClose.get()()),
 			);
 
 			return {
@@ -165,7 +174,9 @@ export function createLinkPreview(props: CreateLinkPreviewProps = {}) {
 				'data-portal': portalAttr($portal),
 			} as const;
 		},
-		action: (node: HTMLElement): MeltActionReturn<LinkPreviewEvents['content']> => {
+		action: (
+			node: HTMLElement,
+		): MeltActionReturn<LinkPreviewEvents['content']> => {
 			let unsub = noop;
 
 			const unsubTimers = () => {
@@ -178,7 +189,13 @@ export function createLinkPreview(props: CreateLinkPreviewProps = {}) {
 
 			const unsubDerived = effect(
 				[isVisible, activeTrigger, positioning, closeOnOutsideClick, portal],
-				([$isVisible, $activeTrigger, $positioning, $closeOnOutsideClick, $portal]) => {
+				([
+					$isVisible,
+					$activeTrigger,
+					$positioning,
+					$closeOnOutsideClick,
+					$portal,
+				]) => {
 					unsubPopper();
 					if (!$isVisible || !$activeTrigger) return;
 
@@ -209,11 +226,13 @@ export function createLinkPreview(props: CreateLinkPreviewProps = {}) {
 								portal: getPortalDestination(node, $portal),
 								focusTrap: null,
 								escapeKeydown: { behaviorType: escapeBehavior },
-								preventTextSelectionOverflow: { enabled: preventTextSelectionOverflow },
+								preventTextSelectionOverflow: {
+									enabled: preventTextSelectionOverflow,
+								},
 							},
 						}).destroy;
 					});
-				}
+				},
 			);
 
 			unsub = executeCallbacks(
@@ -239,7 +258,7 @@ export function createLinkPreview(props: CreateLinkPreviewProps = {}) {
 				}),
 				addMeltEventListener(node, 'focusout', (e) => {
 					e.preventDefault();
-				})
+				}),
 			);
 
 			return {
@@ -263,7 +282,7 @@ export function createLinkPreview(props: CreateLinkPreviewProps = {}) {
 					width: `var(--arrow-size, ${$arrowSize}px)`,
 					height: `var(--arrow-size, ${$arrowSize}px)`,
 				}),
-			} as const),
+			}) as const,
 	});
 
 	effect([open], ([$open]) => {

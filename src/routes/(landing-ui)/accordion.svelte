@@ -34,24 +34,23 @@
 </script>
 
 <div
-	class={cn('mx-auto w-[18rem] max-w-full rounded-xl bg-white shadow-lg sm:w-[25rem]', className)}
+	class={cn('surface-60ad1d804f', className)}
 	{...$root}
 >
 	{#each items as { id, title, description }, i}
 		<div
 			use:melt={$item(id)}
-			class="overflow-hidden transition-colors first:rounded-t-xl
-            last:rounded-b-xl"
+			class="preview-first-item-shape-t-xl  surface-2e126c6bdd"
 		>
-			<h2 class="flex">
+			<h2 class="surface-ace64cf9e8">
 				<button
 					use:melt={$trigger(id)}
 					class={cn(
-						'flex flex-1 cursor-pointer items-center justify-between ',
-						'bg-white px-5 py-5 text-base font-medium leading-none',
-						'text-black transition-colors hover:bg-neutral-100 focus:!ring-0',
-						'focus-visible:text-magnum-800',
-						i !== 0 && 'border-t border-t-neutral-300'
+						'surface-be9974e057',
+						'surface-2bc9559e02',
+						'surface-2cc87e1a85',
+						'surface-001619d5ba',
+						i !== 0 && 'preview-border-t-neutral-300 surface-81fe7e79f8'
 					)}
 				>
 					{title}
@@ -59,11 +58,11 @@
 			</h2>
 			{#if $isSelected(id)}
 				<div
-					class={cn('content', 'overflow-hidden bg-neutral-100 text-sm text-neutral-600')}
+					class={cn('content', 'preview-text-neutral-600 surface-4831590652')}
 					use:melt={$content(id)}
 					transition:slide
 				>
-					<div class="px-5 py-4">
+					<div class="surface-a70c1ecc70">
 						{description}
 					</div>
 				</div>
@@ -72,8 +71,8 @@
 	{/each}
 </div>
 
-<style lang="postcss">
+<style lang="scss">
 	.content {
-		box-shadow: inset 0px 1px 0px theme('colors.neutral.300');
+		box-shadow: inset 0px 1px 0px rgb(var(--color-neutral-300) / 1);
 	}
 </style>

@@ -1,18 +1,18 @@
+import { derived, writable } from 'svelte/store';
 import {
 	addMeltEventListener,
-	makeElement,
 	disabledAttr,
 	executeCallbacks,
 	kbd,
+	makeElement,
 	omit,
 	overridable,
 	toWritableStores,
 } from '$lib/internal/helpers/index.js';
 import type { Defaults, MeltActionReturn } from '$lib/internal/types.js';
-import { derived, writable } from 'svelte/store';
+import { createHiddenInput } from '../hidden-input/create.js';
 import type { CheckboxEvents } from './events.js';
 import type { CreateCheckboxProps } from './types.js';
-import { createHiddenInput } from '../hidden-input/create.js';
 
 const defaults = {
 	disabled: false,
@@ -25,11 +25,14 @@ const defaults = {
 export function createCheckbox(props?: CreateCheckboxProps) {
 	const withDefaults = { ...defaults, ...props } satisfies CreateCheckboxProps;
 
-	const options = toWritableStores(omit(withDefaults, 'checked', 'defaultChecked'));
+	const options = toWritableStores(
+		omit(withDefaults, 'checked', 'defaultChecked'),
+	);
 	const { disabled, name, required, value } = options;
 
 	// States
-	const checkedWritable = withDefaults.checked ?? writable(withDefaults.defaultChecked);
+	const checkedWritable =
+		withDefaults.checked ?? writable(withDefaults.defaultChecked);
 	const checked = overridable(checkedWritable, withDefaults?.onCheckedChange);
 
 	const root = makeElement('checkbox', {
@@ -39,7 +42,11 @@ export function createCheckbox(props?: CreateCheckboxProps) {
 				'data-disabled': disabledAttr($disabled),
 				disabled: disabledAttr($disabled),
 				'data-state':
-					$checked === 'indeterminate' ? 'indeterminate' : $checked ? 'checked' : 'unchecked',
+					$checked === 'indeterminate'
+						? 'indeterminate'
+						: $checked
+							? 'checked'
+							: 'unchecked',
 				type: 'button',
 				role: 'checkbox',
 				'aria-checked': $checked === 'indeterminate' ? 'mixed' : $checked,
@@ -59,7 +66,7 @@ export function createCheckbox(props?: CreateCheckboxProps) {
 						if (value === 'indeterminate') return true;
 						return !value;
 					});
-				})
+				}),
 			);
 
 			return {
@@ -78,7 +85,10 @@ export function createCheckbox(props?: CreateCheckboxProps) {
 		prefix: 'checkbox',
 	});
 
-	const isIndeterminate = derived(checked, ($checked) => $checked === 'indeterminate');
+	const isIndeterminate = derived(
+		checked,
+		($checked) => $checked === 'indeterminate',
+	);
 	const isChecked = derived(checked, ($checked) => $checked === true);
 
 	return {

@@ -1,0 +1,84 @@
+<script lang="ts">
+	import { createSelect, melt, type CreateSelectProps } from '$lib/index.js';
+	import { Check, ChevronDown } from '$icons/index.js';
+	import { fade } from 'svelte/transition';
+
+	const months = {
+		1: 'January',
+		2: 'February',
+		3: 'March',
+		4: 'April',
+		5: 'May',
+		6: 'June',
+		7: 'July',
+		8: 'August',
+		9: 'September',
+		10: 'October',
+		11: 'November',
+		12: 'December',
+	} as const;
+
+	export let onSelectedChange: CreateSelectProps<number>['onSelectedChange'] =
+		undefined;
+	export let selected: CreateSelectProps<number>['selected'] = undefined;
+	const {
+		elements: { trigger, menu, option, label },
+		states: { selectedLabel, open },
+		helpers: { isSelected },
+	} = createSelect<number>({
+		forceVisible: true,
+		positioning: {
+			placement: 'bottom',
+			fitViewport: true,
+			sameWidth: true,
+		},
+		onSelectedChange,
+		selected,
+	});
+</script>
+
+<div class="surface-a5503573b6">
+	<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
+	<label class="surface-8a71880ce8" use:melt={$label}
+		>Select a month</label
+	>
+	<button
+		class="surface-80a257f89f"
+		use:melt={$trigger}
+		aria-label="Food"
+	>
+		{$selectedLabel || 'Select a month'}
+		<ChevronDown class="surface-cdb1a63a16" />
+	</button>
+
+	{#if $open}
+		<div
+			class="surface-5fb0e6e853"
+			use:melt={$menu}
+			transition:fade={{ duration: 150 }}
+		>
+			{#each Object.entries(months) as [value, label]}
+				<div
+					class="surface-ebfedfb119"
+					use:melt={$option({ value, label })}
+				>
+					<div class="check {$isSelected(value) ? 'preview-block' : 'preview-hidden'}">
+						<Check class="surface-d7af6fc67e" />
+					</div>
+					{label}
+				</div>
+			{/each}
+		</div>
+	{/if}
+</div>
+
+<style lang="scss">
+	.check {
+		position: absolute;
+		left: 0.5rem;
+		top: 50%;
+		z-index: 20;
+		translate: 0 calc(-50% + 1px);
+		color: rgb(var(--color-magnum-500) / 1);
+	}
+</style>

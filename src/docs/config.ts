@@ -12,7 +12,8 @@ export const siteConfig = {
 		github: 'https://github.com/melt-ui/melt-ui',
 		discord: 'https://melt-ui.com/discord',
 	},
-	keywords: 'meltui,svelte,sveltekit,sveltekit components,svelte headless, radix svelte',
+	keywords:
+		'meltui,svelte,sveltekit,sveltekit components,svelte headless, radix svelte',
 };
 
 type NavConfig = {

@@ -1,8 +1,8 @@
-import type { CreateRadioGroupProps } from '$lib/index.js';
 import { render } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { describe, it } from 'vitest';
+import type { CreateRadioGroupProps } from '$lib/index.js';
 import { testKbd as kbd } from '../utils.js';
 import RadioGroupTest from './RadioGroupTest.svelte';
 
@@ -26,7 +26,9 @@ const items = [
 ];
 
 function setup(
-	props: CreateRadioGroupProps & { items?: { value: string; disabled: boolean }[] } = {}
+	props: CreateRadioGroupProps & {
+		items?: { value: string; disabled: boolean }[];
+	} = {},
 ) {
 	const user = userEvent.setup();
 	return { ...render(RadioGroupTest, props), user };

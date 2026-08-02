@@ -1,3 +1,4 @@
+import { derived, readonly, writable } from 'svelte/store';
 import {
 	addEventListener,
 	addMeltEventListener,
@@ -16,7 +17,6 @@ import {
 } from '$lib/internal/helpers/index.js';
 import { safeOnMount } from '$lib/internal/helpers/lifecycle.js';
 import type { Defaults, MeltActionReturn } from '$lib/internal/types.js';
-import { derived, readonly, writable } from 'svelte/store';
 import { createHiddenInput } from '../hidden-input/create.js';
 import type { RadioGroupEvents } from './events.js';
 import type { CreateRadioGroupProps, RadioGroupItemProps } from './types.js';
@@ -35,13 +35,17 @@ const prefix = 'radio-group';
 const { name, selector } = createElHelpers<RadioGroupParts>(prefix);
 
 export function createRadioGroup(props?: CreateRadioGroupProps) {
-	const withDefaults = { ...defaults, ...props } satisfies CreateRadioGroupProps;
+	const withDefaults = {
+		...defaults,
+		...props,
+	} satisfies CreateRadioGroupProps;
 
 	// options
 	const options = toWritableStores(omit(withDefaults, 'value'));
 	const { disabled, required, loop, orientation, name: nameProp } = options;
 
-	const valueWritable = withDefaults.value ?? writable(withDefaults.defaultValue);
+	const valueWritable =
+		withDefaults.value ?? writable(withDefaults.defaultValue);
 	const value = overridable(valueWritable, withDefaults?.onValueChange);
 
 	/** Lifecycle & Effects */
@@ -96,7 +100,8 @@ export function createRadioGroup(props?: CreateRadioGroupProps) {
 		returned: ([$value, $orientation, $disabled]) => {
 			return (props: RadioGroupItemProps) => {
 				const itemValue = typeof props === 'string' ? props : props.value;
-				const argDisabled = typeof props === 'string' ? false : !!props.disabled;
+				const argDisabled =
+					typeof props === 'string' ? false : !!props.disabled;
 				const disabled = $disabled || argDisabled;
 
 				const checked = $value === itemValue;
@@ -129,13 +134,19 @@ export function createRadioGroup(props?: CreateRadioGroupProps) {
 					const root = el.closest(selector());
 					if (!isHTMLElement(root)) return;
 
-					const items = Array.from(root.querySelectorAll(selector('item'))).filter(
-						(el): el is HTMLElement => isHTMLElement(el) && !el.hasAttribute('data-disabled')
+					const items = Array.from(
+						root.querySelectorAll(selector('item')),
+					).filter(
+						(el): el is HTMLElement =>
+							isHTMLElement(el) && !el.hasAttribute('data-disabled'),
 					);
 					const currentIndex = items.indexOf(el);
 
 					const dir = getElemDirection(root);
-					const { nextKey, prevKey } = getDirectionalKeys(dir, orientation.get());
+					const { nextKey, prevKey } = getDirectionalKeys(
+						dir,
+						orientation.get(),
+					);
 					const $loop = loop.get();
 
 					let itemToFocus: HTMLElement | null = null;
@@ -167,7 +178,7 @@ export function createRadioGroup(props?: CreateRadioGroupProps) {
 						itemToFocus.focus();
 						selectItem(itemToFocus);
 					}
-				})
+				}),
 			);
 
 			return {

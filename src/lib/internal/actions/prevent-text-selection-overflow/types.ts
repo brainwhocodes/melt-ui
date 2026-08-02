@@ -1,5 +1,5 @@
-import type { WithGet } from '$lib/internal/helpers/withGet.js';
 import type { Readable } from 'svelte/store';
+import type { WithGet } from '$lib/internal/helpers/withGet.js';
 
 export type PreventTextSelectionOverflowConfig = {
 	/**

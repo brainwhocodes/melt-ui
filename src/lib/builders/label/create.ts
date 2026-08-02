@@ -1,4 +1,7 @@
-import { addMeltEventListener, makeElement } from '$lib/internal/helpers/index.js';
+import {
+	addMeltEventListener,
+	makeElement,
+} from '$lib/internal/helpers/index.js';
 import type { MeltActionReturn } from '$lib/internal/types.js';
 import type { LabelEvents } from './events.js';
 

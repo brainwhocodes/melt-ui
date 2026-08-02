@@ -44,6 +44,9 @@
 	export let width = '490px';
 
 	export let type: $$Props['type'] = 'hover';
+	export let showReplacementControls = false;
+	let viewportKey = 0;
+	let contentKey = 0;
 
 	const {
 		elements: { root, content, viewport, corner, scrollbarY, thumbY, scrollbarX, thumbX },
@@ -55,45 +58,54 @@
 	);
 </script>
 
+{#if showReplacementControls}
+	<button on:click={() => (contentKey += 1)}>Replace content</button>
+	<button on:click={() => (viewportKey += 1)}>Replace viewport</button>
+{/if}
+
 <div
 	use:melt={$root}
-	class="relative overflow-hidden rounded-md border bg-white text-magnum-900 shadow-lg"
+	class="surface-dd98ba04e8"
 	data-testid="root"
 	style:width
 	style:height
 >
-	<div use:melt={$viewport} class="h-full w-full rounded-[inherit]" data-testid="viewport">
+	{#key viewportKey}
+	<div use:melt={$viewport} class="surface-21c0571fcb" data-testid="viewport">
+			{#key contentKey}
 		<div use:melt={$content} data-testid="content">
-			<div class="w-[300px] p-4" data-testid="inner-content">
-				<h4 class="mb-4 font-semibold leading-none">Endless Flavors</h4>
+			<div class="surface-c7bdfb16e3" data-testid="inner-content">
+				<h4 class="surface-326c4ede34">Endless Flavors</h4>
 				<div data-testid="hover">Hover me please</div>
 				{#each flavors as flavor (flavor)}
-					<div class="text-sm">
+					<div class="surface-6c4a72920c">
 						{flavor}
 					</div>
-					<div role="separator" class="my-2 h-px w-full bg-magnum-600" />
+					<div role="separator" class="surface-e612aa3495" />
 				{/each}
 			</div>
 		</div>
+			{/key}
 	</div>
+	{/key}
 	<div
 		use:melt={$scrollbarY}
 		data-testid="scrollbar-y"
-		class="flex h-full w-2.5 border-l border-l-transparent bg-magnum-800/10 p-px"
+		class="surface-ef0fe9b491"
 	>
 		<div
 			use:melt={$thumbY}
 			data-testid="thumb-y"
-			class="relative flex-1 rounded-full bg-magnum-600"
+			class="surface-11f7db2078"
 		/>
 	</div>
 
 	<div
 		use:melt={$scrollbarX}
 		data-testid="scrollbar-x"
-		class="flex h-full w-2.5 border-l border-l-transparent bg-magnum-800/10 p-px"
+		class="surface-dc91fd5f6b"
 	>
-		<div use:melt={$thumbX} data-testid="thumb-x" class="relative rounded-full bg-magnum-600" />
+		<div use:melt={$thumbX} data-testid="thumb-x" class="surface-c948684bbb" />
 	</div>
 	<div use:melt={$corner} />
 </div>

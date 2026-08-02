@@ -40,22 +40,22 @@
 </script>
 
 <PreviewWrapper>
-	<div class="flex w-full flex-col items-center gap-3">
+	<div class="surface-9dd628d74a">
 		<div>
-			<span use:melt={$label} class="font-medium text-magnum-900">Due Date</span>
+			<span use:melt={$label} class="surface-2d133f55f1">Due Date</span>
 			<div
 				use:melt={$field}
-				class="mt-0.5 flex w-full min-w-[200px] items-center rounded-lg border bg-white p-1.5 text-magnum-900"
+				class="surface-483187858d"
 			>
 				{#each $segmentContents as seg, i (i)}
-					<div use:melt={$segment(seg.part)} class="segment whitespace-nowrap">
+					<div use:melt={$segment(seg.part)} class="segment surface-8ec0b1f4d6">
 						{seg.value}
 					</div>
 				{/each}
 			</div>
 		</div>
-		<div class="flex w-full">
-			<p class="text-sm font-medium text-magnum-900">
+		<div class="surface-cb34ab7bf2">
+			<p class="surface-61ba043aa0">
 				<span> Selected Date: </span>
 				{#if $insideValue}
 					{$insideValue}
@@ -65,15 +65,29 @@
 	</div>
 </PreviewWrapper>
 
-<style lang="postcss">
+<style lang="scss">
 	.segment:not([data-segment='literal']) {
-		@apply px-0.5;
-	}
-	.segment {
-		@apply data-[segment="dayPeriod"]:pl-0.5 data-[segment="hour"]:pl-1 data-[segment="timeZoneName"]:pl-1;
-	}
+    padding-left: 0.125rem;
+    padding-right: 0.125rem
+}
+	.segment[data-segment="dayPeriod"] {
+    padding-left: 0.125rem
+}
+	.segment[data-segment="hour"] {
+    padding-left: 0.25rem
+}
+	.segment[data-segment="timeZoneName"] {
+    padding-left: 0.25rem
+}
 
 	.btn {
-		@apply rounded bg-magnum-600 p-1 text-xs text-white;
-	}
+    border-radius: 0.25rem;
+    
+    background-color: rgb(var(--color-magnum-600) / 1);
+    padding: 0.25rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    
+    color: rgb(var(--color-white) / 1)
+}
 </style>

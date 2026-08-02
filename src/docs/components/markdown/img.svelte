@@ -8,4 +8,4 @@
 	export let alt: HTMLImgAttributes['alt'] = undefined;
 </script>
 
-<img {src} {alt} class={cn('rounded-md', className)} {...$$restProps} />
+<img {src} {alt} class={cn('surface-46938324e7', className)} {...$$restProps} />

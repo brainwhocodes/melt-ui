@@ -1,15 +1,16 @@
 //@ts-check
-import { resolve } from 'path';
-import { fileURLToPath } from 'url';
-import { visit } from 'unist-util-visit';
-import remarkGfm from 'remark-gfm';
-import rehypePrettyCode from 'rehype-pretty-code';
-import { codeImport } from 'remark-code-import';
-import { toHtml } from 'hast-util-to-html';
+
 import { escapeSvelte } from '@huntabyte/mdsvex';
+import { toHtml } from 'hast-util-to-html';
+import { resolve } from 'path';
+import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeRewrite from 'rehype-rewrite';
-import { processMeltAttributes } from './src/docs/pp.js';
+import { codeImport } from 'remark-code-import';
+import remarkGfm from 'remark-gfm';
 import { getHighlighter } from 'shiki';
+import { visit } from 'unist-util-visit';
+import { fileURLToPath } from 'url';
+import { processMeltAttributes } from './src/docs/pp.js';
 
 /**
  * @typedef {import('mdast').Root} MdastRoot
@@ -177,12 +178,20 @@ function rehypeHandleMetadata() {
 				}
 
 				const preElement = node.children.at(-1);
-				if (preElement && 'tagName' in preElement && preElement.tagName !== 'pre') {
+				if (
+					preElement &&
+					'tagName' in preElement &&
+					preElement.tagName !== 'pre'
+				) {
 					return;
 				}
 
 				const firstChild = node.children.at(0);
-				if (firstChild && 'tagName' in firstChild && firstChild.tagName === 'figcaption') {
+				if (
+					firstChild &&
+					'tagName' in firstChild &&
+					firstChild.tagName === 'figcaption'
+				) {
 					node.properties['data-metadata'] = '';
 					const lastChild = node.children.at(-1);
 					if (lastChild && 'properties' in lastChild) {
@@ -225,7 +234,7 @@ function rehypeRenderCode() {
 						toHtml(codeEl, {
 							allowDangerousCharacters: true,
 							allowDangerousHtml: true,
-						})
+						}),
 					);
 
 					//@ts-expect-error we're modifying the node type

@@ -34,60 +34,61 @@
 <div
 	use:melt={$root}
 	class={cn(
-		'flex min-w-max items-center gap-4 rounded-xl bg-white px-3 py-3 text-neutral-700 shadow-sm lg:w-[35rem]',
+		'surface-bef8511d80',
 		className
 	)}
 >
-	<div class="flex items-center gap-1" use:melt={$fontGroup}>
+	<div class="surface-e9cf8f9a56" use:melt={$fontGroup}>
 		<button class="item" use:melt={$fontItem('bold')}>
-			<Bold class="size-5" />
+			<Bold class="surface-bcb0e128e4" />
 		</button>
 		<button class="item" use:melt={$fontItem('italic')}>
-			<Italic class="size-5" />
+			<Italic class="surface-cca93d5dd6" />
 		</button>
 		<button class="item" use:melt={$fontItem('strikethrough')}>
-			<Strikethrough class="size-5" />
+			<Strikethrough class="surface-ba1e19b6ef" />
 		</button>
 	</div>
 	<div class="separator" use:melt={$separator} />
-	<div class="flex items-center gap-1" use:melt={$alignGroup}>
+	<div class="surface-4c199fdd03" use:melt={$alignGroup}>
 		<button class="item" use:melt={$alignItem('left')}>
-			<AlignLeft class="size-5" />
+			<AlignLeft class="surface-ddd135a5ed" />
 		</button>
 		<button class="item" use:melt={$alignItem('center')}>
-			<AlignCenter class="size-5" />
+			<AlignCenter class="surface-07b464d72c" />
 		</button>
 		<button class="item" use:melt={$alignItem('right')}>
-			<AlignRight class="size-5" />
+			<AlignRight class="surface-cdcb74f681" />
 		</button>
 	</div>
 	<div class="separator" use:melt={$separator} />
-	<a href="/" class="link nowrap flex-shrink-0 transition" use:melt={$link}> Edited 2 hours ago </a>
+	<a href="/" class="link nowrap surface-a0320fd187" use:melt={$link}> Edited 2 hours ago </a>
 	<button
-		class="ml-auto rounded-lg bg-magnum-300 px-3 py-1 font-medium text-magnum-900
-    transition hover:opacity-75 active:opacity-50"
+		class="preview-text-magnum-900  surface-58b5431f81"
 		use:melt={$button}>Save</button
 	>
 </div>
 
-<style lang="postcss">
+<style lang="scss">
 	.item {
-		padding: theme('spacing.1');
-		border-radius: theme('borderRadius.md');
-		color: theme('colors.neutral.400');
+		padding: 0.25rem;
+		border-radius: 0.375rem;
+		color: rgb(var(--color-neutral-400) / 1);
 		position: relative;
+		transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 150ms;
+	}
 
-		@apply transition;
-
-		&:hover {
+		.item:hover {
 			opacity: 0.75;
 		}
 
-		&[data-state='on'] {
-			color: theme('colors.magnum.800');
+		.item[data-state='on'] {
+			color: rgb(var(--color-magnum-800) / 1);
 		}
 
-		&::after {
+		.item::after {
 			position: absolute;
 			left: 50%;
 			bottom: -0.25rem;
@@ -95,20 +96,21 @@
 			content: '';
 			width: 0.25rem;
 			height: 0.25rem;
-			border-radius: theme('borderRadius.full');
-			background-color: theme('colors.magnum.400');
+			border-radius: 9999px;
+			background-color: rgb(var(--color-magnum-400) / 1);
 			opacity: 0;
-			@apply transition;
+			transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+			transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+			transition-duration: 150ms;
 		}
 
-		&:focus::after {
+		.item:focus::after {
 			opacity: 1;
 		}
-	}
 
 	.separator {
 		width: 1px;
-		background-color: theme('colors.neutral.300');
+		background-color: rgb(var(--color-neutral-300) / 1);
 		align-self: stretch;
 	}
 </style>

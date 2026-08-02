@@ -9,7 +9,12 @@ import { dequal as deepEqual } from 'dequal';
  * @param increment the number of elements to move forward.
  * @param loop loop to the beginning of the array if the target index is out of bounds?
  */
-export function back<T>(array: T[], index: number, increment: number, loop = true): T {
+export function back<T>(
+	array: T[],
+	index: number,
+	increment: number,
+	loop = true,
+): T {
 	const previousIndex = index - increment;
 	if (previousIndex <= 0) {
 		return loop ? array[array.length - 1] : array[0];
@@ -26,7 +31,12 @@ export function back<T>(array: T[], index: number, increment: number, loop = tru
  * @param increment the number of elements to move forward.
  * @param loop loop to the beginning of the array if the target index is out of bounds?
  */
-export function forward<T>(array: T[], index: number, increment: number, loop = true): T {
+export function forward<T>(
+	array: T[],
+	index: number,
+	increment: number,
+	loop = true,
+): T {
 	const nextIndex = index + increment;
 	if (nextIndex > array.length - 1) {
 		return loop ? array[0] : array[array.length - 1];
@@ -96,7 +106,7 @@ export function wrapArray<T>(array: T[], startIndex: number): T[] {
 export function toggle<T>(
 	item: T,
 	array: T[],
-	compare: (itemA: T, itemB: T) => boolean = deepEqual
+	compare: (itemA: T, itemB: T) => boolean = deepEqual,
 ): T[] {
 	const itemIdx = array.findIndex((innerItem) => compare(innerItem, item));
 	if (itemIdx !== -1) {

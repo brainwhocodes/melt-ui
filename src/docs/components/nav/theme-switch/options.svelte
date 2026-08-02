@@ -11,11 +11,9 @@
 {#each themes as { value, label }}
 	<button
 		use:melt={$option({ value, label })}
-		class="flex items-center gap-2 rounded-md
-		px-2 py-1 text-neutral-400 transition-colors
-		data-[highlighted]:bg-neutral-800 data-[highlighted]:text-neutral-300 data-[selected]:!text-white"
+		class="preview-shape-md preview-space-x-2 preview-transition-colors preview-state-highlighted-surface-neutral-800 surface-f9219006a2"
 	>
 		<ThemeIcon theme={value} />
-		<span class="text-sm font-semibold">{label}</span>
+		<span class="surface-a4b52513de">{label}</span>
 	</button>
 {/each}

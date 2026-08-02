@@ -7,20 +7,20 @@
 
 <kbd class={cn(className)}><slot /></kbd>
 
-<style>
+<style lang="scss">
 	kbd {
 		display: inline-block;
-		padding: theme('spacing[0.5]') theme('spacing[1.5]');
-		color: theme('colors.neutral.100');
+		padding: 0.125rem 0.375rem;
+		color: rgb(var(--color-neutral-100) / 1);
 		white-space: nowrap;
 
-		margin-block: theme('spacing.1');
+		margin-block: 0.25rem;
 
-		background-color: theme('colors.neutral.800/0.8');
-		border: solid 1px theme('colors.neutral.500');
-		border-bottom-color: theme('colors.neutral.600');
-		border-radius: theme('borderRadius.DEFAULT');
-		box-shadow: inset 0 -1px 0 theme('colors.neutral.300/0.5');
-		font-size: theme('fontSize.xs');
+		background-color: rgb(var(--color-neutral-800) / 0.8);
+		border: solid 1px rgb(var(--color-neutral-500) / 1);
+		border-bottom-color: rgb(var(--color-neutral-600) / 1);
+		border-radius: 0.25rem;
+		box-shadow: inset 0 -1px 0 rgb(var(--color-neutral-300) / 0.5);
+		font-size: 0.75rem;
 	}
 </style>

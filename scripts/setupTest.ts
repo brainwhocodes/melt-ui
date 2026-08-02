@@ -1,14 +1,15 @@
 // setupTest.ts
 /* eslint-disable @typescript-eslint/no-empty-function */
-import * as matchers from '@testing-library/jest-dom/matchers';
-import { expect, vi } from 'vitest';
+
 import type { Navigation, Page } from '@sveltejs/kit';
+import { configure } from '@testing-library/dom';
+import * as matchers from '@testing-library/jest-dom/matchers';
+import { toHaveNoViolations } from 'jest-axe';
 import { readable } from 'svelte/store';
+import { expect, vi } from 'vitest';
 import * as environment from '$app/environment';
 import * as navigation from '$app/navigation';
 import * as stores from '$app/stores';
-import { toHaveNoViolations } from 'jest-axe';
-import { configure } from '@testing-library/dom';
 
 // Add custom jest matchers
 expect.extend(matchers);
@@ -58,7 +59,10 @@ vi.mock('$app/stores', (): typeof stores => {
 			form: undefined,
 			state: {},
 		});
-		const updated = { subscribe: readable(false).subscribe, check: async () => false };
+		const updated = {
+			subscribe: readable(false).subscribe,
+			check: async () => false,
+		};
 
 		return { navigating, page, updated };
 	};

@@ -1,4 +1,10 @@
-import { get, writable, type Readable, type StoresValues, type Writable } from 'svelte/store';
+import {
+	get,
+	type Readable,
+	type StoresValues,
+	type Writable,
+	writable,
+} from 'svelte/store';
 
 type ReadableValue<T> = T extends Readable<infer V> ? V : never;
 
@@ -50,12 +56,14 @@ withGet.derived = function <
 		| WithGet<Readable<unknown>>
 		| [WithGet<Readable<unknown>>, ...Array<WithGet<Readable<unknown>>>]
 		| Array<WithGet<Readable<unknown>>>,
-	T
+	T,
 >(stores: S, fn: (values: StoresValues<S>) => T): WithGet<Readable<T>> {
 	const subscribers: Map<(value: T) => void, Array<() => void>> = new Map();
 
 	const get = () => {
-		const values = Array.isArray(stores) ? stores.map((store) => store.get()) : stores.get();
+		const values = Array.isArray(stores)
+			? stores.map((store) => store.get())
+			: stores.get();
 
 		return fn(values as StoresValues<S>);
 	};
@@ -67,7 +75,7 @@ withGet.derived = function <
 			unsubscribers.push(
 				store.subscribe(() => {
 					subscriber(get());
-				})
+				}),
 			);
 		});
 
@@ -92,7 +100,9 @@ withGet.derived = function <
 	};
 };
 
-export function addGetToStores<T extends Record<string, Writable<unknown>>>(stores: T) {
+export function addGetToStores<T extends Record<string, Writable<unknown>>>(
+	stores: T,
+) {
 	return Object.keys(stores).reduce(
 		(acc, key) => {
 			return {
@@ -102,6 +112,6 @@ export function addGetToStores<T extends Record<string, Writable<unknown>>>(stor
 		},
 		{} as {
 			[K in keyof T]: WithGet<T[K]>;
-		}
+		},
 	);
 }

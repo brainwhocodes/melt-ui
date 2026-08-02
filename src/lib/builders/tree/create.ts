@@ -1,19 +1,19 @@
+import { derived, type Writable, writable } from 'svelte/store';
 import {
 	addMeltEventListener,
-	makeElement,
 	createElHelpers,
 	executeCallbacks,
 	getElementByMeltId,
-	isHTMLElement,
 	isHidden,
+	isHTMLElement,
 	isLetter,
 	kbd,
 	last,
+	makeElement,
 	overridable,
 	styleToString,
 } from '$lib/internal/helpers/index.js';
 import type { Defaults, MeltActionReturn } from '$lib/internal/types.js';
-import { derived, writable, type Writable } from 'svelte/store';
 
 import { generateIds } from '../../internal/helpers/id.js';
 import type { TreeEvents } from './events.js';
@@ -43,8 +43,12 @@ export function createTreeView(args?: CreateTreeViewProps) {
 	const lastFocusedId: Writable<string | null> = writable(null);
 	const selectedItem: Writable<HTMLElement | null> = writable(null);
 
-	const expandedWritable = withDefaults.expanded ?? writable(withDefaults.defaultExpanded);
-	const expanded = overridable(expandedWritable, withDefaults?.onExpandedChange);
+	const expandedWritable =
+		withDefaults.expanded ?? writable(withDefaults.defaultExpanded);
+	const expanded = overridable(
+		expandedWritable,
+		withDefaults?.onExpandedChange,
+	);
 
 	const selectedId = derived([selectedItem], ([$selectedItem]) => {
 		return $selectedItem?.getAttribute('data-id');
@@ -123,7 +127,11 @@ export function createTreeView(args?: CreateTreeViewProps) {
 					}
 
 					const rootEl = getElementByMeltId(metaIds.tree);
-					if (!rootEl || !isHTMLElement(node) || node.getAttribute('role') !== 'treeitem') {
+					if (
+						!rootEl ||
+						!isHTMLElement(node) ||
+						node.getAttribute('role') !== 'treeitem'
+					) {
 						return;
 					}
 
@@ -166,7 +174,9 @@ export function createTreeView(args?: CreateTreeViewProps) {
 							// Focus parent group
 							const parentGroup = node?.closest('[role="group"]');
 							const groupId = parentGroup?.getAttribute('data-group-id');
-							const item = items.find((item) => item.getAttribute('data-id') === groupId);
+							const item = items.find(
+								(item) => item.getAttribute('data-id') === groupId,
+							);
 							if (!item) return;
 							setFocusedItem(item as HTMLElement);
 						}
@@ -197,14 +207,16 @@ export function createTreeView(args?: CreateTreeViewProps) {
 						let nextFocusIdx = -1;
 
 						// Check elements after currently focused one.
-						let foundNextFocusable = values.slice(nodeIdx + 1).some((item, i) => {
-							if (item.value?.toLowerCase()[0] === key) {
-								nextFocusIdx = nodeIdx + 1 + i;
-								return true;
-							}
+						let foundNextFocusable = values
+							.slice(nodeIdx + 1)
+							.some((item, i) => {
+								if (item.value?.toLowerCase()[0] === key) {
+									nextFocusIdx = nodeIdx + 1 + i;
+									return true;
+								}
 
-							return false;
-						});
+								return false;
+							});
 
 						if (!foundNextFocusable) {
 							/**
@@ -238,7 +250,7 @@ export function createTreeView(args?: CreateTreeViewProps) {
 				}),
 				addMeltEventListener(node, 'focus', () => {
 					lastFocusedId.update((p) => node.getAttribute('data-id') ?? p);
-				})
+				}),
 			);
 
 			return {
@@ -256,11 +268,15 @@ export function createTreeView(args?: CreateTreeViewProps) {
 				({
 					role: 'group',
 					'data-group-id': opts.id,
-					hidden: !forceVisible && !$expanded.includes(opts.id) ? true : undefined,
+					hidden:
+						!forceVisible && !$expanded.includes(opts.id) ? true : undefined,
 					style: styleToString({
-						display: !forceVisible && !$expanded.includes(opts.id) ? 'none' : undefined,
+						display:
+							!forceVisible && !$expanded.includes(opts.id)
+								? 'none'
+								: undefined,
 					}),
-				} as const);
+				}) as const;
 		},
 	});
 
@@ -283,7 +299,7 @@ export function createTreeView(args?: CreateTreeViewProps) {
 
 		// Select all 'treeitem' li elements within our root element.
 		items = Array.from(rootEl.querySelectorAll('[role="treeitem"]')).filter(
-			(el) => !isHidden(el as HTMLElement)
+			(el) => !isHidden(el as HTMLElement),
 		) as HTMLElement[];
 
 		return items;
@@ -302,7 +318,11 @@ export function createTreeView(args?: CreateTreeViewProps) {
 	}
 
 	function toggleChildrenElements(el: HTMLElement) {
-		const { hasChildren, expanded: expandedAttr, dataId } = getElementAttributes(el);
+		const {
+			hasChildren,
+			expanded: expandedAttr,
+			dataId,
+		} = getElementAttributes(el);
 		if (!hasChildren || expandedAttr === null || dataId === null) return;
 
 		if (expandedAttr === 'false') {

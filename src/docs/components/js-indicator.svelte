@@ -2,10 +2,10 @@
 	import { browser } from '$app/environment';
 </script>
 
-<!-- Dev mode only tailwind indicator help with making things more responsive -->
+<!-- Dev-only indicator for responsive development -->
 
 <div
-	class="fixed bottom-1 left-8 z-50 flex h-6 w-6 items-center justify-center rounded-full bg-neutral-800 p-3 font-mono text-xs text-white"
+	class="surface-68e7cc63b8"
 	data-browser={browser ? '' : undefined}
 >
 	{browser ? 'js' : 'ssr'}

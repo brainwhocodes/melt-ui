@@ -8,8 +8,8 @@ import {
 	genElements,
 	genProps,
 	propsToOptions,
-	toKebabCase,
 } from '$docs/utils/index.js';
+import { toKebabCase } from '$docs/utils/string.js';
 
 import { menuEvents } from '$lib/builders/menu/events.js';
 
@@ -117,7 +117,8 @@ function getMenuCreateCheckboxItemSchema(): APISchema {
 	return {
 		title: 'createCheckboxItem',
 		isBuilder: true,
-		description: 'The builder function used to create checkbox items for menu elements',
+		description:
+			'The builder function used to create checkbox items for menu elements',
 		props: genProps('menu checkbox item', [
 			...CHECKBOX_ITEM_OPTION_PROPS,
 			{
@@ -128,13 +129,15 @@ function getMenuCreateCheckboxItemSchema(): APISchema {
 			{
 				name: 'checked',
 				type: 'Writable<boolean>',
-				description: 'A writable store that controls the checked state of the checkbox.',
+				description:
+					'A writable store that controls the checked state of the checkbox.',
 				see: SEE.BRING_YOUR_OWN_STORE,
 			},
 			{
 				name: 'onCheckedChange',
 				type: 'ChangeFn<boolean>',
-				description: 'A function that is called when the checked state of the checkbox changes.',
+				description:
+					'A function that is called when the checked state of the checkbox changes.',
 				see: SEE.BRING_YOUR_OWN_STORE,
 			},
 		]),
@@ -148,7 +151,8 @@ function getMenuCreateCheckboxItemSchema(): APISchema {
 			{
 				name: 'checked',
 				type: 'Writable<boolean>',
-				description: 'A writable store with the checked state of the checkbox item.',
+				description:
+					'A writable store with the checked state of the checkbox item.',
 			},
 		],
 		options: propsToOptions('submenu', CHECKBOX_ITEM_OPTION_PROPS),
@@ -312,7 +316,8 @@ function getMenuRadioGroupBuilderSchema(): APISchema {
 			{
 				name: 'value',
 				type: 'Writable<string | null>',
-				description: 'A writable store containing the current value of the radio group.',
+				description:
+					'A writable store containing the current value of the radio group.',
 			},
 		],
 	});
@@ -333,7 +338,8 @@ export function getMenuSeparatorSchema(name: string) {
 function getMenuSubmenuBuilderSchema() {
 	return builderSchema('submenu', {
 		title: 'createSubMenu',
-		description: 'The builder function used to create submenus for context & dropdown menus.',
+		description:
+			'The builder function used to create submenus for context & dropdown menus.',
 		props: [
 			PROPS.POSITIONING({ default: 'placement: "right-start"' }),
 			PROPS.ARROW_SIZE,
@@ -493,7 +499,8 @@ function getMenuSubTriggerSchema(name: string) {
 
 function getMenuGroupSchema(menuName: Menu) {
 	return elementSchema('group', {
-		description: 'A function which takes in a unique key to group menu items together.',
+		description:
+			'A function which takes in a unique key to group menu items together.',
 		props: [
 			{
 				name: 'key',
@@ -512,7 +519,8 @@ function getMenuGroupSchema(menuName: Menu) {
 
 function getMenuGroupLabelSchema(menuName: Menu) {
 	return elementSchema('groupLabel', {
-		description: 'A function which takes in a unique key to group menu items together.',
+		description:
+			'A function which takes in a unique key to group menu items together.',
 		props: [
 			{
 				name: 'key',
@@ -552,7 +560,8 @@ export function getMenuKeyboardSchema(): KeyboardSchema {
 		},
 		{
 			key: KBD.ARROW_RIGHT,
-			behavior: 'When focused on a `subTrigger`, opens the `subMenu` and focuses the first item.',
+			behavior:
+				'When focused on a `subTrigger`, opens the `subMenu` and focuses the first item.',
 		},
 		{
 			key: KBD.ARROW_LEFT,

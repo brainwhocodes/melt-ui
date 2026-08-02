@@ -2,10 +2,10 @@ import { act, render, waitFor } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { describe } from 'vitest';
-import { testKbd as kbd } from '../utils.js';
-import ComboboxTest from './ComboboxTest.svelte';
 import type { ComboboxOptionProps } from '$lib/index.js';
+import { testKbd as kbd } from '../utils.js';
 import ComboboxForceVisibleTest from './ComboboxForceVisibleTest.svelte';
+import ComboboxTest from './ComboboxTest.svelte';
 
 const options: ComboboxOptionProps[] = [
 	{
@@ -91,11 +91,30 @@ describe('Combobox', () => {
 
 	test('Options with undefined values can be selected', async () => {
 		const options: ComboboxOptionProps[] = [
-			{ label: '1234', value: { id: 1234, station: undefined, lastTransmission: '2023-01-01' } },
-			{ label: '4321', value: { id: 4321, station: undefined, lastTransmission: '2023-01-01' } },
-			{ label: '2341', value: { id: 2341, station: undefined, lastTransmission: '2023-01-01' } },
-			{ label: '3412', value: { id: 3412, station: undefined, lastTransmission: '2023-01-01' } },
-			{ label: '5656', value: { id: 5656, station: 'Station 1', lastTransmission: '2023-01-01' } },
+			{
+				label: '1234',
+				value: { id: 1234, station: undefined, lastTransmission: '2023-01-01' },
+			},
+			{
+				label: '4321',
+				value: { id: 4321, station: undefined, lastTransmission: '2023-01-01' },
+			},
+			{
+				label: '2341',
+				value: { id: 2341, station: undefined, lastTransmission: '2023-01-01' },
+			},
+			{
+				label: '3412',
+				value: { id: 3412, station: undefined, lastTransmission: '2023-01-01' },
+			},
+			{
+				label: '5656',
+				value: {
+					id: 5656,
+					station: 'Station 1',
+					lastTransmission: '2023-01-01',
+				},
+			},
 		];
 
 		const { getByTestId } = render(ComboboxTest, { options });
@@ -143,7 +162,9 @@ describe('Combobox', () => {
 
 	test("Doesn't close on outside click if defaultPrevented on `onOutsideClick` handler", async () => {
 		const user = userEvent.setup();
-		const { getByTestId } = render(ComboboxTest, { onOutsideClick: (e) => e.preventDefault() });
+		const { getByTestId } = render(ComboboxTest, {
+			onOutsideClick: (e) => e.preventDefault(),
+		});
 		const input = getByTestId('input');
 
 		await user.click(input);
@@ -225,6 +246,54 @@ describe('Combobox', () => {
 		await waitFor(() => expect(menu).not.toBeVisible());
 	});
 
+	test('clears a stale highlight when user input filters the active option', async () => {
+		const user = userEvent.setup();
+		const { getByRole, getAllByRole } = render(ComboboxTest, {
+			options,
+			filterOnInput: true,
+		});
+		const input = getByRole('combobox');
+
+		await user.click(input);
+		await user.keyboard(kbd.ARROW_DOWN);
+		expect(input).toHaveAttribute('aria-activedescendant');
+
+		await user.keyboard('ONE');
+
+		expect(getAllByRole('option')).toHaveLength(1);
+		expect(input).not.toHaveAttribute('aria-activedescendant');
+		expect(getAllByRole('option')[0]).not.toHaveAttribute('data-highlighted');
+
+		await user.keyboard(kbd.ENTER);
+
+		expect(getByRole('status', { name: 'Selected option' })).toHaveTextContent(
+			/^$/,
+		);
+	});
+
+	test('does not select a highlighted option that became hidden before Enter', async () => {
+		const user = userEvent.setup();
+		const { getByRole, getAllByRole } = render(ComboboxTest, {
+			options,
+			showHideControl: true,
+		});
+		const input = getByRole('combobox');
+
+		await user.click(input);
+		await user.keyboard(kbd.ARROW_DOWN);
+		expect(getAllByRole('option')[0]).toHaveAttribute('data-highlighted');
+
+		await user.click(getByRole('button', { name: 'Hide first option' }));
+		expect(getAllByRole('option')[0]).toHaveAttribute('data-hidden');
+		await act(() => input.focus());
+
+		await user.keyboard(kbd.ENTER);
+
+		expect(getByRole('status', { name: 'Selected option' })).toHaveTextContent(
+			/^$/,
+		);
+	});
+
 	test.todo('Selects multiple items when `multiple` is true');
 	test.todo('Manually setting the value updates the label');
 	test.todo('Updating options and setting the value updates the label');
@@ -278,7 +347,9 @@ describe('Combobox (forceVisible)', () => {
 
 	test('Selects item when clicked', async () => {
 		const user = userEvent.setup();
-		const { getByTestId, queryByTestId } = render(ComboboxForceVisibleTest, { options });
+		const { getByTestId, queryByTestId } = render(ComboboxForceVisibleTest, {
+			options,
+		});
 		const input = getByTestId('input');
 		const getMenu = () => queryByTestId('menu');
 
@@ -301,7 +372,9 @@ describe('Combobox (forceVisible)', () => {
 		expect(getMenu()).not.toBeNull();
 		expect(getMenu()).toBeVisible();
 
-		const secondItem = getMenu()?.querySelectorAll('[data-melt-combobox-option]')[1];
+		const secondItem = getMenu()?.querySelectorAll(
+			'[data-melt-combobox-option]',
+		)[1];
 		if (!secondItem) throw new Error('No option found');
 		await user.click(secondItem);
 
@@ -310,7 +383,9 @@ describe('Combobox (forceVisible)', () => {
 	});
 
 	test('Shows correct label when defaultValue is provided', async () => {
-		const { getByTestId } = render(ComboboxForceVisibleTest, { defaultValue: 'Chocolate' });
+		const { getByTestId } = render(ComboboxForceVisibleTest, {
+			defaultValue: 'Chocolate',
+		});
 		const input = getByTestId('input');
 
 		expect(input).toHaveValue('Chocolate');
@@ -318,15 +393,36 @@ describe('Combobox (forceVisible)', () => {
 
 	test('Options with undefined values can be selected', async () => {
 		const options: ComboboxOptionProps[] = [
-			{ label: '1234', value: { id: 1234, station: undefined, lastTransmission: '2023-01-01' } },
-			{ label: '4321', value: { id: 4321, station: undefined, lastTransmission: '2023-01-01' } },
-			{ label: '2341', value: { id: 2341, station: undefined, lastTransmission: '2023-01-01' } },
-			{ label: '3412', value: { id: 3412, station: undefined, lastTransmission: '2023-01-01' } },
-			{ label: '5656', value: { id: 5656, station: 'Station 1', lastTransmission: '2023-01-01' } },
+			{
+				label: '1234',
+				value: { id: 1234, station: undefined, lastTransmission: '2023-01-01' },
+			},
+			{
+				label: '4321',
+				value: { id: 4321, station: undefined, lastTransmission: '2023-01-01' },
+			},
+			{
+				label: '2341',
+				value: { id: 2341, station: undefined, lastTransmission: '2023-01-01' },
+			},
+			{
+				label: '3412',
+				value: { id: 3412, station: undefined, lastTransmission: '2023-01-01' },
+			},
+			{
+				label: '5656',
+				value: {
+					id: 5656,
+					station: 'Station 1',
+					lastTransmission: '2023-01-01',
+				},
+			},
 		];
 
 		const user = userEvent.setup();
-		const { getByTestId, queryByTestId } = render(ComboboxForceVisibleTest, { options });
+		const { getByTestId, queryByTestId } = render(ComboboxForceVisibleTest, {
+			options,
+		});
 		const input = getByTestId('input');
 		const getMenu = () => queryByTestId('menu');
 		const getFirstItem = () => {

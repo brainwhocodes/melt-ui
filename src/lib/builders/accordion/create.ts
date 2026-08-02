@@ -1,6 +1,8 @@
+import { tick } from 'svelte';
+import { derived, writable } from 'svelte/store';
 import {
 	addMeltEventListener,
-	makeElement,
+	type ChangeFn,
 	createElHelpers,
 	disabledAttr,
 	executeCallbacks,
@@ -9,17 +11,19 @@ import {
 	getElementByMeltId,
 	isHTMLElement,
 	kbd,
+	makeElement,
 	omit,
 	overridable,
 	styleToString,
 	toWritableStores,
-	type ChangeFn,
 } from '$lib/internal/helpers/index.js';
 import type { MeltActionReturn } from '$lib/internal/types.js';
-import { tick } from 'svelte';
-import { derived, writable } from 'svelte/store';
 import type { AccordionEvents } from './events.js';
-import type { AccordionHeadingProps, AccordionItemProps, CreateAccordionProps } from './types.js';
+import type {
+	AccordionHeadingProps,
+	AccordionItemProps,
+	CreateAccordionProps,
+} from './types.js';
 
 type AccordionParts = 'trigger' | 'item' | 'content' | 'heading';
 
@@ -32,20 +36,23 @@ const defaults = {
 } satisfies CreateAccordionProps;
 
 export const createAccordion = <Multiple extends boolean = false>(
-	props?: CreateAccordionProps<Multiple>
+	props?: CreateAccordionProps<Multiple>,
 ) => {
 	const withDefaults = { ...defaults, ...props };
-	const options = toWritableStores(omit(withDefaults, 'value', 'onValueChange', 'defaultValue'));
+	const options = toWritableStores(
+		omit(withDefaults, 'value', 'onValueChange', 'defaultValue'),
+	);
 
 	const meltIds = generateIds(['root']);
 
 	const { disabled, forceVisible } = options;
 
-	const valueWritable = withDefaults.value ?? writable(withDefaults.defaultValue);
+	const valueWritable =
+		withDefaults.value ?? writable(withDefaults.defaultValue);
 
 	const value = overridable<string | string[] | undefined>(
 		valueWritable,
-		withDefaults?.onValueChange as ChangeFn<string | string[] | undefined>
+		withDefaults?.onValueChange as ChangeFn<string | string[] | undefined>,
 	);
 
 	const isSelected = (key: string, v: string | string[] | undefined) => {
@@ -62,7 +69,7 @@ export const createAccordion = <Multiple extends boolean = false>(
 		returned: () =>
 			({
 				'data-melt-id': meltIds.root,
-			} as const),
+			}) as const,
 	});
 
 	const parseItemProps = (props: AccordionItemProps) => {
@@ -112,7 +119,9 @@ export const createAccordion = <Multiple extends boolean = false>(
 				} as const;
 			};
 		},
-		action: (node: HTMLElement): MeltActionReturn<AccordionEvents['trigger']> => {
+		action: (
+			node: HTMLElement,
+		): MeltActionReturn<AccordionEvents['trigger']> => {
 			const unsub = executeCallbacks(
 				addMeltEventListener(node, 'click', () => {
 					const disabled = node.dataset.disabled === 'true';
@@ -122,7 +131,9 @@ export const createAccordion = <Multiple extends boolean = false>(
 					handleValueUpdate(itemValue);
 				}),
 				addMeltEventListener(node, 'keydown', (e) => {
-					if (![kbd.ARROW_DOWN, kbd.ARROW_UP, kbd.HOME, kbd.END].includes(e.key)) {
+					if (
+						![kbd.ARROW_DOWN, kbd.ARROW_UP, kbd.HOME, kbd.END].includes(e.key)
+					) {
 						return;
 					}
 					e.preventDefault();
@@ -139,7 +150,9 @@ export const createAccordion = <Multiple extends boolean = false>(
 					const rootEl = getElementByMeltId(meltIds.root);
 					if (!rootEl || !isHTMLElement(el)) return;
 
-					const items = Array.from(rootEl.querySelectorAll(selector('trigger')));
+					const items = Array.from(
+						rootEl.querySelectorAll(selector('trigger')),
+					);
 					const candidateItems = items.filter((item): item is HTMLElement => {
 						if (!isHTMLElement(item)) return false;
 						return item.dataset.disabled !== 'true';
@@ -152,7 +165,9 @@ export const createAccordion = <Multiple extends boolean = false>(
 						candidateItems[(elIdx + 1) % candidateItems.length].focus();
 					}
 					if (e.key === kbd.ARROW_UP) {
-						candidateItems[(elIdx - 1 + candidateItems.length) % candidateItems.length].focus();
+						candidateItems[
+							(elIdx - 1 + candidateItems.length) % candidateItems.length
+						].focus();
 					}
 					if (e.key === kbd.HOME) {
 						candidateItems[0].focus();
@@ -160,7 +175,7 @@ export const createAccordion = <Multiple extends boolean = false>(
 					if (e.key === kbd.END) {
 						candidateItems[candidateItems.length - 1].focus();
 					}
-				})
+				}),
 			);
 
 			return {
@@ -191,7 +206,7 @@ export const createAccordion = <Multiple extends boolean = false>(
 				const triggerId = generateId();
 
 				const parentTrigger = document.querySelector(
-					`${selector('trigger')}, [data-value="${node.dataset.value}"]`
+					`${selector('trigger')}, [data-value="${node.dataset.value}"]`,
 				);
 				if (!isHTMLElement(parentTrigger)) return;
 

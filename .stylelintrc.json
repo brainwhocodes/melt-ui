@@ -1,0 +1,52 @@
+{
+	"extends": ["stylelint-config-standard-scss"],
+	"overrides": [
+		{
+			"files": ["**/*.svelte"],
+			"customSyntax": "postcss-html"
+		},
+		{
+			"files": ["**/*.scss"],
+			"customSyntax": "postcss-scss"
+		}
+	],
+	"rules": {
+		"alpha-value-notation": null,
+		"font-family-name-quotes": null,
+		"at-rule-empty-line-before": null,
+		"at-rule-no-unknown": null,
+		"block-no-empty": null,
+		"color-function-alias-notation": null,
+		"color-function-notation": null,
+		"declaration-block-no-duplicate-properties": null,
+		"declaration-block-no-redundant-longhand-properties": null,
+		"declaration-empty-line-before": null,
+		"declaration-property-value-keyword-no-deprecated": null,
+		"declaration-property-value-no-unknown": null,
+		"function-no-unknown": null,
+		"length-zero-no-unit": null,
+		"media-feature-range-notation": null,
+		"no-descending-specificity": null,
+		"number-max-precision": null,
+		"property-no-deprecated": null,
+		"property-no-unknown": null,
+		"property-no-vendor-prefix": null,
+		"rule-empty-line-before": null,
+		"selector-attribute-quotes": null,
+		"selector-class-pattern": null,
+		"selector-pseudo-class-no-unknown": null,
+		"selector-pseudo-element-no-unknown": null,
+		"scss/at-else-closing-brace-newline-after": null,
+		"scss/at-else-closing-brace-space-after": null,
+		"scss/at-else-empty-line-before": null,
+		"scss/at-if-closing-brace-newline-after": null,
+		"scss/at-if-closing-brace-space-after": null,
+		"scss/at-if-no-null": null,
+		"scss/at-mixin-pattern": null,
+		"scss/at-rule-no-unknown": null,
+		"scss/dollar-variable-empty-line-before": null,
+		"scss/dollar-variable-pattern": null,
+		"scss/selector-no-redundant-nesting-selector": null,
+		"value-keyword-case": null
+	}
+}

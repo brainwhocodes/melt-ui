@@ -1,33 +1,37 @@
-import { usePopper, type InteractOutsideEvent } from '$lib/internal/actions/index.js';
+import type { VirtualElement } from '@floating-ui/core';
+import { tick } from 'svelte';
+import { derived, type Readable, writable } from 'svelte/store';
 import {
-	FIRST_LAST_KEYS,
+	type InteractOutsideEvent,
+	usePopper,
+} from '$lib/internal/actions/index.js';
+import {
 	addMeltEventListener,
-	makeElement,
 	createElHelpers,
 	derivedVisible,
 	effect,
 	executeCallbacks,
+	FIRST_LAST_KEYS,
 	getNextFocusable,
 	getPortalDestination,
 	getPreviousFocusable,
+	isElement,
 	isHTMLElement,
 	kbd,
+	makeElement,
 	noop,
 	omit,
 	overridable,
+	type Point,
+	portalAttr,
 	styleToString,
 	toWritableStores,
-	withGet,
 	type WithGet,
-	portalAttr,
-	type Point,
-	isElement,
+	withGet,
 } from '$lib/internal/helpers/index.js';
 import type { MeltActionReturn } from '$lib/internal/types.js';
-import type { VirtualElement } from '@floating-ui/core';
-import { tick } from 'svelte';
-import { derived, writable, type Readable } from 'svelte/store';
 import {
+	type _MenuParts,
 	applyAttrsIfDisabled,
 	clearTimerStore,
 	createMenuBuilder,
@@ -35,7 +39,6 @@ import {
 	handleMenuNavigation,
 	handleTabNavigation,
 	setMeltMenuAttribute,
-	type _MenuParts,
 } from '../menu/index.js';
 import type { ContextMenuEvents } from './events.js';
 import type { CreateContextMenuProps } from './types.js';
@@ -64,7 +67,10 @@ const defaults = {
 const { name, selector } = createElHelpers<_MenuParts>('context-menu');
 
 export function createContextMenu(props?: CreateContextMenuProps) {
-	const withDefaults = { ...defaults, ...props } satisfies CreateContextMenuProps;
+	const withDefaults = {
+		...defaults,
+		...props,
+	} satisfies CreateContextMenuProps;
 
 	const rootOptions = toWritableStores(omit(withDefaults, 'ids'));
 	const {
@@ -83,16 +89,17 @@ export function createContextMenu(props?: CreateContextMenuProps) {
 	const nextFocusable = withGet.writable<HTMLElement | null>(null);
 	const prevFocusable = withGet.writable<HTMLElement | null>(null);
 
-	const { elements, builders, ids, options, helpers, states } = createMenuBuilder({
-		rootOpen,
-		rootOptions,
-		rootActiveTrigger: withGet(rootActiveTrigger),
-		nextFocusable: withGet(nextFocusable),
-		prevFocusable: withGet(prevFocusable),
-		selector: 'context-menu',
-		removeScroll: true,
-		ids: withDefaults.ids,
-	});
+	const { elements, builders, ids, options, helpers, states } =
+		createMenuBuilder({
+			rootOpen,
+			rootOptions,
+			rootActiveTrigger: withGet(rootActiveTrigger),
+			nextFocusable: withGet(nextFocusable),
+			prevFocusable: withGet(prevFocusable),
+			selector: 'context-menu',
+			removeScroll: true,
+			ids: withDefaults.ids,
+		});
 
 	const { handleTypeaheadSearch } = helpers;
 
@@ -109,7 +116,7 @@ export function createContextMenu(props?: CreateContextMenuProps) {
 						...$point,
 					}),
 			};
-		})
+		}),
 	);
 	const longPressTimer = withGet.writable(0);
 
@@ -120,7 +127,8 @@ export function createContextMenu(props?: CreateContextMenuProps) {
 		const target = e.target;
 		if (!isElement(target)) return false;
 
-		const isClickInsideTrigger = target.closest(`[data-id="${ids.trigger.get()}"]`) !== null;
+		const isClickInsideTrigger =
+			target.closest(`[data-id="${ids.trigger.get()}"]`) !== null;
 		return !isClickInsideTrigger || isLeftClick(e);
 	}
 
@@ -131,8 +139,22 @@ export function createContextMenu(props?: CreateContextMenuProps) {
 	});
 
 	const menu = makeElement(name(), {
-		stores: [isVisible, rootOpen, rootActiveTrigger, portal, ids.menu, ids.trigger],
-		returned: ([$isVisible, $rootOpen, $rootActiveTrigger, $portal, $menuId, $triggerId]) => {
+		stores: [
+			isVisible,
+			rootOpen,
+			rootActiveTrigger,
+			portal,
+			ids.menu,
+			ids.trigger,
+		],
+		returned: ([
+			$isVisible,
+			$rootOpen,
+			$rootActiveTrigger,
+			$portal,
+			$menuId,
+			$triggerId,
+		]) => {
 			// We only want to render the menu when it's open and has an active trigger.
 			return {
 				role: 'menu',
@@ -145,12 +167,26 @@ export function createContextMenu(props?: CreateContextMenuProps) {
 				tabindex: -1,
 			} as const;
 		},
-		action: (node: HTMLElement): MeltActionReturn<ContextMenuEvents['menu']> => {
+		action: (
+			node: HTMLElement,
+		): MeltActionReturn<ContextMenuEvents['menu']> => {
 			let unsubPopper = noop;
 
 			const unsubDerived = effect(
-				[isVisible, rootActiveTrigger, positioning, closeOnOutsideClick, portal],
-				([$isVisible, $rootActiveTrigger, $positioning, $closeOnOutsideClick, $portal]) => {
+				[
+					isVisible,
+					rootActiveTrigger,
+					positioning,
+					closeOnOutsideClick,
+					portal,
+				],
+				([
+					$isVisible,
+					$rootActiveTrigger,
+					$positioning,
+					$closeOnOutsideClick,
+					$portal,
+				]) => {
 					unsubPopper();
 					if (!$isVisible || !$rootActiveTrigger) return;
 					tick().then(() => {
@@ -171,11 +207,13 @@ export function createContextMenu(props?: CreateContextMenuProps) {
 								},
 								portal: getPortalDestination(node, $portal),
 								escapeKeydown: { behaviorType: escapeBehavior },
-								preventTextSelectionOverflow: { enabled: preventTextSelectionOverflow },
+								preventTextSelectionOverflow: {
+									enabled: preventTextSelectionOverflow,
+								},
 							},
 						}).destroy;
 					});
-				}
+				},
 			);
 
 			const unsubEvents = executeCallbacks(
@@ -213,7 +251,7 @@ export function createContextMenu(props?: CreateContextMenuProps) {
 					if (!isModifierKey && isCharacterKey) {
 						handleTypeaheadSearch(e.key, getMenuItems(menuEl));
 					}
-				})
+				}),
 			);
 			return {
 				destroy() {
@@ -237,7 +275,9 @@ export function createContextMenu(props?: CreateContextMenuProps) {
 				'data-id': $triggerId,
 			} as const;
 		},
-		action: (node: HTMLElement): MeltActionReturn<ContextMenuEvents['trigger']> => {
+		action: (
+			node: HTMLElement,
+		): MeltActionReturn<ContextMenuEvents['trigger']> => {
 			applyAttrsIfDisabled(node);
 			rootActiveTrigger.set(node);
 
@@ -291,7 +331,7 @@ export function createContextMenu(props?: CreateContextMenuProps) {
 					if (!isTouchOrPen(e)) return;
 
 					clearTimerStore(longPressTimer);
-				})
+				}),
 			);
 
 			return {
@@ -327,7 +367,9 @@ function isTouchOrPen(e: PointerEvent) {
 
 export function isLeftClick(event: InteractOutsideEvent): boolean {
 	if ('button' in event) {
-		return event.button === 0 && event.ctrlKey === false && event.metaKey === false;
+		return (
+			event.button === 0 && event.ctrlKey === false && event.metaKey === false
+		);
 	}
 	return true;
 }

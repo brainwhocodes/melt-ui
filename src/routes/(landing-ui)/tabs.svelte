@@ -29,74 +29,73 @@
 <div
 	use:melt={$root}
 	class={cn(
-		'flex max-w-[25rem] flex-col overflow-hidden rounded-xl shadow-lg	data-[orientation=vertical]:flex-row',
+		'surface-4ba47b3d16',
 		className
 	)}
 >
 	<div
 		use:melt={$list}
-		class="flex shrink-0 overflow-x-auto bg-neutral-100
-		data-[orientation=vertical]:flex-col data-[orientation=vertical]:border-r"
+		class="preview-surface-neutral-100   preview-state-orientation-layout-col surface-0cf1b42a8c"
 		aria-label="Manage your account"
 	>
 		{#each triggers as triggerItem}
-			<button use:melt={$trigger(triggerItem.id)} class="trigger relative">
+			<button use:melt={$trigger(triggerItem.id)} class="trigger surface-5febeeb4b4">
 				{triggerItem.title}
 				{#if $value === triggerItem.id}
 					<div
 						in:send={{ key: 'trigger' }}
 						out:receive={{ key: 'trigger' }}
-						class="absolute bottom-1 left-1/2 h-1 w-6 -translate-x-1/2 rounded-full bg-magnum-400"
+						class="surface-b1f0a0c85b"
 					/>
 				{/if}
 			</button>
 		{/each}
 	</div>
-	<div use:melt={$content('tab-1')} class="grow bg-white p-5">
-		<p class="mb-5 leading-normal text-neutral-900">
+	<div use:melt={$content('tab-1')} class="surface-4fce35cfa9">
+		<p class="surface-eac832b925">
 			Make changes to your account here. Click save when you're done.
 		</p>
-		<fieldset class="mb-4 flex w-full flex-col justify-start">
-			<label class="mb-2.5 block text-sm leading-none text-neutral-900" for="name"> Name </label>
+		<fieldset class="surface-330ebe8a41">
+			<label class="surface-8967272001" for="name"> Name </label>
 			<input id="name" value="Thomas G. Lopes" />
 		</fieldset>
 
-		<div class="mt-5 flex justify-end">
+		<div class="surface-266e022c4e">
 			<button class="save">Save changes</button>
 		</div>
 	</div>
-	<div use:melt={$content('tab-2')} class="grow bg-white p-5">
-		<p class="mb-5 leading-normal text-neutral-900">
+	<div use:melt={$content('tab-2')} class="surface-4344c292cf">
+		<p class="surface-1df23bc9ca">
 			Change your password here. Click save when you're done.
 		</p>
-		<fieldset class="mb-4 flex w-full flex-col justify-start">
-			<label class="mb-2.5 block text-sm leading-none text-neutral-900" for="changePass">
+		<fieldset class="surface-b7e61f4f84">
+			<label class="surface-38e0d0f48c" for="changePass">
 				New password
 			</label>
 			<input id="changePass" type="password" />
 		</fieldset>
-		<div class="mt-5 flex justify-end">
+		<div class="surface-47fa6b99c7">
 			<button class="save">Save changes</button>
 		</div>
 	</div>
-	<div use:melt={$content('tab-3')} class="grow bg-white p-5">
-		<p class="mb-5 leading-normal text-neutral-900">
+	<div use:melt={$content('tab-3')} class="surface-ca6c94fc42">
+		<p class="surface-5b42e98655">
 			Change your settings here. Click save when you're done.
 		</p>
 
-		<fieldset class="mb-4 flex w-full flex-col justify-start">
-			<label class="mb-2.5 block text-sm leading-none text-neutral-900" for="changeEmail">
+		<fieldset class="surface-62da362d4d">
+			<label class="surface-9a6946a9ce" for="changeEmail">
 				New email
 			</label>
 			<input id="changeEmail" type="email" />
 		</fieldset>
-		<div class="mt-5 flex justify-end">
+		<div class="surface-e45d614a50">
 			<button class="save">Save changes</button>
 		</div>
 	</div>
 </div>
 
-<style lang="postcss">
+<style lang="scss">
 	.trigger {
 		display: flex;
 		align-items: center;
@@ -106,66 +105,71 @@
 		user-select: none;
 
 		border-radius: 0;
-		background-color: theme(colors.neutral.100);
+		background-color: rgb(var(--color-neutral-100) / 1);
 
-		color: theme(colors.neutral.900);
+		color: rgb(var(--color-neutral-900) / 1);
 		font-weight: 500;
 		line-height: 1;
 
 		flex: 1;
-		height: theme(spacing.12);
-		padding-inline: theme(spacing.2);
+		height: 3rem;
+		padding-inline: 0.5rem;
+	}
 
-		&:focus {
+		.trigger:focus {
 			position: relative;
 		}
 
-		&:focus-visible {
-			@apply z-10 ring-2;
-		}
+		.trigger:focus-visible {
+		z-index: 10;
+		
+		
+		box-shadow: 0 0 #0000, 0 0 #0000, 0 0 #0000;
+}
 
-		&[data-state='active'] {
-			@apply focus:relative;
+		.trigger[data-state='active']:focus {
+		position: relative;
+}
+
+		.trigger[data-state='active'] {
 			background-color: white;
-			color: theme('colors.magnum.900');
+			color: rgb(var(--color-magnum-900) / 1);
 		}
-	}
 
 	input {
-		height: theme(spacing.8);
+		height: 2rem;
 		flex-shrink: 0;
 		flex-grow: 1;
-		border-radius: theme(borderRadius.md);
-		border: 1px solid theme(colors.neutral.200);
-		padding-inline: theme(spacing[2.5]);
+		border-radius: 0.375rem;
+		border: 1px solid rgb(var(--color-neutral-200) / 1);
+		padding-inline: 0.625rem;
 		line-height: 1;
-		color: theme(colors.neutral.900);
-
-		&:focus {
-			border-color: theme(colors.magnum.400);
-		}
+		color: rgb(var(--color-neutral-900) / 1);
 	}
+
+	input:focus {
+			border-color: rgb(var(--color-magnum-400) / 1);
+		}
 
 	.save {
 		display: inline-flex;
-		height: theme(spacing.8);
+		height: 2rem;
 		cursor: default;
 		align-items: center;
 		justify-content: center;
-		border-radius: theme(borderRadius.md);
-		background-color: theme(colors.magnum.200);
-		padding-inline: theme(spacing.4);
+		border-radius: 0.375rem;
+		background-color: rgb(var(--color-magnum-200) / 1);
+		padding-inline: 1rem;
 		line-height: 1;
-		font-weight: theme(fontWeight.semibold);
-		color: theme(colors.magnum.900);
-		@apply transition;
+		font-weight: 600;
+		color: rgb(var(--color-magnum-900) / 1);
+		transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 150ms;
+	}
 
-		&:hover {
+	.save:hover {
 			opacity: 0.75;
 		}
 
-		&:focus {
-			@apply !ring-green-600;
-		}
-	}
 </style>

@@ -1,8 +1,8 @@
-import { testKbd as kbd } from '../utils.js';
 import { queryByText, render } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { describe, test } from 'vitest';
+import { testKbd as kbd } from '../utils.js';
 import TagsInput from './TagsInput.svelte';
 
 describe('TagsInput', () => {

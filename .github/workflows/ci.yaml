@@ -19,42 +19,50 @@ jobs:
   Lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with:
-          version: 8.6.3
           run_install: true
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
       - run: pnpm run lint
 
   Check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with:
-          version: 8.6.3
           run_install: true
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
       - run: GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} && pnpm run check
 
   Tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with:
-          version: 8.6.3
           run_install: true
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
       - run: GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} && pnpm run test
 
   Playwright-Tests:
     name: Playwright Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with:
-          version: 8.6.3
           run_install: true
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
       - run: GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} && pnpm run pw

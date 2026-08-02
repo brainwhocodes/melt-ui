@@ -9,12 +9,16 @@ describe('Separator', async () => {
 	});
 
 	it('should render a vertical separator', async () => {
-		const { getByTestId } = await render(SeparatorTest, { orientation: 'vertical' });
+		const { getByTestId } = await render(SeparatorTest, {
+			orientation: 'vertical',
+		});
 		await expect(getByTestId('vertical')).toBeVisible();
 	});
 
 	it('should have a role of separator', async () => {
-		const { getByTestId } = await render(SeparatorTest, { orientation: 'vertical' });
+		const { getByTestId } = await render(SeparatorTest, {
+			orientation: 'vertical',
+		});
 		await expect(getByTestId('vertical')).toHaveAttribute('role', 'separator');
 	});
 

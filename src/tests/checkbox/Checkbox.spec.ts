@@ -1,9 +1,9 @@
 import { render } from '@testing-library/svelte';
+import { userEvent } from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { describe } from 'vitest';
-import CheckboxTest from './CheckboxTest.svelte';
-import { userEvent } from '@testing-library/user-event';
 import { testKbd as kbd } from '../utils.js';
+import CheckboxTest from './CheckboxTest.svelte';
 
 describe('Checkbox', () => {
 	test('No accessibility violations', async () => {
@@ -31,7 +31,9 @@ describe('Checkbox', () => {
 
 	test('Should be unchecked when checked prop is false', async () => {
 		const { getByTestId } = render(CheckboxTest, { defaultChecked: false });
-		expect(getByTestId('checkbox').getAttribute('data-state')).toBe('unchecked');
+		expect(getByTestId('checkbox').getAttribute('data-state')).toBe(
+			'unchecked',
+		);
 	});
 
 	test('Should trigger on space keydown', async () => {

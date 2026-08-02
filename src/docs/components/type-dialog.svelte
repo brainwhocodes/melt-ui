@@ -15,17 +15,15 @@
 
 <button
 	use:melt={$trigger}
-	class="relative inline rounded-md bg-neutral-700/50 px-[0.25rem] py-[0.15rem] font-mono text-[0.75rem] text-xs font-semibold text-neutral-50 underline underline-offset-4 transition-all hover:underline-offset-[6px]"
+	class="surface-ebba58ebcd"
 	aria-label="Open type dialog"
 >
 	{name}
 </button>
 {#if $open}
-	<div use:melt={$overlay} class="fixed inset-0 z-40 bg-black/50" />
+	<div use:melt={$overlay} class="surface-39b19382ac" />
 	<div
-		class="fixed left-1/2 top-1/2 z-50 max-h-[85vh] w-[90vw] max-w-[960px]
-    -translate-x-1/2 -translate-y-1/2 rounded-md
-    bg-neutral-800 p-4 shadow-lg md:p-8"
+		class="preview-limit-w-960px  preview-shape-md  surface-cf94291e2a"
 		transition:flyAndScale={{
 			duration: 150,
 			y: 8,
@@ -33,22 +31,20 @@
 		}}
 		use:melt={$content}
 	>
-		<div class="mb-2">
-			<code class="inline-code !text-xl" use:melt={$title}>{name}</code>
+		<div class="surface-4320f7df49">
+			<code class="inline-code surface-810e201a3a" use:melt={$title}>{name}</code>
 		</div>
-		<div class="relative">
-			<CodeBlock class="rounded-md bg-neutral-900" copyBtnClasses="top-4 right-4">
+		<div class="surface-03220ebac8">
+			<CodeBlock class="surface-923c35009f" copyBtnClasses="docs-code-block-copy--inset">
 				{@html code}
 			</CodeBlock>
 		</div>
 		<button
 			use:melt={$close}
 			aria-label="Close"
-			class="absolute right-[10px] top-[10px] inline-flex h-6 w-6
-                appearance-none items-center justify-center rounded-full text-magnum-300
-                hover:bg-magnum-800/50 focus:shadow-magnum-400"
+			class="preview-width-6  preview-text-magnum-300  surface-b905993591"
 		>
-			<X class="size-4" />
+			<X class="surface-1c89635127" />
 		</button>
 	</div>
 {/if}

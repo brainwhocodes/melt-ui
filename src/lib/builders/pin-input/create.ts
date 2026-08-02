@@ -1,3 +1,5 @@
+import { tick } from 'svelte';
+import { derived, readonly, writable } from 'svelte/store';
 import {
 	addMeltEventListener,
 	createElHelpers,
@@ -15,8 +17,6 @@ import {
 	toWritableStores,
 } from '$lib/internal/helpers/index.js';
 import type { Defaults, MeltActionReturn } from '$lib/internal/types.js';
-import { tick } from 'svelte';
-import { derived, readonly, writable } from 'svelte/store';
 import { generateIds } from '../../internal/helpers/id.js';
 import { createHiddenInput } from '../hidden-input/create.js';
 import type { PinInputEvents } from './events.js';
@@ -31,7 +31,7 @@ const getInputs = (node: HTMLInputElement) => {
 		return { inputs: null, el: node, elIndex: -1 };
 	}
 	const inputs = Array.from(rootEl.querySelectorAll(selector('input'))).filter(
-		(input): input is HTMLInputElement => isHTMLInputElement(input)
+		(input): input is HTMLInputElement => isHTMLInputElement(input),
 	);
 	return {
 		elIndex: inputs.indexOf(node),
@@ -56,18 +56,23 @@ export function createPinInput(props?: CreatePinInputProps) {
 	const options = toWritableStores(omit(withDefaults, 'value', 'ids'));
 	const { placeholder, disabled, type, name: nameStore } = options;
 
-	const valueWritable = withDefaults.value ?? writable(withDefaults.defaultValue);
+	const valueWritable =
+		withDefaults.value ?? writable(withDefaults.defaultValue);
 	const value = overridable(valueWritable, withDefaults?.onValueChange);
 	const valueStr = derived(value, (v) => v.join(''));
 
-	const ids = toWritableStores({ ...generateIds(pinInputIdParts), ...withDefaults.ids });
+	const ids = toWritableStores({
+		...generateIds(pinInputIdParts),
+		...withDefaults.ids,
+	});
 
 	const root = makeElement(name(), {
 		stores: [value, ids.root],
 		returned: ([$value, $rootId]) => {
 			return {
 				id: $rootId,
-				'data-complete': $value.length && $value.every((v) => v.length > 0) ? '' : undefined,
+				'data-complete':
+					$value.length && $value.every((v) => v.length > 0) ? '' : undefined,
 			} as const;
 		},
 	});
@@ -93,7 +98,8 @@ export function createPinInput(props?: CreatePinInputProps) {
 				const currValue = $value[currIndex] ?? '';
 
 				return {
-					'data-complete': $value.length && $value.every((v) => v.length > 0) ? '' : undefined,
+					'data-complete':
+						$value.length && $value.every((v) => v.length > 0) ? '' : undefined,
 					placeholder: $placeholder,
 					disabled: disabledAttr($disabled),
 					type: $type,
@@ -101,7 +107,9 @@ export function createPinInput(props?: CreatePinInputProps) {
 				} as const;
 			};
 		},
-		action: (node: HTMLInputElement): MeltActionReturn<PinInputEvents['input']> => {
+		action: (
+			node: HTMLInputElement,
+		): MeltActionReturn<PinInputEvents['input']> => {
 			const { elIndex } = getInputs(node);
 			value.update((v) => {
 				v[elIndex] = node.value;
@@ -118,13 +126,17 @@ export function createPinInput(props?: CreatePinInputProps) {
 						if (node.value) {
 							node.value = '';
 							tick().then(() => (node.placeholder = ''));
-							value.set(inputs.map((input) => input.value.slice(-1) ?? undefined));
+							value.set(
+								inputs.map((input) => input.value.slice(-1) ?? undefined),
+							);
 						} else {
 							const prevEl = prev(inputs, elIndex, false);
 							prevEl.focus();
 							prevEl.value = '';
 							tick().then(() => (prevEl.placeholder = ''));
-							value.set(inputs.map((input) => input.value.slice(-1) ?? undefined));
+							value.set(
+								inputs.map((input) => input.value.slice(-1) ?? undefined),
+							);
 						}
 					}
 
@@ -132,7 +144,9 @@ export function createPinInput(props?: CreatePinInputProps) {
 						e.preventDefault();
 						node.value = '';
 						tick().then(() => (node.placeholder = ''));
-						value.set(inputs.map((input) => input.value.slice(-1) ?? undefined));
+						value.set(
+							inputs.map((input) => input.value.slice(-1) ?? undefined),
+						);
 					}
 
 					if (e.key === 'ArrowLeft') {
@@ -198,7 +212,10 @@ export function createPinInput(props?: CreatePinInputProps) {
 
 					const pasted = clipboardData.getData('text');
 					const initialIndex = pasted.length >= inputs.length ? 0 : elIndex;
-					const lastIndex = Math.min(initialIndex + pasted.length, inputs.length);
+					const lastIndex = Math.min(
+						initialIndex + pasted.length,
+						inputs.length,
+					);
 					for (let i = initialIndex; i < lastIndex; i++) {
 						const input = inputs[i];
 						input.value = pasted[i - initialIndex];
@@ -221,7 +238,7 @@ export function createPinInput(props?: CreatePinInputProps) {
 				}),
 				addMeltEventListener(node, 'blur', () => {
 					node.placeholder = placeholder.get();
-				})
+				}),
 			);
 
 			return {

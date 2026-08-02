@@ -1,6 +1,6 @@
+import { CalendarDate, CalendarDateTime } from '@internationalized/date';
 import { describe, expect, it } from 'vitest';
 import { createFormatter } from '../formatter.js';
-import { CalendarDate, CalendarDateTime } from '@internationalized/date';
 import { toDate } from '../utils.js';
 
 describe('Formatter', () => {
@@ -19,7 +19,9 @@ describe('Formatter', () => {
 	it('should allow custom formatting options', () => {
 		const formatter = createFormatter('en-US');
 		const date = new Date('2021-01-01T12:00:00.000Z');
-		expect(formatter.custom(date, { dateStyle: 'long' })).toBe('January 1, 2021');
+		expect(formatter.custom(date, { dateStyle: 'long' })).toBe(
+			'January 1, 2021',
+		);
 	});
 
 	it('should properly format selected dates', () => {
@@ -30,7 +32,9 @@ describe('Formatter', () => {
 		const withTime = new CalendarDateTime(2021, 1, 1, 12, 0, 0);
 		const tz = thisTimeZone(withTime.toString());
 
-		expect(formatter.selectedDate(withTime)).toBe('January 1, 2021 at 12:00:00 PM ' + tz);
+		expect(formatter.selectedDate(withTime)).toBe(
+			'January 1, 2021 at 12:00:00 PM ' + tz,
+		);
 	});
 
 	it('should properly format full months and years', () => {

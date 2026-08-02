@@ -7,7 +7,10 @@ describe('Avatar', () => {
 		const { getByAltText } = render(AvatarTest, {
 			props: { src: 'https://example.com/image.jpg' },
 		});
-		expect(getByAltText('Avatar')).toHaveAttribute('src', 'https://example.com/image.jpg');
+		expect(getByAltText('Avatar')).toHaveAttribute(
+			'src',
+			'https://example.com/image.jpg',
+		);
 	});
 
 	test('renders the fallback with the correct text', () => {

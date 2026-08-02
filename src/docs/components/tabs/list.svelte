@@ -10,7 +10,7 @@
 	export { className as class };
 </script>
 
-<div class={cn('flex items-center gap-3', className)} use:melt={$list}>
+<div class={cn('surface-1ea62c22d4', className)} use:melt={$list}>
 	{#each $tabs as tab}
 		<Tab {tab} />
 	{/each}

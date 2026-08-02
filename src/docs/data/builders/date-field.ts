@@ -107,12 +107,15 @@ const dateFieldProps = [
 	{
 		name: 'ids',
 		type: 'DateFieldIds',
-		description: 'Override the default ids used by the various elements within the date field.',
+		description:
+			'Override the default ids used by the various elements within the date field.',
 	},
 ];
 
 const excludedProps = ['value', 'placeholder'];
-const dateFieldOptions = dateFieldProps.filter((prop) => !excludedProps.includes(prop.name));
+const dateFieldOptions = dateFieldProps.filter(
+	(prop) => !excludedProps.includes(prop.name),
+);
 
 const BUILDER_NAME = 'date field';
 
@@ -145,32 +148,38 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'value',
 			type: 'Writable<DateValue>',
-			description: 'A writable store which represents the current value of the date field.',
+			description:
+				'A writable store which represents the current value of the date field.',
 		},
 		{
 			name: 'segmentValues',
 			type: 'Writable<DateSegmentObj | DateTimeSegmentObj>',
-			description: 'A writable store containing the current values of the date segments.',
+			description:
+				'A writable store containing the current values of the date segments.',
 		},
 		{
 			name: 'segmentContents',
 			type: 'Readable<{ part: SegmentPart; value: string; }[]>',
-			description: 'A readable store used to dynamically render the date segments.',
+			description:
+				'A readable store used to dynamically render the date segments.',
 		},
 		{
 			name: 'segmentContentsObj',
 			type: 'Readable<SegmentContentsObj>',
-			description: 'A readable store containing the current values of the date segments.',
+			description:
+				'A readable store containing the current values of the date segments.',
 		},
 		{
 			name: 'placeholder',
 			type: 'Writable<DateValue>',
-			description: 'A writable store which represents the placeholder value of the date field.',
+			description:
+				'A writable store which represents the placeholder value of the date field.',
 		},
 		{
 			name: 'isInvalid',
 			type: 'Readable<boolean>',
-			description: 'A readable store which represents whether the date field is invalid.',
+			description:
+				'A readable store which represents whether the date field is invalid.',
 		},
 		{
 			name: 'isDateUnavailable',

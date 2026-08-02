@@ -1,8 +1,8 @@
 import { ATTRS, DESCRIPTIONS, KBD } from '$docs/constants.js';
 import type { APISchema, KeyboardSchema } from '$docs/types.js';
-import type { BuilderData } from './index.js';
-import { tableOfContentsEvents } from '$lib/builders/table-of-contents/events.js';
 import { elementSchema } from '$docs/utils/index.js';
+import { tableOfContentsEvents } from '$lib/builders/table-of-contents/events.js';
+import type { BuilderData } from './index.js';
 
 const builder: APISchema = {
 	title: 'createTableOfContents',
@@ -52,7 +52,8 @@ const builder: APISchema = {
 			name: 'scrollBehaviour',
 			type: "'smooth' | 'instant'",
 			default: 'smooth',
-			description: "Defines whether the scroll behaviour should be 'smooth' or 'instant'.",
+			description:
+				"Defines whether the scroll behaviour should be 'smooth' or 'instant'.",
 		},
 		{
 			name: 'headingFilterFn',
@@ -89,14 +90,16 @@ const builder: APISchema = {
 		{
 			name: 'headingsTree',
 			type: 'Writable<TableOfContentsItem[]>',
-			description: 'A writable store that lists all the headings within the specified container.',
+			description:
+				'A writable store that lists all the headings within the specified container.',
 		},
 	],
 	helpers: [
 		{
 			name: 'isActive',
 			type: '(headingId: string) => boolean',
-			description: 'Returns whether the heading with the given id is currently active.',
+			description:
+				'Returns whether the heading with the given id is currently active.',
 		},
 	],
 };

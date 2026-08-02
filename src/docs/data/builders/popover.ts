@@ -6,8 +6,8 @@ import {
 	floatingSideAndAlignDataAttrs,
 	floatingSideDataAttr,
 } from '$docs/utils/index.js';
-import { popoverIdParts } from '$lib/index.js';
 import { popoverEvents } from '$lib/builders/popover/events.js';
+import { popoverIdParts } from '$lib/index.js';
 import type { BuilderData } from './index.js';
 
 /**
@@ -37,7 +37,12 @@ const BUILDER_NAME = 'popover';
 const builder = builderSchema(BUILDER_NAME, {
 	ids: popoverIdParts,
 	title: 'createPopover',
-	props: [...OPTION_PROPS, PROPS.DEFAULT_OPEN, PROPS.OPEN, PROPS.ON_OPEN_CHANGE],
+	props: [
+		...OPTION_PROPS,
+		PROPS.DEFAULT_OPEN,
+		PROPS.OPEN,
+		PROPS.ON_OPEN_CHANGE,
+	],
 	elements: [
 		{
 			name: 'trigger',
@@ -64,7 +69,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'open',
 			type: 'Writable<boolean>',
-			description: 'A writable store which represents the open state of the popover.',
+			description:
+				'A writable store which represents the open state of the popover.',
 		},
 	],
 	options: OPTION_PROPS,

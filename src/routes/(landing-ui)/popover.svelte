@@ -38,23 +38,23 @@
 <button
 	type="button"
 	class={cn(
-		'inline-flex h-9 w-9 items-center justify-center rounded-full bg-white text-sm font-medium text-magnum-800 shadow-sm dark:shadow-none',
-		'transition hover:opacity-75',
+		'surface-951129bb15',
+		'surface-e01deefbd7',
 		className
 	)}
 	use:melt={$trigger}
 	aria-label="Add"
 >
-	<Plus class="size-4" aria-label="plus" />
+	<Plus class="surface-6a2624a9d9" aria-label="plus" />
 </button>
 
 {#if $open}
 	<div
 		use:melt={$content}
 		transition:fly={{ duration: 250, y: 4 }}
-		class={cn('force-dark z-10 rounded-xl bg-white px-4 py-2 shadow-sm', contentClass)}
+		class={cn('force-dark surface-131640e895', contentClass)}
 	>
 		<div use:melt={$arrow} />
-		<p class="text-neutral-900">Add item to library</p>
+		<p class="surface-95a442d548">Add item to library</p>
 	</div>
 {/if}

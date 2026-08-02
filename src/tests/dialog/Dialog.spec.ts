@@ -1,11 +1,11 @@
 import { fireEvent, render, waitFor } from '@testing-library/svelte';
+import { userEvent } from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { describe, it } from 'vitest';
-import DialogTest from './DialogTest.svelte';
-import { userEvent } from '@testing-library/user-event';
+import type { CreateDialogProps } from '$lib/index.js';
 import { sleep } from '$lib/internal/helpers/index.js';
 import { assertActiveFocusTrap, testKbd as kbd, touch } from '../utils.js';
-import type { CreateDialogProps } from '$lib/index.js';
+import DialogTest from './DialogTest.svelte';
 
 function setup(props: CreateDialogProps = {}) {
 	const user = userEvent.setup();
@@ -233,7 +233,9 @@ describe('Dialog', () => {
 	});
 
 	it("Doesn't deactivate focus trap on outside click provided `closeOnOutsideClick` false", async () => {
-		const { user, overlay, content } = await open({ closeOnOutsideClick: false });
+		const { user, overlay, content } = await open({
+			closeOnOutsideClick: false,
+		});
 		await user.click(overlay);
 		expect(content).toBeVisible();
 		await assertActiveFocusTrap(user, content);
@@ -380,7 +382,10 @@ describe('Dialog', () => {
 		it('Closes on touchend if the previous touchstart occurred outside the dialog', async () => {
 			const { content, overlay } = await open();
 			expect(overlay).toBeVisible();
-			await fireEvent(overlay, new TouchEvent('pointerdown', { bubbles: true }));
+			await fireEvent(
+				overlay,
+				new TouchEvent('pointerdown', { bubbles: true }),
+			);
 			await fireEvent(overlay, new TouchEvent('touchstart', { bubbles: true }));
 			await fireEvent(overlay, new TouchEvent('pointerup', { bubbles: true }));
 			await fireEvent(overlay, new TouchEvent('touchend', { bubbles: true }));
@@ -395,9 +400,17 @@ describe('Dialog', () => {
 		 */
 		it('Resets `interceptedEvents` when calling `preventDefault()` on touch event', async () => {
 			const { getByTestId, user, overlay, content } = await open();
-			const touchendPreventDefault = getByTestId('touchend-prevent-default-interceptor');
-			await fireEvent(touchendPreventDefault, new TouchEvent('touchstart', { bubbles: true }));
-			await fireEvent(touchendPreventDefault, new TouchEvent('touchend', { bubbles: true }));
+			const touchendPreventDefault = getByTestId(
+				'touchend-prevent-default-interceptor',
+			);
+			await fireEvent(
+				touchendPreventDefault,
+				new TouchEvent('touchstart', { bubbles: true }),
+			);
+			await fireEvent(
+				touchendPreventDefault,
+				new TouchEvent('touchend', { bubbles: true }),
+			);
 			await sleep(20);
 			expect(content).toBeVisible();
 

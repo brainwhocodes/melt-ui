@@ -1,17 +1,16 @@
-import { readable, type Readable } from 'svelte/store';
-import { isReadable } from '../is.js';
-import { withGet, type WithGet } from '../withGet.js';
+import { type Readable, readable } from 'svelte/store';
 import type { MaybeReadable } from '$lib/internal/types.js';
+import { isReadable } from '../is.js';
+import { type WithGet, withGet } from '../withGet.js';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TODO = any;
 
 export type ToReadableStores<T extends Record<string, unknown>> = {
 	[K in keyof T]: T[K] extends Readable<TODO>
 		? WithGet<T[K]>
 		: T[K] extends MaybeReadable<infer U>
-		? WithGet<Readable<U>>
-		: WithGet<Readable<T[K]>>;
+			? WithGet<Readable<U>>
+			: WithGet<Readable<T[K]>>;
 };
 
 /**
@@ -19,10 +18,12 @@ export type ToReadableStores<T extends Record<string, unknown>> = {
  * with the same properties and values.
  */
 export function toReadableStores<T extends Record<string, unknown>>(
-	properties: T
+	properties: T,
 ): ToReadableStores<T> {
 	const result = {} as {
-		[K in keyof T]: T[K] extends Readable<TODO> ? WithGet<T[K]> : WithGet<Readable<T[K]>>;
+		[K in keyof T]: T[K] extends Readable<TODO>
+			? WithGet<T[K]>
+			: WithGet<Readable<T[K]>>;
 	};
 
 	Object.keys(properties).forEach((key) => {

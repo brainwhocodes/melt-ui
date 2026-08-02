@@ -1,7 +1,14 @@
+import { tick } from 'svelte';
+import { derived, type Writable, writable } from 'svelte/store';
+import {
+	useEscapeKeydown,
+	useFloating,
+	useInteractOutside,
+	usePortal,
+} from '$lib/internal/actions/index.js';
 import {
 	addEventListener,
 	addMeltEventListener,
-	makeElement,
 	createElHelpers,
 	effect,
 	executeCallbacks,
@@ -9,29 +16,21 @@ import {
 	isBrowser,
 	isDocument,
 	isElement,
+	isPointerInGraceArea,
 	isTouch,
+	makeElement,
 	makeHullFromElements,
 	noop,
 	omit,
 	overridable,
+	portalAttr,
 	styleToString,
 	toWritableStores,
-	portalAttr,
-	isPointerInGraceArea,
 } from '$lib/internal/helpers/index.js';
-
-import {
-	useEscapeKeydown,
-	useFloating,
-	useInteractOutside,
-	usePortal,
-} from '$lib/internal/actions/index.js';
 import type { MeltActionReturn } from '$lib/internal/types.js';
-import { derived, writable, type Writable } from 'svelte/store';
 import { generateIds } from '../../internal/helpers/id.js';
 import type { TooltipEvents } from './events.js';
 import type { CreateTooltipProps } from './types.js';
-import { tick } from 'svelte';
 
 const defaults = {
 	positioning: {
@@ -81,7 +80,10 @@ export function createTooltip(props?: CreateTooltipProps) {
 	type OpenReason = 'pointer' | 'focus';
 	const openReason = writable<null | OpenReason>(null);
 
-	const ids = toWritableStores({ ...generateIds(tooltipIdParts), ...withDefaults.ids });
+	const ids = toWritableStores({
+		...generateIds(tooltipIdParts),
+		...withDefaults.ids,
+	});
 
 	let clickedTrigger = false;
 	let isPointerInsideTrigger = false;
@@ -178,7 +180,7 @@ export function createTooltip(props?: CreateTooltipProps) {
 					if (clickedTrigger) return;
 					openTooltip('focus');
 				}),
-				addMeltEventListener(node, 'blur', () => closeTooltip(true))
+				addMeltEventListener(node, 'blur', () => closeTooltip(true)),
 			);
 
 			return {
@@ -243,7 +245,7 @@ export function createTooltip(props?: CreateTooltipProps) {
 							handler: onEscapeKeyDown,
 						}).destroy;
 					});
-				}
+				},
 			);
 
 			/**
@@ -269,7 +271,7 @@ export function createTooltip(props?: CreateTooltipProps) {
 					isPointerInsideContent = false;
 				}),
 				addMeltEventListener(node, 'pointerdown', () => openTooltip('pointer')),
-				addEventListener(window, 'scroll', handleScroll, { capture: true })
+				addEventListener(window, 'scroll', handleScroll, { capture: true }),
 			);
 
 			return {
@@ -295,7 +297,7 @@ export function createTooltip(props?: CreateTooltipProps) {
 					width: `var(--arrow-size, ${$arrowSize}px)`,
 					height: `var(--arrow-size, ${$arrowSize}px)`,
 				}),
-			} as const),
+			}) as const,
 	});
 
 	let isMouseInTooltipArea = false;
@@ -341,14 +343,16 @@ export function createTooltip(props?: CreateTooltipProps) {
 				 * sub-pixel rendering and rounding errors.
 				 */
 				isMouseInTooltipArea =
-					isPointerInsideTrigger || isPointerInsideContent || isPointerInGraceArea(e, polygon);
+					isPointerInsideTrigger ||
+					isPointerInsideContent ||
+					isPointerInGraceArea(e, polygon);
 
 				if ($openReason !== 'pointer') return;
 
 				if (!isMouseInTooltipArea) {
 					closeTooltip();
 				}
-			})
+			}),
 		);
 	});
 

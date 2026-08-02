@@ -23,7 +23,8 @@ const OPTION_PROPS = [
 		name: 'siblingCount',
 		type: 'number',
 		default: '1',
-		description: 'The number of page triggers to show on either side of the current page.',
+		description:
+			'The number of page triggers to show on either side of the current page.',
 	},
 ];
 
@@ -60,22 +61,26 @@ const builder = builderSchema(BUILDER_NAME, {
 		},
 		{
 			name: 'pageTrigger',
-			description: 'The builder store used to create the pagination page trigger.',
+			description:
+				'The builder store used to create the pagination page trigger.',
 		},
 		{
 			name: 'prevButton',
-			description: 'The builder store used to create the pagination previous button.',
+			description:
+				'The builder store used to create the pagination previous button.',
 		},
 		{
 			name: 'nextButton',
-			description: 'The builder store used to create the pagination next button.',
+			description:
+				'The builder store used to create the pagination next button.',
 		},
 	],
 	states: [
 		{
 			name: 'range',
 			type: 'Readable<{start: number; end: number}>',
-			description: 'A readable store that contains the start and end page numbers.',
+			description:
+				'A readable store that contains the start and end page numbers.',
 		},
 		{
 			name: 'pages',
@@ -150,11 +155,13 @@ const nextButton = elementSchema('nextButton', {
 const keyboard: KeyboardSchema = [
 	{
 		key: KBD.SPACE,
-		behavior: 'When focused on a `pageTrigger` or `nextButton`, moves to that page.',
+		behavior:
+			'When focused on a `pageTrigger` or `nextButton`, moves to that page.',
 	},
 	{
 		key: KBD.ENTER,
-		behavior: 'When focused on a `pageTrigger` or `nextButton`, moves to that page.',
+		behavior:
+			'When focused on a `pageTrigger` or `nextButton`, moves to that page.',
 	},
 	{
 		key: KBD.TAB,
@@ -166,19 +173,23 @@ const keyboard: KeyboardSchema = [
 	},
 	{
 		key: KBD.ARROW_RIGHT,
-		behavior: 'Moves focus to the next focusable `pageTrigger` or `nextButton`.',
+		behavior:
+			'Moves focus to the next focusable `pageTrigger` or `nextButton`.',
 	},
 	{
 		key: KBD.ARROW_LEFT,
-		behavior: 'Moves focus to the previous focusable `pageTrigger` or `prevButton`',
+		behavior:
+			'Moves focus to the previous focusable `pageTrigger` or `prevButton`',
 	},
 	{
 		key: KBD.HOME,
-		behavior: 'Moves focus to the first focusable `pageTrigger` or `prevButton`.',
+		behavior:
+			'Moves focus to the first focusable `pageTrigger` or `prevButton`.',
 	},
 	{
 		key: KBD.END,
-		behavior: 'Moves focus to the first focusable `pageTrigger` or `prevButton`.',
+		behavior:
+			'Moves focus to the first focusable `pageTrigger` or `prevButton`.',
 	},
 ];
 

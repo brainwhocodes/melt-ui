@@ -1,9 +1,9 @@
-import type { Writable } from 'svelte/store';
-import type { ChangeFn, IdObj } from '$lib/internal/helpers/index.js';
-import type { DateFieldIdParts, createDateField } from './create.js';
 import type { DateValue } from '@internationalized/date';
+import type { Writable } from 'svelte/store';
 import type { Granularity, Matcher } from '$lib/index.js';
+import type { ChangeFn, IdObj } from '$lib/internal/helpers/index.js';
 import type { EditableSegmentPart } from '$lib/shared/index.js';
+import type { createDateField, DateFieldIdParts } from './create.js';
 
 export type DateFieldProps = {
 	/**
@@ -184,6 +184,15 @@ export type DateFieldProps = {
 	 * @default false
 	 */
 	required?: boolean;
+
+	/**
+	 * The DOM scope containing the field and its segments. Pass the actual
+	 * `ShadowRoot` when rendering inside Shadow DOM, not the shadow host.
+	 * The returned option store can be updated if the field moves to a new root.
+	 *
+	 * @default document
+	 */
+	rootElement?: ParentNode;
 
 	/**
 	 * Override any of the element IDs set by the builder.

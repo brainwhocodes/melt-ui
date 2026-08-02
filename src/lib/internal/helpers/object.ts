@@ -1,5 +1,5 @@
-import type { ValueOf } from '$lib/internal/types.js';
 import { dequal } from 'dequal';
+import type { ValueOf } from '$lib/internal/types.js';
 
 export function omit<T extends Record<string, unknown>, K extends keyof T>(
 	obj: T,
@@ -31,25 +31,27 @@ type StripValuesRecursive<T extends Record<string, unknown>, ToStrip> = {
 export function stripValues<T extends Record<string, unknown>, ToStrip>(
 	inputObject: T,
 	toStrip: ToStrip,
-	recursive: false
+	recursive: false,
 ): StripValues<T, ToStrip>;
 export function stripValues<T extends Record<string, unknown>, ToStrip>(
 	inputObject: T,
 	toStrip: ToStrip,
-	recursive: true
+	recursive: true,
 ): StripValuesRecursive<T, ToStrip>;
 export function stripValues<T extends Record<string, unknown>, ToStrip>(
 	inputObject: T,
 	toStrip: ToStrip,
-	recursive: boolean
+	recursive: boolean,
 ) {
 	return Object.fromEntries(
-		Object.entries(inputObject).filter(([_, value]) => !dequal(value, toStrip))
-	) as typeof recursive extends true ? StripValuesRecursive<T, ToStrip> : StripValues<T, ToStrip>;
+		Object.entries(inputObject).filter(([_, value]) => !dequal(value, toStrip)),
+	) as typeof recursive extends true
+		? StripValuesRecursive<T, ToStrip>
+		: StripValues<T, ToStrip>;
 }
 
 export function removeUndefined<T extends object>(
-	obj: T
+	obj: T,
 ): {
 	[K in keyof T]-?: Exclude<T[K], undefined>;
 } {
@@ -57,7 +59,6 @@ export function removeUndefined<T extends object>(
 	for (const key in obj) {
 		const value = obj[key];
 		if (value !== undefined) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			result[key] = value as any;
 		}
 	}

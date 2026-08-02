@@ -10,18 +10,16 @@
 
 <button
 	use:melt={$trigger(tab)}
-	class="rounded-lg border border-transparent bg-neutral-800 px-3 py-2 text-neutral-400 transition
-        hover:opacity-100 focus-visible:!border-magnum-400 focus-visible:!text-magnum-400 focus-visible:!ring-0
-        data-[state=active]:border-magnum-700 data-[state=active]:py-2 data-[state=active]:text-magnum-500 data-[state=active]:opacity-100 dark:data-[state=active]:text-magnum-600"
+	class="surface-77cadcfac1"
 >
-	<div class="flex items-center gap-2 px-1">
+	<div class="surface-3258a1c48d">
 		{#if tab === 'npm'}
-			<Npm class="size-4" />
+			<Npm class="surface-a04818b338" />
 		{:else if tab === 'yarn'}
-			<Yarn class="size-4" />
+			<Yarn class="surface-e2ee181ebe" />
 		{:else if tab === 'pnpm'}
-			<Pnpm class="size-4" />
+			<Pnpm class="surface-92e37c8387" />
 		{/if}
-		<span class="font-mono text-sm font-semibold">{tab}</span>
+		<span class="surface-83b34ccc25">{tab}</span>
 	</div>
 </button>

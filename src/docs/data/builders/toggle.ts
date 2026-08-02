@@ -24,7 +24,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'pressed',
 			type: 'Writable<boolean>',
-			description: 'A writable store that controls the pressed state of the toggle.',
+			description:
+				'A writable store that controls the pressed state of the toggle.',
 			see: SEE.BRING_YOUR_OWN_STORE,
 		},
 		{
@@ -45,7 +46,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'pressed',
 			type: 'Writable<boolean>',
-			description: 'A writable store that represents the pressed state of the toggle.',
+			description:
+				'A writable store that represents the pressed state of the toggle.',
 		},
 	],
 	options: OPTION_PROPS,
@@ -83,7 +85,10 @@ const keyboard: KeyboardSchema = [
 
 const schemas = [builder, root];
 
-const features = ['Full keyboard navigation', 'Can be controlled or uncontrolled'];
+const features = [
+	'Full keyboard navigation',
+	'Can be controlled or uncontrolled',
+];
 
 export const toggleData: BuilderData = {
 	schemas,

@@ -12,11 +12,15 @@ import {
 } from './menu.js';
 
 const BUILDER_NAME = 'context menu';
-const { elements, builders, states, options } = getMenuBuilderReturns(BUILDER_NAME);
+const { elements, builders, states, options } =
+	getMenuBuilderReturns(BUILDER_NAME);
 
 const builder = builderSchema(BUILDER_NAME, {
 	title: 'createContextMenu',
-	props: [...menuBuilderProps, PROPS.POSITIONING({ default: "placement: 'right'" })],
+	props: [
+		...menuBuilderProps,
+		PROPS.POSITIONING({ default: "placement: 'right'" }),
+	],
 	elements,
 	builders,
 	states,
@@ -43,7 +47,8 @@ const {
 
 const TRIGGER_NAME = 'trigger' as const;
 const trigger = elementSchema(TRIGGER_NAME, {
-	description: 'The element which when right clicked inside, opens the context menu.',
+	description:
+		'The element which when right clicked inside, opens the context menu.',
 	dataAttributes: getMenuTriggerDataAttrs(BUILDER_NAME),
 	events: contextMenuEvents[TRIGGER_NAME],
 });

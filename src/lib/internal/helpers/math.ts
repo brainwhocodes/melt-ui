@@ -7,7 +7,12 @@ export function roundValue(value: number, decimalCount: number) {
 	return Math.round(value * rounder) / rounder;
 }
 
-export function snapValueToStep(value: number, min: number, max: number, step: number): number {
+export function snapValueToStep(
+	value: number,
+	min: number,
+	max: number,
+	step: number,
+): number {
 	const remainder = (value - (isNaN(min) ? 0 : min)) % step;
 	let snappedValue =
 		Math.abs(remainder) * 2 >= step

@@ -1,6 +1,10 @@
 import { ATTRS, KBD, PROPS, SEE } from '$docs/constants.js';
 import type { KeyboardSchema } from '$docs/types.js';
-import { builderSchema, elementSchema, floatingSideAndAlignDataAttrs } from '$docs/utils/index.js';
+import {
+	builderSchema,
+	elementSchema,
+	floatingSideAndAlignDataAttrs,
+} from '$docs/utils/index.js';
 import { comboboxEvents } from '$lib/builders/combobox/events.js';
 import { listboxIdParts } from '$lib/builders/listbox/create.js';
 import type { BuilderData } from './index.js';
@@ -52,7 +56,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		{
 			name: 'selected',
 			type: 'Writable<ComboboxOption<T>>',
-			description: 'A writable store that can be used to get or update the selected item.',
+			description:
+				'A writable store that can be used to get or update the selected item.',
 			see: SEE.BRING_YOUR_OWN_STORE,
 		},
 		{
@@ -92,7 +97,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		},
 		{
 			name: 'label',
-			description: 'The builder store used to create the label for the combobox.',
+			description:
+				'The builder store used to create the label for the combobox.',
 		},
 		{
 			name: 'group',
@@ -104,7 +110,8 @@ const builder = builderSchema(BUILDER_NAME, {
 		},
 		{
 			name: 'hiddenInput',
-			description: 'The builder store used to create the combobox hidden input.',
+			description:
+				'The builder store used to create the combobox hidden input.',
 		},
 		{
 			name: 'arrow',
@@ -200,7 +207,8 @@ const option = elementSchema('option', {
 		{
 			name: 'label',
 			type: 'string',
-			description: 'The label of the item. When not present, the text content will be used.',
+			description:
+				'The label of the item. When not present, the text content will be used.',
 		},
 		{
 			name: 'disabled',
@@ -241,7 +249,8 @@ const label = elementSchema('label', {
 });
 
 const group = elementSchema('group', {
-	description: 'A function which takes in a unique key to group options together.',
+	description:
+		'A function which takes in a unique key to group options together.',
 	props: [
 		{
 			name: 'key',
@@ -258,7 +267,8 @@ const group = elementSchema('group', {
 });
 
 const groupLabel = elementSchema('group-label', {
-	description: 'A function which takes in a unique key to group options together.',
+	description:
+		'A function which takes in a unique key to group options together.',
 	props: [
 		{
 			name: 'key',
@@ -322,7 +332,17 @@ const keyboard: KeyboardSchema = [
 	},
 ];
 
-const schemas = [builder, menu, input, option, label, group, groupLabel, arrow, hiddenInput];
+const schemas = [
+	builder,
+	menu,
+	input,
+	option,
+	label,
+	group,
+	groupLabel,
+	arrow,
+	hiddenInput,
+];
 
 const features = [
 	'Full keyboard navigation',
