@@ -1,9 +1,9 @@
-import type { CreateDropdownMenuProps } from '$lib/index.js';
-import { sleep } from '$lib/internal/helpers/sleep.js';
 import { act, render, waitFor } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { describe, vi } from 'vitest';
+import type { CreateDropdownMenuProps } from '$lib/index.js';
+import { sleep } from '$lib/internal/helpers/sleep.js';
 import { testKbd as kbd } from '../utils.js';
 import DropdownMenuForceVisible from './DropdownMenuForceVisibleTest.svelte';
 import DropdownMenuTest from './DropdownMenuTest.svelte';
@@ -11,7 +11,9 @@ import DropdownMenuTest from './DropdownMenuTest.svelte';
 const OPEN_KEYS = [kbd.ENTER, kbd.ARROW_DOWN, kbd.SPACE];
 
 function setup(
-	props: CreateDropdownMenuProps & { submenuIds?: CreateDropdownMenuProps['ids'] } = {}
+	props: CreateDropdownMenuProps & {
+		submenuIds?: CreateDropdownMenuProps['ids'];
+	} = {},
 ) {
 	const user = userEvent.setup();
 	const returned = render(DropdownMenuTest, props);
@@ -115,25 +117,27 @@ describe('Dropdown Menu (Default)', () => {
 	});
 
 	test('Toggles checked to false for default checked checkbox items', async () => {
-		const { user, trigger, queryByTestId } = setup();
+		const { user, trigger, queryByTestId } = setup({
+			closeOnItemClick: false,
+		});
 		trigger.focus();
 		await user.keyboard(kbd.ENTER);
 		await user.keyboard(kbd.ARROW_DOWN);
 		expect(queryByTestId('check1')).not.toBeNull();
 		await user.keyboard(kbd.ENTER);
-		await user.keyboard(kbd.ENTER);
 		expect(queryByTestId('check1')).toBeNull();
 	});
 
 	test('Toggles checked to true for default unchecked checkbox items', async () => {
-		const { user, trigger, queryByTestId } = setup();
+		const { user, trigger, queryByTestId } = setup({
+			closeOnItemClick: false,
+		});
 
 		trigger.focus();
 		await user.keyboard(kbd.ENTER);
 		await user.keyboard(kbd.ARROW_DOWN);
 		await user.keyboard(kbd.ARROW_DOWN);
 		expect(queryByTestId('check2')).toBeNull();
-		await user.keyboard(kbd.ENTER);
 		await user.keyboard(kbd.ENTER);
 		expect(queryByTestId('check2')).not.toBeNull();
 	});
@@ -164,7 +168,7 @@ describe('Dropdown Menu (Default)', () => {
 			await user.keyboard(key);
 			expect(item).not.toHaveFocus();
 			expect(getByTestId(`${endItem}`)).toHaveFocus();
-		}
+		},
 	);
 
 	test('Arrow right when subtrigger hover focuses first item in submenu', async () => {
@@ -388,25 +392,27 @@ describe('Dropdown Menu (forceVisible)', () => {
 	});
 
 	test('Toggles checked to false for default checked checkbox items', async () => {
-		const { queryByTestId, user, trigger } = setupForceVis();
+		const { queryByTestId, user, trigger } = setupForceVis({
+			closeOnItemClick: false,
+		});
 
 		trigger.focus();
 		await user.keyboard(kbd.ENTER);
 		await user.keyboard(kbd.ARROW_DOWN);
 		expect(queryByTestId('check1')).not.toBeNull();
 		await user.keyboard(kbd.ENTER);
-		await user.keyboard(kbd.ENTER);
 		expect(queryByTestId('check1')).toBeNull();
 	});
 
 	test('Toggles checked to true for default unchecked checkbox items', async () => {
-		const { queryByTestId, user, trigger } = setupForceVis();
+		const { queryByTestId, user, trigger } = setupForceVis({
+			closeOnItemClick: false,
+		});
 		trigger.focus();
 		await user.keyboard(kbd.ENTER);
 		await user.keyboard(kbd.ARROW_DOWN);
 		await user.keyboard(kbd.ARROW_DOWN);
 		expect(queryByTestId('check2')).toBeNull();
-		await user.keyboard(kbd.ENTER);
 		await user.keyboard(kbd.ENTER);
 
 		await waitFor(() => expect(queryByTestId('check2')).not.toBeNull());
@@ -437,7 +443,7 @@ describe('Dropdown Menu (forceVisible)', () => {
 			await user.keyboard(key);
 			expect(item).not.toHaveFocus();
 			expect(getByTestId(`${endItem}`)).toHaveFocus();
-		}
+		},
 	);
 
 	test('Arrow right when subtrigger hover focuses first item in submenu', async () => {
@@ -466,7 +472,9 @@ describe('Dropdown Menu (forceVisible)', () => {
 	});
 
 	test('loops through items when loop prop true', async () => {
-		const { queryByTestId, user, trigger, getByTestId } = setupForceVis({ loop: true });
+		const { queryByTestId, user, trigger, getByTestId } = setupForceVis({
+			loop: true,
+		});
 		const menuItems = ['item1', 'checkboxItem1', 'checkboxItem2', 'subtrigger'];
 
 		await user.click(trigger);

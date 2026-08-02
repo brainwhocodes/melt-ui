@@ -1,10 +1,10 @@
 import { render, waitFor } from '@testing-library/svelte';
+import { userEvent } from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { describe, vi } from 'vitest';
-import { userEvent } from '@testing-library/user-event';
+import type { CreateContextMenuProps } from '$lib/index.js';
 import { testKbd as kbd } from '../utils.js';
 import ContextMenuTest from './ContextMenuTest.svelte';
-import type { CreateContextMenuProps } from '$lib/index.js';
 
 function setup(props: CreateContextMenuProps = {}) {
 	const user = userEvent.setup();
@@ -18,12 +18,17 @@ function setup(props: CreateContextMenuProps = {}) {
 }
 
 async function open(
-	props: CreateContextMenuProps & { submenuIds?: CreateContextMenuProps['ids'] } = {}
+	props: CreateContextMenuProps & {
+		submenuIds?: CreateContextMenuProps['ids'];
+	} = {},
 ) {
 	const returned = setup(props);
 	const { queryByTestId, getByTestId, user, trigger } = returned;
 	expect(queryByTestId('menu')).toBeNull();
-	await user.pointer([{ target: trigger }, { keys: '[MouseRight]', target: trigger }]);
+	await user.pointer([
+		{ target: trigger },
+		{ keys: '[MouseRight]', target: trigger },
+	]);
 	await waitFor(() => expect(queryByTestId('menu')).not.toBeNull());
 	const menu = getByTestId('menu');
 	expect(menu).toBeVisible();
@@ -41,7 +46,6 @@ describe('Context Menu', () => {
 			return window.setTimeout(() => fn(Date.now()), 16);
 		});
 	});
-
 	afterEach(() => {
 		vi.unstubAllGlobals();
 	});
@@ -83,23 +87,25 @@ describe('Context Menu', () => {
 	});
 
 	test('Toggles checked to false for default checked checkbox items', async () => {
-		const { user, queryByTestId } = await open();
+		const { user, queryByTestId } = await open({
+			closeOnItemClick: false,
+		});
 		await user.keyboard(kbd.ARROW_DOWN);
 		await user.keyboard(kbd.ARROW_DOWN);
 		expect(queryByTestId('check1')).not.toBeNull();
-		await user.keyboard(kbd.ENTER);
 		await user.keyboard(kbd.ENTER);
 		expect(queryByTestId('check1')).toBeNull();
 	});
 
 	test('Toggles checked to true for default unchecked checkbox items', async () => {
-		const { user, queryByTestId } = await open();
+		const { user, queryByTestId } = await open({
+			closeOnItemClick: false,
+		});
 
 		await user.keyboard(kbd.ARROW_DOWN);
 		await user.keyboard(kbd.ARROW_DOWN);
 		await user.keyboard(kbd.ARROW_DOWN);
 		expect(queryByTestId('check2')).toBeNull();
-		await user.keyboard(kbd.ENTER);
 		await user.keyboard(kbd.ENTER);
 		expect(queryByTestId('check2')).not.toBeNull();
 	});
@@ -127,7 +133,7 @@ describe('Context Menu', () => {
 			await user.keyboard(key);
 			expect(item).not.toHaveFocus();
 			expect(getByTestId(`${endItem}`)).toHaveFocus();
-		}
+		},
 	);
 
 	test('Arrow right when subtrigger hover focuses first item in submenu', async () => {
