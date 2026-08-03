@@ -11,6 +11,7 @@ export type ComponentMeta = {
 	category: ComponentCategory;
 	description: string;
 	exports: readonly string[];
+	example: string;
 };
 
 export const componentMap = {
@@ -20,6 +21,7 @@ export const componentMap = {
 		description:
 			'Semantic status and callout content with restrained visual variants.',
 		exports: ['Alert'],
+		example: `<Alert variant="success">Saved.</Alert>`,
 	},
 	'alert-dialog': {
 		name: 'Alert Dialog',
@@ -154,6 +156,14 @@ export const componentMap = {
 		description:
 			'Label, description, validation, and control layout with ARIA wiring.',
 		exports: ['Field'],
+	},
+	'inline-edit': {
+		name: 'Inline Edit',
+		category: 'forms',
+		description:
+			'A direct value editor with explicit save, cancel, and keyboard recovery.',
+		exports: ['InlineEdit'],
+		example: `<InlineEdit label="Project name" bind:value />`,
 	},
 	input: {
 		name: 'Input',

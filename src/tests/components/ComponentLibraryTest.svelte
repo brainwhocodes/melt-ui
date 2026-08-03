@@ -40,6 +40,7 @@
 		Empty,
 		Field,
 		Input,
+		InlineEdit,
 		InputGroup,
 		Item,
 		Kbd,
@@ -91,6 +92,7 @@
 	let panelSizes = [50, 50];
 	let commandOpen = true;
 	let commandValue: string | null = null;
+	let inlineValue = 'Melt UI';
 
 	const columns: DataTableColumn[] = [
 		{ key: 'name', header: 'Name', accessor: 'name', sortable: true },
@@ -121,6 +123,12 @@
 		<span slot="suffix">USD</span>
 	</InputGroup>
 	<NativeSelect aria-label="Role"><option>Developer</option></NativeSelect>
+	<InlineEdit
+		id="project-name"
+		label="Project name"
+		bind:value={inlineValue}
+	/>
+	<div aria-live="polite">{inlineValue}</div>
 	<Textarea aria-label="Notes" />
 	<Alert variant="success"><span slot="title">Ready</span>Components loaded.</Alert>
 	<AspectRatio ratio={16 / 9}><span>Media</span></AspectRatio>

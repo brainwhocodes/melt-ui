@@ -8,7 +8,7 @@
 	{#each navConfig.sidebarNav as navItem, index (index)}
 		<div>
 			<span
-				class="surface-985baacfce"
+				class="docs-sidebar-heading surface-985baacfce"
 			>
 				{navItem.title}
 			</span>
@@ -36,3 +36,9 @@
 		</div>
 	{/each}
 </nav>
+
+<style>
+	.docs-sidebar-heading {
+		text-align: left;
+	}
+</style>

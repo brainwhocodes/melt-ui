@@ -21,6 +21,27 @@ describe('styled component library', () => {
 		expect(email).toHaveAttribute('aria-invalid', 'true');
 		expect(email).toHaveAccessibleDescription('Work address Email is required');
 		expect(view.getByRole('alert')).toHaveTextContent('Components loaded.');
+
+		const inlineDisplay = view.getByRole('button', { name: 'Edit Project name' });
+		await user.click(inlineDisplay);
+		const inlineInput = view.getByRole('textbox', { name: 'Project name' });
+		expect(inlineInput).toHaveFocus();
+		expect(inlineInput).toHaveValue('Melt UI');
+		await user.clear(inlineInput);
+		await user.type(inlineInput, 'Component gallery');
+		await user.keyboard('{Enter}');
+		expect(view.getAllByText('Component gallery')).toHaveLength(2);
+
+		await user.click(view.getByRole('button', { name: 'Edit Project name' }));
+		const reopenedInlineInput = view.getByRole('textbox', {
+			name: 'Project name',
+		});
+		await user.keyboard('{Escape}');
+		expect(view.getByRole('button', { name: 'Edit Project name' })).toHaveFocus();
+		expect(view.getByRole('button', { name: 'Edit Project name' })).toHaveTextContent(
+			'Component gallery',
+		);
+
 		expect(
 			view.getByRole('status', { name: 'Loading records' }),
 		).toBeInTheDocument();

@@ -221,6 +221,7 @@
 .melt-sidebar__header,
 .melt-sidebar__footer {
 	padding: 1rem;
+	text-align: start;
 }
 
 .melt-sidebar__header {

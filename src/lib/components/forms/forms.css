@@ -361,6 +361,68 @@
 	border-inline-end: 1px solid var(--melt-color-border);
 }
 
+.melt-inline-edit {
+	display: inline-grid;
+	gap: 0.5rem;
+	min-inline-size: min(100%, 16rem);
+	color: var(--melt-color-ink);
+}
+
+.melt-inline-edit__display {
+	justify-content: space-between;
+	min-inline-size: 100%;
+	border-color: transparent;
+	border-style: dashed;
+	font-weight: 550;
+}
+
+.melt-inline-edit__display:focus-visible,
+.melt-inline-edit__display:hover {
+	border-color: var(--melt-color-border);
+}
+
+.melt-inline-edit__value {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.melt-inline-edit__icon {
+	color: var(--melt-color-muted);
+	font-size: 0.8125em;
+}
+
+.melt-inline-edit__form {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 0.5rem;
+	align-items: start;
+}
+
+.melt-inline-edit__actions {
+	display: inline-flex;
+	gap: 0.5rem;
+}
+
+.melt-inline-edit__error {
+	grid-column: 1 / -1;
+	margin: 0;
+	color: var(--melt-color-danger);
+	font-size: 0.8125rem;
+	line-height: 1.45;
+}
+
+@media (width <= 32rem) {
+	.melt-inline-edit__form {
+		grid-template-columns: 1fr;
+	}
+
+	.melt-inline-edit__actions {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
 .melt-input-group__suffix {
 	border-inline-start: 1px solid var(--melt-color-border);
 }
