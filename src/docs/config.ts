@@ -7,13 +7,13 @@ export const siteConfig = {
 	url: 'https://melt-ui.com',
 	ogImage: 'https://melt-ui.com/og.jpg',
 	description:
-		'An open-source collection of accessible & customizable component builders for creating user interfaces with Svelte.',
+		'An open-source collection of accessible, styled Svelte components built for fast applications.',
 	links: {
 		github: 'https://github.com/melt-ui/melt-ui',
 		discord: 'https://melt-ui.com/discord',
 	},
 	keywords:
-		'meltui,svelte,sveltekit,sveltekit components,svelte headless, radix svelte',
+		'meltui,svelte,sveltekit,svelte components,accessible components,component library',
 };
 
 type NavConfig = {
@@ -26,6 +26,10 @@ export const navConfig: NavConfig = {
 		{
 			title: 'Docs',
 			href: '/docs',
+		},
+		{
+			title: 'Components',
+			href: '/docs/components',
 		},
 		{
 			title: 'Builders',
@@ -69,6 +73,16 @@ export const navConfig: NavConfig = {
 				{
 					title: 'Dates',
 					href: '/docs/dates',
+					items: [],
+				},
+			],
+		},
+		{
+			title: 'Components',
+			items: [
+				{
+					title: 'Component catalog',
+					href: '/docs/components',
 					items: [],
 				},
 			],

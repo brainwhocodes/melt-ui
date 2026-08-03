@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createLinkPreview, melt } from '$lib/index.js';
+	import { createLinkPreview } from '$lib/index.js';
 	import { fly } from 'svelte/transition';
 
 	const {
@@ -15,7 +15,7 @@
 	href="https://github.com/melt-ui/melt-ui"
 	target="_blank"
 	rel="noopener noreferrer"
-	use:melt={$trigger}
+	{...$trigger} use:trigger
 >
 	<img
 		src="/logo_mark.svg"
@@ -27,7 +27,7 @@
 
 {#if $open}
 	<div
-		use:melt={$content}
+		{...$content} use:content
 		transition:fly={{ y: -5, duration: 100 }}
 		class="force-dark surface-342363b8cb"
 	>
@@ -60,7 +60,7 @@
 				</div>
 			</div>
 		</div>
-		<div use:melt={$arrow} />
+		<div {...$arrow} use:arrow></div>
 	</div>
 {/if}
 

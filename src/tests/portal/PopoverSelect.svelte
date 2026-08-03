@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createPopover, createSelect, melt } from '$lib/index.js';
+	import { createPopover, createSelect } from '$lib/index.js';
 	import { Settings2 } from '$icons/index.js';
 	import type { PortalConfig } from '$lib/internal/actions/portal.js';
 
@@ -17,7 +17,7 @@
 <button
 	type="button"
 	class="trigger"
-	use:melt={$trigger}
+	{...$trigger} use:trigger
 	aria-label="Update dimensions"
 	data-testid="popover-trigger"
 >
@@ -25,13 +25,13 @@
 	<span class="surface-3b59b64e0c">Open Popover</span>
 </button>
 
-<div use:melt={$content} data-testid="popover-content">
-	<div use:melt={$arrow} data-testid="popover-arrow" />
-	<button use:melt={$selectTrigger} data-testid="select-trigger"> Open Select </button>
-	<div use:melt={$menu} data-testid="select-menu">
-		<div use:melt={$option({ value: 'option 1', label: 'option 1' })}>option 1</div>
+<div {...$content} use:content data-testid="popover-content">
+	<div {...$arrow} use:arrow data-testid="popover-arrow"></div>
+	<button {...$selectTrigger} use:selectTrigger data-testid="select-trigger"> Open Select </button>
+	<div {...$menu} use:menu data-testid="select-menu">
+		<div {...$option({ value: 'option 1', label: 'option 1' })} use:option>option 1</div>
 	</div>
-	<button use:melt={$close} data-testid="popover-close">Close</button>
+	<button {...$close} use:close data-testid="popover-close">Close</button>
 </div>
-<div class="surface-999359b9b6" />
-<div data-testid="outside" class="surface-fdd1e167b2" />
+<div class="surface-999359b9b6"></div>
+<div data-testid="outside" class="surface-fdd1e167b2"></div>

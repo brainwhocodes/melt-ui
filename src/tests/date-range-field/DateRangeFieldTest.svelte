@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { melt } from '$lib/index.js';
 	import {
 		createDateRangeField,
 		type CreateDateRangeFieldProps,
@@ -56,15 +55,15 @@
 			<p data-testid="end-value">{$insideValue?.end}</p>
 		</div>
 		<div>
-			<span use:melt={$label} data-testid="label" class="surface-2fd60da88b">Booking Dates</span>
+			<span {...$label} use:label data-testid="label" class="surface-2fd60da88b">Booking Dates</span>
 			<div
-				use:melt={$field}
+				{...$field} use:field
 				data-testid="field"
 				class="{$isInvalid && 'preview-border-2 preview-border-red-600'} surface-633adce4a6"
 			>
 				{#each $segmentContents.start as seg, i (i)}
 					<div
-						use:melt={$startSegment(seg.part)}
+						{...$startSegment(seg.part)} use:startSegment
 						class="segment {$isInvalid && 'preview-text-red-600'}"
 						data-testid="start-{seg.part}"
 					>
@@ -74,7 +73,7 @@
 				<div aria-hidden="true" class="surface-a1d6671556">-</div>
 				{#each $segmentContents.end as seg, i (i)}
 					<div
-						use:melt={$endSegment(seg.part)}
+						{...$endSegment(seg.part)} use:endSegment
 						class="segment {$isInvalid && 'preview-text-red-600'}"
 						data-testid="end-{seg.part}"
 					>
@@ -83,6 +82,6 @@
 				{/each}
 			</div>
 		</div>
-		<span use:melt={$validation} data-testid="validation">Validation</span>
+		<span {...$validation} use:validation data-testid="validation">Validation</span>
 	</div>
 </main>

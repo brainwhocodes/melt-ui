@@ -3,16 +3,15 @@
 
 import type { Navigation, Page } from '@sveltejs/kit';
 import { configure } from '@testing-library/dom';
-import * as matchers from '@testing-library/jest-dom/matchers';
+import '@testing-library/jest-dom/vitest';
 import { toHaveNoViolations } from 'jest-axe';
+import ResizeObserver from 'resize-observer-polyfill';
 import { readable } from 'svelte/store';
 import { expect, vi } from 'vitest';
 import * as environment from '$app/environment';
 import * as navigation from '$app/navigation';
 import * as stores from '$app/stores';
 
-// Add custom jest matchers
-expect.extend(matchers);
 
 expect.extend(toHaveNoViolations as never);
 
@@ -92,6 +91,45 @@ vi.mock('$app/stores', (): typeof stores => {
 	};
 });
 
-global.ResizeObserver = require('resize-observer-polyfill');
 
-Element.prototype.scrollIntoView = () => {};
+globalThis.ResizeObserver ??= ResizeObserver;
+if (typeof Element !== 'undefined') {
+	Element.prototype.animate = (_keyframes, options) => {
+		const duration =
+			typeof options === 'number'
+				? options
+				: Number(options?.duration ?? 0);
+		let cancelled = false;
+		let finishHandler: Animation['onfinish'] = null;
+		const animation = {
+			currentTime: 0,
+			effect: null,
+			playState: 'running',
+			cancel() {
+				cancelled = true;
+				animation.playState = 'idle';
+			},
+			get onfinish() {
+				return finishHandler;
+			},
+			set onfinish(handler) {
+				finishHandler = handler;
+				if (!handler) return;
+				queueMicrotask(() => {
+					if (cancelled || finishHandler !== handler) return;
+					animation.currentTime = duration;
+					animation.playState = 'finished';
+					handler.call(
+						animation as unknown as Animation,
+						new Event('finish') as AnimationPlaybackEvent,
+					);
+				});
+			},
+		};
+		return animation as unknown as Animation;
+	};
+}
+if (typeof Element !== 'undefined') {
+	Element.prototype.scrollIntoView = () => {};
+	window.scrollTo = () => {};
+}

@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { createDialog, melt } from '$lib/index.js';
+	import { createDialog } from '$lib/index.js';
 	import { fade, fly } from 'svelte/transition';
 	import { Menu, X } from '$icons/index.js';
 	import { Button, Logo, MobileNavLink } from '$docs/components/index.js';
-	import { navConfig } from '$docs/config.js';
-	import Switch from '../switch.svelte';
-	import { getUsingPreprocessor } from '$routes/store.js';
+	import { navConfig, siteConfig } from '$docs/config.js';
 	import { writable } from 'svelte/store';
 
 	const open = writable(false);
@@ -14,44 +12,39 @@
 	} = createDialog({
 		open,
 	});
-
-	const usingPreprocessor = getUsingPreprocessor();
 </script>
 
 <button
-	use:melt={$trigger}
+	{...$trigger} use:trigger
 	class="surface-0fc523b133"
 >
 	<Menu class="surface-680d89d586" />
 	<span class="surface-5af4a07943">Toggle Menu</span>
 </button>
 {#if $open}
-	<div use:melt={$portalled} class="surface-ca315bd640">
-		<div
-			use:melt={$overlay}
+	<div {...$portalled} use:portalled class="surface-ca315bd640">
+		<div {...$overlay} use:overlay
 			class="surface-7b6b9ec05f"
-			transition:fade={{ duration: 150 }}
-		/>
+			transition:fade={{ duration: 150 }}></div>
 		<div
-			use:melt={$content}
+			{...$content} use:content
 			class="menu safe-area preview-space-x-2      surface-ba286df37b"
 			transition:fly={{ y: 768, duration: 300, opacity: 1 }}
 		>
 			<div class="surface-43b75a033f">
-				<MobileNavLink href="/" {open}>
+				<MobileNavLink href="/" {open} aria-label="Melt UI home">
 					<Logo class="surface-4776956474" withText textColor="white" />
 				</MobileNavLink>
-				<Button class="surface-71de47bb5e" size="sm" variant="faded" {...$close} action={$close.action}>
+				<Button
+					class="surface-71de47bb5e"
+					size="sm"
+					variant="faded"
+					aria-label="Close menu"
+					{...$close}
+					action={$close.action}
+				>
 					<X class="surface-5d7492796d" />
 				</Button>
-			</div>
-
-			<div class="surface-c4eb9abb8e">
-				<Switch id="preprocessor" bind:checked={$usingPreprocessor} keepState>
-					<a href="/docs/preprocessor" class="surface-90639c0745">
-						Preprocessor
-					</a>
-				</Switch>
 			</div>
 
 			<div class="surface-25065a9855">
@@ -63,6 +56,18 @@
 							</MobileNavLink>
 						{/if}
 					{/each}
+					<MobileNavLink
+						href={siteConfig.links.github}
+						{open}
+						target="_blank"
+						rel="noopener noreferrer">GitHub</MobileNavLink
+					>
+					<MobileNavLink
+						href={siteConfig.links.discord}
+						{open}
+						target="_blank"
+						rel="noopener noreferrer">Discord</MobileNavLink
+					>
 				</div>
 				<div class="surface-5a782129da">
 					{#each navConfig.sidebarNav as navItem, index (index)}

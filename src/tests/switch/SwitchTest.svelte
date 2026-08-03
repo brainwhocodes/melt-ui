@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createSwitch, melt, type CreateSwitchProps } from '$lib/index.js';
+	import { createSwitch, type CreateSwitchProps } from '$lib/index.js';
 
 	export let checked: CreateSwitchProps['checked'] = undefined;
 	export let defaultChecked: CreateSwitchProps['defaultChecked'] = undefined;
@@ -25,7 +25,7 @@
 <main>
 	<form>
 		<label id="switch-label" for="switch" data-testid="label"> Airplane mode </label>
-		<button use:melt={$root} id="switch" aria-labelledby="switch-label" data-testid="switch" />
-		<input use:melt={$input} data-testid="input" />
+		<button {...$root} use:root id="switch" aria-labelledby="switch-label" data-testid="switch"></button>
+		<input {...$input} use:input data-testid="input" />
 	</form>
 </main>

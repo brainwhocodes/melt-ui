@@ -1,11 +1,21 @@
 import { sveltekit } from '@sveltejs/kit/vite';
+import { svelteTesting } from '@testing-library/svelte/vite';
 import { pagefind } from 'vite-plugin-pagefind';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	plugins: [
 		sveltekit(),
-		pagefind({ publicDir: 'static', buildDir: 'build', buildScript: 'deploy' }),
+		svelteTesting(),
+		...(process.env.VITEST
+			? []
+			: [
+					pagefind({
+						assetsDirectory: 'static',
+						outputDirectory: 'build',
+						buildScript: 'deploy',
+					}),
+				]),
 	],
 	test: {
 		include: ['src/**/*.spec.{js,ts}'],
@@ -20,11 +30,7 @@ export default defineConfig({
 		coverage: {
 			exclude: ['setupTest.ts'],
 		},
-		alias: [{ find: /^svelte$/, replacement: 'svelte/internal' }],
-		deps: {
-			inline: ['clsx'],
-		},
-		retry: 5,
+		retry: process.env.CI ? 1 : 0,
 		allowOnly: !process.env.CI,
 	},
 });

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createContextMenu, melt } from '$lib/index.js';
+	import { createContextMenu } from '$lib/index.js';
 	import { writable } from 'svelte/store';
 	import { ChevronRight, Check } from '$icons/index.js';
 
@@ -44,15 +44,15 @@
 	];
 </script>
 
-<span class="trigger" use:melt={$trigger} aria-label="Update dimensions">
+<span class="trigger" {...$trigger} use:trigger aria-label="Update dimensions">
 	Right click me.
 </span>
-<div use:melt={$overlay} class="surface-73e27657d3" />
-<div class="force-dark menu" use:melt={$menu}>
-	<div class="item" use:melt={$item}>About Melt UI</div>
-	<div class="item" use:melt={$item}>Check for Updates...</div>
-	<div class="separator" use:melt={$separator} />
-	<div class="item" use:melt={$checkboxItem}>
+<div {...$overlay} use:overlay class="surface-73e27657d3"></div>
+<div class="force-dark menu" {...$menu} use:menu>
+	<div class="item" {...$item} use:item>About Melt UI</div>
+	<div class="item" {...$item} use:item>Check for Updates...</div>
+	<div class="separator" {...$separator} use:separator></div>
+	<div class="item" {...$checkboxItem} use:checkboxItem>
 		<div class="check">
 			{#if $settingsSync}
 				<Check class="surface-6b66b31008" />
@@ -60,20 +60,20 @@
 		</div>
 		Settings Sync is On
 	</div>
-	<div class="item" use:melt={$subTriggerA}>
+	<div class="item" {...$subTriggerA} use:subTriggerA>
 		Profiles
 		<div class="rightSlot">
 			<ChevronRight class="surface-5d375913a0" />
 		</div>
 	</div>
-	<div class="menu subMenu" use:melt={$subMenuA}>
+	<div class="menu subMenu" {...$subMenuA} use:subMenuA>
 		<div class="text">People</div>
-		<div use:melt={$radioGroup}>
+		<div {...$radioGroup} use:radioGroup>
 			{#each personsArr as person}
-				<div class="item" use:melt={$radioItem({ value: person })}>
+				<div class="item" {...$radioItem({ value: person })} use:radioItem>
 					<div class="check">
 						{#if $isChecked(person)}
-							<div class="dot" />
+							<div class="dot"></div>
 						{/if}
 					</div>
 					{person}
@@ -81,9 +81,9 @@
 			{/each}
 		</div>
 	</div>
-	<div use:melt={$separator} class="separator" />
+	<div {...$separator} use:separator class="separator"></div>
 
-	<div class="item" use:melt={$checkboxItemA}>
+	<div class="item" {...$checkboxItemA} use:checkboxItemA>
 		<div class="check">
 			{#if $hideMeltUI}
 				<Check class="surface-45072517ac" />
@@ -92,12 +92,12 @@
 		Hide Melt UI
 		<div class="rightSlot">⌘H</div>
 	</div>
-	<div class="item" use:melt={$item} data-disabled>
+	<div class="item" {...$item} use:item data-disabled>
 		Show All Components
 		<div class="rightSlot">⇧⌘N</div>
 	</div>
-	<div use:melt={$separator} class="separator" />
-	<div class="item" use:melt={$item}>
+	<div {...$separator} use:separator class="separator"></div>
+	<div class="item" {...$item} use:item>
 		Quit Melt UI
 		<div class="rightSlot">⌘Q</div>
 	</div>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createLinkPreview, melt, type CreateLinkPreviewProps } from '$lib/index.js';
+	import { createLinkPreview, type CreateLinkPreviewProps } from '$lib/index.js';
 
 	type $$Props = CreateLinkPreviewProps & { setRootEscapeBehaviorIgnore: () => void };
 	export let setRootEscapeBehaviorIgnore: () => void;
@@ -10,9 +10,9 @@
 	} = createLinkPreview({ ...$$restProps, forceVisible: true, openDelay: 0, closeDelay: 0 });
 </script>
 
-<button use:melt={$trigger} data-testid="link-preview-trigger">trigger</button>
+<button {...$trigger} use:trigger data-testid="link-preview-trigger">trigger</button>
 {#if $open}
-	<div use:melt={$content} data-testid="link-preview-content">
+	<div {...$content} use:content data-testid="link-preview-content">
 		<button
 			data-testid="link-preview-set-parent-escape-behavior-ignore"
 			on:click={setRootEscapeBehaviorIgnore}

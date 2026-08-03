@@ -1,9 +1,5 @@
 <script lang="ts">
-	import {
-		createDateRangeField,
-		melt,
-		type CreateDateRangeFieldProps,
-	} from '$lib/index.js';
+	import { createDateRangeField, type CreateDateRangeFieldProps } from '$lib/index.js';
 	import { CalendarDateTime } from '@internationalized/date';
 
 	export let defaultValue: CreateDateRangeFieldProps['defaultValue'] =
@@ -19,11 +15,11 @@
 </script>
 
 <div>
-	<span use:melt={$label}>Availability</span>
-	<div use:melt={$field}>
+	<span {...$label} use:label>Availability</span>
+	<div {...$field} use:field>
 		<div>
 			{#each $segmentContents.start as seg, i (i)}
-				<div use:melt={$startSegment(seg.part)}>
+				<div {...$startSegment(seg.part)} use:startSegment>
 					{seg.value}
 				</div>
 			{/each}
@@ -31,7 +27,7 @@
 		<div aria-hidden="true">-</div>
 		<div>
 			{#each $segmentContents.end as seg, i (i)}
-				<div use:melt={$endSegment(seg.part)}>
+				<div {...$endSegment(seg.part)} use:endSegment>
 					{seg.value}
 				</div>
 			{/each}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createDialog, melt, type CreateDialogProps } from '$lib/index.js';
+	import { createDialog, type CreateDialogProps } from '$lib/index.js';
 	import { fade } from 'svelte/transition';
 
 	type $$Props = CreateDialogProps;
@@ -13,21 +13,21 @@
 </script>
 
 <main data-testid="main">
-	<button use:melt={$trigger} data-testid="trigger">Open</button>
+	<button {...$trigger} use:trigger data-testid="trigger">Open</button>
 	{#if $open}
-		<div use:melt={$portalled} data-testid="portalled">
-			<div use:melt={$overlay} data-testid="overlay" transition:fade />
-			<div use:melt={$content} data-testid="content" transition:fade>
-				<h2 use:melt={$title}>Title</h2>
-				<p use:melt={$description}>Description</p>
+		<div {...$portalled} use:portalled data-testid="portalled">
+			<div {...$overlay} use:overlay data-testid="overlay" transition:fade></div>
+			<div {...$content} use:content data-testid="content" transition:fade>
+				<h2 {...$title} use:title>Title</h2>
+				<p {...$description} use:description>Description</p>
 
-				<button use:melt={$close} data-testid="closer">Close</button>
-				<button use:melt={$close} data-testid="last">Close2</button>
+				<button {...$close} use:close data-testid="closer">Close</button>
+				<button {...$close} use:close data-testid="last">Close2</button>
 			</div>
 		</div>
 	{/if}
 </main>
-<div id="portal-target" data-testid="portal-target" />
+<div id="portal-target" data-testid="portal-target"></div>
 
 <style lang="scss">
 	[data-testid='overlay'] {

@@ -1,16 +1,14 @@
 //@ts-check
 
-import { escapeSvelte } from '@huntabyte/mdsvex';
+import { escapeSvelte } from 'mdsvex';
 import { toHtml } from 'hast-util-to-html';
 import { resolve } from 'path';
 import rehypePrettyCode from 'rehype-pretty-code';
-import rehypeRewrite from 'rehype-rewrite';
 import { codeImport } from 'remark-code-import';
 import remarkGfm from 'remark-gfm';
 import { getHighlighter } from 'shiki';
 import { visit } from 'unist-util-visit';
 import { fileURLToPath } from 'url';
-import { processMeltAttributes } from './src/docs/pp.js';
 
 /**
  * @typedef {import('mdast').Root} MdastRoot
@@ -20,6 +18,9 @@ import { processMeltAttributes } from './src/docs/pp.js';
  */
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
+/** @type {ReturnType<typeof getHighlighter> | undefined} */
+let prettyCodeHighlighterPromise;
+
 
 /** @type {import('rehype-pretty-code').Options} */
 const prettyCodeOptions = {
@@ -38,7 +39,7 @@ const prettyCodeOptions = {
 		node.properties.className = ['chars--highlighted'];
 	},
 	getHighlighter: (options) =>
-		getHighlighter({
+		(prettyCodeHighlighterPromise ??= getHighlighter({
 			...options,
 			langs: [
 				'plaintext',
@@ -50,48 +51,11 @@ const prettyCodeOptions = {
 				import('shiki/langs/shellscript.mjs'),
 			],
 			themes: [import('shiki/themes/github-dark.mjs')],
-		}),
-};
-
-const removePPFromText = (node) => {
-	if (node?.children?.length) {
-		for (const child of node.children) {
-			if (child.type === 'text') {
-				child.value = processMeltAttributes(child.value);
-			}
-			if (child.children?.length) {
-				removePPFromText(child);
-			}
-		}
-	}
-};
-
-const rehypeRewriteOptions = {
-	rewrite: (node, index, parent) => {
-		if (
-			node?.type === 'element' &&
-			node?.tagName === 'Components.pre' &&
-			!node.properties['data-non-pp']
-		) {
-			const clonedNode = JSON.parse(JSON.stringify(node));
-			const nonPPNode = {
-				...clonedNode,
-				properties: { ...clonedNode.properties, 'data-non-pp': true },
-			};
-
-			removePPFromText(nonPPNode);
-
-			parent.children = [
-				...parent.children.slice(0, index),
-				node,
-				nonPPNode,
-				...parent.children.slice(index + 1),
-			];
-		}
-	},
+		})),
 };
 
 export const mdsvexOptions = {
+	highlight: false,
 	extensions: ['.md'],
 	layout: resolve(__dirname, './src/docs/components/markdown/layout.svelte'),
 	smartypants: {
@@ -102,7 +66,6 @@ export const mdsvexOptions = {
 	},
 	remarkPlugins: [remarkGfm, remarkEscapeSvelte, codeImport],
 	rehypePlugins: [
-		[rehypeRewrite, rehypeRewriteOptions],
 		rehypeComponentPreToPre,
 		[rehypePrettyCode, prettyCodeOptions],
 		rehypeHandleMetadata,
@@ -166,6 +129,7 @@ function rehypePreToComponentPre() {
 	};
 }
 
+
 /**
  * @returns {HastTransformer}
  */
@@ -208,22 +172,11 @@ function rehypeHandleMetadata() {
  */
 function rehypeRenderCode() {
 	return async (tree) => {
-		let counter = 0;
 		visit(tree, (node) => {
 			if (
 				node?.type === 'element' &&
 				(node?.tagName === 'Components.pre' || node?.tagName === 'pre')
 			) {
-				counter++;
-
-				const isNonPP = counter % 2 === 0;
-				if (isNonPP) {
-					node.properties = {
-						...node.properties,
-						'data-non-pp': '',
-					};
-				}
-
 				const codeEl = node.children[0];
 				if (codeEl.type === 'element' && codeEl.tagName !== 'code') {
 					return;

@@ -10,13 +10,14 @@ node_modules
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 /test-results/
-coverage/
-storybook-static
-.vercel
-/test-results/
 /playwright-report/
 /playwright/.cache/
+/.vitest-attachments/
+/storybook-static/
+/coverage/
 /.pnpm-store/
+/public/pagefind/
+/src/**/__screenshots__/
 
 # Pagefind
 static/pagefind

@@ -1,10 +1,5 @@
 <script lang="ts">
-	import {
-		createCombobox,
-		melt,
-		type ComboboxOptionProps,
-		type CreateComboboxProps,
-	} from '$lib/index.js';
+	import { createCombobox, type ComboboxOptionProps, type CreateComboboxProps } from '$lib/index.js';
 	import { removeUndefined } from '../utils.js';
 
 	export let options: ComboboxOptionProps[] = [
@@ -48,16 +43,16 @@
 	<button on:click={() => open.update((curr) => !curr)} data-testid="toggle-btn">Toggle Open</button
 	>
 	<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
-	<label use:melt={$label} data-testid="label">Label</label>
+	<label {...$label} use:label data-testid="label">Label</label>
 
-	<input use:melt={$input} data-testid="input" />
+	<input {...$input} use:input data-testid="input" />
 
 	{#if $open}
-		<ul use:melt={$menu} data-testid="menu">
+		<ul {...$menu} use:menu data-testid="menu">
 			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 			<div tabindex="0">
 				{#each options as o, index (index)}
-					<li use:melt={$option(o)}>
+					<li {...$option(o)} use:option>
 						<div>
 							<span>{o.label}</span>
 							<span>{o.value}</span>
@@ -69,5 +64,5 @@
 			</div>
 		</ul>
 	{/if}
-	<div data-testid="outside-click" />
+	<div data-testid="outside-click"></div>
 </main>

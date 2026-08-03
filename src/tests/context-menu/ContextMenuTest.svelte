@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createContextMenu, melt, type CreateContextMenuProps } from '$lib/index.js';
+	import { createContextMenu, type CreateContextMenuProps } from '$lib/index.js';
 	import { writable } from 'svelte/store';
 	import { ChevronRight } from '$icons/index.js';
 	import { fade } from 'svelte/transition';
@@ -62,13 +62,13 @@
 <main>
 	<div data-testid="outside-click">outside</div>
 	<button id="closeFocus" data-testid="closeFocus">close focus</button>
-	<div use:melt={$trigger} aria-label="Update dimensions" data-testid="trigger">open menu</div>
+	<div {...$trigger} use:trigger aria-label="Update dimensions" data-testid="trigger">open menu</div>
 	{#if $open}
-		<div use:melt={$menu} data-testid="menu" transition:fade>
-			<div use:melt={$item} data-testid="item1">Item 1</div>
-			<div use:melt={$item} data-testid="item2" data-disabled>Item 2</div>
-			<div class="separator" use:melt={$separator} />
-			<div data-testid="checkboxItem1" use:melt={$settingsSyncCheckbox}>
+		<div {...$menu} use:menu data-testid="menu" transition:fade>
+			<div {...$item} use:item data-testid="item1">Item 1</div>
+			<div {...$item} use:item data-testid="item2" data-disabled>Item 2</div>
+			<div class="separator" {...$separator} use:separator></div>
+			<div data-testid="checkboxItem1" {...$settingsSyncCheckbox} use:settingsSyncCheckbox>
 				<div class="check">
 					{#if $settingsSync}
 						<span data-testid="check1"> Check 1 </span>
@@ -76,7 +76,7 @@
 				</div>
 				Item 3
 			</div>
-			<div data-testid="checkboxItem2" use:melt={$hideMeltUICheckbox}>
+			<div data-testid="checkboxItem2" {...$hideMeltUICheckbox} use:hideMeltUICheckbox>
 				<div class="check">
 					{#if $hideMeltUI}
 						<span data-testid="check2"> Check 2 </span>
@@ -85,21 +85,21 @@
 				Item 4
 				<div class="rightSlot">⌘H</div>
 			</div>
-			<div use:melt={$subTriggerA} data-testid="sub-trigger">
+			<div {...$subTriggerA} use:subTriggerA data-testid="sub-trigger">
 				Item 5
 				<div class="rightSlot">
 					<ChevronRight />
 				</div>
 			</div>
 			{#if $subOpen}
-				<div use:melt={$subMenuA} transition:fade data-testid="submenu">
+				<div {...$subMenuA} use:subMenuA transition:fade data-testid="submenu">
 					<div class="text">People</div>
-					<div use:melt={$radioGroup}>
+					<div {...$radioGroup} use:radioGroup>
 						{#each personsArr as person, i}
-							<div use:melt={$radioItem({ value: person })} data-testid={`subitem${i}`}>
+							<div {...$radioItem({ value: person })} use:radioItem data-testid={`subitem${i}`}>
 								<div>
 									{#if $isChecked(person)}
-										<div />
+										<div ></div>
 									{/if}
 								</div>
 								{person}
@@ -108,14 +108,14 @@
 					</div>
 				</div>
 			{/if}
-			<div use:melt={$separator} />
+			<div {...$separator} use:separator></div>
 
-			<div use:melt={$item} aria-disabled="true">
+			<div {...$item} use:item aria-disabled="true">
 				Show All Components
 				<div>⇧⌘N</div>
 			</div>
-			<div use:melt={$separator} />
-			<div use:melt={$arrow} data-testid="arrow" />
+			<div {...$separator} use:separator></div>
+			<div {...$arrow} use:arrow data-testid="arrow"></div>
 		</div>
 	{/if}
 </main>

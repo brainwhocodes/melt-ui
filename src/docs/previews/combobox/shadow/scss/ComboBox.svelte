@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createCombobox, melt } from '$lib/index.js';
+	import { createCombobox } from '$lib/index.js';
 	import { Check, ChevronDown, ChevronUp } from '$icons/index.js';
 	import { fly } from 'svelte/transition';
 	export let componentRoot;
@@ -85,12 +85,12 @@
 
 <div class="root">
 	<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
-	<label use:melt={$label}>
+	<label {...$label} use:label>
 		<span class="label">Choose your favorite manga:</span>
 	</label>
 
 	<div style:position="relative">
-		<input use:melt={$input} class="input" placeholder="Best book ever" />
+		<input {...$input} use:input class="input" placeholder="Best book ever" />
 		<div class="chevron">
 			{#if $open}
 				<ChevronUp style="width: 1rem; height: 1rem;" />
@@ -101,16 +101,16 @@
 	</div>
 </div>
 {#if $open}
-	<ul class="menu" use:melt={$menu} transition:fly={{ duration: 150, y: -5 }}>
+	<ul class="menu" {...$menu} use:menu transition:fly={{ duration: 150, y: -5 }}>
 		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 		<div class="menu-inner" tabindex="0">
 			{#each filteredMangas as book, index (index)}
 				<li
-					use:melt={$option({
+					{...$option({
 						value: book,
 						label: book.title,
 						disabled: book.disabled,
-					})}
+					})} use:option
 					class="menu-item"
 				>
 					{#if $isSelected(book)}

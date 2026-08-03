@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createPopover, melt } from '$lib/index.js';
+	import { createPopover } from '$lib/index.js';
 	import { fade } from 'svelte/transition';
 	import { Settings2, X } from '$icons/index.js';
 
@@ -15,7 +15,7 @@
 <button
 	type="button"
 	class="trigger"
-	use:melt={$trigger}
+	{...$trigger} use:trigger
 	aria-label="Update dimensions"
 >
 	<Settings2 class="surface-a38d397ce6" />
@@ -23,13 +23,13 @@
 </button>
 
 {#if $open}
-	<div use:melt={$overlay} class="surface-502278e58a" />
+	<div {...$overlay} use:overlay class="surface-502278e58a"></div>
 	<div
-		use:melt={$content}
+		{...$content} use:content
 		transition:fade={{ duration: 100 }}
 		class="force-dark content"
 	>
-		<div use:melt={$arrow} />
+		<div {...$arrow} use:arrow></div>
 		<div class="surface-7f0ac0422b">
 			<p>Dimensions</p>
 			<fieldset>
@@ -49,7 +49,7 @@
 				<input type="number" id="weight" class="input" placeholder="Weight" />
 			</fieldset>
 		</div>
-		<button class="close" use:melt={$close}>
+		<button class="close" {...$close} use:close>
 			<X class="surface-62e519e25d" />
 		</button>
 	</div>

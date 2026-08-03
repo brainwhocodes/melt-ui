@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createPopover, createTooltip, melt, type CreateTooltipProps } from '$lib/index.js';
+	import { createPopover, createTooltip, type CreateTooltipProps } from '$lib/index.js';
 	import { Settings2 } from '$icons/index.js';
 	import type { PortalConfig } from '$lib/internal/actions/portal.js';
 
@@ -23,7 +23,7 @@
 <button
 	type="button"
 	class="trigger"
-	use:melt={$trigger}
+	{...$trigger} use:trigger
 	aria-label="Update dimensions"
 	data-testid="popover-trigger"
 >
@@ -31,11 +31,11 @@
 	<span class="surface-84086a286c">Open Popover</span>
 </button>
 
-<div use:melt={$content} data-testid="popover-content">
-	<div use:melt={$arrow} data-testid="popover-arrow" />
-	<button use:melt={$ttTrigger} data-testid="tooltip-trigger"> Open tooltip </button>
-	<div use:melt={$ttContent} data-testid="tooltip-content">Tooltip content</div>
-	<button use:melt={$close} data-testid="popover-close"> Close </button>
+<div {...$content} use:content data-testid="popover-content">
+	<div {...$arrow} use:arrow data-testid="popover-arrow"></div>
+	<button {...$ttTrigger} use:ttTrigger data-testid="tooltip-trigger"> Open tooltip </button>
+	<div {...$ttContent} use:ttContent data-testid="tooltip-content">Tooltip content</div>
+	<button {...$close} use:close data-testid="popover-close"> Close </button>
 </div>
-<div class="surface-6f46a10dd4" />
-<div data-testid="outside" class="surface-75cefea230" />
+<div class="surface-6f46a10dd4"></div>
+<div data-testid="outside" class="surface-75cefea230"></div>

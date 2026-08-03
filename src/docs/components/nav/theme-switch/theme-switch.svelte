@@ -20,7 +20,7 @@
 <script lang="ts">
 	import Tooltip from '$docs/components/tooltip.svelte';
 	import { flyAndScale } from '$docs/utils/index.js';
-	import { type Select, createSelect, melt, type SelectOption } from '$lib/index.js';
+	import { type Select, createSelect, type SelectOption } from '$lib/index.js';
 	import { mode, userPrefersMode } from 'mode-watcher';
 	import Options from './options.svelte';
 	import ThemeIcon from './theme-icon.svelte';
@@ -36,11 +36,11 @@
 	const select = createSelect({
 		positioning: { placement: 'bottom', gutter: 10 },
 		forceVisible: true,
-		defaultSelected: modeToOption($userPrefersMode),
+		defaultSelected: modeToOption(userPrefersMode.current),
 		loop: false,
 		onSelectedChange: ({ curr, next }) => {
 			const definedNext = next ?? curr ?? themes[0];
-			$userPrefersMode = optionToMode(definedNext);
+			userPrefersMode.current = optionToMode(definedNext);
 			return definedNext;
 		},
 	});
@@ -58,16 +58,16 @@
 		class="surface-14af4fdc7f"
 		aria-label="Open theme switcher"
 		data-open={$open ? '' : undefined}
-		use:melt={$trigger}
+		{...$trigger} use:trigger
 	>
-		<ThemeIcon theme={$mode} />
+		<ThemeIcon theme={mode.current} />
 		<span class="surface-b08420e185">Open popover</span>
 	</button>
 </Tooltip>
 
 {#if $open}
 	<div
-		use:melt={$menu}
+		{...$menu} use:menu
 		class="surface-5968373bdf"
 		transition:flyAndScale={{
 			duration: 150,
@@ -75,7 +75,7 @@
 			start: 0.96,
 		}}
 	>
-		<div use:melt={$arrow} />
+		<div {...$arrow} use:arrow></div>
 		<Options />
 	</div>
 {/if}

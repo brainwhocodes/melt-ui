@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createDialog, melt, type CreateDialogProps } from '$lib/index.js';
+	import { createDialog, type CreateDialogProps } from '$lib/index.js';
 	import { initLevel } from './level.js';
 
 	export let portal: CreateDialogProps['portal'];
@@ -13,21 +13,21 @@
 	const level = initLevel();
 </script>
 
-<button use:melt={$trigger} data-testid="dialog-trigger-{level}">Open</button>
+<button {...$trigger} use:trigger data-testid="dialog-trigger-{level}">Open</button>
 
 {#if $open || !forceVisible}
-	<div use:melt={$portalled} data-testid="dialog-portalled-{level}">
-		<div use:melt={$overlay} class="overlay" data-testid="dialog-overlay-{level}" />
-		<div use:melt={$content} class="content" data-testid="dialog-content-{level}">
-			<h2 use:melt={$title}>Title</h2>
-			<p use:melt={$description}>Description</p>
+	<div {...$portalled} use:portalled data-testid="dialog-portalled-{level}">
+		<div {...$overlay} use:overlay class="overlay" data-testid="dialog-overlay-{level}"></div>
+		<div {...$content} use:content class="content" data-testid="dialog-content-{level}">
+			<h2 {...$title} use:title>Title</h2>
+			<p {...$description} use:description>Description</p>
 
-			<button use:melt={$close} data-testid="dialog-closer-{level}">Close</button>
+			<button {...$close} use:close data-testid="dialog-closer-{level}">Close</button>
 			<slot />
 		</div>
 	</div>
 {/if}
-<div data-testid="dialog-outside-{level}" />
+<div data-testid="dialog-outside-{level}"></div>
 
 <style lang="scss">
 	.overlay {

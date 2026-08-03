@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createSelect, melt, type CreateSelectProps } from '$lib/index.js';
+	import { createSelect, type CreateSelectProps } from '$lib/index.js';
 
 	type $$Props = CreateSelectProps & { setRootEscapeBehaviorIgnore: () => void };
 	export let setRootEscapeBehaviorIgnore: () => void;
@@ -10,9 +10,9 @@
 	} = createSelect({ ...$$restProps, forceVisible: true });
 </script>
 
-<button use:melt={$trigger} data-testid="select-trigger">trigger</button>
+<button {...$trigger} use:trigger data-testid="select-trigger">trigger</button>
 {#if $open}
-	<div use:melt={$menu} data-testid="select-content">
+	<div {...$menu} use:menu data-testid="select-content">
 		<button
 			data-testid="select-set-parent-escape-behavior-ignore"
 			on:click={setRootEscapeBehaviorIgnore}

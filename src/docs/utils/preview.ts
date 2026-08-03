@@ -8,7 +8,6 @@ import {
 	builderMap,
 	isBuilderName,
 } from '../data/builders/index.js';
-import { processMeltAttributes } from '../pp.js';
 import type { DocResolver, PreviewFile, PreviewResolver } from '../types.js';
 
 function slugFromPath(path: string) {
@@ -24,12 +23,7 @@ function previewPathMatcher(path: string, builder: string) {
 interface PreviewObj {
 	[cmpName: string]: {
 		scss: {
-			[fileName: `${string}.svelte`]:
-				| {
-						pp: string;
-						base: string;
-				  }
-				| undefined;
+			[fileName: `${string}.svelte`]: string | undefined;
 		};
 	};
 }
@@ -69,15 +63,11 @@ async function createPreviewsObject({
 			returnedObj[groupKey] = { scss: {} };
 		}
 
-		const [highlightedCode, processedCode] = await Promise.all([
-			highlightCode({ code: content, lang: 'svelte' }),
-			highlightCode({ code: processMeltAttributes(content), lang: 'svelte' }),
-		]);
-
-		returnedObj[groupKey].scss[fileKey] = {
-			pp: highlightedCode ?? content,
-			base: processedCode ?? content,
-		};
+		const highlightedCode = await highlightCode({
+			code: content,
+			lang: 'svelte',
+		});
+		returnedObj[groupKey].scss[fileKey] = highlightedCode ?? content;
 	});
 
 	await Promise.all(promises);
@@ -123,10 +113,14 @@ function replaceLibEntries(code: string) {
 }
 
 export async function getAllPreviewSnippets(slug: string) {
-	const previewsCode = import.meta.glob(`/src/docs/previews/**/*.svelte`, {
-		as: 'raw',
-		eager: true,
-	});
+	const previewsCode = import.meta.glob<string>(
+		`/src/docs/previews/**/*.svelte`,
+		{
+			query: '?raw',
+			import: 'default',
+			eager: true,
+		},
+	);
 
 	const previewCodeMatches: { path: string; content: string }[] = [];
 	for (const [path, resolver] of Object.entries(previewsCode)) {
@@ -289,7 +283,24 @@ export function createCopyCodeButton() {
 	}
 
 	function setCodeString(node: HTMLElement) {
-		codeString = node.innerText.trim() ?? '';
+		const updateCodeString = () => {
+			codeString = node.textContent?.trim() ?? '';
+		};
+		const observer = new MutationObserver(updateCodeString);
+		const frame = requestAnimationFrame(updateCodeString);
+		updateCodeString();
+		observer.observe(node, {
+			childList: true,
+			subtree: true,
+			characterData: true,
+		});
+
+		return {
+			destroy() {
+				observer.disconnect();
+				cancelAnimationFrame(frame);
+			},
+		};
 	}
 
 	return {

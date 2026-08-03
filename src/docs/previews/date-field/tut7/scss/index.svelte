@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createDateField, melt, type Matcher } from '$lib/index.js';
+	import { createDateField, type Matcher } from '$lib/index.js';
 	import { CalendarDate } from '@internationalized/date';
 
 	const isFirstOrFifteenth: Matcher = (date) => {
@@ -18,17 +18,17 @@
 
 <form method="POST">
 	<div>
-		<span use:melt={$label}>Appointment Date</span>
-		<div use:melt={$field} class="">
+		<span {...$label} use:label>Appointment Date</span>
+		<div {...$field} use:field class="">
 			{#each $segmentContents as seg, i (i)}
-				<div use:melt={$segment(seg.part)}>
+				<div {...$segment(seg.part)} use:segment>
 					{seg.value}
 				</div>
 			{/each}
 		</div>
-		<input use:melt={$hiddenInput} />
+		<input {...$hiddenInput} use:hiddenInput />
 	</div>
-	<small use:melt={$validation}
+	<small {...$validation} use:validation
 		>Date must not be the 1st or 15th of the month.</small
 	>
 </form>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createDropdownMenu, melt } from '$lib/index.js';
+	import { createDropdownMenu } from '$lib/index.js';
 	import { writable } from 'svelte/store';
 	import { AlignJustify, ChevronRight, Check } from '$icons/index.js';
 	import { fly } from 'svelte/transition';
@@ -51,7 +51,7 @@
 <button
 	type="button"
 	class="trigger"
-	use:melt={$trigger}
+	{...$trigger} use:trigger
 	aria-label="Update dimensions"
 >
 	<AlignJustify class="surface-d7133521f1" />
@@ -59,16 +59,16 @@
 </button>
 
 {#if $open}
-	<div use:melt={$overlay} class="surface-542de3bb99" />
+	<div {...$overlay} use:overlay class="surface-542de3bb99"></div>
 	<div
 		class="force-dark menu"
-		use:melt={$menu}
+		{...$menu} use:menu
 		transition:fly={{ duration: 150, y: -10 }}
 	>
-		<div class="item" use:melt={$item}>About Melt UI</div>
-		<div class="item" use:melt={$item}>Check for Updates...</div>
-		<div class="separator" use:melt={$separator} />
-		<div class="item" use:melt={$checkboxItem}>
+		<div class="item" {...$item} use:item>About Melt UI</div>
+		<div class="item" {...$item} use:item>Check for Updates...</div>
+		<div class="separator" {...$separator} use:separator></div>
+		<div class="item" {...$checkboxItem} use:checkboxItem>
 			<div class="check">
 				{#if $settingsSync}
 					<Check class="surface-0008f80303" />
@@ -76,7 +76,7 @@
 			</div>
 			Settings Sync is On
 		</div>
-		<div class="item surface-8a19a2e0eb" use:melt={$subTrigger}>
+		<div class="item surface-8a19a2e0eb" {...$subTrigger} use:subTrigger>
 			Profiles
 			<div class="rightSlot">
 				<ChevronRight class="surface-27e85da432" />
@@ -85,16 +85,16 @@
 		{#if $subOpen}
 			<div
 				class="menu subMenu"
-				use:melt={$subMenu}
+				{...$subMenu} use:subMenu
 				transition:fly={{ x: -50, duration: 150 }}
 			>
 				<div class="text">People</div>
-				<div use:melt={$radioGroup}>
+				<div {...$radioGroup} use:radioGroup>
 					{#each personsArr as person}
-						<div class="item" use:melt={$radioItem({ value: person })}>
+						<div class="item" {...$radioItem({ value: person })} use:radioItem>
 							<div class="check">
 								{#if $isChecked(person)}
-									<div class="dot" />
+									<div class="dot"></div>
 								{/if}
 							</div>
 							{person}
@@ -103,9 +103,9 @@
 				</div>
 			</div>
 		{/if}
-		<div use:melt={$separator} class="separator" />
+		<div {...$separator} use:separator class="separator"></div>
 
-		<div class="item" use:melt={$checkboxItemA}>
+		<div class="item" {...$checkboxItemA} use:checkboxItemA>
 			<div class="check">
 				{#if $hideMeltUI}
 					<Check class="surface-888fb7440d" />
@@ -114,16 +114,16 @@
 			Hide Melt UI
 			<div class="rightSlot">⌘H</div>
 		</div>
-		<div class="item" use:melt={$item} data-disabled>
+		<div class="item" {...$item} use:item data-disabled>
 			Show All Components
 			<div class="rightSlot">⇧⌘N</div>
 		</div>
-		<div use:melt={$separator} class="separator" />
-		<div class="item" use:melt={$item}>
+		<div {...$separator} use:separator class="separator"></div>
+		<div class="item" {...$item} use:item>
 			Quit Melt UI
 			<div class="rightSlot">⌘Q</div>
 		</div>
-		<div use:melt={$arrow} />
+		<div {...$arrow} use:arrow></div>
 	</div>
 {/if}
 

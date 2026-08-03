@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createSwitch, melt } from '$lib/index.js';
+	import { createSwitch } from '$lib/index.js';
 
 	const {
 		elements: { root, input },
@@ -16,14 +16,14 @@
 			Airplane mode
 		</label>
 		<button
-			use:melt={$root}
+			{...$root} use:root
 			class="surface-cef0a81386"
 			id="airplane-mode"
 			aria-labelledby="airplane-mode-label"
 		>
-			<span class="thumb surface-f2d79cb68b" />
+			<span class="thumb surface-f2d79cb68b"></span>
 		</button>
-		<input use:melt={$input} />
+		<input {...$input} use:input />
 	</div>
 </form>
 

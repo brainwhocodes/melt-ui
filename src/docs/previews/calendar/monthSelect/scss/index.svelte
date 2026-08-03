@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createCalendar, melt, type CreateSelectProps } from '$lib/index.js';
+	import { createCalendar, type CreateSelectProps } from '$lib/index.js';
 	import { ChevronRight, ChevronLeft } from '$icons/index.js';
 	import MonthSelect from './MonthSelect.svelte';
 	import { writable } from 'svelte/store';
@@ -31,21 +31,21 @@
 </script>
 
 <div class="surface-f4426a6c48">
-	<div use:melt={$calendar}>
+	<div {...$calendar} use:calendar>
 		<header>
-			<button use:melt={$prevButton}>
+			<button {...$prevButton} use:prevButton>
 				<ChevronLeft size={24} />
 			</button>
-			<div use:melt={$heading}>
+			<div {...$heading} use:heading>
 				{$headingValue}
 			</div>
-			<button use:melt={$nextButton}>
+			<button {...$nextButton} use:nextButton>
 				<ChevronRight size={24} />
 			</button>
 		</header>
 		<div>
 			{#each $months as month}
-				<table use:melt={$grid}>
+				<table {...$grid} use:grid>
 					<thead aria-hidden="true">
 						<tr>
 							{#each $weekdays as day}
@@ -66,7 +66,7 @@
 										aria-disabled={$isDateDisabled(date) ||
 											$isDateUnavailable(date)}
 									>
-										<div use:melt={$cell(date, month.value)}>
+										<div {...$cell(date, month.value)} use:cell>
 											{date.day}
 										</div>
 									</td>

@@ -5,7 +5,6 @@
 </script>
 
 <script lang="ts">
-	import { melt } from '$lib/index.js';
 	import {
 		createHiddenInput,
 		type CreateHiddenInputProps,
@@ -27,4 +26,4 @@
 	});
 </script>
 
-<input use:melt={$hiddenInput} on:change={onChange} data-testid="input" />
+<input {...$hiddenInput} use:hiddenInput on:change={onChange} data-testid="input" />

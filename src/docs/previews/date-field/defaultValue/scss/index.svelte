@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createDateField, melt } from '$lib/index.js';
+	import { createDateField } from '$lib/index.js';
 
 	const {
 		elements: { field, segment, label },
@@ -9,13 +9,13 @@
 
 <div class="surface-c6daf439d7">
 	<div>
-		<span use:melt={$label} class="surface-622cda8052">Due Date</span>
+		<span {...$label} use:label class="surface-622cda8052">Due Date</span>
 		<div
-			use:melt={$field}
+			{...$field} use:field
 			class="surface-59f703d8ef"
 		>
 			{#each $segmentContents as seg, i (i)}
-				<div use:melt={$segment(seg.part)} class="segment surface-1973f4dcf5">
+				<div {...$segment(seg.part)} use:segment class="segment surface-1973f4dcf5">
 					{seg.value}
 				</div>
 			{/each}

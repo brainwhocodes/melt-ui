@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createDialog, melt } from '$lib/index.js';
+	import { createDialog } from '$lib/index.js';
 	import { fade } from 'svelte/transition';
 
 	const {
@@ -21,25 +21,25 @@
 </script>
 
 <main>
-	<button use:melt={$trigger} data-testid="trigger">Open</button>
+	<button {...$trigger} use:trigger data-testid="trigger">Open</button>
 	{#if $open}
-		<div use:melt={$portalled} data-testid="portalled">
-			<div use:melt={$overlay} data-testid="overlay" transition:fade />
-			<div use:melt={$content} data-testid="content">
-				<h2 use:melt={$title}>Title</h2>
-				<p use:melt={$description}>Description</p>
+		<div {...$portalled} use:portalled data-testid="portalled">
+			<div {...$overlay} use:overlay data-testid="overlay" transition:fade></div>
+			<div {...$content} use:content data-testid="content">
+				<h2 {...$title} use:title>Title</h2>
+				<p {...$description} use:description>Description</p>
 
-				<button use:melt={$close} data-testid="closer">Close</button>
-				<button use:melt={$triggerA} data-testid="triggerA">Close2</button>
+				<button {...$close} use:close data-testid="closer">Close</button>
+				<button {...$triggerA} use:triggerA data-testid="triggerA">Close2</button>
 				{#if $openA}
-					<div use:melt={$portalledA} data-testid="portalledA">
-						<div use:melt={$overlayA} data-testid="overlayA" />
-						<div use:melt={$contentA} data-testid="contentA" transition:fade>
-							<h2 use:melt={$titleA}>Title</h2>
-							<p use:melt={$descriptionA}>Description</p>
+					<div {...$portalledA} use:portalledA data-testid="portalledA">
+						<div {...$overlayA} use:overlayA data-testid="overlayA"></div>
+						<div {...$contentA} use:contentA data-testid="contentA" transition:fade>
+							<h2 {...$titleA} use:titleA>Title</h2>
+							<p {...$descriptionA} use:descriptionA>Description</p>
 
-							<button use:melt={$closeA} data-testid="closerA">Close</button>
-							<button use:melt={$closeA} data-testid="lastA">Close2</button>
+							<button {...$closeA} use:closeA data-testid="closerA">Close</button>
+							<button {...$closeA} use:closeA data-testid="lastA">Close2</button>
 						</div>
 					</div>
 				{/if}

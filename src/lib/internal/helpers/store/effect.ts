@@ -1,5 +1,5 @@
-import type { Stores, StoresValues } from 'svelte/store';
 import { derived } from 'svelte/store';
+import type { Stores, StoresValues } from './types.js';
 import { noop } from '../index.js';
 import { safeOnDestroy } from '../lifecycle.js';
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createAvatar, melt } from '$lib/index.js';
+	import { createAvatar } from '$lib/index.js';
 
 	const {
 		elements: { image, fallback },
@@ -28,11 +28,11 @@
 		class="surface-cf0cd6d759"
 	>
 		<img
-			use:melt={$image}
+			{...$image} use:image
 			alt="Avatar"
 			class="surface-8ba8ae1ab8"
 		/>
-		<span use:melt={$fallback} class="surface-cd23f34dd7"
+		<span {...$fallback} use:fallback class="surface-cd23f34dd7"
 			>RH</span
 		>
 	</div>
@@ -41,11 +41,11 @@
 		class="surface-0c7f1bfab0"
 	>
 		<img
-			use:melt={$imageA}
+			{...$imageA} use:imageA
 			alt="Avatar"
 			class="surface-e558f5c7d4"
 		/>
-		<span use:melt={$fallbackA} class="surface-70e02ad421"
+		<span {...$fallbackA} use:fallbackA class="surface-70e02ad421"
 			>SH</span
 		>
 	</div>
@@ -54,11 +54,11 @@
 		class="surface-53551e5020"
 	>
 		<img
-			use:melt={$imageB}
+			{...$imageB} use:imageB
 			alt="Avatar"
 			class="surface-d58e91c84a"
 		/>
-		<span use:melt={$fallbackB} class="surface-6b70cfab40"
+		<span {...$fallbackB} use:fallbackB class="surface-6b70cfab40"
 			>UI</span
 		>
 	</div>

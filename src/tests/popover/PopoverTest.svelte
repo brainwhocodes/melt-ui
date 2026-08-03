@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createPopover, melt, type CreatePopoverProps } from '$lib/index.js';
+	import { createPopover, type CreatePopoverProps } from '$lib/index.js';
 	import { Settings2, X } from '$icons/index.js';
 	import { kbd } from '$lib/internal/helpers/keyboard.js';
 	import { onMount } from 'svelte';
@@ -37,7 +37,7 @@
 <button
 	type="button"
 	class="trigger"
-	use:melt={$trigger}
+	{...$trigger} use:trigger
 	aria-label="Update dimensions"
 	data-testid="trigger"
 >
@@ -45,8 +45,8 @@
 	<span class="surface-d9f6dc7cd1">Open Popover</span>
 </button>
 
-<div use:melt={$content} class="content" data-testid="content">
-	<div use:melt={$arrow} data-testid="arrow" />
+<div {...$content} use:content class="content" data-testid="content">
+	<div {...$arrow} use:arrow data-testid="arrow"></div>
 	<div class="surface-07a37995d4">
 		<p>Dimensions</p>
 		<fieldset>
@@ -73,24 +73,24 @@
 		</button>
 		<button on:click={() => open.update((p) => !p)} data-testid="toggle-open">toggle open</button>
 	</div>
-	<button class="close" use:melt={$close} data-testid="close">
+	<button class="close" {...$close} use:close data-testid="close">
 		<X class="surface-06b5214a49" />
 	</button>
 	<button data-testid="openFocus" id="openFocus"> focus me on open </button>
 </div>
-<div use:melt={$overlay} data-testid="overlay" />
+<div {...$overlay} use:overlay data-testid="overlay"></div>
 <button data-testid="outside">Outside</button>
 <button on:click|stopPropagation data-testid="click-interceptor">click interceptor</button>
 {#if showSelfRemovingButton}
 	<button on:click={() => (showSelfRemovingButton = false)}>Remove me</button>
 {/if}
 <canvas aria-hidden="true" data-testid="outside-canvas">Outside interaction target</canvas>
-<div bind:this={shadowHost} data-testid="shadow-host" />
+<div bind:this={shadowHost} data-testid="shadow-host"></div>
 
-<button type="button" class="trigger" use:melt={$triggerB} data-testid="trigger-2">
+<button type="button" class="trigger" {...$triggerB} use:triggerB data-testid="trigger-2">
 	<span>Open Popover</span>
 </button>
-<div use:melt={$contentB} class="content" data-testid="content-2">
+<div {...$contentB} use:contentB class="content" data-testid="content-2">
 	<div class="surface-2dfc7ef11d">
 		<p>Dimensions</p>
 	</div>

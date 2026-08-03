@@ -1,14 +1,14 @@
 ---
 title: Preprocessor
-description: Simplifying the syntax of Melt UI using a custom preprocessor.
+description: Optional legacy builder shorthand using a custom preprocessor.
 ---
 
 ## What it does
 
-We provide a custom preprocessor that aims to enhance the DX of Melt UI just a bit further. It
-introduces a new action, `melt`, that accepts our builders as values. This helps trim down on the
-boilerplate just enough to keep the markup nice and tidy. The preprocessor will then transform our
-special attribute into the proper Svelte syntax.
+Melt UI's documented syntax spreads builder attributes and applies builder actions explicitly.
+Consumers who prefer the legacy builder ergonomics can optionally install `@melt-ui/pp`, which
+introduces a `melt` action and transforms the `use:melt` shorthand into the explicit Svelte syntax.
+This documentation site and Melt UI's own sources do not require the custom preprocessor.
 
 ## How it works
 
@@ -34,9 +34,9 @@ and transform it into this:
 	const { open, root, content, trigger } = createCollapsible()
 </script>
 
-<div {...$root} use:$root.action>
-	<button {...$trigger} use:$trigger.action>{$open ? 'Close' : 'Open'}</button>
-	<div {...$content} use:$content.action>Obi-Wan says: Hello there!</div>
+<div {...$root} use:root>
+	<button {...$trigger} use:trigger>{$open ? 'Close' : 'Open'}</button>
+	<div {...$content} use:content>Obi-Wan says: Hello there!</div>
 </div>
 ```
 

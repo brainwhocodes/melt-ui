@@ -45,7 +45,7 @@ To start off, we'll destructure the `field`, `segment`, and `label`, and `segmen
 
 ```svelte showLineNumbers
 <script lang="ts">
-	import { createDateField, melt } from '@melt-ui/svelte'
+	import { createDateField } from '@melt-ui/svelte'
 
 	const {
 		elements: { field, segment, label },
@@ -60,7 +60,7 @@ screen readers in the same way.
 
 ```svelte showLineNumbers
 <script lang="ts">
-	import { createDateField, melt } from '@melt-ui/svelte'
+	import { createDateField } from '@melt-ui/svelte'
 
 	const {
 		elements: { field, segment, label },
@@ -68,8 +68,8 @@ screen readers in the same way.
 	} = createDateField()
 </script>
 
-<span use:melt={$label}>Appointment Date</span>
-<div use:melt={$field}>
+<span {...$label} use:label>Appointment Date</span>
+<div {...$field} use:field>
 	<!-- ... -->
 </div>
 ```
@@ -80,15 +80,15 @@ which is used to determine which segment this element represents.
 While it's possible to use the `segment` function to render each segment individually like so:
 
 ```svelte showLineNumbers
-<span use:melt={$label}>Appointment Date</span>
-<div use:melt={$field}>
-	<div use:melt={$segment('day')}>
+<span {...$label} use:label>Appointment Date</span>
+<div {...$field} use:field>
+	<div {...$segment('day')} use:segment>
 		<!-- ... -->
 	</div>
-	<div use:melt={$segment('month')}>
+	<div {...$segment('month')} use:segment>
 		<!-- ... -->
 	</div>
-	<div use:melt={$segment('year')}>
+	<div {...$segment('year')} use:segment>
 		<!-- ... -->
 	</div>
 	<!-- ...rest -->
@@ -104,7 +104,7 @@ which is the locale-aware string representation of the segment.
 
 ```svelte showLineNumbers {12-16}
 <script lang="ts">
-	import { createDateField, melt } from '@melt-ui/svelte'
+	import { createDateField } from '@melt-ui/svelte'
 
 	const {
 		elements: { field, segment, label },
@@ -112,10 +112,10 @@ which is the locale-aware string representation of the segment.
 	} = createDateField()
 </script>
 
-<span use:melt={$label}>Appointment Date</span>
-<div use:melt={$field}>
+<span {...$label} use:label>Appointment Date</span>
+<div {...$field} use:field>
 	{#each $segmentContents as seg, i (i)}
-		<div use:melt={$segment(seg.part)}>
+		<div {...$segment(seg.part)} use:segment>
 			{seg.value}
 		</div>
 	{/each}
@@ -131,7 +131,7 @@ its name.
 
 ```svelte showLineNumbers {5-6,8,20,24-26}
 <script lang="ts">
-	import { createDateField, melt } from '@melt-ui/svelte'
+	import { createDateField } from '@melt-ui/svelte'
 
 	const {
 		elements: { field, segment, label, hiddenInput },
@@ -142,14 +142,14 @@ its name.
 </script>
 
 <form method="POST">
-	<span use:melt={$label}>Appointment Date</span>
-	<div use:melt={$field}>
+	<span {...$label} use:label>Appointment Date</span>
+	<div {...$field} use:field>
 		{#each $segmentContents as seg, i (i)}
-			<div use:melt={$segment(seg.part)}>
+			<div {...$segment(seg.part)} use:segment>
 				{seg.value}
 			</div>
 		{/each}
-		<input use:melt={$hiddenInput} />
+		<input {...$hiddenInput} use:hiddenInput />
 	</div>
 	<p>
 		You selected:
@@ -186,7 +186,7 @@ as the `defaultPlaceholder` prop.
 
 ```svelte showLineNumbers {3,10}
 <script lang="ts">
-	import { createDateField, melt } from '@melt-ui/svelte'
+	import { createDateField } from '@melt-ui/svelte'
 	import { CalendarDateTime } from '@internationalized/date'
 
 	const {
@@ -229,7 +229,7 @@ We can also just as easily convert the field into a Zoned Date & Time field, by 
 
 ```svelte showLineNumbers {3,10}
 <script lang="ts">
-	import { createDateField, melt } from '@melt-ui/svelte'
+	import { createDateField } from '@melt-ui/svelte'
 	import { now, getLocalTimeZone } from '@internationalized/date'
 
 	const {
@@ -254,7 +254,7 @@ the argument to the `now` function.
 
 ```svelte showLineNumbers {10}
 <script lang="ts">
-	import { createDateField, melt } from '@melt-ui/svelte'
+	import { createDateField } from '@melt-ui/svelte'
 	import { now } from '@internationalized/date'
 
 	const {
@@ -291,7 +291,7 @@ props interact.
 
 ```svelte showLineNumbers {3,11}
 <script lang="ts">
-	import { createDateField, melt } from '@melt-ui/svelte'
+	import { createDateField } from '@melt-ui/svelte'
 	import { CalendarDateTime, CalendarDate } from '@internationalized/date'
 
 	const {
@@ -322,7 +322,7 @@ accomplishing that may look something like this:
 
 ```svelte showLineNumbers {3,12-13}
 <script lang="ts">
-	import { createDateField, melt } from '@melt-ui/svelte'
+	import { createDateField } from '@melt-ui/svelte'
 	import { CalendarDate, parseDate } from '@internationalized/date'
 
 	export let data
@@ -370,7 +370,7 @@ function to accomplish just that.
 
 ```svelte showLineNumbers {2,4-6,13} /isInvalid/#hi /validation/#hi
 <script lang="ts">
-	import { createDateField, melt, type Matcher } from '@melt-ui/svelte'
+	import { createDateField, type Matcher } from '@melt-ui/svelte'
 
 	const isFirstOrFifteenth: Matcher = (date) => {
 		return date.day === 1 || date.day === 15
@@ -390,7 +390,7 @@ If you have a few different matchers you want to use, you can simply combine the
 
 ```svelte showLineNumbers {8-10,12-14,21}
 <script lang="ts">
-	import { createDateField, melt, type Matcher } from '@melt-ui/svelte'
+	import { createDateField, type Matcher } from '@melt-ui/svelte'
 
 	const isFirstOrFifteenth: Matcher = (date) => {
 		return date.day === 1 || date.day === 15
@@ -419,7 +419,7 @@ matchers which you could use throughout your app.
 
 ```svelte showLineNumbers {12,14-18,25}
 <script lang="ts">
-	import { createDateField, melt, type Matcher } from '@melt-ui/svelte'
+	import { createDateField, type Matcher } from '@melt-ui/svelte'
 
 	const isFirstOrFifteenth: Matcher = (date) => {
 		return date.day === 1 || date.day === 15
@@ -457,16 +457,16 @@ to give screen readers the information they need.
 
 ```svelte showLineNumbers {11,12,19}
 <form method="POST">
-	<span use:melt={$label}>Appointment Date</span>
-	<div use:melt={$field}>
+	<span {...$label} use:label>Appointment Date</span>
+	<div {...$field} use:field>
 		{#each $segmentContents as seg, i (i)}
-			<div use:melt={$segment(seg.part)}>
+			<div {...$segment(seg.part)} use:segment>
 				{seg.value}
 			</div>
 		{/each}
-		<input use:melt={$hiddenInput} />
+		<input {...$hiddenInput} use:hiddenInput />
 	</div>
-	<small use:melt={$validation}> Date cannot be on the 1st or 15th of the month. </small>
+	<small {...$validation} use:validation> Date cannot be on the 1st or 15th of the month. </small>
 	{#if !$isInvalid}
 		<p>
 			You selected:
@@ -490,7 +490,7 @@ dates a user can select.
 
 ```svelte showLineNumbers {11-12}
 <script lang="ts">
-	import { createDateField, melt } from '@melt-ui/svelte'
+	import { createDateField } from '@melt-ui/svelte'
 	import { CalendarDate } from '@internationalized/date'
 
 	const {
@@ -522,7 +522,7 @@ simple as passing it as the `locale` prop.
 
 ```svelte showLineNumbers {9}
 <script lang="ts">
-	import { createDateField, melt } from '@melt-ui/svelte'
+	import { createDateField } from '@melt-ui/svelte'
 
 	const {
 		elements: { field, segment, label, hiddenInput },
@@ -553,7 +553,7 @@ The `readonlySegments` prop can be used for this.
 
 ```svelte showLineNumbers {9-10}
 <script lang="ts">
-	import { createDateField, melt } from '$lib'
+	import { createDateField } from '$lib'
 	import { CalendarDate } from '@internationalized/date'
 
 	const {

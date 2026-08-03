@@ -22,7 +22,7 @@
 </script>
 
 <script lang="ts">
-	import { melt, type TreeView } from '$lib/index.js';
+	import { type TreeView } from '$lib/index.js';
 	import { getContext } from 'svelte';
 
 	export let treeItems: TreeItem[];
@@ -41,10 +41,10 @@
 	<li class={level !== 1 ? 'surface-aefd055561' : ''}>
 		<button
 			class="surface-7081405d0d"
-			use:melt={$item({
+			{...$item({
 				id: itemId,
 				hasChildren,
-			})}
+			})} use:item
 		>
 			<!-- Add icon. -->
 			{#if icon === 'folder' && hasChildren && $isExpanded(itemId)}
@@ -62,7 +62,7 @@
 		</button>
 
 		{#if children}
-			<ul use:melt={$group({ id: itemId })}>
+			<ul {...$group({ id: itemId })} use:group>
 				<svelte:self treeItems={children} level={level + 1} />
 			</ul>
 		{/if}

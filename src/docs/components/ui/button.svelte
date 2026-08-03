@@ -24,15 +24,17 @@
 		action?: Action<HTMLElement> | (() => void);
 	};
 
-	interface AnchorElement extends Props, HTMLAnchorAttributes {
-		href?: HTMLAnchorAttributes['href'];
-		type?: never;
-	}
+	type AnchorElement = Props &
+		Omit<HTMLAnchorAttributes, keyof Props | 'type'> & {
+			href?: HTMLAnchorAttributes['href'];
+			type?: never;
+		};
 
-	interface ButtonElement extends Props, HTMLButtonAttributes {
-		type?: HTMLButtonAttributes['type'];
-		href?: never;
-	}
+	type ButtonElement = Props &
+		Omit<HTMLButtonAttributes, keyof Props | 'href'> & {
+			type?: HTMLButtonAttributes['type'];
+			href?: never;
+		};
 
 	type $$Props = AnchorElement | ButtonElement;
 </script>

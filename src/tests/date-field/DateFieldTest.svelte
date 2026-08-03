@@ -1,9 +1,5 @@
 <script lang="ts">
-	import {
-		createDateField,
-		melt,
-		type CreateDateFieldProps,
-	} from '$lib/index.js';
+	import { createDateField, type CreateDateFieldProps } from '$lib/index.js';
 	import { removeUndefined } from '../utils.js';
 
 	export let value: CreateDateFieldProps['value'] = undefined;
@@ -51,15 +47,15 @@
 			<p class="surface-e3678618e9" data-testid="inside-value">{$insideValue}</p>
 		</div>
 		<div>
-			<span use:melt={$label} class="surface-07ddc06ea2" data-testid="label">Date</span>
+			<span {...$label} use:label class="surface-07ddc06ea2" data-testid="label">Date</span>
 			<div
-				use:melt={$field}
+				{...$field} use:field
 				class="surface-b963add057"
 				data-testid="field"
 			>
 				{#each $segmentContents as seg, i (i)}
 					<div
-						use:melt={$segment(seg.part)}
+						{...$segment(seg.part)} use:segment
 						class="segment surface-aa97e97ecb"
 						data-testid={seg.part === 'literal' ? undefined : seg.part}
 					>
@@ -67,7 +63,7 @@
 					</div>
 				{/each}
 			</div>
-			<span use:melt={$validation} data-testid="validation">Validation</span>
+			<span {...$validation} use:validation data-testid="validation">Validation</span>
 		</div>
 	</div>
 </main>

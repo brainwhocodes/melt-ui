@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createSlider, melt, type CreateSliderProps } from '$lib/index.js';
+	import { createSlider, type CreateSliderProps } from '$lib/index.js';
 
 	export let value = [30];
 	export let max = 100;
@@ -33,20 +33,18 @@
 </script>
 
 <main>
-	<span data-testid="slider" use:melt={$root} class="surface-3e356aa96f">
+	<span data-testid="slider" {...$root} use:root class="surface-3e356aa96f">
 		<span class="surface-6a02132cd8">
-			<span data-testid="range" use:melt={$range} class="surface-78f2f031a1" />
+			<span data-testid="range" {...$range} use:range class="surface-78f2f031a1"></span>
 		</span>
 
 		{#each $ticks as tick}
-			<span use:melt={tick} data-testid="tick" />
+			<span {...tick} use:tick.action data-testid="tick"></span>
 		{/each}
 
-		<span
-			aria-label="Volume"
+		<span aria-label="Volume"
 			data-testid="thumb"
-			use:melt={$thumbs[0]}
-			class="surface-94875c31b1"
-		/>
+			{...$thumbs[0]} use:thumbs
+			class="surface-94875c31b1"></span>
 	</span>
 </main>

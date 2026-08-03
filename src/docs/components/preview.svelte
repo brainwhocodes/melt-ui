@@ -1,21 +1,5 @@
 <script lang="ts" context="module">
-	type SvelteFile = `${string}.svelte`;
-	function isSvelteFile(fileName: string): fileName is SvelteFile {
-		return fileName.endsWith('.svelte');
-	}
-
-	type CodeEntry = {
-		[fileName: `${string}.svelte`]:
-			| {
-					pp: string;
-					base: string;
-			  }
-			| undefined;
-	};
-
-	type ProcessedCodeEntry = {
-		[key: string]: string | undefined;
-	};
+	type CodeEntry = Record<string, string | undefined>;
 
 	export type PreviewProps = {
 		class?: string;
@@ -26,7 +10,6 @@
 </script>
 
 <script lang="ts">
-	import { getUsingPreprocessor } from '$routes/store.js';
 	import CodeBlock from './code-block.svelte';
 	import PreviewWrapper from './preview-wrapper.svelte';
 	import Switch from './switch.svelte';
@@ -46,39 +29,7 @@
 	export let position: $$Props['position'] = 'default';
 	export let viewCode = false;
 
-	const usingPreprocessor = getUsingPreprocessor();
-
-	function processCode({
-		code,
-		usePP,
-	}: {
-		code: $$Props['code'];
-		usePP?: boolean;
-	}): ProcessedCodeEntry {
-		const processedCode = {} as ProcessedCodeEntry;
-		const styleCode = code.scss;
-		if (!styleCode) return processedCode;
-
-		for (const key in styleCode) {
-			if (isSvelteFile(key)) {
-				processedCode[key] = usePP ? styleCode[key]?.pp : styleCode[key]?.base;
-			}
-		}
-
-		return processedCode;
-	}
-
-	let codingStyleObj = processCode({
-		code,
-		usePP: $usingPreprocessor,
-	});
-
-	$: {
-		codingStyleObj = processCode({
-			code,
-			usePP: $usingPreprocessor,
-		});
-	}
+	$: codingStyleObj = code.scss ?? {};
 
 	$: files = Object.keys(codingStyleObj).sort((a, b) => {
 		if (a === 'index.svelte') return -1;
@@ -97,7 +48,7 @@
 	{#if viewCode}
 		<TabsRoot tabs={files} let:tab>
 			<TabsList />
-			<CodeBlock code={codingStyleObj[tab]} />
+			<CodeBlock>{@html codingStyleObj[tab] ?? ''}</CodeBlock>
 		</TabsRoot>
 	{:else}
 		<PreviewWrapper {variant} {size} {position}>

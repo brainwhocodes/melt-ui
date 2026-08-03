@@ -1,9 +1,5 @@
 <script lang="ts">
-	import {
-		createDateField,
-		melt,
-		type CreateDateFieldProps,
-	} from '$lib/index.js';
+	import { createDateField, type CreateDateFieldProps } from '$lib/index.js';
 
 	export let defaultPlaceholder: CreateDateFieldProps['defaultPlaceholder'] =
 		undefined;
@@ -18,15 +14,15 @@
 
 <div class="surface-3dfcf0f048">
 	<div>
-		<span use:melt={$label} class="surface-865035207a"
+		<span {...$label} use:label class="surface-865035207a"
 			>Appointment Date</span
 		>
 		<div
-			use:melt={$field}
+			{...$field} use:field
 			class="surface-eee6a1977f"
 		>
 			{#each $segmentContents as seg, i (i)}
-				<div use:melt={$segment(seg.part)} class="segment surface-063d98d7cb">
+				<div {...$segment(seg.part)} use:segment class="segment surface-063d98d7cb">
 					{seg.value}
 				</div>
 			{/each}

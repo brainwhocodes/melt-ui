@@ -10,7 +10,7 @@ description: Enable sighted users to preview content behind a link.
 
 <Callout type="warning">
 
-⚠� The Link Preview is only intended to be used with a mouse or other pointing device. It doesn't
+⚠� The Link Preview is only intended to be used with a mouse or other pointing device. It doesn't
 respond to touch events, and the preview content cannot be accessed via the keyboard. On touch
 devices, the link will be followed immediately. As it is not accessible to all users, the preview
 should not contain vital information.
@@ -29,7 +29,7 @@ Create a link preview using the `createLinkPreview` builder function.
 
 ```svelte {3-5}
 <script lang="ts">
-	import { createLinkPreview, melt } from '@melt-ui/svelte'
+	import { createLinkPreview } from '@melt-ui/svelte'
 	const {
 		elements: { trigger, content, arrow }
 	} = createLinkPreview()
@@ -41,17 +41,17 @@ example of how to structure the link preview is shown below.
 
 ```svelte
 <script lang="ts">
-	import { createLinkPreview, melt } from '@melt-ui/svelte'
+	import { createLinkPreview } from '@melt-ui/svelte'
 	const {
 		elements: { trigger, content, arrow }
 	} = createLinkPreview()
 </script>
 
-<button use:melt={$trigger}>Hover Me</button>
+<button {...$trigger} use:trigger>Hover Me</button>
 
-<div use:melt={$content}>
+<div {...$content} use:content>
 	<div>I am content inside the link preview</div>
-	<div use:melt={$arrow} />
+	<div {...$arrow} use:arrow />
 </div>
 ```
 
@@ -68,7 +68,7 @@ events.
 
 ```svelte {3-8}
 <button
-	use:melt={$trigger}
+	{...$trigger} use:trigger
 	on:m-focus={(e) => {
 		e.preventDefault()
 	}}

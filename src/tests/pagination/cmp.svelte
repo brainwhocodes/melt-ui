@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createPagination, melt } from '$lib/index.js';
+	import { createPagination } from '$lib/index.js';
 	import { ChevronLeft, ChevronRight } from '$icons/index.js';
 
 	const {
@@ -13,19 +13,19 @@
 	});
 </script>
 
-<nav aria-label="pagination" use:melt={$root} data-testid="root">
+<nav aria-label="pagination" {...$root} use:root data-testid="root">
 	<p>
 		Showing items {$range.start} - {$range.end}
 	</p>
 	<div>
-		<button use:melt={$prevButton} data-testid="prev"><ChevronLeft class="surface-e38d2ef7dc" /></button>
+		<button {...$prevButton} use:prevButton data-testid="prev"><ChevronLeft class="surface-e38d2ef7dc" /></button>
 		{#each $pages as page (page.key)}
 			{#if page.type === 'ellipsis'}
 				<span>...</span>
 			{:else}
-				<button use:melt={$pageTrigger(page)}>{page.value}</button>
+				<button {...$pageTrigger(page)} use:pageTrigger>{page.value}</button>
 			{/if}
 		{/each}
-		<button use:melt={$nextButton} data-testid="next"><ChevronRight class="surface-5f8b80607d" /></button>
+		<button {...$nextButton} use:nextButton data-testid="next"><ChevronRight class="surface-5f8b80607d" /></button>
 	</div>
 </nav>

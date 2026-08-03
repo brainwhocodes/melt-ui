@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createDialog, melt, type CreateDialogProps } from '$lib/index.js';
+	import { createDialog, type CreateDialogProps } from '$lib/index.js';
 	import { kbd } from '$lib/internal/helpers/keyboard.js';
 
 	type $$Props = CreateDialogProps;
@@ -14,12 +14,12 @@
 
 <main data-testid="main">
 	<button id="closeFocus" data-testid="closeFocus">Focus Me</button>
-	<button use:melt={$trigger} data-testid="trigger">Open</button>
-	<div use:melt={$portalled} data-testid="portalled">
-		<div use:melt={$overlay} data-testid="overlay" />
-		<div use:melt={$content} data-testid="content">
-			<h2 use:melt={$title} data-testid="title">Title</h2>
-			<p use:melt={$description} data-testid="description">Description</p>
+	<button {...$trigger} use:trigger data-testid="trigger">Open</button>
+	<div {...$portalled} use:portalled data-testid="portalled">
+		<div {...$overlay} use:overlay data-testid="overlay"></div>
+		<div {...$content} use:content data-testid="content">
+			<h2 {...$title} use:title data-testid="title">Title</h2>
+			<p {...$description} use:description data-testid="description">Description</p>
 			<button on:click={() => open.update((p) => !p)} data-testid="toggle-open">toggle open</button>
 			<button
 				data-testid="escape-interceptor"
@@ -28,13 +28,13 @@
 				escape interceptor
 			</button>
 
-			<button use:melt={$close} data-testid="closer">Close</button>
-			<button use:melt={$close} data-testid="last">Close</button>
+			<button {...$close} use:close data-testid="closer">Close</button>
+			<button {...$close} use:close data-testid="last">Close</button>
 			<div tabindex="-1" role="button" id="openFocus" data-testid="openFocus">hello world</div>
 		</div>
 	</div>
 </main>
-<div id="portal-target" data-testid="portal-target" />
+<div id="portal-target" data-testid="portal-target"></div>
 
 <button on:click|stopPropagation data-testid="click-interceptor">click interceptor</button>
 <button on:pointerdown|stopPropagation data-testid="pointerdown-interceptor">
@@ -62,7 +62,7 @@
 
 {#if $open}
 	<!-- Floating close -->
-	<button use:melt={$close} data-testid="floating-closer">Close</button>
+	<button {...$close} use:close data-testid="floating-closer">Close</button>
 {/if}
 
 <style lang="scss">

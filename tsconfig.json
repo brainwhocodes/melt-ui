@@ -10,7 +10,13 @@
 		"sourceMap": true,
 		"strict": true,
 		"module": "NodeNext",
-		"moduleResolution": "NodeNext"
+		"moduleResolution": "NodeNext",
+		"types": [
+			"vitest/globals",
+			"@testing-library/jest-dom",
+			"@testing-library/jest-dom/vitest"
+		],
+		"ignoreDeprecations": "6.0"
 	},
 	"exclude": [
 		"*.ignore-ts",

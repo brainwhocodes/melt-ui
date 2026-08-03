@@ -1,6 +1,6 @@
 <script lang="ts">
 	import PreviewWrapper from '$docs/components/preview-wrapper.svelte';
-	import { createCollapsible, melt, type CreateCollapsibleProps } from '$lib/index.js';
+	import { createCollapsible, type CreateCollapsibleProps } from '$lib/index.js';
 	import { ChevronsUpDown, X } from '$icons/index.js';
 
 	export let defaultOpen = false;
@@ -25,11 +25,11 @@
 
 <main>
 	<PreviewWrapper>
-		<div use:melt={$root} class="surface-3cd2c00bea">
+		<div {...$root} use:root class="surface-3cd2c00bea">
 			<div class="surface-aa2c053172">
 				<span class="surface-58b03cd9cc"> @thomasglopes starred 3 repositories </span>
 				<button
-					use:melt={$trigger}
+					{...$trigger} use:trigger
 					class="surface-f849fa43f5"
 					aria-label={localOpen ? 'Close' : 'Open'}
 					data-testid="trigger"
@@ -48,7 +48,7 @@
 				<span class="surface-7f3f4d5957">melt-ui/melt-ui</span>
 			</div>
 
-			<div use:melt={$content} data-testid="content">
+			<div {...$content} use:content data-testid="content">
 				<div class="surface-fca850d1da">
 					<div class="surface-cc2acff3aa">
 						<span class="surface-bded08a04c">sveltejs/svelte</span>

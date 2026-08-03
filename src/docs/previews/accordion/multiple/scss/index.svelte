@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { cn } from '$docs/utils/index.js';
-	import { createAccordion, melt } from '$lib/index.js';
+	import { createAccordion } from '$lib/index.js';
 	import { slide } from 'svelte/transition';
 
 	const {
@@ -42,12 +42,12 @@
 >
 	{#each items as { id, title, description }, i}
 		<div
-			use:melt={$item(id)}
+			{...$item(id)} use:item
 			class="preview-first-item-shape-t-xl  surface-8c45c8a67b"
 		>
 			<h2 class="surface-eb90cbcd39">
 				<button
-					use:melt={$trigger(id)}
+					{...$trigger(id)} use:trigger
 					class={cn(
 						'surface-229b196045',
 						'surface-a434ab4a41',
@@ -65,7 +65,7 @@
 						'content',
 						'preview-text-neutral-600 surface-c09402930e',
 					)}
-					use:melt={$content(id)}
+					{...$content(id)} use:content
 					transition:slide
 				>
 					<div class="surface-634e7d702d">

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createLabel, melt } from '$lib/index.js';
+	import { createLabel } from '$lib/index.js';
 
 	const {
 		elements: { root },
@@ -9,7 +9,7 @@
 <form>
 	<div class="surface-f61d65d8ed">
 		<label
-			use:melt={$root}
+			{...$root} use:root
 			for="email"
 			class="surface-373b51d04f"
 			data-melt-part="root"

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createPopover, melt, type CreatePopoverProps } from '$lib/index.js';
+	import { createPopover, type CreatePopoverProps } from '$lib/index.js';
 	import { Settings2 } from '$icons/index.js';
 	import { initLevel } from './level.js';
 
@@ -17,7 +17,7 @@
 <button
 	type="button"
 	class="trigger"
-	use:melt={$trigger}
+	{...$trigger} use:trigger
 	aria-label="Update dimensions"
 	data-testid="popover-trigger-{level}"
 >
@@ -26,10 +26,10 @@
 </button>
 
 {#if $open || !forceVisible}
-	<div use:melt={$content} data-testid="popover-content-{level}">
-		<div use:melt={$arrow} data-testid="popover-arrow-{level}" />
+	<div {...$content} use:content data-testid="popover-content-{level}">
+		<div {...$arrow} use:arrow data-testid="popover-arrow-{level}"></div>
 		<slot />
-		<button use:melt={$close} data-testid="popover-close-{level}"> Close </button>
+		<button {...$close} use:close data-testid="popover-close-{level}"> Close </button>
 	</div>
 {/if}
-<div data-testid="popover-outside-{level}" />
+<div data-testid="popover-outside-{level}"></div>

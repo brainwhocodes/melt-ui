@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createPopover, createTagsInput, melt, type CreatePopoverProps } from '$lib/index.js';
+	import { createPopover, createTagsInput, type CreatePopoverProps } from '$lib/index.js';
 	import { Settings2 } from '$icons/index.js';
 
 	export let portal: CreatePopoverProps['portal'];
@@ -18,7 +18,7 @@
 <button
 	type="button"
 	class="trigger"
-	use:melt={$trigger}
+	{...$trigger} use:trigger
 	aria-label="Update dimensions"
 	data-testid="popover-trigger"
 >
@@ -26,21 +26,21 @@
 	<span class="surface-416c8df3fd">Open Popover</span>
 </button>
 
-<div use:melt={$content} data-testid="popover-content">
-	<div use:melt={$arrow} data-testid="popover-arrow" />
-	<div use:melt={$root}>
+<div {...$content} use:content data-testid="popover-content">
+	<div {...$arrow} use:arrow data-testid="popover-arrow"></div>
+	<div {...$root} use:root>
 		{#each $tags as t, i}
-			<div data-testid="tag-{i}" use:melt={$tag(t)}>
+			<div data-testid="tag-{i}" {...$tag(t)} use:tag>
 				<span>{t.value}</span>
-				<button data-testid="delete-tag-{i}" use:melt={$deleteTrigger(t)}> Delete </button>
+				<button data-testid="delete-tag-{i}" {...$deleteTrigger(t)} use:deleteTrigger> Delete </button>
 			</div>
-			<div data-testid="edit-tag-{i}" use:melt={$edit(t)} />
+			<div data-testid="edit-tag-{i}" {...$edit(t)} use:edit></div>
 		{/each}
 
-		<input use:melt={$input} type="text" placeholder="Enter tags..." />
+		<input {...$input} use:input type="text" placeholder="Enter tags..." />
 	</div>
 
-	<button use:melt={$close} data-testid="popover-close"> Close </button>
+	<button {...$close} use:close data-testid="popover-close"> Close </button>
 </div>
-<div class="surface-fc74aedafd" />
-<div data-testid="outside" class="surface-a67ec0e521" />
+<div class="surface-fc74aedafd"></div>
+<div data-testid="outside" class="surface-a67ec0e521"></div>

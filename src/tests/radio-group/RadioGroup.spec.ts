@@ -42,7 +42,7 @@ describe('Radio Group', () => {
 
 	it('doesnt require a default value', async () => {
 		const { getByTestId } = setup();
-		expect(getByTestId('value')).toHaveTextContent('undefined');
+		expect(getByTestId('value')).toHaveTextContent(/^$/);
 	});
 
 	it('allows changing value by clicking on a radio button', async () => {

@@ -79,15 +79,15 @@ Next, we can setup our field. Notice that in addition to the segments that we no
 [Popover](/docs/builders/popover).
 
 ```svelte showLineNumbers
-<span use:melt={$label}>Appointment Date</span>
-<div use:melt={$field}>
+<span {...$label} use:label>Appointment Date</span>
+<div {...$field} use:field>
 	{#each $segmentContents as seg}
-		<div use:melt={$segment(seg.part)}>
+		<div {...$segment(seg.part)} use:segment>
 			{seg.value}
 		</div>
 	{/each}
 	<div>
-		<button use:melt={$trigger}>
+		<button {...$trigger} use:trigger>
 			<span>Open Calendar</span>
 		</button>
 	</div>
@@ -98,34 +98,34 @@ Once that's in place, we can setup our calendar, which will be contained within 
 [Popover](/docs/builders/popover)'s content.
 
 ```svelte showLineNumbers
-<span use:melt={$label}>Appointment Date</span>
-<div use:melt={$field}>
+<span {...$label} use:label>Appointment Date</span>
+<div {...$field} use:field>
 	{#each $segmentContents as seg}
-		<div use:melt={$segment(seg.part)}>
+		<div {...$segment(seg.part)} use:segment>
 			{seg.value}
 		</div>
 	{/each}
 	<div>
-		<button use:melt={$trigger}>
+		<button {...$trigger} use:trigger>
 			<span>Open Calendar</span>
 		</button>
 	</div>
 </div>
-<div use:melt={$content}>
-	<div use:melt={$calendar}>
+<div {...$content} use:content>
+	<div {...$calendar} use:calendar>
 		<header>
-			<button use:melt={$prevButton}>
+			<button {...$prevButton} use:prevButton>
 				<span>Previous Month</span>
 			</button>
-			<div use:melt={$heading}>
+			<div {...$heading} use:heading>
 				{$headingValue}
 			</div>
-			<button use:melt={$nextButton}>
+			<button {...$nextButton} use:nextButton>
 				<span>Next Month</span>
 			</button>
 		</header>
 		{#each $months as month}
-			<table use:melt={$grid}>
+			<table {...$grid} use:grid>
 				<thead aria-hidden="true">
 					<tr>
 						{#each $weekdays as day}
@@ -142,7 +142,7 @@ Once that's in place, we can setup our calendar, which will be contained within 
 								<td
 									role="gridcell"
 									aria-disabled={$isDateDisabled(date) || $isDateUnavailable(date)}>
-									<div use:melt={$cell(date, month.value)}>
+									<div {...$cell(date, month.value)} use:cell>
 										{date.day}
 									</div>
 								</td>
@@ -181,7 +181,7 @@ Below, we'll set the placeholder to a `CalendarDateTime` object representing Feb
 
 ```svelte showLineNumbers {8}
 <script lang="ts">
-	import { createDatePicker, melt } from '@melt-ui/svelte'
+	import { createDatePicker } from '@melt-ui/svelte'
 	import { CalendarDateTime } from '@internationalized/date'
 
 	const {
@@ -216,7 +216,7 @@ To have a date selected by default, we can use either value prop. Below, we'll s
 
 ```svelte showLineNumbers {8}
 <script lang="ts">
-	import { createDatePicker, melt } from '@melt-ui/svelte'
+	import { createDatePicker } from '@melt-ui/svelte'
 	import { CalendarDate } from '@internationalized/date'
 
 	const {
@@ -244,7 +244,7 @@ action when the value changes.
 
 ```svelte showLineNumbers {7,13}
 <script lang="ts">
-	import { createDatePicker, melt } from '@melt-ui/svelte'
+	import { createDatePicker } from '@melt-ui/svelte'
 	import { CalendarDate } from '@internationalized/date'
 
 	const {
@@ -275,7 +275,7 @@ as the name of the input element.
 
 ```svelte showLineNumbers {6,8,24}
 <script lang="ts">
-	import { createDatePicker, melt } from '@melt-ui/svelte'
+	import { createDatePicker } from '@melt-ui/svelte'
 
 	const {
 		/* ... */
@@ -285,19 +285,19 @@ as the name of the input element.
 	})
 </script>
 
-<span use:melt={$label}>Appointment Date</span>
-<div use:melt={$field}>
+<span {...$label} use:label>Appointment Date</span>
+<div {...$field} use:field>
 	{#each $segmentContents as seg}
-		<div use:melt={$segment(seg.part)}>
+		<div {...$segment(seg.part)} use:segment>
 			{seg.value}
 		</div>
 	{/each}
 	<div>
-		<button use:melt={$trigger}>
+		<button {...$trigger} use:trigger>
 			<span>Open Calendar</span>
 		</button>
 	</div>
-	<input use:melt={$hiddenInput} />
+	<input {...$hiddenInput} use:hiddenInput />
 </div>
 ```
 
@@ -311,7 +311,7 @@ set the `fixedWeeks` prop to `true`.
 
 ```svelte showLineNumbers {7}
 <script lang="ts">
-	import { createDatePicker, melt } from '@melt-ui/svelte'
+	import { createDatePicker } from '@melt-ui/svelte'
 
 	const {
 		/* ... */
@@ -335,7 +335,7 @@ By default, the calendar will display one month, but you can change this by sett
 
 ```svelte showLineNumbers {7}
 <script lang="ts">
-	import { createDatePicker, melt } from '@melt-ui/svelte'
+	import { createDatePicker } from '@melt-ui/svelte'
 
 	const {
 		/* ... */
@@ -358,7 +358,7 @@ months being displayed.
 
 ```svelte showLineNumbers {8}
 <script lang="ts">
-	import { createDatePicker, melt } from '@melt-ui/svelte'
+	import { createDatePicker } from '@melt-ui/svelte'
 
 	const {
 		/* ... */
@@ -382,7 +382,7 @@ constructor.
 
 ```svelte showLineNumbers {7}
 <script lang="ts">
-	import { createDatePicker, melt } from '@melt-ui/svelte'
+	import { createDatePicker } from '@melt-ui/svelte'
 
 	const {
 		/* ... */
@@ -405,7 +405,7 @@ able to deselect dates.
 
 ```svelte showLineNumbers {9}
 <script lang="ts">
-	import { createDatePicker, melt } from '@melt-ui/svelte'
+	import { createDatePicker } from '@melt-ui/svelte'
 
 	const {
 		/* ... */
@@ -440,7 +440,7 @@ return a boolean indicating whether the date is unavailable.
 
 ```svelte showLineNumbers {9}
 <script lang="ts">
-	import { createDatePicker, melt } from '@melt-ui/svelte'
+	import { createDatePicker } from '@melt-ui/svelte'
 	import { isWeekend } from '@internationalized/date'
 
 	const {
@@ -472,7 +472,7 @@ boolean indicating whether the date is disabled.
 
 ```svelte showLineNumbers {9}
 <script lang="ts">
-	import { createDatePicker, melt } from '@melt-ui/svelte'
+	import { createDatePicker } from '@melt-ui/svelte'
 
 	const {
 		/* ... */
@@ -500,7 +500,7 @@ If a date is before the `minValue`, or after the `maxValue`, it will be disabled
 
 ```svelte showLineNumbers {8-9}
 <script lang="ts">
-	import { createDatePicker, melt } from '@melt-ui/svelte'
+	import { createDatePicker } from '@melt-ui/svelte'
 	import { CalendarDate } from '@internationalized/date'
 
 	const {

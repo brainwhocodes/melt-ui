@@ -10,7 +10,7 @@ const meta = {
 		defaultOpen: { control: 'boolean', defaultValue: false },
 		disabled: { control: 'boolean' },
 	},
-} satisfies Meta<Collapsible>;
+} satisfies Meta<typeof Collapsible>;
 
 export default meta;
 export type Story = StoryObj<typeof meta>;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type CreateTabsProps, melt, createTabs } from '$lib/index.js';
+	import { type CreateTabsProps, createTabs } from '$lib/index.js';
 
 	type $$Props = CreateTabsProps & {
 		tabValues: string[];
@@ -17,14 +17,14 @@
 </script>
 
 <main>
-	<div use:melt={$root} data-testid="root">
-		<div use:melt={$list} data-testid="list">
+	<div {...$root} use:root data-testid="root">
+		<div {...$list} use:list data-testid="list">
 			{#each tabValues as tab}
 				<button
-					use:melt={$trigger({
+					{...$trigger({
 						value: tab,
 						disabled: disabledValues.includes(tab),
-					})}
+					})} use:trigger
 					data-testid="{tab}-trigger"
 				>
 					{tab}
@@ -32,7 +32,7 @@
 			{/each}
 		</div>
 		{#each tabValues as tab}
-			<div use:melt={$content(tab)} data-testid="{tab}-content">
+			<div {...$content(tab)} use:content data-testid="{tab}-content">
 				{tab}
 			</div>
 		{/each}

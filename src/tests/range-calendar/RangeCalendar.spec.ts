@@ -211,8 +211,8 @@ describe('Range Calendar', () => {
 
 		const selectedDays = calendar.querySelectorAll('[data-selected]');
 		expect(selectedDays).toHaveLength(1);
-		expect(startValue).toHaveTextContent(String(undefined));
-		expect(endValue).toHaveTextContent(String(undefined));
+		expect(startValue).toHaveTextContent(/^$/);
+		expect(endValue).toHaveTextContent(/^$/);
 		const seventhDayInMonth = getByTestId('month-1-date-7');
 		await user.click(seventhDayInMonth);
 		await tick();
@@ -343,9 +343,9 @@ describe('Range Calendar', () => {
 		});
 
 		const startValue = getByTestId('start-value');
-		expect(startValue).toHaveTextContent('undefined');
+		expect(startValue).toHaveTextContent(/^$/);
 		const endValue = getByTestId('end-value');
-		expect(endValue).toHaveTextContent('undefined');
+		expect(endValue).toHaveTextContent(/^$/);
 		valueStore.set(calendarDateRange);
 
 		await tick();
@@ -369,13 +369,13 @@ describe('Range Calendar', () => {
 			end: undefined,
 		});
 		await tick();
-		expect(internalStart).toHaveTextContent('undefined');
-		expect(internalEnd).toHaveTextContent('undefined');
+		expect(internalStart).toHaveTextContent(/^$/);
+		expect(internalEnd).toHaveTextContent(/^$/);
 
 		valueStore.set({ start: undefined, end: undefined });
 		await tick();
-		expect(internalStart).toHaveTextContent('undefined');
-		expect(internalEnd).toHaveTextContent('undefined');
+		expect(internalStart).toHaveTextContent(/^$/);
+		expect(internalEnd).toHaveTextContent(/^$/);
 
 		const firstAvailableCell = calendar.querySelector<HTMLElement>(
 			'[data-melt-calendar-cell]:not([data-outside-month]):not([data-disabled])',
@@ -384,8 +384,8 @@ describe('Range Calendar', () => {
 			throw new Error('Expected an available calendar cell');
 		await user.click(firstAvailableCell);
 
-		expect(internalStart).not.toHaveTextContent('undefined');
-		expect(internalEnd).toHaveTextContent('undefined');
+		expect(internalStart).not.toHaveTextContent(/^$/);
+		expect(internalEnd).toHaveTextContent(/^$/);
 		expect(get(valueStore)).toEqual({ start: undefined, end: undefined });
 	});
 

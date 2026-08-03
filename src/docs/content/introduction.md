@@ -1,17 +1,17 @@
 ---
 title: Introduction
 description:
-  An open-source collection of accessible and customizable component builders for creating user
-  interfaces with Svelte.
+  An open-source Svelte component library with accessible defaults, shared design tokens, and
+  lower-level behavior builders.
 ---
 
 <script>
     import { Construction, Contributors } from '$docs/components'
 </script>
 
-Melt UI empowers developers to create accessible UIs that embody their unique style. With a strong
-focus on accessibility, limitless customization options, and an overall delightful developer
-experience, Melt UI strives to be the de-facto headless UI library for Svelte.
+Melt UI provides accessible, production-ready Svelte components with a restrained default design.
+Components preserve native platform behavior, share one token-driven stylesheet, and avoid runtime
+style injection. Lower-level builders remain available when an application needs full markup control.
 
 <Construction>
     Melt UI is in its early stages. Expect breaking changes in minor releases until 1.0 is ready! And lots of new stuff! 🚀
@@ -19,49 +19,47 @@ experience, Melt UI strives to be the de-facto headless UI library for Svelte.
 
 ## Features
 
-### Builder API
+### Component API
 
-Unlike a traditional component library, Melt UI provides access to builders instead of components.
-Builders are just functions that generate a collection of properties that can be assigned to any
-element or component.
+Import the shared stylesheet once, then use components directly.
 
-```svelte {3-6} /$root/#hi /$content/#hi /$trigger/#hi
+```svelte
 <script>
-	import { createCollapsible, melt } from '@melt-ui/svelte'
-	const {
-		elements: { root, content, trigger },
-		states: { open }
-	} = createCollapsible()
+	import { Button, Field, Input } from '@melt-ui/svelte';
+	import '@melt-ui/svelte/styles.css';
 </script>
 
-<div use:melt={$root}>
-	<button use:melt={$trigger}>{$open ? 'Close' : 'Open'}</button>
-	<div use:melt={$content}>Obi-Wan says: Hello there!</div>
-</div>
+<Field id="profile-email" label="Email" description="Used for account notifications." required>
+	<Input type="email" placeholder="you@example.com" />
+</Field>
+
+<Button>Save profile</Button>
 ```
 
-This is all you need to have a working Collapsible component in your application. The builders
-automatically apply the necessary attributes and event handlers to your element or component.
+Components expose native attributes and events, ordinary class names, and consistent variants.
+Family subpath exports let applications keep import graphs focused.
+
+### Builder API
+
+Builders remain available for advanced composition. They generate state, attributes, and event
+handlers that can be attached to custom elements or components without replacing the styled API.
 
 ### Accessible by Design
 
-Melt UI puts accessibility front and center, making sure your UI components are inclusive and
-user-friendly. We follow [WAI-ARIA design patterns](https://www.w3.org/WAI/ARIA/apg/) and take care
-of all the nitty-gritty details like aria attributes, role management, focus handling, and keyboard
-navigation. Each builder's page includes a section on accessibility, with references to relevant
-WAI-ARIA guidelines and instructions for using the builder in an accessible manner.
+Melt UI puts accessibility front and center so interfaces are inclusive and predictable. We follow
+[WAI-ARIA design patterns](https://www.w3.org/WAI/ARIA/apg/) and handle details such as ARIA
+relationships, role management, focus return, keyboard navigation, and live-region behavior.
 
-### Bring Your Own Styles
+### Token-driven Styles
 
-The builders ship with zero predefined styles, allowing you to customize them to seamlessly
-integrate with your application's design system. Whether you prefer vanilla CSS, CSS preprocessors,
-or CSS-in-JS libraries, our components work harmoniously with your preferred styling solution.
+The shared stylesheet uses documented custom properties and ordinary component classes. Override
+tokens globally, add application-specific classes locally, or import a component-family subpath
+without paying for a runtime styling engine.
 
 ### Open and Extensible
 
-Melt UI embraces your desire for customization. The builder architecture is open and flexible,
-allowing you to tinker with every aspect of the components. Wrap them, extend their functionality,
-or add event listener and props to tailor them to your exact needs.
+Components expose native attributes, events, slots, and class hooks. For deeper control, the builder
+architecture remains open and flexible enough to support custom markup and interaction composition.
 
 ### Simplified DX
 

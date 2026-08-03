@@ -1,6 +1,6 @@
 ---
 title: Installation
-description: Install Melt UI, a headless UI library for Svelte.
+description: Install Melt UI, an accessible component library for Svelte.
 ---
 
 <script>
@@ -27,7 +27,7 @@ Install Melt UI with your package manager of choice.
 <span slot="npm">
 
 ```bash
-npm install -D @melt-ui/svelte
+npm install @melt-ui/svelte
 ```
 
 </span>
@@ -35,7 +35,7 @@ npm install -D @melt-ui/svelte
 <span slot="yarn">
 
 ```bash
-yarn add -D @melt-ui/svelte
+yarn add @melt-ui/svelte
 ```
 
 </span>
@@ -43,22 +43,31 @@ yarn add -D @melt-ui/svelte
 <span slot="pnpm">
 
 ```bash
-pnpm add -D @melt-ui/svelte
+pnpm add @melt-ui/svelte
 ```
 
 </span>
 </InstallTabs>
 
+Import the shared stylesheet once in your application layout:
+
+```svelte
+<script>
+	import '@melt-ui/svelte/styles.css';
+</script>
+```
+
 <Callout>
 P.S. These tabs were built using Melt! Try using them with the arrow keys.
 </Callout>
 
-## Preprocessor Installation
+## Optional Preprocessor Installation
 
-Melt UI also provides a custom preprocessor that aims to enhance the DX of Melt UI. You can read
-more about it [here](/docs/preprocessor).
-
-Install our preprocessor, [@melt-ui/pp](https://github.com/melt-ui/preprocessor).
+The documented Melt UI syntax spreads each builder's attributes and applies its action explicitly.
+For example: `{...$trigger} use:trigger`. If you prefer the legacy `use:melt={$trigger}`
+shorthand, you can optionally install the
+[@melt-ui/pp preprocessor](https://github.com/melt-ui/preprocessor). Read the
+[preprocessor guide](/docs/preprocessor) before enabling it.
 
 <InstallTabs>
 <span slot="npm">
@@ -87,19 +96,20 @@ pnpm add -D @melt-ui/pp
 
 </InstallTabs>
 
-Next, import both preprocessors and add them to your `preprocess` array in `svelte.config.js`.
+Next, append the Melt preprocessor to Svelte's native `preprocess` array in `svelte.config.js`.
+Keep it after any preprocessors that produce Svelte markup.
 
 ```js
 // svelte.config.js
 
-import { preprocessMeltUI, sequence } from '@melt-ui/pp'
+import { preprocessMeltUI } from '@melt-ui/pp'
 
 const config = {
 	// ... other svelte config options
-	preprocess: sequence([
+	preprocess: [
 		// ... other preprocessors
-		preprocessMeltUI() // add to the end!
-	])
+		preprocessMeltUI()
+	]
 }
 
 export default config

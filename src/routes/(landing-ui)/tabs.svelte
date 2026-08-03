@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { cn } from '$docs/utils/index.js';
-	import { createTabs, melt } from '$lib/index.js';
+	import { createTabs } from '$lib/index.js';
 	import { cubicInOut } from 'svelte/easing';
 	import { crossfade } from 'svelte/transition';
 
@@ -27,31 +27,29 @@
 </script>
 
 <div
-	use:melt={$root}
+	{...$root} use:root
 	class={cn(
 		'surface-4ba47b3d16',
 		className
 	)}
 >
 	<div
-		use:melt={$list}
+		{...$list} use:list
 		class="preview-surface-neutral-100   preview-state-orientation-layout-col surface-0cf1b42a8c"
 		aria-label="Manage your account"
 	>
 		{#each triggers as triggerItem}
-			<button use:melt={$trigger(triggerItem.id)} class="trigger surface-5febeeb4b4">
+			<button {...$trigger(triggerItem.id)} use:trigger class="trigger surface-5febeeb4b4">
 				{triggerItem.title}
 				{#if $value === triggerItem.id}
-					<div
-						in:send={{ key: 'trigger' }}
+					<div in:send={{ key: 'trigger' }}
 						out:receive={{ key: 'trigger' }}
-						class="surface-b1f0a0c85b"
-					/>
+						class="surface-b1f0a0c85b"></div>
 				{/if}
 			</button>
 		{/each}
 	</div>
-	<div use:melt={$content('tab-1')} class="surface-4fce35cfa9">
+	<div {...$content('tab-1')} use:content class="surface-4fce35cfa9">
 		<p class="surface-eac832b925">
 			Make changes to your account here. Click save when you're done.
 		</p>
@@ -64,7 +62,7 @@
 			<button class="save">Save changes</button>
 		</div>
 	</div>
-	<div use:melt={$content('tab-2')} class="surface-4344c292cf">
+	<div {...$content('tab-2')} use:content class="surface-4344c292cf">
 		<p class="surface-1df23bc9ca">
 			Change your password here. Click save when you're done.
 		</p>
@@ -78,7 +76,7 @@
 			<button class="save">Save changes</button>
 		</div>
 	</div>
-	<div use:melt={$content('tab-3')} class="surface-ca6c94fc42">
+	<div {...$content('tab-3')} use:content class="surface-ca6c94fc42">
 		<p class="surface-5b42e98655">
 			Change your settings here. Click save when you're done.
 		</p>

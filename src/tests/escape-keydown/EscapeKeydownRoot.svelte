@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createDialog, melt, type CreateDialogProps } from '$lib/index.js';
+	import { createDialog, type CreateDialogProps } from '$lib/index.js';
 	import Dialog from './DialogTest.svelte';
 	import Combobox from './ComboboxTest.svelte';
 	import LinkPreview from './LinkPreviewTest.svelte';
@@ -21,10 +21,10 @@
 	const setRootEscapeBehaviorIgnore = () => rootEscapeBehavior.set('ignore');
 </script>
 
-<button use:melt={$trigger} data-testid="root-dialog-trigger">Open</button>
+<button {...$trigger} use:trigger data-testid="root-dialog-trigger">Open</button>
 {#if $open}
-	<div use:melt={$portalled}>
-		<div use:melt={$content} data-testid="root-dialog-content">
+	<div {...$portalled} use:portalled>
+		<div {...$content} use:content data-testid="root-dialog-content">
 			<Dialog {escapeBehavior} {setRootEscapeBehaviorIgnore} />
 			<Combobox {escapeBehavior} {setRootEscapeBehaviorIgnore} />
 			<LinkPreview {escapeBehavior} {setRootEscapeBehaviorIgnore} />

@@ -324,7 +324,7 @@ describe('Calendar', () => {
 
 		await tick();
 		const insideValue = queryByTestId('inside-value');
-		expect(insideValue).toHaveTextContent('undefined');
+		expect(insideValue).toHaveTextContent(/^$/);
 	});
 
 	test('selection with mouse', async () => {
@@ -480,7 +480,7 @@ describe('Calendar', () => {
 		});
 
 		const insideValue = getByTestId('inside-value');
-		expect(insideValue).toHaveTextContent('undefined');
+		expect(insideValue).toHaveTextContent(/^$/);
 		valueStore.set(calendarDate);
 
 		await tick();

@@ -1,9 +1,5 @@
 <script lang="ts">
-	import {
-		createCombobox,
-		melt,
-		type CreateComboboxProps,
-	} from '$lib/index.js';
+	import { createCombobox, type CreateComboboxProps } from '$lib/index.js';
 	import { Check, ChevronDown, ChevronUp } from '$icons/index.js';
 	import { fly } from 'svelte/transition';
 	import { localeOptions } from './locales.js';
@@ -51,13 +47,13 @@
 <div class="surface-82807e3abe">
 	<div class="surface-c9f174b904">
 		<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
-		<label use:melt={$label}>
+		<label {...$label} use:label>
 			<span class="surface-cc30321937">Choose a locale:</span>
 		</label>
 
 		<div class="surface-11fbc02f4b">
 			<input
-				use:melt={$input}
+				{...$input} use:input
 				aria-describedby="disclaimer"
 				class="surface-f3096f1964"
 				placeholder="Choose a locale"
@@ -80,7 +76,7 @@
 	{#if $open}
 		<ul
 			class="force-dark surface-cc107273c4"
-			use:melt={$menu}
+			{...$menu} use:menu
 			transition:fly={{ duration: 150, y: -5 }}
 		>
 			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -90,7 +86,7 @@
 			>
 				{#each filteredLocales as locale, index (index)}
 					<li
-						use:melt={$option(locale)}
+						{...$option(locale)} use:option
 						class="surface-fb7dd35233"
 					>
 						{#if $isSelected(locale.value)}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createDateRangeField, melt } from '$lib/index.js';
+	import { createDateRangeField } from '$lib/index.js';
 	import { CalendarDate, CalendarDateTime } from '@internationalized/date';
 
 	const {
@@ -14,11 +14,11 @@
 	});
 </script>
 
-<span use:melt={$label}>Trip Dates</span>
-<div use:melt={$field}>
+<span {...$label} use:label>Trip Dates</span>
+<div {...$field} use:field>
 	<div>
 		{#each $segmentContents.start as seg, i (i)}
-			<div use:melt={$startSegment(seg.part)}>
+			<div {...$startSegment(seg.part)} use:startSegment>
 				{seg.value}
 			</div>
 		{/each}
@@ -26,7 +26,7 @@
 	<div aria-hidden="true">-</div>
 	<div>
 		{#each $segmentContents.end as seg, i (i)}
-			<div use:melt={$endSegment(seg.part)}>
+			<div {...$endSegment(seg.part)} use:endSegment>
 				{seg.value}
 			</div>
 		{/each}

@@ -662,7 +662,7 @@ export function createCalendar<
 	 *
 	 * @example
 	 * ```svelte
-	 * <table use:melt={$grid} class="w-full">
+	 * <table {...$grid} use:grid class="w-full">
 	 * 	<thead aria-hidden="true">
 	 * 		<tr>
 	 * 			{#each $weekdays as day}
@@ -685,7 +685,7 @@ export function createCalendar<
 	 * @example
 	 * ```svelte
 	 * {#each $months as month}
-	 * 	<table use:melt={$grid} class="w-full">
+	 * 	<table {...$grid} use:grid class="w-full">
 	 * 		<thead aria-hidden="true">
 	 * 			<tr>
 	 * 				{#each month.weeks[0] as dayOfWeek}

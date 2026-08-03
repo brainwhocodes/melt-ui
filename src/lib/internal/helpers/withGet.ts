@@ -1,10 +1,5 @@
-import {
-	get,
-	type Readable,
-	type StoresValues,
-	type Writable,
-	writable,
-} from 'svelte/store';
+import { get, type Readable, type Writable, writable } from 'svelte/store';
+import type { StoresValues } from './store/types.js';
 
 type ReadableValue<T> = T extends Readable<infer V> ? V : never;
 

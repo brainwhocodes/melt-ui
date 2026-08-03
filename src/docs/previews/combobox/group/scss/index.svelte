@@ -1,9 +1,5 @@
 <script lang="ts">
-	import {
-		createCombobox,
-		melt,
-		type ComboboxOptionProps,
-	} from '$lib/index.js';
+	import { createCombobox, type ComboboxOptionProps } from '$lib/index.js';
 	import { Check, ChevronDown, ChevronUp } from '$icons/index.js';
 	import { fly } from 'svelte/transition';
 
@@ -110,7 +106,7 @@
 
 <div class="surface-946773ead1">
 	<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
-	<label use:melt={$label}>
+	<label {...$label} use:label>
 		<span class="surface-34ac3a4325"
 			>Choose your favorite manga:</span
 		>
@@ -118,7 +114,7 @@
 
 	<div class="surface-f488248834">
 		<input
-			use:melt={$input}
+			{...$input} use:input
 			class="surface-68e987f7dd"
 			placeholder="Best book ever"
 		/>
@@ -134,7 +130,7 @@
 {#if $open}
 	<ul
 		class="force-dark surface-aa5800d125"
-		use:melt={$menu}
+		{...$menu} use:menu
 		transition:fly={{ duration: 150, y: -5 }}
 	>
 		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -143,16 +139,16 @@
 			tabindex="0"
 		>
 			{#each Object.entries(filteredMangas) as [key, arr]}
-				<div use:melt={$group(key)}>
+				<div {...$group(key)} use:group>
 					<div
 						class="surface-06f377b70a"
-						use:melt={$groupLabel(key)}
+						{...$groupLabel(key)} use:groupLabel
 					>
 						{key}
 					</div>
 					{#each arr as manga, index (index)}
 						<li
-							use:melt={$option(toOption(manga))}
+							{...$option(toOption(manga))} use:option
 							class="surface-0d6f81a5ca"
 						>
 							{#if $isSelected(manga)}

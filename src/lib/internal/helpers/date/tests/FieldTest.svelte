@@ -1,13 +1,13 @@
 <div id="field" data-testid="field">
-	<div data-segment="day" />
-	<div data-segment="month" />
-	<div data-segment="year" />
-	<div data-segment="literal" />
+	<div data-segment="day"></div>
+	<div data-segment="month"></div>
+	<div data-segment="year"></div>
+	<div data-segment="literal"></div>
 	<div data-segment="sknkndfkndknd">
-		<div data-segment="hour" />
-		<div data-segment="minute" />
-		<div data-segment="second" />
-		<div data-segment="dayPeriod" />
-		<div data-segment="timeZoneName" />
+		<div data-segment="hour"></div>
+		<div data-segment="minute"></div>
+		<div data-segment="second"></div>
+		<div data-segment="dayPeriod"></div>
+		<div data-segment="timeZoneName"></div>
 	</div>
 </div>

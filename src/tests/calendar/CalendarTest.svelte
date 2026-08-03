@@ -1,9 +1,5 @@
 <script lang="ts">
-	import {
-		createCalendar,
-		melt,
-		type CreateCalendarProps,
-	} from '$lib/index.js';
+	import { createCalendar, type CreateCalendarProps } from '$lib/index.js';
 	import { ChevronRight, ChevronLeft } from '$icons/index.js';
 	import { removeUndefined } from '../utils.js';
 
@@ -92,21 +88,21 @@
 		</div>
 
 		<div class="surface-8137693dd8">
-			<div class="surface-cd44bf9b37" use:melt={$calendar} data-testid="calendar">
+			<div class="surface-cd44bf9b37" {...$calendar} use:calendar data-testid="calendar">
 				<header class="surface-f51db752b9">
-					<button use:melt={$prevButton} data-testid="prev-button">
+					<button {...$prevButton} use:prevButton data-testid="prev-button">
 						<ChevronLeft />
 					</button>
-					<h2 class="surface-422643ec2c" use:melt={$heading} data-testid="heading">
+					<h2 class="surface-422643ec2c" {...$heading} use:heading data-testid="heading">
 						{$headingValue}
 					</h2>
-					<button use:melt={$nextButton} data-testid="next-button">
+					<button {...$nextButton} use:nextButton data-testid="next-button">
 						<ChevronRight />
 					</button>
 				</header>
 				<div>
 					{#each $months as month, i}
-						<table use:melt={$grid} class="surface-29d08cef74" data-testid="grid-{i}">
+						<table {...$grid} use:grid class="surface-29d08cef74" data-testid="grid-{i}">
 							<thead aria-hidden="true">
 								<tr data-testid="weekdays">
 									{#each $weekdays as day, idx}
@@ -127,7 +123,7 @@
 										{#each days as date}
 											<td role="gridcell">
 												<div
-													use:melt={$cell(date, month.value)}
+													{...$cell(date, month.value)} use:cell
 													class="cell"
 													data-testid="month-{date.month}-date-{date.day}"
 												>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createSelect, melt, type CreateSelectProps } from '$lib/index.js';
+	import { createSelect, type CreateSelectProps } from '$lib/index.js';
 	import { Check, ChevronDown } from '$icons/index.js';
 	import { fade } from 'svelte/transition';
 
@@ -39,12 +39,12 @@
 
 <div class="surface-a5503573b6">
 	<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
-	<label class="surface-8a71880ce8" use:melt={$label}
+	<label class="surface-8a71880ce8" {...$label} use:label
 		>Select a month</label
 	>
 	<button
 		class="surface-80a257f89f"
-		use:melt={$trigger}
+		{...$trigger} use:trigger
 		aria-label="Food"
 	>
 		{$selectedLabel || 'Select a month'}
@@ -54,13 +54,13 @@
 	{#if $open}
 		<div
 			class="surface-5fb0e6e853"
-			use:melt={$menu}
+			{...$menu} use:menu
 			transition:fade={{ duration: 150 }}
 		>
 			{#each Object.entries(months) as [value, label]}
 				<div
 					class="surface-ebfedfb119"
-					use:melt={$option({ value, label })}
+					{...$option({ value, label })} use:option
 				>
 					<div class="check {$isSelected(value) ? 'preview-block' : 'preview-hidden'}">
 						<Check class="surface-d7af6fc67e" />

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createTagsInput, melt } from '$lib/index.js';
+	import { createTagsInput } from '$lib/index.js';
 	import { X } from '$icons/index.js';
 
 	const {
@@ -17,32 +17,30 @@
 
 <div class="surface-710b53fd44">
 	<div
-		use:melt={$root}
+		{...$root} use:root
 		class="preview-text-magnum-700   preview-focus-within-ring surface-2d675c3c3d"
 	>
 		{#each $tags as t}
 			<div
-				use:melt={$tag(t)}
+				{...$tag(t)} use:tag
 				class="preview-word-break-break-word    preview-state-disabled-surface-magnum-300 preview-state-disabled-hover-interaction-default     preview-state-disabled-focus-no-ring surface-f9f4e3cce1"
 			>
 				<span class="surface-e180e4a09d"
 					>{t.value}</span
 				>
 				<button
-					use:melt={$deleteTrigger(t)}
+					{...$deleteTrigger(t)} use:deleteTrigger
 					class="surface-8eb163744f"
 				>
 					<X class="surface-fab0578b8b" />
 				</button>
 			</div>
-			<div
-				use:melt={$edit(t)}
-				class="surface-74b8858a18"
-			/>
+			<div {...$edit(t)} use:edit
+				class="surface-74b8858a18"></div>
 		{/each}
 
 		<input
-			use:melt={$input}
+			{...$input} use:input
 			type="text"
 			placeholder="Enter tags..."
 			class="surface-e82fb35238"

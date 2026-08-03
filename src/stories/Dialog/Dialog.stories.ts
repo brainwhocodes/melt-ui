@@ -9,7 +9,7 @@ const meta = {
 	title: 'Components/Dialog',
 	component: Dialog,
 	argTypes: {},
-} satisfies Meta<Dialog>;
+} satisfies Meta<typeof Dialog>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

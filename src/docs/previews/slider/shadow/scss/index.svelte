@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { mount, onMount, unmount } from 'svelte';
 	import Slider from './Slider.svelte';
 
 	export let elementRoot: HTMLElement;
@@ -31,14 +31,17 @@
 			shadowRoot.appendChild(componentRoot);
 
 			shadowRoot.appendChild(styleElement);
-			new Slider({
+			const component = mount(Slider, {
 				target: componentRoot,
 				props: {
 					componentRoot,
 				},
 			});
+			return () => {
+				void unmount(component);
+			};
 		}
 	});
 </script>
 
-<main bind:this={elementRoot} />
+<main bind:this={elementRoot}></main>

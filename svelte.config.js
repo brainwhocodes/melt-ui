@@ -1,20 +1,23 @@
-import { mdsvex } from '@huntabyte/mdsvex';
-import { preprocessMeltUI } from '@melt-ui/pp';
+import { mdsvex } from 'mdsvex';
 import adapterStatic from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import sequence from 'svelte-sequential-preprocessor';
 import { mdsvexOptions } from './mdsvex.config.js';
+
+const vite = vitePreprocess();
+const viteTypescriptAndScss = {
+	...vite,
+	style: (options) => (options.attributes.lang === 'scss' ? vite.style(options) : undefined),
+};
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	extensions: ['.svelte', '.md'],
 	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
 	// for more information about preprocessors
-	preprocess: sequence([
+	preprocess: [
 		mdsvex(mdsvexOptions),
-		vitePreprocess(),
-		preprocessMeltUI(),
-	]),
+		viteTypescriptAndScss,
+	],
 
 	kit: {
 		// adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.

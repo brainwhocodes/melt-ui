@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createProgress, melt } from '$lib/index.js';
+	import { createProgress } from '$lib/index.js';
 	import { writable } from 'svelte/store';
 
 	const value = writable(30);
@@ -20,13 +20,11 @@
 </script>
 
 <div
-	use:melt={$root}
+	{...$root} use:root
 	class="surface-f0d6ce4666"
 >
-	<div
-		class="preview-motion-cubic-bezier-0-65-0-0-35-1 surface-59be3f4c2e"
+	<div class="preview-motion-cubic-bezier-0-65-0-0-35-1 surface-59be3f4c2e"
 		style={`transform: translateX(-${
 			100 - (100 * ($value ?? 0)) / ($max ?? 1)
-		}%)`}
-	/>
+		}%)`}></div>
 </div>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createToggleGroup, melt } from '$lib/index.js';
+	import { createToggleGroup } from '$lib/index.js';
 	import { AlignCenter, AlignLeft, AlignRight } from '$icons/index.js';
 
 	const {
@@ -10,27 +10,27 @@
 </script>
 
 <div
-	use:melt={$root}
+	{...$root} use:root
 	class="preview-state-orientation-layout-col-2 surface-816e9df285"
 	aria-label="Text alignment"
 >
 	<button
 		class="toggle-item"
-		use:melt={$item('left')}
+		{...$item('left')} use:item
 		aria-label="Left aligned"
 	>
 		<AlignLeft class="surface-6978a089f8" />
 	</button>
 	<button
 		class="toggle-item"
-		use:melt={$item('center')}
+		{...$item('center')} use:item
 		aria-label="Center aligned"
 	>
 		<AlignCenter class="surface-b3a7762383" />
 	</button>
 	<button
 		class="toggle-item"
-		use:melt={$item('right')}
+		{...$item('right')} use:item
 		aria-label="Right aligned"
 	>
 		<AlignRight class="surface-2b5fbfb1f0" />

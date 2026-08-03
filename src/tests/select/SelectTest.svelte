@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createSelect, melt, type CreateSelectProps } from '$lib/index.js';
+	import { createSelect, type CreateSelectProps } from '$lib/index.js';
 	import { Check } from '$icons/index.js';
 	import { tick } from 'svelte';
 	import { removeUndefined } from '../utils.js';
@@ -14,7 +14,6 @@
 		elements: { trigger, menu, option, group, groupLabel, label },
 		states: { selected, selectedLabel },
 		helpers: { isSelected },
-		ids: { trigger: triggerId },
 	} = createSelect(
 		removeUndefined({
 			multiple,
@@ -38,7 +37,7 @@
 </script>
 
 <main>
-	<label for={$triggerId} use:melt={$label} data-testid="label">Label</label>
+	<label id={$label.id} for={$label.for} use:label data-testid="label">Label</label>
 	<button
 		on:click={() => {
 			selected.set({ value: 'Chocolate', label: 'Chocolate' });
@@ -65,7 +64,7 @@
 		Update options and set
 	</button>
 
-	<button use:melt={$trigger} aria-label="Food" data-testid="trigger">
+	<button {...$trigger} use:trigger aria-label="Food" data-testid="trigger">
 		{$selectedLabel || 'Select an option'}
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -84,13 +83,13 @@
 		>
 	</button>
 
-	<div use:melt={$menu} data-testid="menu">
+	<div {...$menu} use:menu data-testid="menu">
 		{#each Object.entries(options) as [key, arr]}
-			<div use:melt={$group(key)} data-testid="group-{key}">
-				<div use:melt={$groupLabel(key)} data-testid="label-{key}">{key}</div>
+			<div {...$group(key)} use:group data-testid="group-{key}">
+				<div {...$groupLabel(key)} use:groupLabel data-testid="label-{key}">{key}</div>
 				{#each arr as item, i}
 					<div
-						use:melt={$option({ value: item, label: item, disabled: i === 2 })}
+						{...$option({ value: item, label: item, disabled: i === 2 })} use:option
 						data-testid="{key}-option-{i}"
 					>
 						{#if $isSelected(item)}
@@ -104,5 +103,5 @@
 			</div>
 		{/each}
 	</div>
-	<div data-testid="outside" />
+	<div data-testid="outside"></div>
 </main>

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { Tooltip } from '$docs/components/index.js';
-	import { createCombobox, createDialog, melt } from '$lib/index.js';
+	import { createCombobox, createDialog } from '$lib/index.js';
 	import { CornerDownRight, LoaderIcon, Search as SearchIcon } from '$icons/index.js';
 	import { onMount } from 'svelte';
 	import type { Pagefind, PagefindSearchFragment, PagefindSubResult } from '../../pagefind.js';
@@ -83,22 +83,26 @@
 />
 
 <Tooltip text="Search">
-	<button class="surface-1f07b58ff2" use:melt={$trigger}>
+	<button
+		class="surface-1f07b58ff2"
+		aria-label="Search documentation"
+		{...$trigger} use:trigger
+	>
 		<SearchIcon class="surface-df1bc37795" />
 	</button>
 </Tooltip>
 
-<div use:melt={$portalled} class="surface-f4b2afd98c">
-	<div use:melt={$overlay} class="surface-7ef270ecc5" />
+<div {...$portalled} use:portalled class="surface-f4b2afd98c">
+	<div {...$overlay} use:overlay class="surface-7ef270ecc5"></div>
 	<div
-		use:melt={$content}
+		{...$content} use:content
 		class="surface-4aa8c6d24e"
 	>
 		<div class="surface-9143f75033">
 			<div class="surface-de57919a1f">
 				<input
 					bind:this={comboboxInput}
-					use:melt={$input}
+					{...$input} use:input
 					class="surface-6d7884f481"
 					placeholder="Search..."
 					on:keydown={(e) => {
@@ -121,7 +125,7 @@
 
 		<div
 			class="preview-limit-h-min-600px-50vh surface-849326f3f2"
-			use:melt={$menu}
+			{...$menu} use:menu
 			class:preview-hidden={!$inputValue}
 		>
 			{#if search}
@@ -136,7 +140,7 @@
 							{@const isLast = index === results.length - 1}
 
 							<div
-								use:melt={$option({ value: data, label: data.meta.title })}
+								{...$option({ value: data, label: data.meta.title })} use:option
 								class="surface-ae2c8b782e"
 							>
 								<a
@@ -150,7 +154,7 @@
 							{#each data.sub_results.filter(({ title }) => title !== data.meta.title) as subresult}
 								<div
 									class="subresult surface-e73dd998e6"
-									use:melt={$option({ value: subresult, label: subresult.title })}
+									{...$option({ value: subresult, label: subresult.title })} use:option
 								>
 									<div class="surface-3c2d90a018">
 										<CornerDownRight class="surface-e5d26165c8" />

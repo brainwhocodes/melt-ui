@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createSlider, melt } from '$lib/index.js';
+	import { createSlider } from '$lib/index.js';
 	export let componentRoot;
 	const {
 		elements: { root, range, thumbs },
@@ -12,10 +12,10 @@
 	});
 </script>
 
-<span use:melt={$root} class="root">
+<span {...$root} use:root class="root">
 	<span class="range-wrapper">
-		<span use:melt={$range} class="range" />
+		<span {...$range} use:range class="range"></span>
 	</span>
 
-	<span use:melt={$thumbs[0]} class="thumb" />
+	<span {...$thumbs[0]} use:thumbs class="thumb"></span>
 </span>

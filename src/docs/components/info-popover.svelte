@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { cn } from '$docs/utils/index.js';
-	import { createPopover, melt } from '$lib/index.js';
+	import { createPopover } from '$lib/index.js';
 	import { fade } from 'svelte/transition';
 	import { Info } from '$icons/index.js';
 
@@ -13,20 +13,20 @@
 	export let contentClasses = '';
 </script>
 
-<button use:melt={$trigger} aria-label="More info">
+<button {...$trigger} use:trigger aria-label="More info">
 	<Info class={cn('surface-2edca20fab', iconClasses)} />
 	<span class="surface-4b7396ff96">Open popover</span>
 </button>
 {#if $open}
 	<div
-		use:melt={$content}
+		{...$content} use:content
 		transition:fade={{ duration: 100 }}
 		class={cn(
 			'mdsvex surface-3913b2c9d7',
 			contentClasses
 		)}
 	>
-		<div use:melt={$arrow} />
+		<div {...$arrow} use:arrow></div>
 		<p class="surface-7ff6331d58">
 			<slot />
 		</p>

@@ -402,18 +402,18 @@ describe('DatePicker', () => {
 			await user.click(nextButton);
 
 			const hourSegment = getByTestId('hour');
-			expect(hourSegment).not.toHaveTextContent(String(undefined));
+			expect(hourSegment).not.toHaveTextContent(/^$/);
 
 			const minuteSegment = getByTestId('minute');
-			expect(minuteSegment).not.toHaveTextContent(String(undefined));
+			expect(minuteSegment).not.toHaveTextContent(/^$/);
 
 			const firstDayInMonth = getByTestId('month-2-date-1');
 			await user.click(firstDayInMonth);
 
 			await tick();
 
-			expect(hourSegment).not.toHaveTextContent(String(undefined));
-			expect(minuteSegment).not.toHaveTextContent(String(undefined));
+			expect(hourSegment).not.toHaveTextContent(/^$/);
+			expect(minuteSegment).not.toHaveTextContent(/^$/);
 		});
 
 		test('correct segments are rendered with placeholder', async () => {

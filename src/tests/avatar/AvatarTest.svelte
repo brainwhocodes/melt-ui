@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createAvatar, melt } from '$lib/index.js';
+	import { createAvatar } from '$lib/index.js';
 
 	export let src = 'https://avatars.githubusercontent.com/u/1162160?v=4';
 
@@ -11,7 +11,7 @@
 </script>
 
 <div class="surface-900127e8ae">
-	<img use:melt={$image} alt="Avatar" class="surface-baa0bffe7c" data-testid="image" />
-	<span use:melt={$fallback} class="surface-451ef3ffb0" data-testid="fallback">RH</span
+	<img {...$image} use:image alt="Avatar" class="surface-baa0bffe7c" data-testid="image" />
+	<span {...$fallback} use:fallback class="surface-451ef3ffb0" data-testid="fallback">RH</span
 	>
 </div>

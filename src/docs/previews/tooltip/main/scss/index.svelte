@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createTooltip, melt } from '$lib/index.js';
+	import { createTooltip } from '$lib/index.js';
 	import { fade } from 'svelte/transition';
 	import { Plus } from '$icons/index.js';
 
@@ -17,17 +17,17 @@
 	});
 </script>
 
-<button type="button" class="trigger" use:melt={$trigger} aria-label="Add">
+<button type="button" class="trigger" {...$trigger} use:trigger aria-label="Add">
 	<Plus class="surface-b8e60f35b8" aria-label="plus" />
 </button>
 
 {#if $open}
 	<div
-		use:melt={$content}
+		{...$content} use:content
 		transition:fade={{ duration: 100 }}
 		class="force-dark surface-e226f73506"
 	>
-		<div use:melt={$arrow} />
+		<div {...$arrow} use:arrow></div>
 		<p class="surface-76b448fcab">Add item to library</p>
 	</div>
 {/if}

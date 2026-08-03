@@ -266,7 +266,7 @@ then you could do something like this:
 
 ```svelte {3-6}
 <button
-	use:melt={$trigger}
+	{...$trigger} use:trigger
 	on:m-click={(e) => {
 		e.preventDefault()
 		// do something else

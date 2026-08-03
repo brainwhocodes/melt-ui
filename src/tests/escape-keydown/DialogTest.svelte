@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createDialog, melt, type CreateDialogProps } from '$lib/index.js';
+	import { createDialog, type CreateDialogProps } from '$lib/index.js';
 
 	type $$Props = CreateDialogProps & { setRootEscapeBehaviorIgnore: () => void };
 	export let setRootEscapeBehaviorIgnore: () => void;
@@ -12,10 +12,10 @@
 	} = createDialog({ escapeBehavior, forceVisible: true });
 </script>
 
-<button use:melt={$trigger} data-testid="dialog-trigger">Open</button>
+<button {...$trigger} use:trigger data-testid="dialog-trigger">Open</button>
 {#if $open}
-	<div use:melt={$portalled}>
-		<div use:melt={$content} data-testid="dialog-content">
+	<div {...$portalled} use:portalled>
+		<div {...$content} use:content data-testid="dialog-content">
 			<button
 				data-testid="dialog-set-parent-escape-behavior-ignore"
 				on:click={setRootEscapeBehaviorIgnore}

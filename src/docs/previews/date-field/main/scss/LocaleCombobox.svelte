@@ -1,9 +1,5 @@
 <script lang="ts">
-	import {
-		createCombobox,
-		melt,
-		type CreateComboboxProps,
-	} from '$lib/index.js';
+	import { createCombobox, type CreateComboboxProps } from '$lib/index.js';
 	import { Check, ChevronDown, ChevronUp } from '$icons/index.js';
 	import { fly } from 'svelte/transition';
 	import { localeOptions } from './locales.js';
@@ -48,16 +44,16 @@
 	$: filteredLocales = $touchedInput ? _filteredLocales : localeOptionsArr;
 </script>
 
-<div class="surface-b01c347c3b">
+<div class="locale-combobox">
 	<div class="surface-dff9595ee6">
 		<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
-		<label use:melt={$label}>
+		<label {...$label} use:label>
 			<span class="surface-36aefb0453">Choose a locale:</span>
 		</label>
 
 		<div class="surface-fae8229465">
 			<input
-				use:melt={$input}
+				{...$input} use:input
 				aria-describedby="disclaimer"
 				class="surface-8a7beb2ce4"
 				placeholder="Choose a locale"
@@ -80,7 +76,7 @@
 	{#if $open}
 		<ul
 			class="force-dark surface-9f46fabea5"
-			use:melt={$menu}
+			{...$menu} use:menu
 			transition:fly={{ duration: 150, y: -5 }}
 		>
 			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -90,7 +86,7 @@
 			>
 				{#each filteredLocales as locale, index (index)}
 					<li
-						use:melt={$option(locale)}
+						{...$option(locale)} use:option
 						class="surface-578c60cc48"
 					>
 						{#if $isSelected(locale.value)}

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Orientation } from '$lib/internal/types.js';
-	import { createSeparator, melt } from '$lib/index.js';
+	import { createSeparator } from '$lib/index.js';
 
 	export let orientation: Orientation = 'vertical';
 
@@ -20,10 +20,10 @@
 
 <div>
 	<h2>Separator</h2>
-	<div use:melt={$horizontalSeparator} data-testid="horizontal" />
+	<div {...$horizontalSeparator} use:horizontalSeparator data-testid="horizontal"></div>
 	<div>
 		<p>Part 1</p>
-		<div use:melt={$vertical} data-testid="vertical" />
+		<div {...$vertical} use:vertical data-testid="vertical"></div>
 		<p>Part 2</p>
 	</div>
 </div>

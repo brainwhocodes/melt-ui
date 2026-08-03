@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createDateRangeField, melt } from '$lib/index.js';
+	import { createDateRangeField } from '$lib/index.js';
 	import LocaleCombobox from './LocaleCombobox.svelte';
 
 	const {
@@ -19,17 +19,17 @@
 		}}
 	/>
 	<div>
-		<span use:melt={$label}>Booking Dates</span>
-		<div use:melt={$field}>
+		<span {...$label} use:label>Booking Dates</span>
+		<div {...$field} use:field>
 			{#key $locale}
 				{#each $segmentContents.start as seg, i (i)}
-					<div use:melt={$startSegment(seg.part)}>
+					<div {...$startSegment(seg.part)} use:startSegment>
 						{seg.value}
 					</div>
 				{/each}
 				<span aria-hidden="true">-</span>
 				{#each $segmentContents.end as seg, i (i)}
-					<div use:melt={$endSegment(seg.part)}>
+					<div {...$endSegment(seg.part)} use:endSegment>
 						{seg.value}
 					</div>
 				{/each}

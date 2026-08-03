@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createMenubar, melt, type CreateMenubarMenuProps } from '$lib/index.js';
+	import { createMenubar, type CreateMenubarMenuProps } from '$lib/index.js';
 
 	type $$Props = CreateMenubarMenuProps & { setRootEscapeBehaviorIgnore: () => void };
 	export let escapeBehavior: CreateMenubarMenuProps['escapeBehavior'] = 'close';
@@ -16,10 +16,10 @@
 	} = createMenu({ ...$$restProps, escapeBehavior, forceVisible: true });
 </script>
 
-<div use:melt={$menubar}>
-	<button use:melt={$trigger} data-testid="menubar-trigger">trigger</button>
+<div {...$menubar} use:menubar>
+	<button {...$trigger} use:trigger data-testid="menubar-trigger">trigger</button>
 	{#if $open}
-		<div use:melt={$menu} data-testid="menubar-content">
+		<div {...$menu} use:menu data-testid="menubar-content">
 			<button
 				data-testid="menubar-set-parent-escape-behavior-ignore"
 				on:click={setRootEscapeBehaviorIgnore}

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { melt } from '$lib/index.js';
 	/** Internal helpers */
 	import { PreviewWrapper } from '$docs/components/index.js';
 	import BaseDialog from './BaseDialog.svelte';
@@ -9,14 +8,14 @@
 <PreviewWrapper>
 	<BaseDialog let:trigger>
 		<button
-			use:melt={trigger}
+			{...trigger} use:trigger.action
 			class="preview-space-y-2   preview-type-medium preview-hover-opacity-75    surface-bbee522c5d"
 		>
 			Open Dialog
 		</button>
 		<svelte:fragment slot="content" let:title let:description let:close>
-			<h2 use:melt={title} class="surface-ddf9e83082">Dialog</h2>
-			<p use:melt={description} class="surface-06abffe25a">
+			<h2 {...title} use:title.action class="surface-ddf9e83082">Dialog</h2>
+			<p {...description} use:description.action class="surface-06abffe25a">
 				This dialog should contain a select element.
 			</p>
 
@@ -24,7 +23,7 @@
 
 			<div class="surface-a7c798766d">
 				<button
-					use:melt={close}
+					{...close} use:close.action
 					class="preview-surface-neutral-100  surface-415205e036"
 				>
 					Close

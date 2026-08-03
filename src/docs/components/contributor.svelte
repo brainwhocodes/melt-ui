@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createAvatar, createLinkPreview, melt } from '$lib/index.js';
+	import { createAvatar, createLinkPreview } from '$lib/index.js';
 	import type { FullContributor } from '$routes/docs/[...slug]/+layout.server.js';
 	import { fly } from 'svelte/transition';
 
@@ -37,10 +37,10 @@
 	href={contributor.html_url}
 	target="_blank"
 	rel="noopener noreferrer"
-	use:melt={$trigger}
+	{...$trigger} use:trigger
 >
-	<img use:melt={$image} alt="Avatar" class="avatar" />
-	<div use:melt={$fallback} class="fallback">
+	<img {...$image} use:image alt="Avatar" class="avatar" />
+	<div {...$fallback} use:fallback class="fallback">
 		{getInitials(contributor.name ?? contributor.login)}
 	</div>
 </a>
@@ -48,7 +48,7 @@
 {#if $open}
 	<div
 		class="surface-a987fff884"
-		use:melt={$content}
+		{...$content} use:content
 		transition:fly={{ duration: 150, y: 4 }}
 	>
 		<div class="surface-e98d851435">

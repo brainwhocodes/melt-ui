@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { ChevronRight, ChevronLeft } from '$icons/index.js';
-	import { melt } from '$lib/index.js';
 	import { createRangeCalendar } from '$lib/builders/range-calendar/index.js';
 	import LocaleCombobox from './LocaleCombobox.svelte';
 
@@ -21,21 +20,21 @@
 			return next;
 		}}
 	/>
-	<div use:melt={$calendar}>
+	<div {...$calendar} use:calendar>
 		<header>
-			<button use:melt={$prevButton}>
+			<button {...$prevButton} use:prevButton>
 				<ChevronLeft />
 			</button>
-			<div use:melt={$heading}>
+			<div {...$heading} use:heading>
 				{$headingValue}
 			</div>
-			<button use:melt={$nextButton}>
+			<button {...$nextButton} use:nextButton>
 				<ChevronRight />
 			</button>
 		</header>
 		<div>
 			{#each $months as month}
-				<table use:melt={$grid}>
+				<table {...$grid} use:grid>
 					<thead aria-hidden="true">
 						<tr>
 							{#each $weekdays as day}
@@ -56,7 +55,7 @@
 										aria-disabled={$isDateDisabled(date) ||
 											$isDateUnavailable(date)}
 									>
-										<div use:melt={$cell(date, month.value)}>
+										<div {...$cell(date, month.value)} use:cell>
 											{date.day}
 										</div>
 									</td>

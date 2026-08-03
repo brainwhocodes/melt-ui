@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createDatePicker, melt } from '$lib/index.js';
+	import { createDatePicker } from '$lib/index.js';
 	import { ChevronRight, ChevronLeft, Calendar } from '$icons/index.js';
 	import { fade } from 'svelte/transition';
 
@@ -29,15 +29,15 @@
 
 <div class="surface-5f80c5f518">
 	<div>
-		<span use:melt={$label}>Date</span>
-		<div use:melt={$field}>
+		<span {...$label} use:label>Date</span>
+		<div {...$field} use:field>
 			{#each $segmentContents as seg}
-				<div use:melt={$segment(seg.part)}>
+				<div {...$segment(seg.part)} use:segment>
 					{seg.value}
 				</div>
 			{/each}
 			<div class="button-container">
-				<button use:melt={$trigger}>
+				<button {...$trigger} use:trigger>
 					<Calendar size={16} />
 				</button>
 			</div>
@@ -45,22 +45,22 @@
 	</div>
 	<div>You selected: {$value}</div>
 	{#if $open}
-		<div transition:fade={{ duration: 100 }} use:melt={$content}>
-			<div use:melt={$calendar}>
+		<div transition:fade={{ duration: 100 }} {...$content} use:content>
+			<div {...$calendar} use:calendar>
 				<header>
-					<button use:melt={$prevButton}>
+					<button {...$prevButton} use:prevButton>
 						<ChevronLeft size={24} />
 					</button>
-					<div use:melt={$heading}>
+					<div {...$heading} use:heading>
 						{$headingValue}
 					</div>
-					<button use:melt={$nextButton}>
+					<button {...$nextButton} use:nextButton>
 						<ChevronRight size={24} />
 					</button>
 				</header>
 				<div>
 					{#each $months as month}
-						<table use:melt={$grid}>
+						<table {...$grid} use:grid>
 							<thead aria-hidden="true">
 								<tr>
 									{#each $weekdays as day}
@@ -81,7 +81,7 @@
 												aria-disabled={$isDateDisabled(date) ||
 													$isDateUnavailable(date)}
 											>
-												<div use:melt={$cell(date, month.value)}>
+												<div {...$cell(date, month.value)} use:cell>
 													{date.day}
 												</div>
 											</td>

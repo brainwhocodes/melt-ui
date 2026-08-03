@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { cn } from '$docs/utils/index.js';
-	import { createToggleGroup, melt } from '$lib/index.js';
+	import { createToggleGroup } from '$lib/index.js';
 	import { AlignCenter, AlignLeft, AlignRight } from '$icons/index.js';
 
 	const {
@@ -21,20 +21,20 @@
 </script>
 
 <div
-	use:melt={$root}
+	{...$root} use:root
 	class={cn(
 		"preview-state-orientation-layout-col-2 surface-92922a8ebd",
 		className
 	)}
 	aria-label="Text alignment"
 >
-	<button class="toggle-item" use:melt={$item('left')} aria-label="Left aligned">
+	<button class="toggle-item" {...$item('left')} use:item aria-label="Left aligned">
 		<AlignLeft class="surface-6d7c12cc54" />
 	</button>
-	<button class="toggle-item" use:melt={$item('center')} aria-label="Center aligned">
+	<button class="toggle-item" {...$item('center')} use:item aria-label="Center aligned">
 		<AlignCenter class="surface-896575d199" />
 	</button>
-	<button class="toggle-item" use:melt={$item('right')} aria-label="Right aligned">
+	<button class="toggle-item" {...$item('right')} use:item aria-label="Right aligned">
 		<AlignRight class="surface-39c14cad45" />
 	</button>
 </div>

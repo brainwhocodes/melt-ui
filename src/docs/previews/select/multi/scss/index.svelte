@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createSelect, melt } from '$lib/index.js';
+	import { createSelect } from '$lib/index.js';
 	import { Check, ChevronDown } from '$icons/index.js';
 
 	const options = {
@@ -24,10 +24,10 @@
 
 <div class="surface-ca38de6c21">
 	<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
-	<label class="surface-2fe4a725e0" use:melt={$label}>Favorite Flavor</label>
+	<label class="surface-2fe4a725e0" {...$label} use:label>Favorite Flavor</label>
 	<button
 		class="preview-space-y-2  preview-text-magnum-700 surface-c84e11e71a"
-		use:melt={$trigger}
+		{...$trigger} use:trigger
 		aria-label="Food"
 	>
 		{$selectedLabel || 'Select a flavor'}
@@ -36,20 +36,20 @@
 	{#if $open}
 		<div
 			class="force-dark preview-layout-col   preview-overflow-y-auto preview-space-1   shadow surface-239bd990aa"
-			use:melt={$menu}
+			{...$menu} use:menu
 		>
 			{#each Object.entries(options) as [key, arr]}
-				<div use:melt={$group(key)}>
+				<div {...$group(key)} use:group>
 					<div
 						class="surface-cfc043286b"
-						use:melt={$groupLabel(key)}
+						{...$groupLabel(key)} use:groupLabel
 					>
 						{key}
 					</div>
 					{#each arr as item}
 						<div
 							class="preview-text-neutral-800        preview-focus-layer-10 preview-focus-text-magnum-700       preview-state-highlighted-surface-magnum-50 preview-state-selected-surface-magnum-100       preview-state-highlighted-text-magnum-900 surface-ff8be649f8"
-							use:melt={$option({ value: item, label: item })}
+							{...$option({ value: item, label: item })} use:option
 						>
 							<div class="check {$isSelected(item) ? 'surface-d55a355563' : 'surface-9be492add0'}">
 								<Check class="surface-7335f27c40" />

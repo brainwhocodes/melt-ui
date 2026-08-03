@@ -4,4 +4,4 @@
 	<li aria-selected="false" role="option">Strawberry</li>
 	<li aria-selected="false" role="option">Cookies & Cream</li>
 </ul>
-<ul role="menu" />
+<ul role="menu"></ul>

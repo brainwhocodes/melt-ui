@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createDateField, melt } from '$lib/index.js';
+	import { createDateField } from '$lib/index.js';
 	import { CalendarDate } from '@internationalized/date';
 	import { onMount } from 'svelte';
 
@@ -37,12 +37,12 @@
 
 <div bind:this={hostMount}></div>
 <div bind:this={fieldContainer}>
-	<span use:melt={$label}>Date</span>
-	<div use:melt={$field} data-testid="field">
+	<span {...$label} use:label>Date</span>
+	<div {...$field} use:field data-testid="field">
 		{#each $segmentContents as seg, i (i)}
-			<div use:melt={$segment(seg.part)}>{seg.value}</div>
+			<div {...$segment(seg.part)} use:segment>{seg.value}</div>
 		{/each}
 	</div>
-	<span use:melt={$validation}>Validation</span>
+	<span {...$validation} use:validation>Validation</span>
 </div>
 <button data-testid="move-date-field-root" on:click={moveToSecondRoot}>Move date field root</button>

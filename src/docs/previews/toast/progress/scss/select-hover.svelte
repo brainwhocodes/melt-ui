@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Check, ChevronDown } from '$icons/index.js';
-	import { createSelect, melt, type CreateToasterProps } from '$lib/index.js';
+	import { createSelect, type CreateToasterProps } from '$lib/index.js';
 	import { fade } from 'svelte/transition';
 
 	const options: { value: CreateToasterProps['hover']; label: string }[] = [
@@ -31,10 +31,10 @@
 <div class="surface-c1ea41ee43">
 	<div class="surface-3583548e35">
 		<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
-		<label class="surface-5521ca0221" use:melt={$label}> Hover behavior : </label>
+		<label class="surface-5521ca0221" {...$label} use:label> Hover behavior : </label>
 		<button
 			class="surface-e08e8a514e"
-			use:melt={$trigger}
+			{...$trigger} use:trigger
 			aria-label="Hover behavior"
 		>
 			{$selectedLabel || 'Select hover behavior'}
@@ -43,13 +43,13 @@
 		{#if $open}
 			<div
 				class="force-dark surface-b060a936ff"
-				use:melt={$menu}
+				{...$menu} use:menu
 				transition:fade={{ duration: 150 }}
 			>
 				{#each options as { value, label }}
 					<div
 						class="surface-b732ad1651"
-						use:melt={$option({ value, label })}
+						{...$option({ value, label })} use:option
 					>
 						<div class="check {$isSelected(value) ? 'preview-block' : 'preview-hidden'}">
 							<Check class="surface-42122945c4" />

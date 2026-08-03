@@ -8,11 +8,11 @@ const locators = {
 };
 
 async function nav(page: Page) {
-	await page.goto('/docs/builders/dialog');
+	await page.goto('/docs/builders/dialog', { waitUntil: 'domcontentloaded' });
 	await jsAvailable(page);
 }
 
-test.describe.configure({ mode: 'parallel' });
+test.describe.configure({ mode: 'parallel', timeout: 120_000 });
 
 test.describe('dialog', () => {
 	test.beforeEach(async ({ page }) => {

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createSlider, melt } from '$lib/index.js';
+	import { createSlider } from '$lib/index.js';
 
 	const {
 		elements: { root, range, thumbs },
@@ -12,15 +12,13 @@
 </script>
 
 <span
-	use:melt={$root}
+	{...$root} use:root
 	class="surface-88d647dfee"
 >
 	<span class="surface-04433213a5">
-		<span use:melt={$range} class="surface-2cdd903c61" />
+		<span {...$range} use:range class="surface-2cdd903c61"></span>
 	</span>
 
-	<span
-		use:melt={$thumbs[0]}
-		class="surface-e52a1eb723"
-	/>
+	<span {...$thumbs[0]} use:thumbs
+		class="surface-e52a1eb723"></span>
 </span>

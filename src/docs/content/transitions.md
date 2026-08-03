@@ -24,7 +24,7 @@ At a high level, here's how you could use the `forceVisible` prop with the Colla
 
 ```svelte {9,15,17} /transition:slide/#hi
 <script lang="ts">
-	import { createCollapsible, melt } from '@melt-ui/svelte'
+	import { createCollapsible } from '@melt-ui/svelte'
 	import { slide } from 'svelte/transition'
 
 	const {
@@ -35,10 +35,10 @@ At a high level, here's how you could use the `forceVisible` prop with the Colla
 	})
 </script>
 
-<div use:melt={$root}>
-	<button use:melt={$trigger} aria-label="Toggle"> Open </button>
+<div {...$root} use:root>
+	<button {...$trigger} use:trigger aria-label="Toggle"> Open </button>
 	{#if $open}
-		<div use:melt={$content} transition:slide>Collapsible content</div>
+		<div {...$content} use:content transition:slide>Collapsible content</div>
 	{/if}
 </div>
 ```

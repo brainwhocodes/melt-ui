@@ -241,7 +241,7 @@ export function createDateRangeField(props?: CreateDateRangeFieldProps) {
 				'data-invalid': $isInvalid ? '' : undefined,
 			} as const;
 		},
-		action: () => {
+		action: (_node: HTMLElement) => {
 			getAnnouncer();
 			return {
 				destroy() {

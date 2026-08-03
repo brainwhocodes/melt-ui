@@ -4,7 +4,6 @@
 	import { X } from '$icons/index.js';
 	import { CodeBlock } from '$docs/components/index.js';
 	import customEventDetail from '$docs/data/long-types/custom-event-detail.html?raw';
-	import { melt } from '$lib/index.js';
 
 	const {
 		elements: { trigger, overlay, content, title, close },
@@ -14,13 +13,13 @@
 
 <code class="neutral"
 	>(e: <button
-		use:melt={$trigger}
+		{...$trigger} use:trigger
 		class="surface-bca2be0d04"
 		>CustomEvent
 	</button>) => void</code
 >
 {#if $open}
-	<div use:melt={$overlay} class="surface-6697cd3522" />
+	<div {...$overlay} use:overlay class="surface-6697cd3522"></div>
 	<div
 		class="preview-limit-w-960px  preview-shape-md  surface-274bfd9bc8"
 		transition:flyAndScale={{
@@ -28,10 +27,10 @@
 			y: 8,
 			start: 0.96,
 		}}
-		use:melt={$content}
+		{...$content} use:content
 	>
 		<div class="surface-a698818745">
-			<code class="inline-code surface-f0c41fb05d" use:melt={$title}>CustomEventDetail</code>
+			<code class="inline-code surface-f0c41fb05d" {...$title} use:title>CustomEventDetail</code>
 		</div>
 		<div class="surface-285f350312">
 			<CodeBlock class="surface-77528e796f" copyBtnClasses="docs-code-block-copy--inset">
@@ -39,7 +38,7 @@
 			</CodeBlock>
 		</div>
 		<button
-			use:melt={$close}
+			{...$close} use:close
 			aria-label="Close"
 			class="preview-width-6  preview-text-magnum-300  surface-63a0a7dd27"
 		>

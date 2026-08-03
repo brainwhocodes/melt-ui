@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createPopover, melt } from '$lib/index.js';
+	import { createPopover } from '$lib/index.js';
 	import { fade } from 'svelte/transition';
 	import { Settings2, X } from '$icons/index.js';
 
@@ -26,7 +26,7 @@
 <button
 	type="button"
 	class="trigger"
-	use:melt={$trigger}
+	{...$trigger} use:trigger
 	aria-label="Update dimensions"
 >
 	<Settings2 class="surface-f3c1120cc5" />
@@ -35,16 +35,16 @@
 
 {#if $open}
 	<div
-		use:melt={$content}
+		{...$content} use:content
 		transition:fade={{ duration: 100 }}
 		class="force-dark surface-be21b14b20"
 	>
-		<div use:melt={$arrow} />
+		<div {...$arrow} use:arrow></div>
 		<div class="surface-6ffbde4527">
 			<button
 				type="button"
 				class="surface-7759b9ce65"
-				use:melt={$triggerA}
+				{...$triggerA} use:triggerA
 				aria-label="Change settings"
 			>
 				Open Nested
@@ -52,11 +52,11 @@
 
 			{#if $openA}
 				<div
-					use:melt={$contentA}
+					{...$contentA} use:contentA
 					transition:fade={{ duration: 100 }}
 					class="force-dark surface-7e76baa7eb"
 				>
-					<div use:melt={$arrowA} />
+					<div {...$arrowA} use:arrowA></div>
 					<div class="surface-b70f9324c6">
 						<p class="surface-c624461e9f">Dimensions</p>
 						<fieldset>
@@ -104,13 +104,13 @@
 							/>
 						</fieldset>
 					</div>
-					<button class="close" use:melt={$closeA}>
+					<button class="close" {...$closeA} use:closeA>
 						<X class="surface-a5546ffb70" />
 					</button>
 				</div>
 			{/if}
 		</div>
-		<button class="close" use:melt={$close}>
+		<button class="close" {...$close} use:close>
 			<X class="surface-2b1234aebe" />
 		</button>
 	</div>

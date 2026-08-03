@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createDialog, melt } from '$lib/index.js';
+	import { createDialog } from '$lib/index.js';
 	/** Internal helpers */
 	import { flyAndScale } from '$docs/utils/index.js';
 	import { X } from '$icons/index.js';
@@ -25,14 +25,14 @@
 </script>
 
 <button
-	use:melt={$trigger}
+	{...$trigger} use:trigger
 	class="preview-space-y-2  surface-99b29a0836"
 >
 	Open Dialog
 </button>
 {#if $open}
-	<div class="force-dark" use:melt={$portalled}>
-		<div use:melt={$overlay} class="surface-890b993a6f" />
+	<div class="force-dark" {...$portalled} use:portalled>
+		<div {...$overlay} use:overlay class="surface-890b993a6f"></div>
 		<div
 			class="preview-width-90vw  preview-surface-white  surface-7a9f76b775"
 			transition:flyAndScale={{
@@ -40,12 +40,12 @@
 				y: 8,
 				start: 0.96,
 			}}
-			use:melt={$content}
+			{...$content} use:content
 		>
-			<h2 use:melt={$title} class="surface-aee068755c">
+			<h2 {...$title} use:title class="surface-aee068755c">
 				Edit profile
 			</h2>
-			<p use:melt={$description} class="surface-cb7f88c293">
+			<p {...$description} use:description class="surface-cb7f88c293">
 				Make changes to your profile here. Click save when you're done.
 			</p>
 
@@ -71,13 +71,13 @@
 			</fieldset>
 			<div class="surface-0da5693fbe">
 				<button
-					use:melt={$close}
+					{...$close} use:close
 					class="preview-shape-4px  surface-4a71dffb04"
 				>
 					Cancel
 				</button>
 				<button
-					use:melt={$close}
+					{...$close} use:close
 					class="preview-shape-4px  surface-489032f9de"
 				>
 					Save changes
@@ -85,7 +85,7 @@
 			</div>
 
 			<button
-				use:melt={$close}
+				{...$close} use:close
 				aria-label="close"
 				class="preview-width-6  preview-text-magnum-800  surface-e995da33b4"
 			>

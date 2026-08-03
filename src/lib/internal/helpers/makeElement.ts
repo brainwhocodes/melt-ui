@@ -1,10 +1,6 @@
 import type { Action } from 'svelte/action';
-import {
-	derived,
-	type Readable,
-	type Stores,
-	type StoresValues,
-} from 'svelte/store';
+import { derived, type Readable } from 'svelte/store';
+import type { Stores, StoresValues } from './store/types.js';
 import { isBrowser, isHTMLElement, noop } from './index.js';
 import { removeUndefined } from './object.js';
 import { lightable } from './store/lightable.js';
@@ -101,7 +97,11 @@ export function makeElement<
 		if (stores && returned) {
 			// If stores are provided, create a derived store from them
 			return derived(stores, (values) => {
-				const result = returned(values);
+				const result = (
+					returned as (
+						values: StoresValues<NonNullable<S>>,
+					) => ReturnType<R>
+				)(values);
 				if (isFunctionWithParams(result)) {
 					const fn = (...args: Parameters<typeof result>) => {
 						return hiddenAction(

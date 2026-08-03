@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { createRangeCalendar, type CreateRangeCalendarProps } from '$lib/builders/index.js';
 	import { ChevronRight, ChevronLeft } from '$icons/index.js';
-	import { melt } from '$lib/index.js';
 	import { removeUndefined } from '../utils.js';
 
 	export let value: CreateRangeCalendarProps['value'] = undefined;
@@ -87,21 +86,21 @@
 		</div>
 
 		<div class="surface-6787e52822">
-			<div class="surface-90297ffb4d" use:melt={$calendar} data-testid="calendar">
+			<div class="surface-90297ffb4d" {...$calendar} use:calendar data-testid="calendar">
 				<header class="surface-6a2d3c2dc2">
-					<button use:melt={$prevButton} data-testid="prev-button">
+					<button {...$prevButton} use:prevButton data-testid="prev-button">
 						<ChevronLeft />
 					</button>
-					<h2 class="surface-011723d0ef" use:melt={$heading} data-testid="heading">
+					<h2 class="surface-011723d0ef" {...$heading} use:heading data-testid="heading">
 						{$headingValue}
 					</h2>
-					<button use:melt={$nextButton} data-testid="next-button">
+					<button {...$nextButton} use:nextButton data-testid="next-button">
 						<ChevronRight />
 					</button>
 				</header>
 				{#each $months as month, i (i)}
 					{@const { weeks } = month}
-					<table use:melt={$grid} class="surface-3d88e07f2e" data-testid="grid-{i}">
+					<table {...$grid} use:grid class="surface-3d88e07f2e" data-testid="grid-{i}">
 						<thead aria-hidden="true">
 							<tr data-testid="weekdays">
 								{#each $weekdays as day, idx}
@@ -122,7 +121,7 @@
 									{#each days as date}
 										<td role="gridcell">
 											<div
-												use:melt={$cell(date, month.value)}
+												{...$cell(date, month.value)} use:cell
 												class="cell"
 												data-testid="month-{date.month}-date-{date.day}"
 											>

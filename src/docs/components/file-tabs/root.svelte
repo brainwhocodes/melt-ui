@@ -14,7 +14,7 @@
 </script>
 
 <script lang="ts">
-	import { createTabs, melt } from '$lib/index.js';
+	import { createTabs } from '$lib/index.js';
 	import { getContext, setContext } from 'svelte';
 	import { writable, type Writable } from 'svelte/store';
 
@@ -35,6 +35,6 @@
 	setTabsContext({ content, list, trigger, tabs: tabsStore });
 </script>
 
-<div use:melt={$root}>
+<div {...$root} use:root>
 	<slot tab={$value} />
 </div>

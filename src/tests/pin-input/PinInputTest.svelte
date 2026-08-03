@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createPinInput, melt, type CreatePinInputProps } from '$lib/index.js';
+	import { createPinInput, type CreatePinInputProps } from '$lib/index.js';
 
 	export let placeholder: CreatePinInputProps['placeholder'] = '○';
 	export let name: CreatePinInputProps['name'] = undefined;
@@ -23,10 +23,10 @@
 </script>
 
 <main>
-	<div use:melt={$root} data-testid="root">
+	<div {...$root} use:root data-testid="root">
 		{#each Array(5) as _, i}
-			<input use:melt={$input()} data-testid="input-{i + 1}" />
+			<input {...$input()} use:input data-testid="input-{i + 1}" />
 		{/each}
-		<input use:melt={$hiddenInput} data-testid="hidden-input" />
+		<input {...$hiddenInput} use:hiddenInput data-testid="hidden-input" />
 	</div>
 </main>

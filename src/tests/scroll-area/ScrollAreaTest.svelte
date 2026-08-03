@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createScrollArea, melt, type CreateScrollAreaProps } from '$lib/index.js';
+	import { createScrollArea, type CreateScrollAreaProps } from '$lib/index.js';
 	import { removeUndefined } from '../utils.js';
 
 	const flavors = [
@@ -64,16 +64,16 @@
 {/if}
 
 <div
-	use:melt={$root}
+	{...$root} use:root
 	class="surface-dd98ba04e8"
 	data-testid="root"
 	style:width
 	style:height
 >
 	{#key viewportKey}
-	<div use:melt={$viewport} class="surface-21c0571fcb" data-testid="viewport">
+	<div {...$viewport} use:viewport class="surface-21c0571fcb" data-testid="viewport">
 			{#key contentKey}
-		<div use:melt={$content} data-testid="content">
+		<div {...$content} use:content data-testid="content">
 			<div class="surface-c7bdfb16e3" data-testid="inner-content">
 				<h4 class="surface-326c4ede34">Endless Flavors</h4>
 				<div data-testid="hover">Hover me please</div>
@@ -81,7 +81,7 @@
 					<div class="surface-6c4a72920c">
 						{flavor}
 					</div>
-					<div role="separator" class="surface-e612aa3495" />
+					<div role="separator" class="surface-e612aa3495"></div>
 				{/each}
 			</div>
 		</div>
@@ -89,23 +89,21 @@
 	</div>
 	{/key}
 	<div
-		use:melt={$scrollbarY}
+		{...$scrollbarY} use:scrollbarY
 		data-testid="scrollbar-y"
 		class="surface-ef0fe9b491"
 	>
-		<div
-			use:melt={$thumbY}
+		<div {...$thumbY} use:thumbY
 			data-testid="thumb-y"
-			class="surface-11f7db2078"
-		/>
+			class="surface-11f7db2078"></div>
 	</div>
 
 	<div
-		use:melt={$scrollbarX}
+		{...$scrollbarX} use:scrollbarX
 		data-testid="scrollbar-x"
 		class="surface-dc91fd5f6b"
 	>
-		<div use:melt={$thumbX} data-testid="thumb-x" class="surface-c948684bbb" />
+		<div {...$thumbX} use:thumbX data-testid="thumb-x" class="surface-c948684bbb"></div>
 	</div>
-	<div use:melt={$corner} />
+	<div {...$corner} use:corner></div>
 </div>

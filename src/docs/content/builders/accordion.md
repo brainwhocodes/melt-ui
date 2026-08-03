@@ -31,7 +31,7 @@ example at the top of this page to create your accordion.
 To disable a single item, you can pass in an object instead of a string to the function.
 
 ```svelte /{ value: 'item-3', disabled: true }/#hi
-<div class="accordion-item" use:melt={$item({ value: 'item-3', disabled: true })}>Item 3</div>
+<div class="accordion-item" {...$item({ value: 'item-3', disabled: true })} use:item>Item 3</div>
 ```
 
 <Preview code={snippets.disabled}>
@@ -62,7 +62,7 @@ Accordion.
 
 ```svelte {3,5,11,19}
 <script lang="ts">
-	import { createAccordion, melt } from '@melt-ui/svelte'
+	import { createAccordion } from '@melt-ui/svelte'
 	import { writable } from 'svelte/store'
 
 	const customValue = writable('item-1')
@@ -87,24 +87,24 @@ Accordion.
 
 <p>Value: {$value}</p>
 
-<div use:melt={$root}>
-	<div use:melt={$item('item-1')}>
-		<button use:melt={$trigger('item-1')}>Is it accessible?</button>
-		<div use:melt={$content('item-1')}>
+<div {...$root} use:root>
+	<div {...$item('item-1')} use:item>
+		<button {...$trigger('item-1')} use:trigger>Is it accessible?</button>
+		<div {...$content('item-1')} use:content>
 			<div>Yes. It adheres to the WAI-ARIA design pattern.</div>
 		</div>
 	</div>
 
-	<div use:melt={$item('item-2')}>
-		<button use:melt={$trigger('item-2')}>Is it accessible?</button>
-		<div use:melt={$content('item-2')}>
+	<div {...$item('item-2')} use:item>
+		<button {...$trigger('item-2')} use:trigger>Is it accessible?</button>
+		<div {...$content('item-2')} use:content>
 			<div>Yes. It adheres to the WAI-ARIA design pattern.</div>
 		</div>
 	</div>
 
-	<div use:melt={$item('item-3')}>
-		<button use:melt={$trigger('item-3')}>Is it accessible?</button>
-		<div use:melt={$content('item-3')}>
+	<div {...$item('item-3')} use:item>
+		<button {...$trigger('item-3')} use:trigger>Is it accessible?</button>
+		<div {...$content('item-3')} use:content>
 			<div>Yes. It adheres to the WAI-ARIA design pattern.</div>
 		</div>
 	</div>
@@ -127,7 +127,7 @@ heading element, like so:
 
 ```svelte
 <h2>
-	<button use:melt={$trigger(id)}>
+	<button {...$trigger(id)} use:trigger>
 		{title}
 	</button>
 </h2>
@@ -147,8 +147,8 @@ the heading level to 4.
 ```
 
 ```svelte {1}
-<span use:melt={$heading(4)}>
-    <button use:melt={$trigger(id)}>
+<span {...$heading(4)} use:heading>
+    <button {...$trigger(id)} use:trigger>
         {title}
     </button>
 <span>

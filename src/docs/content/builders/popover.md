@@ -77,7 +77,7 @@ and `overlay` builder element.
 
 ```svelte
 <script lang="ts">
-	import { createPopover, melt } from '@melt-ui/svelte'
+	import { createPopover } from '@melt-ui/svelte'
 
 	const {
 		elements: { content, trigger, overlay, close, arrow }
@@ -86,14 +86,14 @@ and `overlay` builder element.
 	})
 </script>
 
-<button type="button" use:melt={$trigger}> Open </button>
-<div use:melt={$overlay} />
-<div use:melt={$content}>
-	<div use:melt={$arrow} />
+<button type="button" {...$trigger} use:trigger> Open </button>
+<div {...$overlay} use:overlay />
+<div {...$content} use:content>
+	<div {...$arrow} use:arrow />
 	<div>
 		<!-- ... -->
 	</div>
-	<button use:melt={$close}> Close </button>
+	<button {...$close} use:close> Close </button>
 </div>
 ```
 

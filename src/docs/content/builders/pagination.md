@@ -24,7 +24,7 @@ the example above to create your pagination component.
 
 ```svelte
 <script lang="ts">
-	import { createPagination, melt } from '@melt-ui/svelte'
+	import { createPagination } from '@melt-ui/svelte'
 	const {
 		elements: { root, pageTrigger, prevButton, nextButton },
 		states: { pages, range }
@@ -36,18 +36,18 @@ the example above to create your pagination component.
 	})
 </script>
 
-<nav use:melt={$root}>
+<nav {...$root} use:root>
 	<p>Showing items {$range.start} - {$range.end}</p>
 	<div>
-		<button use:melt={$prevButton}>Prev</button>
+		<button {...$prevButton} use:prevButton>Prev</button>
 		{#each $pages as page (page.key)}
 			{#if page.type === 'ellipsis'}
 				<span>...</span>
 			{:else}
-				<button use:melt={$pageTrigger(page)}>{page.value}</button>
+				<button {...$pageTrigger(page)} use:pageTrigger>{page.value}</button>
 			{/if}
 		{/each}
-		<button use:melt={$nextButton}>Next</button>
+		<button {...$nextButton} use:nextButton>Next</button>
 	</div>
 </nav>
 ```

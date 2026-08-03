@@ -1,9 +1,5 @@
 <script lang="ts">
-	import {
-		createDateField,
-		melt,
-		type CreateDateFieldProps,
-	} from '$lib/index.js';
+	import { createDateField, type CreateDateFieldProps } from '$lib/index.js';
 	import { CalendarDate } from '@internationalized/date';
 
 	export let defaultValue: CreateDateFieldProps['defaultValue'] = undefined;
@@ -20,15 +16,15 @@
 
 <form method="POST">
 	<div>
-		<span use:melt={$label}>Your Birthday</span>
-		<div use:melt={$field} class="">
+		<span {...$label} use:label>Your Birthday</span>
+		<div {...$field} use:field class="">
 			{#each $segmentContents as seg, i (i)}
-				<div use:melt={$segment(seg.part)}>
+				<div {...$segment(seg.part)} use:segment>
 					{seg.value}
 				</div>
 			{/each}
 		</div>
-		<input use:melt={$hiddenInput} />
+		<input {...$hiddenInput} use:hiddenInput />
 	</div>
 </form>
 

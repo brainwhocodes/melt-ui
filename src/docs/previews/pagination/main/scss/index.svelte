@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createPagination, melt } from '$lib/index.js';
+	import { createPagination } from '$lib/index.js';
 	import { ChevronLeft, ChevronRight } from '$icons/index.js';
 
 	const {
@@ -16,7 +16,7 @@
 <nav
 	class="surface-f08be7a326"
 	aria-label="pagination"
-	use:melt={$root}
+	{...$root} use:root
 >
 	<p class="surface-d3b23cb26d">
 		Showing items {$range.start} - {$range.end}
@@ -24,7 +24,7 @@
 	<div class="surface-6ffd13b825">
 		<button
 			class="preview-elevation-sm    preview-hover-opacity-75 preview-state-selected-surface-magnum-900    preview-state-selected-text-white surface-343fa31d61"
-			use:melt={$prevButton}><ChevronLeft class="surface-2f1de7faac" /></button
+			{...$prevButton} use:prevButton><ChevronLeft class="surface-2f1de7faac" /></button
 		>
 		{#each $pages as page (page.key)}
 			{#if page.type === 'ellipsis'}
@@ -32,13 +32,13 @@
 			{:else}
 				<button
 					class="preview-elevation-sm      preview-hover-opacity-75 preview-state-selected-surface-magnum-900     preview-state-selected-text-white surface-6ac213b81a"
-					use:melt={$pageTrigger(page)}>{page.value}</button
+					{...$pageTrigger(page)} use:pageTrigger>{page.value}</button
 				>
 			{/if}
 		{/each}
 		<button
 			class="preview-elevation-sm    preview-hover-opacity-75 preview-state-selected-surface-magnum-900   preview-state-selected-text-white surface-8883a4cc53"
-			use:melt={$nextButton}><ChevronRight class="surface-b8d5c58805" /></button
+			{...$nextButton} use:nextButton><ChevronRight class="surface-b8d5c58805" /></button
 		>
 	</div>
 </nav>

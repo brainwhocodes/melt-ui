@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createDropdownMenu, melt, type CreateDropdownMenuProps } from '$lib/index.js';
+	import { createDropdownMenu, type CreateDropdownMenuProps } from '$lib/index.js';
 	import { initLevel } from './level.js';
 
 	type $$Props = CreateDropdownMenuProps;
@@ -15,13 +15,13 @@
 	const level = initLevel();
 </script>
 
-<button use:melt={$trigger} data-testid="dropdown-menu-trigger-{level}">Open Popover</button>
+<button {...$trigger} use:trigger data-testid="dropdown-menu-trigger-{level}">Open Popover</button>
 
 {#if $open || !forceVisible}
-	<div class="menu" use:melt={$menu} data-testid="dropdown-menu-content-{level}">
-		<div class="item" use:melt={$item}>Item 1</div>
-		<div class="item" use:melt={$item}>Item 2</div>
+	<div class="menu" {...$menu} use:menu data-testid="dropdown-menu-content-{level}">
+		<div class="item" {...$item} use:item>Item 1</div>
+		<div class="item" {...$item} use:item>Item 2</div>
 		<slot />
 	</div>
 {/if}
-<div data-testid="dropdown-menu-outside-{level}" />
+<div data-testid="dropdown-menu-outside-{level}"></div>

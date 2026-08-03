@@ -19,6 +19,7 @@
 	import INTER_900 from '@fontsource/inter/files/inter-latin-900-normal.woff2';
 
 	import '$styles/app.scss';
+	import '$lib/styles.css';
 
 	import { dev } from '$app/environment';
 	import { page } from '$app/stores';
@@ -26,6 +27,13 @@
 	import { cn } from '$docs/utils/index.js';
 
 	import { ModeWatcher } from 'mode-watcher';
+	import { onMount } from 'svelte';
+
+	let mounted = false;
+
+	onMount(() => {
+		mounted = true;
+	});
 
 	$: isRoot = $page.url.pathname === '/';
 </script>
@@ -51,7 +59,11 @@
 >
 	Skip to main content
 </a>
-<div class="surface-126436ebcd" id="page">
+<div
+	class="surface-126436ebcd"
+	id="page"
+	data-browser={mounted ? '' : undefined}
+>
 	<div class="surface-be15640c06">
 		<slot />
 	</div>
@@ -64,7 +76,10 @@
 		<div
 			class="container surface-e150b7c93e"
 		>
-			<a class="surface-5bbd64ba7b" href="https://next.melt-ui.com">
+			<a
+				class="new-version-link surface-5bbd64ba7b"
+				href="https://next.melt-ui.com"
+			>
 				Check out the new version, with Runes!
 			</a>
 		</div>
@@ -75,3 +90,9 @@
 		<JsIndicator />
 	{/if}
 </div>
+
+<style>
+	.new-version-link {
+		color: rgb(var(--color-magnum-900));
+	}
+</style>

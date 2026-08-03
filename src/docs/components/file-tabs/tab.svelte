@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { getTabsContext } from '$docs/components/tabs/root.svelte';
-	import { melt } from '$lib/index.js';
 
 	export let tab: string;
 
@@ -8,7 +7,7 @@
 </script>
 
 <button
-	use:melt={$trigger(tab)}
+	{...$trigger(tab)} use:trigger
 	class="surface-26b6cbd1b9"
 >
 	<div class="surface-0e39bfa48e">

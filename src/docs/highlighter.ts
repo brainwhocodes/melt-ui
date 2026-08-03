@@ -15,16 +15,10 @@ const shikiOptions: ShikiOptions = {
 	],
 };
 
-const globalHighlighterCache = new WeakMap<ShikiOptions, Highlighter>();
+let highlighterPromise: Promise<Highlighter> | undefined;
 
-export async function getStoredHighlighter() {
-	const currHighlighter = globalHighlighterCache.get(shikiOptions);
-	if (currHighlighter) {
-		return currHighlighter;
-	}
-	const shikiHighlighter = await getHighlighter(shikiOptions);
-	globalHighlighterCache.set(shikiOptions, shikiHighlighter);
-	return shikiHighlighter;
+export function getStoredHighlighter() {
+	return (highlighterPromise ??= getHighlighter(shikiOptions));
 }
 
 type HighlightClasses = {

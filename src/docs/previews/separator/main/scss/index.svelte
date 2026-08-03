@@ -1,9 +1,5 @@
 <script lang="ts">
-	import {
-		createSeparator,
-		melt,
-		type CreateSeparatorProps,
-	} from '$lib/index.js';
+	import { createSeparator, type CreateSeparatorProps } from '$lib/index.js';
 
 	export let orientation: CreateSeparatorProps['orientation'] = 'vertical';
 
@@ -26,12 +22,12 @@
 <div class="surface-0c6e49f7ee">
 	<h2 class="surface-5b6efd9c52">Melt UI</h2>
 	<p>Flavors for everyone</p>
-	<div use:melt={$horizontal} class="surface-170555e54e" />
+	<div {...$horizontal} use:horizontal class="surface-170555e54e"></div>
 	<div class="surface-bcd4b084e5">
 		{#each icecreams as icecream, i}
 			<p>{icecream}</p>
 			{#if i !== icecreams.length - 1}
-				<div use:melt={$vertical} class="surface-a681d05fad" />
+				<div {...$vertical} use:vertical class="surface-a681d05fad"></div>
 			{/if}
 		{/each}
 	</div>

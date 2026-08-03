@@ -29,6 +29,7 @@ export { default as Menu } from 'lucide-svelte/icons/menu';
 export { default as Minus } from 'lucide-svelte/icons/minus';
 export { default as Monitor } from 'lucide-svelte/icons/monitor';
 export { default as Moon } from 'lucide-svelte/icons/moon';
+export { default as Pipette } from 'lucide-svelte/icons/pipette';
 export { default as Plus } from 'lucide-svelte/icons/plus';
 export { default as Search } from 'lucide-svelte/icons/search';
 export { default as Settings2 } from 'lucide-svelte/icons/settings-2';

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createTooltip, melt } from '$lib/index.js';
+	import { createTooltip } from '$lib/index.js';
 	import { fade } from 'svelte/transition';
 
 	const {
@@ -16,17 +16,17 @@
 	export let text = 'Tooltip text';
 </script>
 
-<div use:melt={$trigger}>
+<div {...$trigger} use:trigger>
 	<slot />
 </div>
 
 {#if $open}
 	<div
-		use:melt={$content}
+		{...$content} use:content
 		in:fade={{ duration: 150 }}
 		class="surface-99dc174566"
 	>
-		<div use:melt={$arrow} />
+		<div {...$arrow} use:arrow></div>
 		{text}
 	</div>
 {/if}

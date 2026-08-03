@@ -1,12 +1,18 @@
 <script>
-	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
+
+	let mounted = false;
+
+	onMount(() => {
+		mounted = true;
+	});
 </script>
 
 <!-- Dev-only indicator for responsive development -->
 
 <div
 	class="surface-68e7cc63b8"
-	data-browser={browser ? '' : undefined}
+	data-browser={mounted ? '' : undefined}
 >
-	{browser ? 'js' : 'ssr'}
+	{mounted ? 'js' : 'ssr'}
 </div>

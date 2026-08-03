@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createCheckbox, type CreateCheckboxProps, melt } from '$lib/index.js';
+	import { createCheckbox, type CreateCheckboxProps } from '$lib/index.js';
 
 	export let defaultChecked: CreateCheckboxProps['defaultChecked'] = 'indeterminate';
 
@@ -12,7 +12,7 @@
 </script>
 
 <main>
-	<button use:melt={$root} data-testid="checkbox">
+	<button {...$root} use:root data-testid="checkbox">
 		{#if $isChecked}
 			checked
 		{:else}

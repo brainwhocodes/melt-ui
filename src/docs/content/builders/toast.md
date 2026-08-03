@@ -49,23 +49,23 @@ components.
 </script>
 
 <script lang="ts">
-	import { createToaster, melt } from '@melt-ui/svelte'
+	import { createToaster } from '@melt-ui/svelte'
 </script>
 
 <div use:portal>
 	{#each $toasts as { id, data } (id)}
-		<div use:melt={$content(id)}>
+		<div {...$content(id)} use:content>
 			<div>
 				<div>
-					<h3 use:melt={$title(id)}>
+					<h3 {...$title(id)} use:title>
 						{data.title}
 						<span style:color={data.color} />
 					</h3>
-					<div use:melt={$description(id)}>
+					<div {...$description(id)} use:description>
 						{data.description}
 					</div>
 				</div>
-				<button use:melt={$close(id)} aria-label="close notification"> X </button>
+				<button {...$close(id)} use:close aria-label="close notification"> X </button>
 			</div>
 		</div>
 	{/each}

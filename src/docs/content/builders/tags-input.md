@@ -27,7 +27,7 @@ Use the `createTagsInput` builder function.
 
 ```svelte
 <script lang="ts">
-	import { createTagsInput, melt } from '@melt-ui/svelte'
+	import { createTagsInput } from '@melt-ui/svelte'
 	const {
 		/* ... */
 	} = createTagsInput()
@@ -38,7 +38,7 @@ Use the return values to construct a tags-input.
 
 ```svelte
 <script lang="ts">
-	import { createTagsInput, melt } from '@melt-ui/svelte'
+	import { createTagsInput } from '@melt-ui/svelte'
 
 	// This is a subset of return values
 	const {
@@ -47,15 +47,15 @@ Use the return values to construct a tags-input.
 	} = createTagsInput()
 </script>
 
-<div use:melt={$root}>
+<div {...$root} use:root>
 	{#each $tags as t}
-		<div use:melt={$tag(t)}>
+		<div {...$tag(t)} use:tag>
 			<span>{t.value}</span>
-			<button use:melt={$deleteTrigger(t)}>x</button>
+			<button {...$deleteTrigger(t)} use:deleteTrigger>x</button>
 		</div>
-		<div use:melt={$edit(t)}>{t.value}</div>
+		<div {...$edit(t)} use:edit>{t.value}</div>
 	{/each}
-	<input use:melt={$input} type="text" />
+	<input {...$input} use:input type="text" />
 </div>
 ```
 

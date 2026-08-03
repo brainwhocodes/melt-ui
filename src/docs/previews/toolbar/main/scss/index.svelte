@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createToolbar, melt } from '$lib/index.js';
+	import { createToolbar } from '$lib/index.js';
 
 	// Icons
 	import {
@@ -26,51 +26,51 @@
 </script>
 
 <div
-	use:melt={$root}
+	{...$root} use:root
 	class="surface-a2ac3820b1"
 >
-	<div class="surface-130c68275b" use:melt={$fontGroup}>
-		<button class="item" aria-label="bold" use:melt={$fontItem('bold')}>
+	<div class="surface-130c68275b" {...$fontGroup} use:fontGroup>
+		<button class="item" aria-label="bold" {...$fontItem('bold')} use:fontItem>
 			<Bold class="surface-fd8c246bea" />
 		</button>
-		<button class="item" aria-label="italic" use:melt={$fontItem('italic')}>
+		<button class="item" aria-label="italic" {...$fontItem('italic')} use:fontItem>
 			<Italic class="surface-a96ea5419f" />
 		</button>
 		<button
 			class="item"
 			aria-label="strikethrough"
-			use:melt={$fontItem('strikethrough')}
+			{...$fontItem('strikethrough')} use:fontItem
 		>
 			<Strikethrough class="surface-bba9c7addd" />
 		</button>
 	</div>
-	<div class="separator" use:melt={$separator} />
-	<div class="surface-d59ca5b9c0" use:melt={$alignGroup}>
-		<button class="item" aria-label="align left" use:melt={$alignItem('left')}>
+	<div class="separator" {...$separator} use:separator></div>
+	<div class="surface-d59ca5b9c0" {...$alignGroup} use:alignGroup>
+		<button class="item" aria-label="align left" {...$alignItem('left')} use:alignItem>
 			<AlignLeft class="surface-6ce7d15586" />
 		</button>
 		<button
 			class="item"
 			aria-label="align center"
-			use:melt={$alignItem('center')}
+			{...$alignItem('center')} use:alignItem
 		>
 			<AlignCenter class="surface-c40ec3180f" />
 		</button>
 		<button
 			class="item"
 			aria-label="align-right"
-			use:melt={$alignItem('right')}
+			{...$alignItem('right')} use:alignItem
 		>
 			<AlignRight class="surface-2548ba8b6b" />
 		</button>
 	</div>
-	<div class="separator" use:melt={$separator} />
-	<a href="/" class="link nowrap surface-f01fda65dc" use:melt={$link}>
+	<div class="separator" {...$separator} use:separator></div>
+	<a href="/" class="link nowrap surface-f01fda65dc" {...$link} use:link>
 		Edited 2 hours ago
 	</a>
 	<button
 		class="surface-40ca49e353"
-		use:melt={$button}>Save</button
+		{...$button} use:button>Save</button
 	>
 </div>
 

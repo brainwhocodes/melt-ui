@@ -41,7 +41,7 @@ we go.
 
 ```svelte
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 
 	const {
 		elements: { calendar, heading, grid, cell, prevButton, nextButton },
@@ -56,7 +56,7 @@ elements will be contained within it.
 
 ```svelte showLineNumbers {11-13}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 
 	const {
 		elements: { calendar, heading, grid, cell, prevButton, nextButton },
@@ -65,7 +65,7 @@ elements will be contained within it.
 	} = createCalendar()
 </script>
 
-<div use:melt={$calendar}>
+<div {...$calendar} use:calendar>
 	<!-- ... -->
 </div>
 ```
@@ -75,7 +75,7 @@ buttons (`prevButton` & `nextButton`).
 
 ```svelte showLineNumbers {12-18}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 
 	const {
 		elements: { calendar, heading, grid, cell, prevButton, nextButton },
@@ -84,13 +84,13 @@ buttons (`prevButton` & `nextButton`).
 	} = createCalendar()
 </script>
 
-<div use:melt={$calendar}>
+<div {...$calendar} use:calendar>
 	<header>
-		<button use:melt={$prevButton}> Previous Page </button>
-		<div use:melt={$heading}>
+		<button {...$prevButton} use:prevButton> Previous Page </button>
+		<div {...$heading} use:heading>
 			{$headingValue}
 		</div>
-		<button use:melt={$nextButton}> Next Page</button>
+		<button {...$nextButton} use:nextButton> Next Page</button>
 	</header>
 </div>
 ```
@@ -148,7 +148,7 @@ according to the `locale` prop.
 
 ```svelte showLineNumbers {19-29}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 
 	const {
 		elements: { calendar, heading, grid, cell, prevButton, nextButton },
@@ -157,16 +157,16 @@ according to the `locale` prop.
 	} = createCalendar()
 </script>
 
-<div use:melt={$calendar}>
+<div {...$calendar} use:calendar>
 	<header>
-		<button use:melt={$prevButton}> Previous Page </button>
-		<div use:melt={$heading}>
+		<button {...$prevButton} use:prevButton> Previous Page </button>
+		<div {...$heading} use:heading>
 			{$headingValue}
 		</div>
-		<button use:melt={$nextButton}> Next Page</button>
+		<button {...$nextButton} use:nextButton> Next Page</button>
 	</header>
 	{#each $months as month}
-		<table use:melt={$grid}>
+		<table {...$grid} use:grid>
 			<thead aria-hidden="true">
 				<tr>
 					{#each $weekdays as day}
@@ -186,7 +186,7 @@ Now we can finish off the calendar by rendering the weeks and days within each w
 
 ```svelte showLineNumbers {28-40}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 
 	const {
 		elements: { calendar, heading, grid, cell, prevButton, nextButton },
@@ -195,16 +195,16 @@ Now we can finish off the calendar by rendering the weeks and days within each w
 	} = createCalendar()
 </script>
 
-<div use:melt={$calendar}>
+<div {...$calendar} use:calendar>
 	<header>
-		<button use:melt={$prevButton}> Previous Page </button>
-		<div use:melt={$heading}>
+		<button {...$prevButton} use:prevButton> Previous Page </button>
+		<div {...$heading} use:heading>
 			{$headingValue}
 		</div>
-		<button use:melt={$nextButton}> Next Page</button>
+		<button {...$nextButton} use:nextButton> Next Page</button>
 	</header>
 	{#each $months as month}
-		<table use:melt={$grid}>
+		<table {...$grid} use:grid>
 			<thead aria-hidden="true">
 				<tr>
 					{#each $weekdays as day}
@@ -217,7 +217,7 @@ Now we can finish off the calendar by rendering the weeks and days within each w
 					<tr>
 						{#each weekDates as date}
 							<td role="gridcell" aria-disabled={$isDateDisabled(date) || $isDateUnavailable(date)}>
-								<div use:melt={$cell(date, month.value)}>
+								<div {...$cell(date, month.value)} use:cell>
 									{date.day}
 								</div>
 							</td>
@@ -252,7 +252,7 @@ By default, the placeholder will be set to the current date, but you can overrid
 
 ```svelte showLineNumbers {8}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 	import { CalendarDate } from '@internationalized/date'
 
 	const {
@@ -281,7 +281,7 @@ To have a date selected by default, we can use the `value` (controlled), or `def
 
 ```svelte showLineNumbers {8}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 	import { CalendarDate } from '@internationalized/date'
 
 	const {
@@ -313,7 +313,7 @@ Let's say that when a user selects Halloween (October 31st), we want to display 
 
 ```svelte showLineNumbers {3,5,9,14-16}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 	import { CalendarDate, isSameDay } from '@internationalized/date'
 
 	const halloween = new CalendarDate(2023, 10, 31)
@@ -349,7 +349,7 @@ lot more power.
 
 ```svelte showLineNumbers {10,12}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 
 	const {
 		/* ... */
@@ -380,7 +380,7 @@ regardless of the month.
 
 ```svelte showLineNumbers {9}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 	import { CalendarDate } from '@internationalized/date'
 
 	const {
@@ -403,7 +403,7 @@ like, using the `numberOfMonths` prop.
 
 ```svelte showLineNumbers {7}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 
 	const {
 		/* ... */
@@ -426,7 +426,7 @@ months being displayed.
 
 ```svelte showLineNumbers {8}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 
 	const {
 		/* ... */
@@ -450,7 +450,7 @@ constructor.
 
 ```svelte showLineNumbers {7}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 
 	const {
 		/* ... */
@@ -472,7 +472,7 @@ are available for use.
 
 ```svelte showLineNumbers {3,8,9}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 	import { PersianCalendar } from '@internationalized/date'
 
 	const {
@@ -493,7 +493,7 @@ able to deselect dates.
 
 ```svelte showLineNumbers {7}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 
 	const {
 		/* ... */
@@ -514,7 +514,7 @@ behavior, you can set the `multiple` prop to `true`.
 
 ```svelte showLineNumbers {7}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 
 	const {
 		/* ... */
@@ -543,7 +543,7 @@ another.
 
 ```svelte showLineNumbers {8-15}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 
 	const {
 		/* ... */
@@ -570,7 +570,7 @@ the oldest date when the user selects a new one after they've already selected 3
 
 ```svelte showLineNumbers {8-15}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 
 	const {
 		/* ... */
@@ -611,7 +611,7 @@ return a boolean indicating whether the date is unavailable.
 
 ```svelte showLineNumbers {3,8-10}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 	import { isWeekend } from '@internationalized/date'
 
 	const {
@@ -643,7 +643,7 @@ boolean indicating whether the date is disabled.
 
 ```svelte showLineNumbers {7-9}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 
 	const {
 		/* ... */
@@ -671,7 +671,7 @@ If a date is before the `minValue`, or after the `maxValue`, it will be disabled
 
 ```svelte showLineNumbers {9-10}
 <script lang="ts">
-	import { createCalendar, melt } from '@melt-ui/svelte'
+	import { createCalendar } from '@melt-ui/svelte'
 	import { CalendarDate } from '@internationalized/date'
 
 	const {

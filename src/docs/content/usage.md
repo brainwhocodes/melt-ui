@@ -14,16 +14,16 @@ collapsible component using Melt UI's [Collapsible](/docs/builders/collapsible) 
 
 ```svelte
 <script>
-	import { createCollapsible, melt } from '@melt-ui/svelte'
+	import { createCollapsible } from '@melt-ui/svelte'
 	const {
 		elements: { root, content, trigger },
 		states: { open }
 	} = createCollapsible()
 </script>
 
-<div use:melt={$root}>
-	<button use:melt={$trigger}>{$open ? 'Close' : 'Open'}</button>
-	<div use:melt={$content}>Obi-Wan says: Hello there!</div>
+<div {...$root} use:root>
+	<button {...$trigger} use:trigger>{$open ? 'Close' : 'Open'}</button>
+	<div {...$content} use:content>Obi-Wan says: Hello there!</div>
 </div>
 ```
 
@@ -40,7 +40,7 @@ third-party components, as long as you can pass Melt's props to the elements.
 
 ```svelte
 <script>
-  import { createCollapsible, melt } from '@melt-ui/svelte';
+  import { createCollapsible } from '@melt-ui/svelte';
   import Button from '$components/button.svelte';
 
  const {
@@ -50,13 +50,13 @@ third-party components, as long as you can pass Melt's props to the elements.
 </script>
 
 <!-- Using Svelte Scoped Styles -->
-<div class="root" use:melt={$root}>
+<div class="root" {...$root} use:root>
 <!-- Using an external component -->
 <Button on:click={() => console.log('clicked')} {...$trigger} action={trigger}>
   {$open ? 'Close' : 'Open'}
 </Button>
 <!-- Using a shared component style -->
-<div class="example-content" use:melt={$content}>
+<div class="example-content" {...$content} use:content>
   Obi-Wan says: Hello there!
 </div>
 </div>
@@ -87,15 +87,15 @@ purposes, should you desire to do so.
 
 ```svelte
 <script>
-	import { createCollapsible, melt } from '@melt-ui/svelte'
+	import { createCollapsible } from '@melt-ui/svelte'
 	const {
 		elements: { root, content, trigger }
 	} = createCollapsible()
 </script>
 
-<div use:melt={$root}>
-	<button use:melt={$trigger}> Toggle </button>
-	<div class="content" use:melt={$content}>
+<div {...$root} use:root>
+	<button {...$trigger} use:trigger> Toggle </button>
+	<div class="content" {...$content} use:content>
 		<p>sveltejs/svelte</p>
 		<p>sveltejs/kit</p>
 	</div>
@@ -124,7 +124,7 @@ manner, where props don't reactively affect the builder's internal state.
 ```svelte
 <!-- Uncontrolled -->
 <script>
-	import { createCollapsible, melt } from '@melt-ui/svelte'
+	import { createCollapsible } from '@melt-ui/svelte'
 
 	// This prop only affects the initial state of the component
 	export let defaultOpen = false
@@ -140,7 +140,7 @@ Or you can use them in a controlled manner, where props do affect the builder's 
 ```svelte {12-14}
 <!-- Controlled -->
 <script>
-	import { createCollapsible, melt, createSync } from '@melt-ui/svelte'
+	import { createCollapsible, createSync } from '@melt-ui/svelte'
 
 	export let open = false
 
@@ -171,13 +171,13 @@ generic `Button` component. You may want to pass down a `trigger` element from a
  export let element: AnyMeltElement = emptyMeltElement
 </script>
 
-<button use:melt={$element}>
+<button {...$element} use:element>
  <slot />
 </button>
 
 <!-- Later, in +page.svelte -->
 <script>
- import { createCollapsible, melt } from '@melt-ui/svelte'
+ import { createCollapsible } from '@melt-ui/svelte'
  import Button from './Button.svelte'
 
  const {

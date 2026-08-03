@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { cn } from '$docs/utils/index.js';
-	import { createPinInput, melt } from '$lib/index.js';
+	import { createPinInput } from '$lib/index.js';
 
 	const {
 		elements: { root, input },
@@ -13,11 +13,11 @@
 	export { className as class };
 </script>
 
-<div use:melt={$root} class={cn('surface-b530640d7f', className)}>
+<div {...$root} use:root class={cn('surface-b530640d7f', className)}>
 	{#each Array.from({ length: 5 }) as _}
 		<input
 			class="surface-fe6ff160de"
-			use:melt={$input()}
+			{...$input()} use:input
 		/>
 	{/each}
 </div>

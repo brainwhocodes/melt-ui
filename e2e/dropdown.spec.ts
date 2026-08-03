@@ -10,7 +10,9 @@ const locators = {
 const menuOpenKeys = ['ArrowDown', 'Space', 'Enter'];
 
 async function nav(page: Page) {
-	await page.goto('/docs/builders/dropdown-menu');
+	await page.goto('/docs/builders/dropdown-menu', {
+		waitUntil: 'domcontentloaded',
+	});
 	await jsAvailable(page);
 }
 

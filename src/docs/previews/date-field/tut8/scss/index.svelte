@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createDateField, melt } from '$lib/index.js';
+	import { createDateField } from '$lib/index.js';
 	import { CalendarDate } from '@internationalized/date';
 
 	const {
@@ -15,17 +15,17 @@
 
 <form method="POST">
 	<div>
-		<span use:melt={$label}>Appointment Date</span>
-		<div use:melt={$field} class="">
+		<span {...$label} use:label>Appointment Date</span>
+		<div {...$field} use:field class="">
 			{#each $segmentContents as seg, i (i)}
-				<div use:melt={$segment(seg.part)}>
+				<div {...$segment(seg.part)} use:segment>
 					{seg.value}
 				</div>
 			{/each}
 		</div>
-		<input use:melt={$hiddenInput} />
+		<input {...$hiddenInput} use:hiddenInput />
 	</div>
-	<small use:melt={$validation}
+	<small {...$validation} use:validation
 		>Date must be between 2023-10-11 and 2024-10-11</small
 	>
 </form>

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { createDateRangePicker } from '$lib/builders/index.js';
 	import { ChevronRight, ChevronLeft, Calendar } from '$icons/index.js';
-	import { melt } from '$lib/index.js';
 	import { fade } from 'svelte/transition';
 	import LocaleCombobox from './LocaleCombobox.svelte';
 
@@ -38,11 +37,11 @@
 		}}
 	/>
 	<div>
-		<span use:melt={$label}>Date</span>
-		<div use:melt={$field}>
+		<span {...$label} use:label>Date</span>
+		<div {...$field} use:field>
 			{#key $locale}
 				{#each $segmentContents.start as seg}
-					<div use:melt={$startSegment(seg.part)}>
+					<div {...$startSegment(seg.part)} use:startSegment>
 						{seg.value}
 					</div>
 				{/each}
@@ -50,13 +49,13 @@
 			<div aria-hidden="true" class="separator">-</div>
 			{#key $locale}
 				{#each $segmentContents.end as seg}
-					<div use:melt={$endSegment(seg.part)}>
+					<div {...$endSegment(seg.part)} use:endSegment>
 						{seg.value}
 					</div>
 				{/each}
 			{/key}
 			<div>
-				<button use:melt={$trigger}>
+				<button {...$trigger} use:trigger>
 					<Calendar size={16} />
 				</button>
 			</div>
@@ -66,23 +65,23 @@
 		<div
 			class="force-dark"
 			transition:fade={{ duration: 100 }}
-			use:melt={$content}
+			{...$content} use:content
 		>
-			<div use:melt={$calendar}>
+			<div {...$calendar} use:calendar>
 				<header>
-					<button use:melt={$prevButton}>
+					<button {...$prevButton} use:prevButton>
 						<ChevronLeft size={24} />
 					</button>
-					<div use:melt={$heading}>
+					<div {...$heading} use:heading>
 						{$headingValue}
 					</div>
-					<button use:melt={$nextButton}>
+					<button {...$nextButton} use:nextButton>
 						<ChevronRight size={24} />
 					</button>
 				</header>
 				<div>
 					{#each $months as month}
-						<table use:melt={$grid}>
+						<table {...$grid} use:grid>
 							<thead aria-hidden="true">
 								<tr>
 									{#each $weekdays as day}
@@ -103,7 +102,7 @@
 												aria-disabled={$isDateDisabled(date) ||
 													$isDateUnavailable(date)}
 											>
-												<div use:melt={$cell(date, month.value)}>
+												<div {...$cell(date, month.value)} use:cell>
 													{date.day}
 												</div>
 											</td>

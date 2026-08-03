@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createCheckbox, melt } from '$lib/index.js';
+	import { createCheckbox } from '$lib/index.js';
 	import { Check, Minus } from '$icons/index.js';
 
 	const {
@@ -13,7 +13,7 @@
 <form>
 	<div class="surface-f933776c6c">
 		<button
-			use:melt={$root}
+			{...$root} use:root
 			class="preview-layout-center  surface-2748f7279e"
 			id="checkbox"
 		>
@@ -22,7 +22,7 @@
 			{:else if $isChecked}
 				<Check class="surface-aaaaf7a5f0" />
 			{/if}
-			<input use:melt={$input} />
+			<input {...$input} use:input />
 		</button>
 		<label class="surface-bbde895004" for="checkbox">
 			Accept terms and conditions.

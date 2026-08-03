@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createCollapsible, melt } from '$lib/index.js';
+	import { createCollapsible } from '$lib/index.js';
 	import { ChevronsUpDown, X } from '$icons/index.js';
 	import { slide } from 'svelte/transition';
 
@@ -12,7 +12,7 @@
 </script>
 
 <div
-	use:melt={$root}
+	{...$root} use:root
 	class="surface-435e2a486b"
 >
 	<div class="surface-048a245a02">
@@ -20,7 +20,7 @@
 			@thomasglopes starred 3 repositories
 		</span>
 		<button
-			use:melt={$trigger}
+			{...$trigger} use:trigger
 			class="preview-text-sm     preview-state-disabled-interaction-not-allowed     surface-c728a99e4d"
 			aria-label="Toggle"
 		>
@@ -45,7 +45,7 @@
 		style:left="0"
 	>
 		{#if $open}
-			<div use:melt={$content} transition:slide>
+			<div {...$content} use:content transition:slide>
 				<div class="surface-6067ae930c">
 					<div class="surface-6693006615">
 						<span class="surface-ea2604d07b">sveltejs/svelte</span>

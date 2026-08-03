@@ -1,9 +1,5 @@
 <script lang="ts">
-	import {
-		type TableOfContentsItem,
-		type TableOfContentsElements,
-		melt,
-	} from '$lib/index.js';
+	import { type TableOfContentsItem, type TableOfContentsElements } from '$lib/index.js';
 
 	export let tree: TableOfContentsItem[] = [];
 	export let activeHeadingIdxs: number[];
@@ -17,7 +13,7 @@
 			<li class="surface-83880f03ab">
 				<a
 					href="#{heading.id}"
-					use:melt={$item(heading.id)}
+					{...$item(heading.id)} use:item
 					class="surface-abf9b41426"
 				>
 					<!--

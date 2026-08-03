@@ -32,7 +32,7 @@ The first thing you need to do is create a context menu using the `createContext
 
 ```svelte {3-5}
 <script lang="ts">
-	import { createContextMenu, melt } from '@melt-ui/svelte'
+	import { createContextMenu } from '@melt-ui/svelte'
 	const {
 		elements: { menu, item, trigger, arrow }
 	} = createContextMenu()
@@ -44,18 +44,18 @@ of how to structure the menu is shown below.
 
 ```svelte
 <script lang="ts">
-	import { createContextMenu, melt } from '@melt-ui/svelte'
+	import { createContextMenu } from '@melt-ui/svelte'
 	const {
 		elements: { menu, item, trigger, arrow }
 	} = createContextMenu()
 </script>
 
-<button use:melt={$trigger}>Click me</button>
-<div use:melt={$menu}>
-	<div use:melt={$item}>...</div>
-	<div use:melt={$item}>...</div>
-	<div use:melt={$item}>...</div>
-	<div use:melt={$arrow} />
+<button {...$trigger} use:trigger>Click me</button>
+<div {...$menu} use:menu>
+	<div {...$item} use:item>...</div>
+	<div {...$item} use:item>...</div>
+	<div {...$item} use:item>...</div>
+	<div {...$arrow} use:arrow />
 </div>
 ```
 
@@ -69,9 +69,9 @@ action, which will be called when that item is pressed (Space and Enter keys als
 event for items).
 
 ```svelte /on:m-click={(e) => console.log('Item 2!')}/#hi /on:m-click={(e) => console.log('Item 3!')}/#hi
-<a href="/1" use:melt={$item}>Item 1</a>
-<div use:melt={$item} on:m-click={(e) => console.log('Item 2!')}>Item 2</div>
-<div use:melt={$item} on:m-click={(e) => console.log('Item 3!')}>Item 3</div>
+<a href="/1" {...$item} use:item>Item 1</a>
+<div {...$item} use:item on:m-click={(e) => console.log('Item 2!')}>Item 2</div>
+<div {...$item} use:item on:m-click={(e) => console.log('Item 3!')}>Item 3</div>
 ```
 
 If you wanted to prevent the default behavior that occurs when you select an item, you can call
@@ -80,7 +80,7 @@ occurring.
 
 ```svelte {4}
 <div
-	use:melt={$item}
+	{...$item} use:item
 	on:m-click={(e) => {
 		e.preventDefault()
 	}}>
@@ -95,17 +95,17 @@ prevent interaction with the rest of the page while open, use the `overlay` buil
 
 ```svelte
 <script lang="ts">
-	import { createContextMenu, melt } from '@melt-ui/svelte'
+	import { createContextMenu } from '@melt-ui/svelte'
 	const {
 		elements: { trigger, menu, item, separator, arrow, overlay }
 	} = createContextMenu()
 </script>
 
-<div use:melt={$trigger}>Right click to open</div>
-<div use:melt={$overlay} />
-<div use:melt={$menu}>
-	<div use:melt={$arrow} />
-	<div use:melt={$item} />
+<div {...$trigger} use:trigger>Right click to open</div>
+<div {...$overlay} use:overlay />
+<div {...$menu} use:menu>
+	<div {...$arrow} use:arrow />
+	<div {...$item} use:item />
 </div>
 ```
 

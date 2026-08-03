@@ -1,9 +1,11 @@
 import type { APISchema, KeyboardSchema } from '$docs/types.js';
 import { accordionData } from './accordion.js';
+import { alignmentPickerData } from './alignment-picker.js';
 import { avatarData } from './avatar.js';
 import { calendarData } from './calendar.js';
 import { checkboxData } from './checkbox.js';
 import { collapsibleData } from './collapsible.js';
+import { colorPickerData } from './color-picker.js';
 import { comboboxData } from './combobox.js';
 import { contextMenuData } from './context-menu.js';
 import { dateFieldData } from './date-field.js';
@@ -44,11 +46,13 @@ export type BuilderData = {
 };
 
 export const builderMap = {
+	'alignment-picker': alignmentPickerData,
 	accordion: accordionData,
 	avatar: avatarData,
 	calendar: calendarData,
 	checkbox: checkboxData,
 	collapsible: collapsibleData,
+	'color-picker': colorPickerData,
 	combobox: comboboxData,
 	'context-menu': contextMenuData,
 	'date-field': dateFieldData,

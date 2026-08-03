@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { melt } from '$lib/index.js';
 	/** Internal helpers */
 	import { PreviewWrapper } from '$docs/components/index.js';
 	import BaseDialog from './BaseDialog.svelte';
@@ -8,14 +7,14 @@
 <PreviewWrapper id="preview">
 	<BaseDialog let:trigger>
 		<button
-			use:melt={trigger}
+			{...trigger} use:trigger.action
 			class="preview-space-y-2   preview-type-medium surface-e8faf32479"
 		>
 			Open Dialog
 		</button>
 		<svelte:fragment slot="content" let:title let:description let:close>
-			<h2 use:melt={title} class="surface-a6d942e8eb">Edit profile</h2>
-			<p use:melt={description} class="surface-0c39c88064">
+			<h2 {...title} use:title.action class="surface-a6d942e8eb">Edit profile</h2>
+			<p {...description} use:description.action class="surface-0c39c88064">
 				Make changes to your profile here. Click save when you're done.
 			</p>
 
@@ -37,13 +36,13 @@
 			</fieldset>
 			<div class="surface-3ff63eee4c">
 				<button
-					use:melt={close}
+					{...close} use:close.action
 					class="preview-surface-zinc-100      preview-space-x-4 surface-914c2735d6"
 				>
 					Cancel
 				</button>
 				<button
-					use:melt={close}
+					{...close} use:close.action
 					class="preview-surface-magnum-100      preview-space-x-4 surface-11e8de979b"
 				>
 					Save changes

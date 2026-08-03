@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { createDateField, type CreateDateFieldProps } from '$lib/builders/index.js';
-	import { melt } from '$lib/index.js';
 	import { PreviewWrapper } from '$docs/components/index.js';
 
 	export let value: CreateDateFieldProps['value'] = undefined;
@@ -42,13 +41,13 @@
 <PreviewWrapper>
 	<div class="surface-9dd628d74a">
 		<div>
-			<span use:melt={$label} class="surface-2d133f55f1">Due Date</span>
+			<span {...$label} use:label class="surface-2d133f55f1">Due Date</span>
 			<div
-				use:melt={$field}
+				{...$field} use:field
 				class="surface-483187858d"
 			>
 				{#each $segmentContents as seg, i (i)}
-					<div use:melt={$segment(seg.part)} class="segment surface-8ec0b1f4d6">
+					<div {...$segment(seg.part)} use:segment class="segment surface-8ec0b1f4d6">
 						{seg.value}
 					</div>
 				{/each}

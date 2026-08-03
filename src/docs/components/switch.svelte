@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
-	import { createSwitch, melt } from '$lib/index.js';
+	import { createSwitch } from '$lib/index.js';
 	import { generateId } from '$lib/internal/helpers/index.js';
 	import { writable } from 'svelte/store';
 
@@ -31,12 +31,12 @@
 <div class="surface-ecf965eff6">
 	<label class="surface-66c0cc5b81" id={labelId} for={id}><slot /></label>
 	<button
-		use:melt={$root}
+		{...$root} use:root
 		class="force-dark surface-36e9efd785"
 		{id}
 		aria-labelledby={labelId}
 	>
-		<div class="thumb surface-a5b7e6f7d3" />
+		<div class="thumb surface-a5b7e6f7d3"></div>
 	</button>
 </div>
 

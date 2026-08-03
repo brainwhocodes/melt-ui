@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createToaster, melt } from '$lib/index.js';
+	import { createToaster } from '$lib/index.js';
 	import { flip } from 'svelte/animate';
 	import { fly } from 'svelte/transition';
 	import { X } from '$icons/index.js';
@@ -55,7 +55,7 @@
 >
 	{#each $toasts as { id, data } (id)}
 		<div
-			use:melt={$content(id)}
+			{...$content(id)} use:content
 			animate:flip={{ duration: 500 }}
 			in:fly={{ duration: 150, x: '100%' }}
 			out:fly={{ duration: 150, x: '100%' }}
@@ -66,18 +66,18 @@
 			>
 				<div>
 					<h3
-						use:melt={$title(id)}
+						{...$title(id)} use:title
 						class="surface-1cf3e291ab"
 					>
 						{data.title}
-						<span class="{data.color} surface-d8fc708552" />
+						<span class="{data.color} surface-d8fc708552"></span>
 					</h3>
-					<div use:melt={$description(id)}>
+					<div {...$description(id)} use:description>
 						{data.description}
 					</div>
 				</div>
 				<button
-					use:melt={$close(id)}
+					{...$close(id)} use:close
 					class="surface-be4ea5e834"
 				>
 					<X class="surface-32188bbc6d" />

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createTooltip, melt, type CreateTooltipProps } from '$lib/index.js';
+	import { createTooltip, type CreateTooltipProps } from '$lib/index.js';
 	import type { Writable } from 'svelte/store';
 	import { removeUndefined } from '../utils.js';
 
@@ -28,8 +28,8 @@
 	$: options.group.set(group);
 </script>
 
-<button use:melt={$trigger} data-testid="trigger">Trigger</button>
-<div use:melt={$content} data-testid="content" class="surface-9b60fd5cfa">
+<button {...$trigger} use:trigger data-testid="trigger">Trigger</button>
+<div {...$content} use:content data-testid="content" class="surface-9b60fd5cfa">
 	Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae provident non quam,
 	distinctio dolorum sunt sed minus adipisci. Commodi, alias minima! Nisi architecto corrupti quam
 	quisquam totam laborum voluptatem accusantium. Lorem ipsum, dolor sit amet consectetur adipisicing

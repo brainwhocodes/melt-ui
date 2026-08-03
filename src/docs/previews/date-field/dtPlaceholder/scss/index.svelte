@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createDateField, melt } from '$lib/index.js';
+	import { createDateField } from '$lib/index.js';
 	import { CalendarDateTime } from '@internationalized/date';
 
 	const {
@@ -12,15 +12,15 @@
 
 <div class="surface-d3c01e7453">
 	<div>
-		<span use:melt={$label} class="surface-f0ee317c01"
+		<span {...$label} use:label class="surface-f0ee317c01"
 			>Appointment Date</span
 		>
 		<div
-			use:melt={$field}
+			{...$field} use:field
 			class="surface-5ad758c868"
 		>
 			{#each $segmentContents as seg, i (i)}
-				<div use:melt={$segment(seg.part)} class="segment surface-42134a6f71">
+				<div {...$segment(seg.part)} use:segment class="segment surface-42134a6f71">
 					{seg.value}
 				</div>
 			{/each}

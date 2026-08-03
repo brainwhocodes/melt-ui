@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { createDatePicker, type CreateDatePickerProps } from '$lib/builders/index.js';
 	import { ChevronRight, ChevronLeft, Calendar } from '$icons/index.js';
-	import { melt } from '$lib/index.js';
 	import { removeUndefined } from '../utils.js';
 
 	export let value: CreateDatePickerProps['value'] = undefined;
@@ -106,15 +105,15 @@
 		<p class="surface-653f12f973" data-testid="inside-value">{$insideValue}</p>
 	</div>
 	<div>
-		<span use:melt={$label} class="surface-c23c4a5415" data-testid="label">Date</span>
+		<span {...$label} use:label class="surface-c23c4a5415" data-testid="label">Date</span>
 		<div
-			use:melt={$field}
+			{...$field} use:field
 			class="surface-604de9a8d4"
 			data-testid="field"
 		>
 			{#each $segmentContents as seg, i (`${i}-${$insideLocale}`)}
 				<div
-					use:melt={$segment(seg.part)}
+					{...$segment(seg.part)} use:segment
 					class="segment surface-cbeed70698"
 					data-testid={seg.part === 'literal' ? `literal=${i}` : seg.part}
 				>
@@ -122,33 +121,33 @@
 				</div>
 			{/each}
 			<div class="surface-aa6ad889ce">
-				<button use:melt={$trigger} data-testid="trigger" class="surface-1e3fc60c1b">
+				<button {...$trigger} use:trigger data-testid="trigger" class="surface-1e3fc60c1b">
 					<Calendar class="surface-e4936214ae" />
 				</button>
 			</div>
 		</div>
-		<span use:melt={$validation} data-testid="validation">validation</span>
+		<span {...$validation} use:validation data-testid="validation">validation</span>
 	</div>
 	<div
 		class="surface-6c252a00ff"
-		use:melt={$content}
+		{...$content} use:content
 		data-testid="content"
 	>
-		<div class="surface-5dbf63ddff" use:melt={$calendar} data-testid="calendar">
+		<div class="surface-5dbf63ddff" {...$calendar} use:calendar data-testid="calendar">
 			<header class="surface-fe1c63899e">
-				<button use:melt={$prevButton} data-testid="prev-button">
+				<button {...$prevButton} use:prevButton data-testid="prev-button">
 					<ChevronLeft />
 				</button>
-				<h2 class="surface-405580a61d" use:melt={$heading} data-testid="heading">
+				<h2 class="surface-405580a61d" {...$heading} use:heading data-testid="heading">
 					{$headingValue}
 				</h2>
-				<button use:melt={$nextButton} data-testid="next-button">
+				<button {...$nextButton} use:nextButton data-testid="next-button">
 					<ChevronRight />
 				</button>
 			</header>
 			{#each $months as month, i (i)}
 				{@const { weeks } = month}
-				<table use:melt={$grid} class="surface-14bfe8255f" data-testid="grid-{i}">
+				<table {...$grid} use:grid class="surface-14bfe8255f" data-testid="grid-{i}">
 					<thead aria-hidden="true">
 						<tr data-testid="weekdays">
 							{#each $weekdays as day, idx}
@@ -169,7 +168,7 @@
 								{#each days as date}
 									<td role="gridcell">
 										<div
-											use:melt={$cell(date, month.value)}
+											{...$cell(date, month.value)} use:cell
 											class="cell"
 											data-testid="month-{date.month}-date-{date.day}"
 										>

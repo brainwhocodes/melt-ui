@@ -5,7 +5,7 @@
 <script lang="ts" generics="T extends 'single' | 'multiple'">
 	import { removeUndefined } from '../utils.js';
 
-	import { createToggleGroup, melt, type CreateToggleGroupProps } from '$lib/index.js';
+	import { createToggleGroup, type CreateToggleGroupProps } from '$lib/index.js';
 
 	export let type: T;
 	export let defaultValue: CreateToggleGroupProps<T>['defaultValue'] = undefined;
@@ -39,9 +39,9 @@
 
 <main>
 	<button data-testid="tab-btn">Tab Focus Step button</button>
-	<div use:melt={$root} aria-label="root-1" data-testid="root">
+	<div {...$root} use:root aria-label="root-1" data-testid="root">
 		{#each items as tItem}
-			<button use:melt={$item(tItem)} data-testid={tItem}>
+			<button {...$item(tItem)} use:item data-testid={tItem}>
 				{tItem}
 			</button>
 		{/each}

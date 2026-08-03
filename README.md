@@ -1,6 +1,6 @@
 ![](static/banner.png)
 
-[Melt UI](https://www.melt-ui.com/) is a set of headless, accessible component builders for Svelte.
+[Melt UI](https://www.melt-ui.com/) is an accessible, styled component library for Svelte.
 
 [![](https://img.shields.io/npm/v/@melt-ui/svelte?style=flat)](https://www.npmjs.com/package/@melt-ui/svelte)
 ![npm](https://img.shields.io/npm/dw/%40melt-ui%2Fsvelte?style=flat&color=orange)
@@ -11,39 +11,43 @@
 
 ## About
 
-Melt UI is meant to be used as a base for your own styles and components. It offers:
+Melt UI provides production-ready components for application interfaces:
 
-- Uncoupled builders that can be attached to any element/component
-- Typescript and [SvelteKit](https://kit.svelte.dev/) support out-of-the-box
-- Strict adherence to [WAI-ARIA guidelines](https://www.w3.org/WAI/ARIA/apg/)
-- Easy to use examples and documentation
-- A high emphasis on accessibility, extensibility, quality and consistency
+- Styled Svelte components with a shared, token-driven CSS layer
+- Native platform semantics and strict adherence to [WAI-ARIA guidelines](https://www.w3.org/WAI/ARIA/apg/)
+- TypeScript and [SvelteKit](https://kit.svelte.dev/) support out of the box
+- Tree-shakeable component and family exports with no runtime styling engine
+- Lower-level behavior builders for advanced composition
 
 ## Getting started
 
-Run our installer script to get started:
+Install the package:
 
 ```sh
-npx @melt-ui/cli@latest init
+pnpm add @melt-ui/svelte
 ```
 
-Import the builders to your code and start using them:
+Import the shared stylesheet once, then use components directly:
 
-```html
+```svelte
 <script>
-	import { createCollapsible, melt } from '@melt-ui/svelte'
-
-	const {
-		elements: { root, content, trigger },
-		states: { open }
-	} = createCollapsible()
+	import { Button, Field, Input } from '@melt-ui/svelte';
+	import '@melt-ui/svelte/styles.css';
 </script>
 
-<div use:melt="{$root}">
-	<button use:melt="{$trigger}">{$open ? 'Close' : 'Open'}</button>
-	<div use:melt="{$content}">Obi-Wan says: Hello there!</div>
-</div>
+<Field
+	id="account-email"
+	label="Email"
+	description="Used for account notifications."
+	required
+>
+	<Input type="email" placeholder="you@example.com" />
+</Field>
+
+<Button>Save account</Button>
 ```
+
+Behavior builders remain available from the same package when a design needs lower-level control.
 
 ## Contributing
 

@@ -3,7 +3,7 @@
 	import type { SvelteComponent } from 'svelte';
 	import type { PageData } from './$types.js';
 	import { cn } from '$docs/utils/index.js';
-	import { createSeparator, melt } from '$lib/index.js';
+	import { createSeparator } from '$lib/index.js';
 	import { page } from '$app/stores';
 
 	const {
@@ -35,7 +35,7 @@
 				</Description>
 			{/if}
 		</div>
-		<div use:melt={$separator} class="surface-cf84d1beba" />
+		<div {...$separator} use:separator class="surface-cf84d1beba"></div>
 		<div class="mdsvex" id="mdsvex">
 			<Preview code={snippets.main} viewCode={false} variant="default">
 				<svelte:component this={mainPreview} />
@@ -44,7 +44,7 @@
 
 			<svelte:component this={component} {snippets} {schemas} {previews} {keyboard} />
 		</div>
-		<div use:melt={$separator} class="surface-e423b90bef" />
+		<div {...$separator} use:separator class="surface-e423b90bef"></div>
 		<!-- <DocsPager /> -->
 	</div>
 	<div class="surface-f91ac6edbd">

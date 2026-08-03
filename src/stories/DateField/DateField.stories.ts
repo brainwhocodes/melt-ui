@@ -33,7 +33,7 @@ const meta = {
 		},
 		disabled: { control: 'boolean' },
 	},
-} satisfies Meta<DateField>;
+} satisfies Meta<typeof DateField>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createLinkPreview, melt, type CreateLinkPreviewProps } from '$lib/index.js';
+	import { createLinkPreview, type CreateLinkPreviewProps } from '$lib/index.js';
 
 	type $$Props = CreateLinkPreviewProps;
 
@@ -17,7 +17,7 @@
 	href="https://github.com/melt-ui/melt-ui"
 	target="_blank"
 	rel="noopener noreferrer"
-	use:melt={$trigger}
+	{...$trigger} use:trigger
 >
 	<img
 		src="/logo-mark.svg"
@@ -27,7 +27,7 @@
 	<span class="surface-43a79b87d9">Open Melt UI Details</span>
 </a>
 
-<div use:melt={$content} class="surface-449da680da" data-testid="content">
+<div {...$content} use:content class="surface-449da680da" data-testid="content">
 	<div class="surface-51c6b063e4">
 		<div class="surface-5bc74db062">
 			<img
@@ -56,9 +56,9 @@
 			</div>
 		</div>
 	</div>
-	<div use:melt={$arrow} data-testid="arrow" />
+	<div {...$arrow} use:arrow data-testid="arrow"></div>
 </div>
-<div data-testid="start" />
+<div data-testid="start"></div>
 
 <style lang="scss">
 	.trigger {

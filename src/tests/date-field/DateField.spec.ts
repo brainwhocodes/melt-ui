@@ -466,7 +466,7 @@ describe('DateField', () => {
 		await user.keyboard('0');
 
 		expect(hourSegment).toHaveAttribute('aria-valuetext', 'Empty');
-		expect(getByTestId('inside-value')).toHaveTextContent('undefined');
+		expect(getByTestId('inside-value')).toHaveTextContent(/^$/);
 	});
 
 	test('commits zero as an underlying hour in 24-hour mode', async () => {
