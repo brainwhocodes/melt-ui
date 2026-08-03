@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	type CreateTabs = ReturnType<typeof createTabs>;
 	type Elements = CreateTabs['elements'];
 
@@ -18,7 +18,12 @@
 	import { getContext, setContext } from 'svelte';
 	import { writable, type Writable } from 'svelte/store';
 
-	export let tabs: string[] = [];
+	interface Props {
+		tabs?: string[];
+		children?: import('svelte').Snippet<[any]>;
+	}
+
+	let { tabs = [], children }: Props = $props();
 	const value = writable(tabs[0]);
 
 	const {
@@ -27,14 +32,18 @@
 		value,
 	});
 
-	$: value.set(tabs[0]);
+	$effect(() => {
+		value.set(tabs[0]);
+	});
 
 	const tabsStore = writable(tabs);
-	$: tabsStore.update(() => tabs);
+	$effect(() => {
+		tabsStore.update(() => tabs);
+	});
 
 	setTabsContext({ content, list, trigger, tabs: tabsStore });
 </script>
 
 <div {...$root} use:root>
-	<slot tab={$value} />
+	{@render children?.({ tab: $value, })}
 </div>

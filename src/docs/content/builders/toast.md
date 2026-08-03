@@ -3,12 +3,9 @@ title: Toast
 description: A succinct message that is displayed temporarily.
 ---
 
-<script>
+<script lang="ts">
     import { APIReference, KbdTable, Preview } from '$docs/components'
-    export let schemas
-    export let keyboard
-    export let snippets
-    export let previews
+    let { schemas, keyboard, snippets, previews } = $props()
 </script>
 
 ## Anatomy
@@ -75,7 +72,7 @@ components.
 This component should be added to your root `+layout.svelte` or `App.svelte` component.
 
 ```svelte
-<script>
+<script lang="ts">
 	import Toaster from '$lib/Toaster.svelte'
 </script>
 
@@ -102,7 +99,7 @@ the application.
 	}
 </script>
 
-<button on:click={create}> Create </button>
+<button onclick={create}> Create </button>
 ```
 
 ### Overriding default values for individual toasts
@@ -134,9 +131,9 @@ override these defaults for individual toasts using the `addToast` helper functi
 	}
 </script>
 
-<button on:click={create}> Create </button>
+<button onclick={create}> Create </button>
 
-<button on:click={createImportant}> Create Important </button>
+<button onclick={createImportant}> Create Important </button>
 ```
 
 ## Example Components

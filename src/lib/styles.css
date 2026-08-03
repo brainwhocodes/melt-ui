@@ -29,9 +29,9 @@
 		--melt-focus-ring: 0 0 0 3px oklch(67% 0.16 48 / 30%);
 	}
 
-	@media (prefers-color-scheme: dark) {
-		:root:not(.light):not([data-theme='light']) {
-			--melt-color-canvas: oklch(16% 0.009 65);
+	.dark,
+	[data-theme='dark'] {
+		--melt-color-canvas: oklch(16% 0.009 65);
 			--melt-color-surface: oklch(20% 0.01 65);
 			--melt-color-surface-raised: oklch(24% 0.011 65);
 			--melt-color-ink: oklch(94% 0.007 65);
@@ -41,21 +41,6 @@
 			--melt-color-accent-ink: oklch(17% 0.02 55);
 			--melt-color-danger: oklch(70% 0.18 25);
 			--melt-color-success: oklch(72% 0.12 150);
-			--melt-color-warning: oklch(78% 0.13 75);
-		}
-	}
-
-	:where(.dark, [data-theme='dark']) {
-		--melt-color-canvas: oklch(16% 0.009 65);
-		--melt-color-surface: oklch(20% 0.01 65);
-		--melt-color-surface-raised: oklch(24% 0.011 65);
-		--melt-color-ink: oklch(94% 0.007 65);
-		--melt-color-muted: oklch(72% 0.01 65);
-		--melt-color-border: oklch(36% 0.012 65);
-		--melt-color-accent: oklch(72% 0.15 55);
-		--melt-color-accent-ink: oklch(17% 0.02 55);
-		--melt-color-danger: oklch(70% 0.18 25);
-		--melt-color-success: oklch(72% 0.12 150);
 		--melt-color-warning: oklch(78% 0.13 75);
 	}
 }

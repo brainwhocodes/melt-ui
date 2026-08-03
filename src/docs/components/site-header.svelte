@@ -8,7 +8,7 @@
 	import Logo from './logo.svelte';
 	import ThemeSwitch from './nav/theme-switch/index.js';
 
-	$: isRoot = $page.url.pathname === '/';
+	let isRoot = $derived($page.url.pathname === '/');
 </script>
 
 <div

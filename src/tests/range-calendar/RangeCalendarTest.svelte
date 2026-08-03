@@ -3,25 +3,49 @@
 	import { ChevronRight, ChevronLeft } from '$icons/index.js';
 	import { removeUndefined } from '../utils.js';
 
-	export let value: CreateRangeCalendarProps['value'] = undefined;
-	export let defaultValue: CreateRangeCalendarProps['defaultValue'] = undefined;
-	export let defaultPlaceholder: CreateRangeCalendarProps['defaultPlaceholder'] = undefined;
-	export let onValueChange: CreateRangeCalendarProps['onValueChange'] = undefined;
-	export let onPlaceholderChange: CreateRangeCalendarProps['onPlaceholderChange'] = undefined;
-	export let isDateUnavailable: CreateRangeCalendarProps['isDateUnavailable'] = undefined;
-	export let isDateDisabled: CreateRangeCalendarProps['isDateDisabled'] = undefined;
-	export let locale: CreateRangeCalendarProps['locale'] = 'en';
-	export let calendarLabel: CreateRangeCalendarProps['calendarLabel'] = undefined;
-	export let preventDeselect: CreateRangeCalendarProps['preventDeselect'] = undefined;
-	export let numberOfMonths: CreateRangeCalendarProps['numberOfMonths'] = undefined;
-	export let pagedNavigation: CreateRangeCalendarProps['pagedNavigation'] = undefined;
-	export let placeholder: CreateRangeCalendarProps['placeholder'] = undefined;
-	export let weekStartsOn: CreateRangeCalendarProps['weekStartsOn'] = undefined;
-	export let fixedWeeks: CreateRangeCalendarProps['fixedWeeks'] = undefined;
-	export let minValue: CreateRangeCalendarProps['minValue'] = undefined;
-	export let maxValue: CreateRangeCalendarProps['maxValue'] = undefined;
-	export let weekdayFormat: CreateRangeCalendarProps['weekdayFormat'] = undefined;
-	export let ids: CreateRangeCalendarProps['ids'] = undefined;
+	interface Props {
+		value?: CreateRangeCalendarProps['value'];
+		defaultValue?: CreateRangeCalendarProps['defaultValue'];
+		defaultPlaceholder?: CreateRangeCalendarProps['defaultPlaceholder'];
+		onValueChange?: CreateRangeCalendarProps['onValueChange'];
+		onPlaceholderChange?: CreateRangeCalendarProps['onPlaceholderChange'];
+		isDateUnavailable?: CreateRangeCalendarProps['isDateUnavailable'];
+		isDateDisabled?: CreateRangeCalendarProps['isDateDisabled'];
+		locale?: CreateRangeCalendarProps['locale'];
+		calendarLabel?: CreateRangeCalendarProps['calendarLabel'];
+		preventDeselect?: CreateRangeCalendarProps['preventDeselect'];
+		numberOfMonths?: CreateRangeCalendarProps['numberOfMonths'];
+		pagedNavigation?: CreateRangeCalendarProps['pagedNavigation'];
+		placeholder?: CreateRangeCalendarProps['placeholder'];
+		weekStartsOn?: CreateRangeCalendarProps['weekStartsOn'];
+		fixedWeeks?: CreateRangeCalendarProps['fixedWeeks'];
+		minValue?: CreateRangeCalendarProps['minValue'];
+		maxValue?: CreateRangeCalendarProps['maxValue'];
+		weekdayFormat?: CreateRangeCalendarProps['weekdayFormat'];
+		ids?: CreateRangeCalendarProps['ids'];
+	}
+
+	let {
+		value = undefined,
+		defaultValue = undefined,
+		defaultPlaceholder = undefined,
+		onValueChange = undefined,
+		onPlaceholderChange = undefined,
+		isDateUnavailable = undefined,
+		isDateDisabled = undefined,
+		locale = 'en',
+		calendarLabel = undefined,
+		preventDeselect = undefined,
+		numberOfMonths = undefined,
+		pagedNavigation = undefined,
+		placeholder = undefined,
+		weekStartsOn = undefined,
+		fixedWeeks = undefined,
+		minValue = undefined,
+		maxValue = undefined,
+		weekdayFormat = undefined,
+		ids = undefined
+	}: Props = $props();
 
 	const {
 		elements: { calendar, heading, grid, cell, prevButton, nextButton },
@@ -137,28 +161,28 @@
 			</div>
 		</div>
 	</div>
-	<button on:click={cycleWeekdayFormat} data-testid="cycle-weekday-format">
+	<button onclick={cycleWeekdayFormat} data-testid="cycle-weekday-format">
 		Cycle weekdayFormat
 	</button>
 	<button
 		data-testid="numberOfMonths"
-		on:click={() => {
+		onclick={() => {
 			$numberOfMonthsOption++;
 		}}>numberOfMonths</button
 	>
 	<br />
-	<button data-testid="weekStartsOn" on:click={cycleWeekStart}>weekStartsOn</button>
+	<button data-testid="weekStartsOn" onclick={cycleWeekStart}>weekStartsOn</button>
 	<br />
 	<button
 		data-testid="fixedWeeks"
-		on:click={() => {
+		onclick={() => {
 			$fixedWeeksOption = !$fixedWeeksOption;
 		}}>fixedWeeksOption</button
 	>
 	<br />
 	<button
 		data-testid="locale"
-		on:click={() => {
+		onclick={() => {
 			$localeOption = 'it';
 		}}>setLocaleToIt</button
 	>
@@ -171,7 +195,7 @@
     width: 100%;
     border-radius: 0.375rem;
     border-width: 1px;
-    
+
     border-color: rgb(var(--color-magnum-800) / 1);
     background-color: transparent;
     padding-left: 0.625rem;
@@ -180,11 +204,11 @@
     line-height: 1.25rem;
     }
 	.input:focus-visible {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    
-    
+
+
     }
 	.input {
     flex: 1 1 0%;
@@ -195,7 +219,7 @@
     font-size: 0.875rem;
     line-height: 1.25rem;
     line-height: 1;
-    
+
     color: rgb(var(--color-magnum-700) / 1)
 }
 
@@ -205,7 +229,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 0.25rem;
-    
+
     background-color: rgb(var(--color-white) / 1);
     padding: 0px;
     padding-left: 0.5rem;
@@ -215,7 +239,7 @@
     font-size: 0.875rem;
     line-height: 1.25rem;
     font-weight: 500;
-    
+
     color: rgb(var(--color-magnum-900) / 1);
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -227,11 +251,11 @@
 }
 
 	.trigger:focus-visible {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    
-    
+
+
     }
 
 	.close {
@@ -244,7 +268,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 9999px;
-    
+
     color: rgb(var(--color-magnum-900) / 1);
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -256,15 +280,15 @@
 }
 
 	.close:focus-visible {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    
-    
+
+
     }
 
 	.close {
-    
+
     background-color: rgb(var(--color-white) / 1);
     padding: 0px;
     font-size: 0.875rem;
@@ -279,7 +303,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 9999px;
-    
+
     color: rgb(var(--color-magnum-900) / 1);
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -291,14 +315,14 @@
 }
 
 	.button:focus-visible {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    
+
     }
 
 	.button {
-    
+
     background-color: rgb(var(--color-white) / 1);
     padding: 0px;
     font-size: 0.875rem;
@@ -310,11 +334,11 @@
     z-index: 10;
     width: 15rem;
     border-radius: 4px;
-    
+
     background-color: rgb(var(--color-white) / 1);
     padding: 1.25rem;
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)
 }
 
@@ -324,7 +348,7 @@
     justify-content: space-between;
     border-top-width: 1px;
     border-bottom-width: 1px;
-    
+
     border-color: rgb(var(--color-magnum-700) / 1);
     padding-top: 0.25rem;
     padding-bottom: 0.25rem
@@ -343,15 +367,15 @@
 }
 
 	.cell:hover {
-    
+
     background-color: rgb(var(--color-magnum-100) / 1)
 }
 
 	.cell:focus {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    
+
     }
 
 	.cell[data-outside-month] {
@@ -360,12 +384,12 @@
 }
 
 	.cell[data-range-highlighted] {
-    
+
     background-color: rgb(var(--color-magnum-200) / 1)
 }
 
 	.cell[data-selected] {
-    
+
     background-color: rgb(var(--color-magnum-300) / 1)
 }
 
@@ -395,12 +419,12 @@
 
 	.btn {
     border-radius: 0.25rem;
-    
+
     background-color: rgb(var(--color-magnum-600) / 1);
     padding: 0.25rem;
     font-size: 0.75rem;
     line-height: 1rem;
-    
+
     color: rgb(var(--color-white) / 1)
 }
 </style>

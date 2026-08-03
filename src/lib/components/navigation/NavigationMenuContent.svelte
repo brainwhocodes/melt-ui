@@ -7,20 +7,27 @@
 		type NavigationMenuRootContext
 	} from './context.js';
 
-	let className = '';
-	export { className as class };
+	interface Props {
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { class: className = '', children, ...rest }: Props = $props();
+
 
 	const root = getContext<NavigationMenuRootContext>(NAVIGATION_MENU_ROOT);
 	const item = getContext<NavigationMenuItemContext>(NAVIGATION_MENU_ITEM);
-	let element: HTMLDivElement;
-	$: itemValue = item.value();
+	let element: HTMLDivElement | undefined = $state();
+	let itemValue = $derived(item.value());
 
 	onMount(() => {
+		if (!element) return;
 		const unregister = root.registerContent(itemValue, element);
 		element.addEventListener('keydown', handleKeydown);
 		return () => {
 			unregister();
-			element.removeEventListener('keydown', handleKeydown);
+			element?.removeEventListener('keydown', handleKeydown);
 		};
 	});
 
@@ -34,7 +41,7 @@
 </script>
 
 <div
-	{...$$restProps}
+	{...rest}
 	bind:this={element}
 	class={`melt-navigation-menu__content ${className}`.trim()}
 	id={root.getContentId(itemValue)}
@@ -44,5 +51,5 @@
 	hidden
 	data-state="closed"
 >
-	<slot />
+	{@render children?.()}
 </div>

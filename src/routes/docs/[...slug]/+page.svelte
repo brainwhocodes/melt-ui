@@ -11,10 +11,16 @@
 		elements: { root: separator },
 	} = createSeparator();
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 	type Component = $$Generic<typeof SvelteComponent>;
-	$: component = data.component as unknown as Component;
-	$: doc = data.metadata;
+	let component = $derived(data.component as unknown as Component);
+	let doc = $derived(data.metadata);
+
+	const SvelteComponent_1 = $derived(component);
 </script>
 
 <main class="surface-e882db926c">
@@ -30,7 +36,7 @@
 			{/if}
 		</div>
 		<div class="mdsvex" id="mdsvex">
-			<svelte:component this={component} />
+			<SvelteComponent_1 />
 		</div>
 		<div {...$separator} use:separator class="surface-1a7fe491c8"></div>
 		<!-- <DocsPager /> -->

@@ -2,8 +2,12 @@
 	import { Monitor, Moon, Sun } from '$icons/index.js';
 	import type { Theme } from './types.js';
 
-	export let theme: Theme = 'light';
-	export let size: 'sm' | 'md' | 'lg' = 'md';
+	interface Props {
+		theme?: Theme;
+		size?: 'sm' | 'md' | 'lg';
+	}
+
+	let { theme = 'light', size = 'md' }: Props = $props();
 
 	const sizeMap = {
 		sm: 'preview-height-3 preview-width-3',
@@ -11,7 +15,9 @@
 		lg: 'preview-height-7 preview-width-7',
 	};
 
-	$: component = theme === 'dark' ? Moon : theme === 'light' ? Sun : Monitor;
+	let component = $derived(theme === 'dark' ? Moon : theme === 'light' ? Sun : Monitor);
+
+	const SvelteComponent = $derived(component);
 </script>
 
-<svelte:component this={component} class={sizeMap[size]} />
+<SvelteComponent class={sizeMap[size]} />

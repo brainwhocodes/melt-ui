@@ -4,9 +4,19 @@
 	import { generateId } from '$lib/internal/helpers/index.js';
 	import { writable } from 'svelte/store';
 
-	export let checked: boolean | undefined = false;
-	export let id: string = generateId();
-	export let keepState = false;
+	interface Props {
+		checked?: boolean | undefined;
+		id?: string;
+		keepState?: boolean;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		checked = $bindable(false),
+		id = generateId(),
+		keepState = false,
+		children
+	}: Props = $props();
 	const checkedStore = writable(checked);
 
 	const {
@@ -29,7 +39,7 @@
 </script>
 
 <div class="surface-ecf965eff6">
-	<label class="surface-66c0cc5b81" id={labelId} for={id}><slot /></label>
+	<label class="surface-66c0cc5b81" id={labelId} for={id}>{@render children?.()}</label>
 	<button
 		{...$root} use:root
 		class="force-dark surface-36e9efd785"

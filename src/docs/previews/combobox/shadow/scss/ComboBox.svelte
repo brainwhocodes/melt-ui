@@ -2,7 +2,7 @@
 	import { createCombobox } from '$lib/index.js';
 	import { Check, ChevronDown, ChevronUp } from '$icons/index.js';
 	import { fly } from 'svelte/transition';
-	export let componentRoot;
+	let { componentRoot } = $props();
 	type Manga = {
 		author: string;
 		title: string;
@@ -72,7 +72,7 @@
 		rootElement: componentRoot,
 	});
 
-	$: filteredMangas = $touchedInput
+	let filteredMangas = $derived($touchedInput
 		? mangas.filter(({ title, author }) => {
 				const normalizedInput = $inputValue.toLowerCase();
 				return (
@@ -80,11 +80,11 @@
 					author.toLowerCase().includes(normalizedInput)
 				);
 		  })
-		: mangas;
+		: mangas);
 </script>
 
 <div class="root">
-	<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
+	<!-- svelte-ignore a11y_label_has_associated_control - $label contains the 'for' attribute -->
 	<label {...$label} use:label>
 		<span class="label">Choose your favorite manga:</span>
 	</label>
@@ -102,7 +102,7 @@
 </div>
 {#if $open}
 	<ul class="menu" {...$menu} use:menu transition:fly={{ duration: 150, y: -5 }}>
-		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+		<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 		<div class="menu-inner" tabindex="0">
 			{#each filteredMangas as book, index (index)}
 				<li

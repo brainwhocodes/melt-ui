@@ -2,8 +2,13 @@
 	import { createDialog, type CreateDialogProps } from '$lib/index.js';
 	import { initLevel } from './level.js';
 
-	export let portal: CreateDialogProps['portal'];
-	export let forceVisible: CreateDialogProps['forceVisible'];
+	interface Props {
+		portal: CreateDialogProps['portal'];
+		forceVisible: CreateDialogProps['forceVisible'];
+		children?: import('svelte').Snippet;
+	}
+
+	let { portal, forceVisible, children }: Props = $props();
 
 	const {
 		elements: { trigger, overlay, content, title, description, close, portalled },
@@ -23,7 +28,7 @@
 			<p {...$description} use:description>Description</p>
 
 			<button {...$close} use:close data-testid="dialog-closer-{level}">Close</button>
-			<slot />
+			{@render children?.()}
 		</div>
 	</div>
 {/if}

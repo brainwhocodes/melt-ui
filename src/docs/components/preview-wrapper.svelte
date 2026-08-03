@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	export type PreviewVariant = 'default' | 'dark';
 	export type PreviewSize = 'default' | 'sm' | 'md' | 'lg' | 'auto';
 	export type PreviewPosition = 'default' | 'static';
@@ -10,10 +10,21 @@
 </script>
 
 <script lang="ts">
-	export let variant: PreviewVariant = 'default';
-	export let size: PreviewSize = 'default';
-	export let position: PreviewPosition = 'default';
-	export let id: string | undefined = undefined;
+	interface Props {
+		variant?: PreviewVariant;
+		size?: PreviewSize;
+		position?: PreviewPosition;
+		id?: string | undefined;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		variant = 'default',
+		size = 'default',
+		position = 'default',
+		id = undefined,
+		children
+	}: Props = $props();
 </script>
 
 <div
@@ -25,7 +36,7 @@
 	{id}
 >
 	<div class="docs-preview-content">
-		<slot />
+		{@render children?.()}
 	</div>
 </div>
 

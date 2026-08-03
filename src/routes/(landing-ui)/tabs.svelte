@@ -11,8 +11,12 @@
 		defaultValue: 'tab-3',
 	});
 
-	let className = '';
-	export { className as class };
+	interface Props {
+		class?: string;
+	}
+
+	let { class: className = '' }: Props = $props();
+
 
 	const triggers = [
 		{ id: 'tab-1', title: 'Account' },
@@ -120,8 +124,8 @@
 
 		.trigger:focus-visible {
 		z-index: 10;
-		
-		
+
+
 		box-shadow: 0 0 #0000, 0 0 #0000, 0 0 #0000;
 }
 

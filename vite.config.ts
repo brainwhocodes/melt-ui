@@ -18,12 +18,12 @@ export default defineConfig({
 				]),
 	],
 	test: {
-		include: ['src/**/*.spec.{js,ts}'],
+		include: ['src/**/*.spec.ts'],
 		// jest like globals
 		globals: true,
 		environment: 'jsdom',
 		// in-source testing
-		includeSource: ['src/**/*.{js,ts,svelte}'],
+		includeSource: ['src/**/*.{ts,svelte}'],
 		// Add @testing-library/jest-dom matchers & mocks of SvelteKit modules
 		setupFiles: ['./scripts/setupTest.ts'],
 		// Exclude files in v8

@@ -10,11 +10,23 @@
 
 	type $$Props = CreateContextMenuProps;
 
-	export let loop = false;
-	export let closeFocus: CreateContextMenuProps['closeFocus'] = undefined;
-	export let escapeBehavior: CreateContextMenuProps['escapeBehavior'] = 'close';
-	export let closeOnOutsideClick: CreateContextMenuProps['closeOnOutsideClick'] = true;
-	export let submenuIds: CreateContextMenuProps['ids'] = undefined;
+	interface Props {
+		loop?: boolean;
+		closeFocus?: CreateContextMenuProps['closeFocus'];
+		escapeBehavior?: CreateContextMenuProps['escapeBehavior'];
+		closeOnOutsideClick?: CreateContextMenuProps['closeOnOutsideClick'];
+		submenuIds?: CreateContextMenuProps['ids'];
+		[key: string]: any
+	}
+
+	let {
+		loop = false,
+		closeFocus = undefined,
+		escapeBehavior = 'close',
+		closeOnOutsideClick = true,
+		submenuIds = undefined,
+		...rest
+	}: Props = $props();
 
 	const {
 		elements: { trigger, menu, item, separator, arrow },
@@ -25,7 +37,7 @@
 		closeFocus,
 		escapeBehavior,
 		closeOnOutsideClick,
-		...$$restProps,
+		...rest,
 		forceVisible: true,
 	});
 
@@ -127,12 +139,12 @@
 		max-height: 300px;
 		min-width: 220px;
 		flex-direction: column;
-		
-		
+
+
 		box-shadow: 0 0 #0000, 0 0 #0000, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 		border-radius: 0.375rem;
-		
-		
+
+
 		box-shadow: 0 0 #0000, 0 0 #0000, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important
 }
 	.subMenu {
@@ -154,8 +166,8 @@
 		font-size: 0.875rem;
 		line-height: 1.25rem;
 		line-height: 1;
-		
-		
+
+
 		box-shadow: 0 0 #0000, 0 0 #0000, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1) !important
 }
 	.trigger {

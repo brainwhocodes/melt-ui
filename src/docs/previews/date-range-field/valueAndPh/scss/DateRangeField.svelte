@@ -2,8 +2,11 @@
 	import { createDateRangeField, type CreateDateRangeFieldProps } from '$lib/index.js';
 	import { CalendarDateTime } from '@internationalized/date';
 
-	export let defaultValue: CreateDateRangeFieldProps['defaultValue'] =
-		undefined;
+	interface Props {
+		defaultValue?: CreateDateRangeFieldProps['defaultValue'];
+	}
+
+	let { defaultValue = undefined }: Props = $props();
 
 	const {
 		elements: { field, startSegment, endSegment, label },
@@ -42,14 +45,14 @@
 
     font-weight: 500;
 
-    
+
 
     color: rgb(var(--color-white) / 1)
 }
 
 	[data-melt-datefield-label][data-invalid] {
 
-    
+
 
     color: rgb(239 68 68 / 1)
 }
@@ -78,7 +81,7 @@
 
     padding: 0.375rem;
 
-    
+
 
     color: rgb(var(--color-magnum-400) / 1)
 }
@@ -92,14 +95,14 @@
 
 	[data-melt-datefield-field][data-invalid] {
 
-    
+
 
     border-color: rgb(248 113 113 / 1)
 }
 
 	[data-melt-datefield-segment][data-invalid] {
 
-    
+
 
     color: rgb(239 68 68 / 1)
 }
@@ -115,7 +118,7 @@
 
     align-self: flex-start;
 
-    
+
 
     color: rgb(239 68 68 / 1)
 }

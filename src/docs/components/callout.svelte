@@ -1,13 +1,18 @@
 <script lang="ts">
 	type CalloutType = 'default' | 'info' | 'warning' | 'danger' | 'success';
 
-	let className: string | undefined | null = undefined;
-	export { className as class };
-	export let type: CalloutType = 'default';
+
+	interface Props {
+		class?: string | undefined | null;
+		type?: CalloutType;
+		children?: import('svelte').Snippet;
+	}
+
+	let { class: className = undefined, type = 'default', children }: Props = $props();
 </script>
 
 <div class={`docs-callout force-dark ${className ?? ''}`} data-callout data-type={type}>
-	<slot />
+	{@render children?.()}
 </div>
 
 <style lang="scss">

@@ -1,11 +1,17 @@
 <script lang="ts">
-	export let label = 'Breadcrumb';
-	let className = '';
-	export { className as class };
+	interface Props {
+		label?: string;
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { label = 'Breadcrumb', class: className = '', children, ...rest }: Props = $props();
+
 </script>
 
-<nav {...$$restProps} class={`melt-breadcrumb ${className}`.trim()} aria-label={label}>
+<nav {...rest} class={`melt-breadcrumb ${className}`.trim()} aria-label={label}>
 	<ol class="melt-breadcrumb__list">
-		<slot />
+		{@render children?.()}
 	</ol>
 </nav>

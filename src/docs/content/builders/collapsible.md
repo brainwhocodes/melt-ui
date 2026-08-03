@@ -3,12 +3,9 @@ title: Collapsible
 description: An interactive component which expands/collapses a panel.
 ---
 
-<script>
+<script lang="ts">
     import { KbdTable, APIReference, Preview } from '$docs/components'
-    export let keyboard
-    export let schemas
-    export let snippets
-    export let previews
+    let { keyboard, schemas, snippets, previews } = $props()
 </script>
 
 ## Anatomy

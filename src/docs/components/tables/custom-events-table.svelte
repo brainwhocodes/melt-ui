@@ -3,17 +3,23 @@
 	import { APITableHeading } from '$docs/components/index.js';
 	import CustomEventDialog from '../custom-event-dialog.svelte';
 
-	export let data: APISchema['events'];
+	interface Props {
+		data: APISchema['events'];
+	}
+
+	let { data }: Props = $props();
 </script>
 
 {#if data}
 	<APITableHeading>
 		Custom Events
-		<svelte:fragment slot="info">
-			Custom events are dispatched with each normal event that we handle. You can override the way
-			we handle these events by calling
-			<code class="neutral">e.preventDefault()</code> in your event listener.
-		</svelte:fragment>
+		{#snippet info()}
+
+				Custom events are dispatched with each normal event that we handle. You can override the way
+				we handle these events by calling
+				<code class="neutral">e.preventDefault()</code> in your event listener.
+
+			{/snippet}
 	</APITableHeading>
 
 	<div class="surface-b2ffcaf81e">

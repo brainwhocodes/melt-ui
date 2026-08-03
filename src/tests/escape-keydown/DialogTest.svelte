@@ -2,9 +2,13 @@
 	import { createDialog, type CreateDialogProps } from '$lib/index.js';
 
 	type $$Props = CreateDialogProps & { setRootEscapeBehaviorIgnore: () => void };
-	export let setRootEscapeBehaviorIgnore: () => void;
 
-	export let escapeBehavior: CreateDialogProps['escapeBehavior'] = 'close';
+	interface Props {
+		setRootEscapeBehaviorIgnore: () => void;
+		escapeBehavior?: CreateDialogProps['escapeBehavior'];
+	}
+
+	let { setRootEscapeBehaviorIgnore, escapeBehavior = 'close' }: Props = $props();
 
 	const {
 		elements: { trigger, content, portalled },
@@ -18,7 +22,7 @@
 		<div {...$content} use:content data-testid="dialog-content">
 			<button
 				data-testid="dialog-set-parent-escape-behavior-ignore"
-				on:click={setRootEscapeBehaviorIgnore}
+				onclick={setRootEscapeBehaviorIgnore}
 			>
 				set root escapeBehavior: ignore
 			</button>

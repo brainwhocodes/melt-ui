@@ -3,10 +3,9 @@ title: Table of Contents
 description: An organized list of the content on your page.
 ---
 
-<script>
+<script lang="ts">
     import { APIReference, KbdTable } from '$docs/components'
-    export let schemas
-    export let keyboard
+    let { schemas, keyboard } = $props()
 </script>
 
 ## Anatomy

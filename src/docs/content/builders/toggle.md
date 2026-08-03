@@ -3,10 +3,9 @@ title: Toggle
 description: A two-state button that can be either on or off.
 ---
 
-<script>
+<script lang="ts">
     import { APIReference, KbdTable } from '$docs/components'
-    export let schemas
-    export let keyboard
+    let { schemas, keyboard } = $props()
 </script>
 
 ## Anatomy

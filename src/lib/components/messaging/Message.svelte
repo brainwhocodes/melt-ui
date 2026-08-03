@@ -3,19 +3,48 @@
 
 	type MessageVariant = 'incoming' | 'outgoing' | 'system';
 
-	export let id: string | undefined = undefined;
-	export let variant: MessageVariant = 'incoming';
-	export let sender: string | undefined = undefined;
-	export let timestamp: string | undefined = undefined;
-	export let datetime: string | undefined = undefined;
-	export let avatarSrc: string | undefined = undefined;
-	export let avatarAlt: string | undefined = undefined;
-	export let status: string | undefined = undefined;
-	export let actionsLabel = 'Message actions';
-	let className = '';
-	export { className as class };
+	interface Props {
+		id?: string | undefined;
+		variant?: MessageVariant;
+		sender?: string | undefined;
+		timestamp?: string | undefined;
+		datetime?: string | undefined;
+		avatarSrc?: string | undefined;
+		avatarAlt?: string | undefined;
+		status?: string | undefined;
+		actionsLabel?: string;
+		class?: string;
+		avatar?: import('svelte').Snippet;
+		header?: import('svelte').Snippet;
+		body?: import('svelte').Snippet;
+		children?: import('svelte').Snippet;
+		footer?: import('svelte').Snippet;
+		actions?: import('svelte').Snippet;
+		[key: string]: any
+	}
 
-	$: resolvedAvatarAlt = avatarAlt ?? (sender ? `${sender} avatar` : '');
+	let {
+		id = undefined,
+		variant = 'incoming',
+		sender = undefined,
+		timestamp = undefined,
+		datetime = undefined,
+		avatarSrc = undefined,
+		avatarAlt = undefined,
+		status = undefined,
+		actionsLabel = 'Message actions',
+		class: className = '',
+		avatar,
+		header,
+		body,
+		children,
+		footer,
+		actions,
+		...rest
+	}: Props = $props();
+
+
+	let resolvedAvatarAlt = $derived(avatarAlt ?? (sender ? `${sender} avatar` : ''));
 </script>
 
 <article
@@ -27,42 +56,42 @@
 	{id}
 	data-message-id={id}
 	data-variant={variant}
-	{...$$restProps}
+	{...rest}
 >
-	{#if variant !== 'system' && ($$slots.avatar || avatarSrc)}
+	{#if variant !== 'system' && (avatar || avatarSrc)}
 		<div class="melt-message-avatar">
-			<slot name="avatar">
+			{#if avatar}{@render avatar()}{:else}
 				{#if avatarSrc}
 					<img src={avatarSrc} alt={resolvedAvatarAlt} />
 				{/if}
-			</slot>
+			{/if}
 		</div>
 	{/if}
 
 	<div class="melt-message-content">
-		{#if $$slots.header || sender || timestamp}
+		{#if header || sender || timestamp}
 			<header class="melt-message-header">
-				<slot name="header">
+				{#if header}{@render header()}{:else}
 					{#if sender}<strong class="melt-message-sender">{sender}</strong>{/if}
 					{#if timestamp}<time {datetime}>{timestamp}</time>{/if}
-				</slot>
+				{/if}
 			</header>
 		{/if}
 
 		<Bubble {variant} class="melt-message-bubble">
-			<slot name="body"><slot /></slot>
+			{#if body}{@render body()}{:else}{@render children?.()}{/if}
 		</Bubble>
 
-		{#if $$slots.footer || status}
+		{#if footer || status}
 			<footer class="melt-message-footer">
-				<slot name="footer">{status}</slot>
+				{#if footer}{@render footer()}{:else}{status}{/if}
 			</footer>
 		{/if}
 	</div>
 
-	{#if $$slots.actions}
+	{#if actions}
 		<div class="melt-message-actions" role="group" aria-label={actionsLabel}>
-			<slot name="actions" />
+			{@render actions?.()}
 		</div>
 	{/if}
 </article>

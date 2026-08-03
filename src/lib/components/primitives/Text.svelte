@@ -3,20 +3,33 @@
 	type TextVariant = 'body' | 'lead' | 'muted' | 'small';
 	type TextWeight = 'regular' | 'medium' | 'semibold' | 'bold';
 
-	export let as: TextElement = 'p';
-	export let variant: TextVariant = 'body';
-	export let weight: TextWeight = 'regular';
 
-	let className = '';
-	export { className as class };
+	interface Props {
+		as?: TextElement;
+		variant?: TextVariant;
+		weight?: TextWeight;
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let {
+		as = 'p',
+		variant = 'body',
+		weight = 'regular',
+		class: className = '',
+		children,
+		...rest
+	}: Props = $props();
+
 </script>
 
 <svelte:element
 	this={as}
-	{...$$restProps}
+	{...rest}
 	class={`melt-text ${className}`}
 	data-variant={variant}
 	data-weight={weight}
 >
-	<slot />
+	{@render children?.()}
 </svelte:element>

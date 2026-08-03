@@ -4,12 +4,23 @@
 	import { tick } from 'svelte';
 	import { removeUndefined } from '../utils.js';
 
-	export let multiple = false;
-	export let defaultValue: string | undefined = undefined;
-	export let escapeBehavior: CreateSelectProps['escapeBehavior'] = 'close';
-	export let closeOnOutsideClick = true;
-	export let ids: CreateSelectProps['ids'] = undefined;
-	export let onOutsideClick: CreateSelectProps['onOutsideClick'] = undefined;
+	interface Props {
+		multiple?: boolean;
+		defaultValue?: string | undefined;
+		escapeBehavior?: CreateSelectProps['escapeBehavior'];
+		closeOnOutsideClick?: boolean;
+		ids?: CreateSelectProps['ids'];
+		onOutsideClick?: CreateSelectProps['onOutsideClick'];
+	}
+
+	let {
+		multiple = false,
+		defaultValue = undefined,
+		escapeBehavior = 'close',
+		closeOnOutsideClick = true,
+		ids = undefined,
+		onOutsideClick = undefined
+	}: Props = $props();
 	const {
 		elements: { trigger, menu, option, group, groupLabel, label },
 		states: { selected, selectedLabel },
@@ -30,16 +41,16 @@
 		})
 	);
 
-	let options = {
+	let options = $state({
 		sweet: ['Caramel', 'Chocolate', 'Strawberry', 'Cookies & Cream'],
 		savory: ['Basil', 'Bacon', 'Rosemary', 'Balsamic Fig'],
-	};
+	});
 </script>
 
 <main>
 	<label id={$label.id} for={$label.for} use:label data-testid="label">Label</label>
 	<button
-		on:click={() => {
+		onclick={() => {
 			selected.set({ value: 'Chocolate', label: 'Chocolate' });
 		}}
 		data-testid="manual-btn"
@@ -48,7 +59,7 @@
 	</button>
 
 	<button
-		on:click={async () => {
+		onclick={async () => {
 			options.sweet.push('Vanilla');
 			// trigger the update
 			options = options;

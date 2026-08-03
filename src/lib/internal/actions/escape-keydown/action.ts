@@ -34,6 +34,10 @@ export const useEscapeKeydown = ((node, config = {}) => {
 		layers.set(node, behaviorType);
 
 		const onKeyDown = (e: KeyboardEvent) => {
+			// If a child intercepted the event (e.g. `stopPropagation()` in a
+			// delegated Svelte 5 handler, which runs at the root/document),
+			// the escape must not close the layer.
+			if (e.cancelBubble) return;
 			if (e.key !== kbd.ESCAPE || !isResponsibleEscapeLayer(node)) return;
 			const target = e.target;
 			if (!isHTMLElement(target)) return;

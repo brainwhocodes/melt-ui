@@ -3,12 +3,9 @@ title: Color Picker
 description: An inline headless color control with HSVA state and editable channels
 ---
 
-<script>
+<script lang="ts">
     import { APIReference, KbdTable, Preview } from '$docs/components'
-    export let schemas
-    export let keyboard
-    export let snippets
-    export let previews
+    let { schemas, keyboard, snippets, previews } = $props()
 </script>
 
 ## Usage

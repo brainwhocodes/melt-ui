@@ -3,16 +3,22 @@
 	import { transformAPIString } from '$docs/utils/index.js';
 	import { APITableHeading } from '$docs/components/index.js';
 
-	export let data: APISchema['dataAttributes'];
+	interface Props {
+		data: APISchema['dataAttributes'];
+	}
+
+	let { data }: Props = $props();
 </script>
 
 {#if data}
 	<APITableHeading>
 		Data Attributes
-		<svelte:fragment slot="info">
-			Data attributes are set on each element which can be used for styling or however else you want
-			to use them. They are prefixed with <code class="neutral">data-</code>.
-		</svelte:fragment>
+		{#snippet info()}
+
+				Data attributes are set on each element which can be used for styling or however else you want
+				to use them. They are prefixed with <code class="neutral">data-</code>.
+
+			{/snippet}
 	</APITableHeading>
 
 	<div class="surface-6080e285bb">

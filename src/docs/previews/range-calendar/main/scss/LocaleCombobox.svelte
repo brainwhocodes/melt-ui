@@ -12,12 +12,15 @@
 		}),
 	);
 
-	export let onSelectedChange: CreateComboboxProps<string>['onSelectedChange'] =
-		undefined;
-	export let defaultSelected: CreateComboboxProps<string>['defaultSelected'] = {
+	interface Props {
+		onSelectedChange?: CreateComboboxProps<string>['onSelectedChange'];
+		defaultSelected?: CreateComboboxProps<string>['defaultSelected'];
+	}
+
+	let { onSelectedChange = undefined, defaultSelected = {
 		value: 'en-US',
 		label: 'English (US)',
-	};
+	} }: Props = $props();
 
 	const {
 		elements: { menu, input, option, label },
@@ -29,24 +32,26 @@
 		defaultSelected,
 	});
 
-	$: if (!$open) {
-		$inputValue = $selected?.label ?? '';
-	}
+	$effect(() => {
+		if (!$open) {
+			$inputValue = $selected?.label ?? '';
+		}
+	});
 
-	$: _filteredLocales = localeOptionsArr.filter(({ value, label }) => {
+	let _filteredLocales = $derived(localeOptionsArr.filter(({ value, label }) => {
 		const normalizedInput = $inputValue.toLowerCase();
 		return (
 			value.toLowerCase().includes(normalizedInput) ||
 			label.toLowerCase().includes(normalizedInput)
 		);
-	});
+	}));
 
-	$: filteredLocales = $touchedInput ? _filteredLocales : localeOptionsArr;
+	let filteredLocales = $derived($touchedInput ? _filteredLocales : localeOptionsArr);
 </script>
 
 <div class="surface-7bd5178f31">
 	<div class="surface-2816c01d1f">
-		<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
+		<!-- svelte-ignore a11y_label_has_associated_control - $label contains the 'for' attribute -->
 		<label {...$label} use:label>
 			<span class="surface-7ebab17818">Choose a locale:</span>
 		</label>
@@ -79,7 +84,7 @@
 			{...$menu} use:menu
 			transition:fly={{ duration: 150, y: -5 }}
 		>
-			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+			<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 			<div
 				class="surface-64e5d133c3"
 				tabindex="0"
@@ -112,7 +117,7 @@
 		position: absolute;
 		left: 0.5rem;
 		top: 50%;
-		
+
 		color: rgb(var(--color-magnum-500) / 1);
 		translate: 0 calc(-50% + 1px)
 }

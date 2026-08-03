@@ -1,28 +1,40 @@
 <script lang="ts">
 	import { getCarouselContext } from './Carousel.svelte';
 
-	let className = '';
-	export { className as class };
-	export let label = 'Slides';
-	export let tabindex = 0;
+
+	interface Props {
+		class?: string;
+		label?: string;
+		tabindex?: number;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let {
+		class: className = '',
+		label = 'Slides',
+		tabindex = 0,
+		children,
+		...rest
+	}: Props = $props();
 
 	const carousel = getCarouselContext();
 	const { orientation } = carousel;
 </script>
 
 <!-- The labelled scroll viewport intentionally owns carousel keyboard navigation. -->
-<!-- svelte-ignore a11y-no-noninteractive-tabindex a11y-no-noninteractive-element-interactions -->
+<!-- svelte-ignore a11y_no_noninteractive_tabindex, a11y_no_noninteractive_element_interactions -->
 <div
-	{...$$restProps}
+	{...rest}
 	use:carousel.attachViewport
 	class={`melt-carousel-viewport ${className}`.trim()}
 	{tabindex}
 	role="group"
 	aria-label={label}
 	data-orientation={$orientation}
-	on:keydown={carousel.handleKeydown}
+	onkeydown={carousel.handleKeydown}
 >
 	<div class="melt-carousel-track">
-		<slot />
+		{@render children?.()}
 	</div>
 </div>

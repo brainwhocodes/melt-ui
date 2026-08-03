@@ -67,7 +67,7 @@ export type MeltActionReturn<Events extends keyof HTMLElementEventMap> =
 	ActionReturn<
 		undefined,
 		{
-			[K in Events as `on:m-${string & K}`]?: K extends keyof HTMLElementEventMap
+			[K in Events as `onm-${string & K}`]?: K extends keyof HTMLElementEventMap
 				? MeltEventHandler<HTMLElementEventMap[K]>
 				: never;
 		}

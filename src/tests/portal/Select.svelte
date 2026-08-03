@@ -2,8 +2,13 @@
 	import { createSelect, type CreateSelectProps } from '$lib/index.js';
 	import { initLevel } from './level.js';
 
-	export let portal: CreateSelectProps['portal'];
-	export let forceVisible: CreateSelectProps['forceVisible'];
+	interface Props {
+		portal: CreateSelectProps['portal'];
+		forceVisible: CreateSelectProps['forceVisible'];
+		children?: import('svelte').Snippet;
+	}
+
+	let { portal, forceVisible, children }: Props = $props();
 
 	const {
 		elements: { trigger, menu, option, group, groupLabel, label },
@@ -18,7 +23,7 @@
 	const level = initLevel();
 </script>
 
-<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
+<!-- svelte-ignore a11y_label_has_associated_control - $label contains the 'for' attribute -->
 <label {...$label} use:label>Favorite Flavor</label>
 <button {...$trigger} use:trigger aria-label="Food" data-testid="select-trigger-{level}">
 	{$selectedLabel || 'Select a flavor'}
@@ -26,7 +31,7 @@
 
 {#if $open || !forceVisible}
 	<div {...$menu} use:menu data-testid="select-content-{level}">
-		<slot />
+		{@render children?.()}
 		{#each Object.entries(options) as [key, arr]}
 			<div {...$group(key)} use:group>
 				<div {...$groupLabel(key)} use:groupLabel>

@@ -3,31 +3,61 @@
 	import { ChevronRight, ChevronLeft, Calendar } from '$icons/index.js';
 	import { removeUndefined } from '../utils.js';
 
-	export let value: CreateDatePickerProps['value'] = undefined;
-	export let defaultValue: CreateDatePickerProps['defaultValue'] = undefined;
-	export let defaultPlaceholder: CreateDatePickerProps['defaultPlaceholder'] = undefined;
-	export let onValueChange: CreateDatePickerProps['onValueChange'] = undefined;
-	export let onPlaceholderChange: CreateDatePickerProps['onPlaceholderChange'] = undefined;
-	export let isDateUnavailable: CreateDatePickerProps['isDateUnavailable'] = undefined;
-	export let isDateDisabled: CreateDatePickerProps['isDateDisabled'] = undefined;
-	export let disabled: CreateDatePickerProps['disabled'] = undefined;
-	export let readonly: CreateDatePickerProps['readonly'] = undefined;
-	export let hourCycle: CreateDatePickerProps['hourCycle'] = undefined;
-	export let locale: CreateDatePickerProps['locale'] = 'en';
-	export let hideTimeZone: CreateDatePickerProps['hideTimeZone'] = undefined;
-	export let dateFieldIds: CreateDatePickerProps['dateFieldIds'] = undefined;
-	export let calendarIds: CreateDatePickerProps['calendarIds'] = undefined;
-	export let popoverIds: CreateDatePickerProps['popoverIds'] = undefined;
-	export let granularity: CreateDatePickerProps['granularity'] = undefined;
-	export let calendarLabel: CreateDatePickerProps['calendarLabel'] = undefined;
-	export let preventDeselect: CreateDatePickerProps['preventDeselect'] = undefined;
-	export let numberOfMonths: CreateDatePickerProps['numberOfMonths'] = undefined;
-	export let pagedNavigation: CreateDatePickerProps['pagedNavigation'] = undefined;
-	export let placeholder: CreateDatePickerProps['placeholder'] = undefined;
-	export let weekStartsOn: CreateDatePickerProps['weekStartsOn'] = undefined;
-	export let weekdayFormat: CreateDatePickerProps['weekdayFormat'] = undefined;
-	export let fixedWeeks: CreateDatePickerProps['fixedWeeks'] = undefined;
-	export let onOutsideClick: CreateDatePickerProps['onOutsideClick'] = undefined;
+	interface Props {
+		value?: CreateDatePickerProps['value'];
+		defaultValue?: CreateDatePickerProps['defaultValue'];
+		defaultPlaceholder?: CreateDatePickerProps['defaultPlaceholder'];
+		onValueChange?: CreateDatePickerProps['onValueChange'];
+		onPlaceholderChange?: CreateDatePickerProps['onPlaceholderChange'];
+		isDateUnavailable?: CreateDatePickerProps['isDateUnavailable'];
+		isDateDisabled?: CreateDatePickerProps['isDateDisabled'];
+		disabled?: CreateDatePickerProps['disabled'];
+		readonly?: CreateDatePickerProps['readonly'];
+		hourCycle?: CreateDatePickerProps['hourCycle'];
+		locale?: CreateDatePickerProps['locale'];
+		hideTimeZone?: CreateDatePickerProps['hideTimeZone'];
+		dateFieldIds?: CreateDatePickerProps['dateFieldIds'];
+		calendarIds?: CreateDatePickerProps['calendarIds'];
+		popoverIds?: CreateDatePickerProps['popoverIds'];
+		granularity?: CreateDatePickerProps['granularity'];
+		calendarLabel?: CreateDatePickerProps['calendarLabel'];
+		preventDeselect?: CreateDatePickerProps['preventDeselect'];
+		numberOfMonths?: CreateDatePickerProps['numberOfMonths'];
+		pagedNavigation?: CreateDatePickerProps['pagedNavigation'];
+		placeholder?: CreateDatePickerProps['placeholder'];
+		weekStartsOn?: CreateDatePickerProps['weekStartsOn'];
+		weekdayFormat?: CreateDatePickerProps['weekdayFormat'];
+		fixedWeeks?: CreateDatePickerProps['fixedWeeks'];
+		onOutsideClick?: CreateDatePickerProps['onOutsideClick'];
+	}
+
+	let {
+		value = undefined,
+		defaultValue = undefined,
+		defaultPlaceholder = undefined,
+		onValueChange = undefined,
+		onPlaceholderChange = undefined,
+		isDateUnavailable = undefined,
+		isDateDisabled = undefined,
+		disabled = undefined,
+		readonly = undefined,
+		hourCycle = undefined,
+		locale = 'en',
+		hideTimeZone = undefined,
+		dateFieldIds = undefined,
+		calendarIds = undefined,
+		popoverIds = undefined,
+		granularity = undefined,
+		calendarLabel = undefined,
+		preventDeselect = undefined,
+		numberOfMonths = undefined,
+		pagedNavigation = undefined,
+		placeholder = undefined,
+		weekStartsOn = undefined,
+		weekdayFormat = undefined,
+		fixedWeeks = undefined,
+		onOutsideClick = undefined
+	}: Props = $props();
 
 	const {
 		elements: {
@@ -182,21 +212,21 @@
 				</table>
 			{/each}
 		</div>
-		<button on:click={cycleWeekdayFormat} data-testid="cycle-weekday-format">
+		<button onclick={cycleWeekdayFormat} data-testid="cycle-weekday-format">
 			Cycle weekdayFormat
 		</button>
 		<button
 			data-testid="numberOfMonths"
-			on:click={() => {
+			onclick={() => {
 				$numberOfMonthsOption++;
 			}}>numberOfMonths</button
 		>
 		<br />
-		<button data-testid="weekStartsOn" on:click={cycleWeekStart}>weekStartsOn</button>
+		<button data-testid="weekStartsOn" onclick={cycleWeekStart}>weekStartsOn</button>
 		<br />
 		<button
 			data-testid="fixedWeeks"
-			on:click={() => {
+			onclick={() => {
 				$fixedWeeksOption = !$fixedWeeksOption;
 			}}>fixedWeeksOption</button
 		>
@@ -210,7 +240,7 @@
     width: 100%;
     border-radius: 0.375rem;
     border-width: 1px;
-    
+
     border-color: rgb(var(--color-magnum-800) / 1);
     background-color: transparent;
     padding-left: 0.625rem;
@@ -219,11 +249,11 @@
     line-height: 1.25rem;
     }
 	.input:focus-visible {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    
-    
+
+
     }
 	.input {
     flex: 1 1 0%;
@@ -234,7 +264,7 @@
     font-size: 0.875rem;
     line-height: 1.25rem;
     line-height: 1;
-    
+
     color: rgb(var(--color-magnum-700) / 1)
 }
 
@@ -244,7 +274,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 0.25rem;
-    
+
     background-color: rgb(var(--color-white) / 1);
     padding: 0px;
     padding-left: 0.5rem;
@@ -254,7 +284,7 @@
     font-size: 0.875rem;
     line-height: 1.25rem;
     font-weight: 500;
-    
+
     color: rgb(var(--color-magnum-900) / 1);
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -266,11 +296,11 @@
 }
 
 	.trigger:focus-visible {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    
-    
+
+
     }
 
 	.close {
@@ -283,7 +313,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 9999px;
-    
+
     color: rgb(var(--color-magnum-900) / 1);
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -295,15 +325,15 @@
 }
 
 	.close:focus-visible {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    
-    
+
+
     }
 
 	.close {
-    
+
     background-color: rgb(var(--color-white) / 1);
     padding: 0px;
     font-size: 0.875rem;
@@ -318,7 +348,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 9999px;
-    
+
     color: rgb(var(--color-magnum-900) / 1);
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -330,14 +360,14 @@
 }
 
 	.button:focus-visible {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    
+
     }
 
 	.button {
-    
+
     background-color: rgb(var(--color-white) / 1);
     padding: 0px;
     font-size: 0.875rem;
@@ -349,11 +379,11 @@
     z-index: 10;
     width: 15rem;
     border-radius: 4px;
-    
+
     background-color: rgb(var(--color-white) / 1);
     padding: 1.25rem;
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)
 }
 
@@ -363,7 +393,7 @@
     justify-content: space-between;
     border-top-width: 1px;
     border-bottom-width: 1px;
-    
+
     border-color: rgb(var(--color-magnum-700) / 1);
     padding-top: 0.25rem;
     padding-bottom: 0.25rem
@@ -382,15 +412,15 @@
 }
 
 	.cell:hover {
-    
+
     background-color: rgb(var(--color-magnum-100) / 1)
 }
 
 	.cell:focus {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    
+
     }
 
 	.cell[data-outside-month] {
@@ -399,12 +429,12 @@
 }
 
 	.cell[data-range-highlighted] {
-    
+
     background-color: rgb(var(--color-magnum-200) / 1)
 }
 
 	.cell[data-selected] {
-    
+
     background-color: rgb(var(--color-magnum-300) / 1)
 }
 
@@ -438,12 +468,12 @@
 
 	.btn {
     border-radius: 0.25rem;
-    
+
     background-color: rgb(var(--color-magnum-600) / 1);
     padding: 0.25rem;
     font-size: 0.75rem;
     line-height: 1rem;
-    
+
     color: rgb(var(--color-white) / 1)
 }
 </style>

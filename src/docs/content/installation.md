@@ -3,7 +3,7 @@ title: Installation
 description: Install Melt UI, an accessible component library for Svelte.
 ---
 
-<script>
+<script lang="ts">
     import { Callout, InstallTabs } from '$docs/components';
 </script>
 
@@ -52,7 +52,7 @@ pnpm add @melt-ui/svelte
 Import the shared stylesheet once in your application layout:
 
 ```svelte
-<script>
+<script lang="ts">
 	import '@melt-ui/svelte/styles.css';
 </script>
 ```
@@ -96,11 +96,11 @@ pnpm add -D @melt-ui/pp
 
 </InstallTabs>
 
-Next, append the Melt preprocessor to Svelte's native `preprocess` array in `svelte.config.js`.
+Next, append the Melt preprocessor to Svelte's native `preprocess` array in `svelte.config.ts`.
 Keep it after any preprocessors that produce Svelte markup.
 
-```js
-// svelte.config.js
+```ts
+// svelte.config.ts
 
 import { preprocessMeltUI } from '@melt-ui/pp'
 

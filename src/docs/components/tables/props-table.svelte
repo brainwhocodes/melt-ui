@@ -8,16 +8,22 @@
 		return str.replace(/"/g, "'");
 	}
 
-	export let data: APISchema['props'];
+	interface Props {
+		data: APISchema['props'];
+	}
+
+	let { data }: Props = $props();
 </script>
 
 {#if data}
 	<APITableHeading>
 		Props
-		<svelte:fragment slot="info">
-			Props are passed as an object to the function and are used to configure the behavior of the
-			builder function or element.
-		</svelte:fragment>
+		{#snippet info()}
+
+				Props are passed as an object to the function and are used to configure the behavior of the
+				builder function or element.
+
+			{/snippet}
 	</APITableHeading>
 
 	<div class="surface-57049b098b">

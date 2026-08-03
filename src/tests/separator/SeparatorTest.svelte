@@ -2,7 +2,11 @@
 	import type { Orientation } from '$lib/internal/types.js';
 	import { createSeparator } from '$lib/index.js';
 
-	export let orientation: Orientation = 'vertical';
+	interface Props {
+		orientation?: Orientation;
+	}
+
+	let { orientation = 'vertical' }: Props = $props();
 
 	const {
 		elements: { root: vertical },

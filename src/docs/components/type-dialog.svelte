@@ -9,8 +9,12 @@
 		states: { open },
 	} = createDialog();
 
-	export let name = '';
-	export let code = '';
+	interface Props {
+		name?: string;
+		code?: string;
+	}
+
+	let { name = '', code = '' }: Props = $props();
 </script>
 
 <button

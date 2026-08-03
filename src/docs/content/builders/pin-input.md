@@ -3,10 +3,9 @@ title: PIN Input
 description: A sequence of one-character alphanumeric inputs.
 ---
 
-<script>
+<script lang="ts">
     import { APIReference, KbdTable } from '$docs/components'
-    export let schemas
-    export let keyboard
+    let { schemas, keyboard } = $props()
 </script>
 
 ## API Reference

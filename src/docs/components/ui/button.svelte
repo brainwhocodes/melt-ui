@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	export type ButtonVariant = 'default' | 'ghost' | 'link' | 'outline' | 'faded';
 	export type ButtonSize = 'default' | 'sm';
 </script>
@@ -7,36 +7,28 @@
 	import { noop } from '$lib/internal/helpers/index.js';
 	import type { Action } from 'svelte/action';
 	import type { HTMLAnchorAttributes, HTMLButtonAttributes } from 'svelte/elements';
-
-
-	let className: string | undefined | null = undefined;
-	export { className as class };
-	export let href: HTMLAnchorAttributes['href'] = undefined;
-	export let type: HTMLButtonAttributes['type'] = undefined;
-	export let variant: ButtonVariant = 'default';
-	export let size: ButtonSize = 'default';
-	export let action: Action<HTMLElement> = noop;
-
-	type Props = {
-		class?: string | null;
+	interface Props {
+		class?: string | undefined | null;
+		href?: HTMLAnchorAttributes['href'];
+		type?: HTMLButtonAttributes['type'];
 		variant?: ButtonVariant;
 		size?: ButtonSize;
-		action?: Action<HTMLElement> | (() => void);
-	};
+		action?: Action<HTMLElement>;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
 
-	type AnchorElement = Props &
-		Omit<HTMLAnchorAttributes, keyof Props | 'type'> & {
-			href?: HTMLAnchorAttributes['href'];
-			type?: never;
-		};
+	let {
+		class: className = undefined,
+		href = undefined,
+		type = undefined,
+		variant = 'default',
+		size = 'default',
+		action = noop,
+		children,
+		...rest
+	}: Props = $props();
 
-	type ButtonElement = Props &
-		Omit<HTMLButtonAttributes, keyof Props | 'href'> & {
-			type?: HTMLButtonAttributes['type'];
-			href?: never;
-		};
-
-	type $$Props = AnchorElement | ButtonElement;
 </script>
 
 <svelte:element
@@ -46,18 +38,12 @@
 	class={`docs-button docs-button--${variant} docs-button--size-${size} ${className ?? ''}`}
 	data-variant={variant}
 	data-size={size}
-	{...$$restProps}
+	{...rest}
 	role="button"
 	tabindex="0"
-	on:click
-	on:change
-	on:keydown
-	on:keyup
-	on:mouseenter
-	on:mouseleave
 	use:action
 >
-	<slot />
+	{@render children?.()}
 </svelte:element>
 
 <style lang="scss">

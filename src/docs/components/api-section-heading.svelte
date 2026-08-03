@@ -3,9 +3,13 @@
 	import { createHeadingId } from '$docs/utils/index.js';
 	import { Hammer, Shapes } from '$icons/index.js';
 	import P from './markdown/p.svelte';
-	export let title: string;
-	export let description: string;
-	export let isBuilder = false;
+	interface Props {
+		title: string;
+		description: string;
+		isBuilder?: boolean;
+	}
+
+	let { title, description, isBuilder = false }: Props = $props();
 </script>
 
 <div

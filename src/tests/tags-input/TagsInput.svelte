@@ -1,11 +1,21 @@
 <script lang="ts">
 	import { createTagsInput, type AddTag } from '$lib/index.js';
 
-	export let defaultTags = ['Svelte', 'Typescript'];
-	export let unique = true;
-	export let trim = true;
-	export let allowed: string[] | undefined = undefined;
-	export let add: AddTag | undefined = undefined;
+	interface Props {
+		defaultTags?: any;
+		unique?: boolean;
+		trim?: boolean;
+		allowed?: string[] | undefined;
+		add?: AddTag | undefined;
+	}
+
+	let {
+		defaultTags = ['Svelte', 'Typescript'],
+		unique = true,
+		trim = true,
+		allowed = undefined,
+		add = undefined
+	}: Props = $props();
 	const {
 		elements: { root, input, tag, deleteTrigger, edit },
 		states: { tags },

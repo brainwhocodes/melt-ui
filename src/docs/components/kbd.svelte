@@ -1,11 +1,16 @@
 <script lang="ts">
 	import { cn } from '$docs/utils/index.js';
 
-	let className: string | undefined | null = undefined;
-	export { className as class };
+	interface Props {
+		class?: string | undefined | null;
+		children?: import('svelte').Snippet;
+	}
+
+	let { class: className = undefined, children }: Props = $props();
+
 </script>
 
-<kbd class={cn(className)}><slot /></kbd>
+<kbd class={cn(className)}>{@render children?.()}</kbd>
 
 <style lang="scss">
 	kbd {

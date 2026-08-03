@@ -1,5 +1,5 @@
 <!-- MDsveX Layout Component -->
-<script context="module" lang="ts">
+<script module lang="ts">
 	import '$styles/markdown.scss';
 	import {
 		a,
@@ -21,15 +21,29 @@
 	export { a, blockquote, h1, h2, h3, h4, h5, h6, hr, img, li, ol, p, pre, ul };
 </script>
 
-<script>
+<script lang="ts">
 	// this gets rid of warnings in the console that the layout was created with unknown props
-	// feels weird but we can't use TS in this mdsvex layout component (from my understanding)
-	export let snippets = '';
-	export let schemas = '';
-	export let previews = '';
-	export let keyboard = '';
-	export let title = '';
-	export let description = '';
+
+	interface Props {
+		// feels weird but we can't use TS in this mdsvex layout component (from my understanding)
+		snippets?: string;
+		schemas?: string;
+		previews?: string;
+		keyboard?: string;
+		title?: string;
+		description?: string;
+		children?: import('svelte').Snippet<[any]>;
+	}
+
+	let {
+		snippets = '',
+		schemas = '',
+		previews = '',
+		keyboard = '',
+		title = '',
+		description = '',
+		children
+	}: Props = $props();
 </script>
 
-<slot {snippets} {schemas} {previews} {keyboard} {title} {description} />
+{@render children?.({ snippets, schemas, previews, keyboard, title, description, })}

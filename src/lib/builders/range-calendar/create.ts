@@ -756,13 +756,13 @@ export function createRangeCalendar<T extends DateValue = DateValue>(
 	 *
 	 * @example
 	 * ```svelte
-	 * <script>
+	 * <script lang="ts">
 	 * 	import { createCalendar } from '@melt-ui/svelte';
 	 *  import { prev } from '../../internal/helpers/array'
 	 * 	const { { ... }, helpers: { nextPage } } = createCalendar()
 	 * </script>
 	 *
-	 * <button on:click={nextPage} aria-label="Next page">Next page</button>
+	 * <button onclick={nextPage} aria-label="Next page">Next page</button>
 	 * ```
 	 */
 	function nextPage() {
@@ -798,12 +798,12 @@ export function createRangeCalendar<T extends DateValue = DateValue>(
 	 *
 	 * @example
 	 * ```svelte
-	 * <script>
+	 * <script lang="ts">
 	 * 	import { createCalendar } from '@melt-ui/svelte';
 	 * 	const { { ... }, helpers: { prevPage } } = createCalendar()
 	 * </script>
 	 *
-	 * <button on:click={prevPage} aria-label="Previous page">◀�</button>
+	 * <button onclick={prevPage} aria-label="Previous page">◀�</button>
 	 * ```
 	 */
 	function prevPage() {

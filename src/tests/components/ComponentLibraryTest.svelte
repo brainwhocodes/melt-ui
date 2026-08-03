@@ -81,18 +81,18 @@
 		type DataTableColumn,
 	} from '$lib/index.js';
 
-	let alertOpen = false;
-	let sheetOpen = false;
-	let drawerOpen = false;
-	let navValue = '';
-	let guidesDisabled = false;
-	let showGuides = true;
-	let carouselIndex = 1;
-	let showSecondSlide = true;
-	let panelSizes = [50, 50];
-	let commandOpen = true;
-	let commandValue: string | null = null;
-	let inlineValue = 'Melt UI';
+	let alertOpen = $state(false);
+	let sheetOpen = $state(false);
+	let drawerOpen = $state(false);
+	let navValue = $state('');
+	let guidesDisabled = $state(false);
+	let showGuides = $state(true);
+	let carouselIndex = $state(1);
+	let showSecondSlide = $state(true);
+	let panelSizes = $state([50, 50]);
+	let commandOpen = $state(true);
+	let commandValue: string | null = $state(null);
+	let inlineValue = $state('Melt UI');
 
 	const columns: DataTableColumn[] = [
 		{ key: 'name', header: 'Name', accessor: 'name', sortable: true },
@@ -118,9 +118,13 @@
 		<Input type="email" value="" />
 	</Field>
 	<InputGroup>
-		<span slot="prefix">$</span>
+		{#snippet prefix()}
+				<span >$</span>
+			{/snippet}
 		<Input aria-label="Amount" />
-		<span slot="suffix">USD</span>
+		{#snippet suffix()}
+				<span >USD</span>
+			{/snippet}
 	</InputGroup>
 	<NativeSelect aria-label="Role"><option>Developer</option></NativeSelect>
 	<InlineEdit
@@ -130,7 +134,9 @@
 	/>
 	<div aria-live="polite">{inlineValue}</div>
 	<Textarea aria-label="Notes" />
-	<Alert variant="success"><span slot="title">Ready</span>Components loaded.</Alert>
+	<Alert variant="success">{#snippet title()}
+				<span >Ready</span>
+			{/snippet}Components loaded.</Alert>
 	<AspectRatio ratio={16 / 9}><span>Media</span></AspectRatio>
 	<Badge removable>Stable</Badge>
 	<Card>
@@ -139,8 +145,16 @@
 		<CardFooter>Footer</CardFooter>
 	</Card>
 	<Direction dir="rtl">مرحبا</Direction>
-	<Empty><span slot="title">No results</span><span slot="description">Try another query.</span></Empty>
-	<Item selected><span slot="media">A</span>Item content<span slot="actions">Action</span></Item>
+	<Empty>{#snippet title()}
+				<span >No results</span>{#snippet description()}
+
+			{/snippet}	<span >Try another query.</span>
+			{/snippet}</Empty>
+	<Item selected>{#snippet media()}
+				<span >A</span>
+			{/snippet}Item content{#snippet actions()}
+				<span >Action</span>
+			{/snippet}</Item>
 	<Kbd keys={['Ctrl', 'K']} />
 	<Skeleton width="4rem" height="1rem" />
 	<Spinner label="Loading records" />
@@ -163,13 +177,19 @@
 			<NavigationMenuContent><NavigationMenuLink href="/guides">Guides link</NavigationMenuLink></NavigationMenuContent>
 		</NavigationMenuItem>
 	{/if}
-	<NavigationMenuViewport slot="viewport" />
+	{#snippet viewport()}
+		<NavigationMenuViewport  />
+	{/snippet}
 </NavigationMenu>
-<Button on:click={() => (navValue = '')}>Close navigation externally</Button>
-<Button on:click={() => (guidesDisabled = true)}>Disable Guides</Button>
-<Button on:click={() => (showGuides = false)}>Unmount Guides</Button>
+<Button onclick={() => (navValue = '')}>Close navigation externally</Button>
+<Button onclick={() => (guidesDisabled = true)}>Disable Guides</Button>
+<Button onclick={() => (showGuides = false)}>Unmount Guides</Button>
 
-<Sidebar label="Workspace"><span slot="header">Workspace</span><a href="/inbox">Inbox</a><span slot="footer">Signed in</span></Sidebar>
+<Sidebar label="Workspace">{#snippet header()}
+		<span >Workspace</span>
+	{/snippet}<a href="/inbox">Inbox</a>{#snippet footer()}
+		<span >Signed in</span>
+	{/snippet}</Sidebar>
 
 <Carousel bind:activeIndex={carouselIndex} label="Highlights">
 	<CarouselViewport>
@@ -180,7 +200,7 @@
 	<CarouselNext />
 	<CarouselDots />
 </Carousel>
-<Button on:click={() => (showSecondSlide = false)}>Remove active slide</Button>
+<Button onclick={() => (showSecondSlide = false)}>Remove active slide</Button>
 
 <ResizableGroup bind:sizes={panelSizes}>
 	<ResizablePanel defaultSize={50} minSize={20}>Editor</ResizablePanel>
@@ -203,7 +223,7 @@
 <Chart labels={['Mon', 'Tue']} series={chartSeries} title="Requests" />
 <Command bind:open={commandOpen} bind:value={commandValue} items={commandItems} label="Actions" />
 
-<Button on:click={() => (alertOpen = true)}>Open alert dialog</Button>
+<Button onclick={() => (alertOpen = true)}>Open alert dialog</Button>
 <AlertDialog bind:open={alertOpen}>
 	<AlertDialogContent>
 		<AlertDialogTitle>Delete draft?</AlertDialogTitle>
@@ -213,12 +233,12 @@
 	</AlertDialogContent>
 </AlertDialog>
 
-<Button on:click={() => (sheetOpen = true)}>Open sheet</Button>
+<Button onclick={() => (sheetOpen = true)}>Open sheet</Button>
 <Sheet bind:open={sheetOpen}>
 	<SheetContent side="right"><SheetTitle>Details</SheetTitle><SheetDescription>Secondary work</SheetDescription><SheetClose ariaLabel="Close sheet">Close sheet</SheetClose></SheetContent>
 </Sheet>
 
-<Button on:click={() => (drawerOpen = true)}>Open drawer</Button>
+<Button onclick={() => (drawerOpen = true)}>Open drawer</Button>
 <Drawer bind:open={drawerOpen} direction="bottom">
 	<DrawerContent><DrawerHandle /><DrawerTitle>Filters</DrawerTitle><DrawerDescription>Refine results</DrawerDescription><DrawerClose ariaLabel="Close drawer">Close drawer</DrawerClose></DrawerContent>
 </Drawer>

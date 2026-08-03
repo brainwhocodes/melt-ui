@@ -1,28 +1,40 @@
 <script lang="ts">
 	import { createToolbar, type CreateToolbarProps, type CreateToolbarGroupProps } from '$lib/index.js';
 
-	export let loop: CreateToolbarProps['loop'] = undefined;
-	export let orientation: CreateToolbarProps['orientation'] = undefined;
 
-	export let toolbarGroup1Props: CreateToolbarGroupProps<'multiple'> = {
+
+
+	interface Props {
+		loop?: CreateToolbarProps['loop'];
+		orientation?: CreateToolbarProps['orientation'];
+		toolbarGroup1Props?: CreateToolbarGroupProps<'multiple'>;
+		toolbarGroup2Props?: CreateToolbarGroupProps;
+		linksFirst?: boolean;
+		buttonsFirst?: boolean;
+		linksButtonsOnly?: boolean;
+	}
+
+	let {
+		loop = undefined,
+		orientation = undefined,
+		toolbarGroup1Props = {
 		type: 'multiple',
 		defaultValue: undefined,
 		disabled: undefined,
 		onValueChange: undefined,
 		value: undefined,
-	};
-
-	export let toolbarGroup2Props: CreateToolbarGroupProps = {
+	},
+		toolbarGroup2Props = {
 		type: 'single',
 		defaultValue: undefined,
 		disabled: undefined,
 		onValueChange: undefined,
 		value: undefined,
-	};
-
-	export let linksFirst = false;
-	export let buttonsFirst = false;
-	export let linksButtonsOnly = false;
+	},
+		linksFirst = false,
+		buttonsFirst = false,
+		linksButtonsOnly = false
+	}: Props = $props();
 
 	const {
 		elements: { root, button, link, separator },

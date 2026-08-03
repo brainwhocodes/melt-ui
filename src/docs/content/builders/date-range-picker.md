@@ -3,12 +3,10 @@ title: Date Range Picker
 description: Select a range of dates in a calendar.
 ---
 
-<script>
+<script lang="ts">
 	import { APIReference, Preview, Callout } from '$docs/components'
 	import { A } from '$docs/components/markdown';
-	export let snippets
-	export let previews
-	export let schemas
+	let { snippets, previews, schemas } = $props()
 </script>
 
 ## Overview

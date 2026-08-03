@@ -1,11 +1,17 @@
 <script lang="ts">
 	type BubbleVariant = 'incoming' | 'outgoing' | 'system';
 
-	export let variant: BubbleVariant = 'incoming';
-	let className = '';
-	export { className as class };
+	interface Props {
+		variant?: BubbleVariant;
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
 
-	$: role = variant === 'system' ? 'status' : undefined;
+	let { variant = 'incoming', class: className = '', children, ...rest }: Props = $props();
+
+
+	let role = $derived(variant === 'system' ? 'status' : undefined);
 </script>
 
 <div
@@ -16,7 +22,7 @@
 	class={className}
 	{role}
 	data-variant={variant}
-	{...$$restProps}
+	{...rest}
 >
-	<slot />
+	{@render children?.()}
 </div>

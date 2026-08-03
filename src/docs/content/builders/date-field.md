@@ -3,12 +3,10 @@ title: Date Field
 description: An enhanced alternative to a native date input.
 ---
 
-<script>
+<script lang="ts">
 	import { APIReference, Preview, Callout } from '$docs/components'
 	import { Code } from '$docs/components/markdown'
-	export let snippets
-	export let schemas
-	export let previews
+	let { snippets, schemas, previews } = $props()
 </script>
 
 ## Overview
@@ -325,7 +323,7 @@ accomplishing that may look something like this:
 	import { createDateField } from '@melt-ui/svelte'
 	import { CalendarDate, parseDate } from '@internationalized/date'
 
-	export let data
+	let { data } = $props()
 
 	const {
 		elements: { field, segment, label, hiddenInput },

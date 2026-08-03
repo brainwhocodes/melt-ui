@@ -5,12 +5,9 @@ description:
   functionality and command palettes.
 ---
 
-<script>
+<script lang="ts">
     import { APIReference, KbdTable, Preview } from '$docs/components'
-    export let schemas
-    export let keyboard
-    export let snippets
-    export let previews
+    let { schemas, keyboard, snippets, previews } = $props()
 </script>
 
 ## Anatomy

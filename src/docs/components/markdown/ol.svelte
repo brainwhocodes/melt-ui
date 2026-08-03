@@ -1,10 +1,16 @@
 <script lang="ts">
 	import { cn } from '$docs/utils/index.js';
 
-	let className: string | undefined | null = undefined;
-	export { className as class };
+	interface Props {
+		class?: string | undefined | null;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { class: className = undefined, children, ...rest }: Props = $props();
+
 </script>
 
-<ol class={cn('surface-d252eaf835', className)} {...$$restProps}>
-	<slot />
+<ol class={cn('surface-d252eaf835', className)} {...rest}>
+	{@render children?.()}
 </ol>

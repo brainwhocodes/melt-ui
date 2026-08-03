@@ -1,60 +1,60 @@
 <script lang="ts">
-	import { createEventDispatcher, tick } from 'svelte';
-	import type { HTMLInputAttributes } from 'svelte/elements';
+	import { tick } from 'svelte';
 	import Button from './Button.svelte';
 
-	type $$Props = {
+	interface Props {
 		label: string;
 		value: string;
 		emptyValue?: string;
 		editing?: boolean;
 		disabled?: boolean;
 		loading?: boolean;
-		error?: string;
+		error?: string | undefined;
 		saveLabel?: string;
 		cancelLabel?: string;
-		id?: string;
 		class?: string;
-	} & Omit<
-		HTMLInputAttributes,
-		'value' | 'disabled' | 'class' | 'id' | 'aria-label' | 'aria-describedby' | 'aria-invalid'
-	>;
-
-	export let label: string;
-	export let value: string;
-	export let emptyValue = '—';
-	export let editing = false;
-	export let disabled = false;
-	export let loading = false;
-	export let error: string | undefined = undefined;
-	export let saveLabel = 'Save';
-	export let cancelLabel = 'Cancel';
-
-	let className = '';
-	export { className as class };
-
-	const dispatch = createEventDispatcher<{
-		cancel: { previousValue: string };
-		save: { previousValue: string; value: string };
-	}>();
-
-	let draft = value;
-	let previousValue = value;
-	let input: HTMLInputElement;
-	let root: HTMLDivElement;
-
-	$: displayValue = value || emptyValue;
-
-	$: if (!editing) {
-		draft = value;
-		previousValue = value;
-		error = undefined;
+		onsave?: (detail: { previousValue: string; value: string }) => void;
+		oncancel?: (detail: { previousValue: string }) => void;
+		[key: string]: any;
 	}
 
-	$: if (editing && input) {
-		input.focus();
-		input.select();
-	}
+	let {
+		label,
+		value = $bindable(),
+		emptyValue = '—',
+		editing = $bindable(false),
+		disabled = false,
+		loading = false,
+		error = $bindable(undefined),
+		saveLabel = 'Save',
+		cancelLabel = 'Cancel',
+		class: className = '',
+		onsave = undefined,
+		oncancel = undefined,
+		...rest
+	}: Props = $props();
+
+	let draft = $state(value);
+	let previousValue = $state(value);
+	let input: HTMLInputElement | undefined = $state();
+	let root: HTMLDivElement | undefined = $state();
+
+	let displayValue = $derived(value || emptyValue);
+
+	$effect(() => {
+		if (!editing) {
+			draft = value;
+			previousValue = value;
+			error = undefined;
+		}
+	});
+
+	$effect(() => {
+		if (editing && input) {
+			input.focus();
+			input.select();
+		}
+	});
 
 	function startEditing() {
 		if (disabled || loading) return;
@@ -75,7 +75,7 @@
 		draft = previousValue;
 		error = undefined;
 		editing = false;
-		dispatch('cancel', { previousValue });
+		oncancel?.({ previousValue });
 		focusDisplayButton();
 	}
 
@@ -83,7 +83,7 @@
 		if (loading) return;
 		const previous = previousValue;
 		value = draft;
-		dispatch('save', { previousValue: previous, value: draft });
+		onsave?.({ previousValue: previous, value: draft });
 		editing = false;
 		focusDisplayButton();
 	}
@@ -101,27 +101,33 @@
 	{#if editing}
 		<form
 			class="melt-inline-edit__form"
-			on:submit|preventDefault={saveEditing}
-			on:reset|preventDefault={cancelEditing}
+			onsubmit={(event) => {
+				event.preventDefault();
+				saveEditing();
+			}}
+			onreset={(event) => {
+				event.preventDefault();
+				cancelEditing();
+			}}
 		>
-			<label class="melt-sr-only" for={$$restProps.id}>{label}</label>
+			<label class="melt-sr-only" for={rest.id}>{label}</label>
 			<input
 				class="melt-input"
 				bind:this={input}
-				id={$$restProps.id}
+				id={rest.id}
 				aria-label={label}
-				aria-describedby={error ? `${$$restProps.id}-error` : undefined}
+				aria-describedby={error ? `${rest.id}-error` : undefined}
 				aria-invalid={Boolean(error) || undefined}
 				data-invalid={Boolean(error) || undefined}
 				bind:value={draft}
 				{disabled}
-				on:keydown={(event) => {
+				onkeydown={(event) => {
 					if (event.key === 'Escape') {
 						event.preventDefault();
 						cancelEditing();
 					}
 				}}
-				{...$$restProps}
+				{...rest}
 			/>
 			<div class="melt-inline-edit__actions">
 				<Button type="submit" size="sm" {loading} loadingLabel="Saving edit" {disabled}>
@@ -132,21 +138,25 @@
 				</Button>
 			</div>
 			{#if error}
-				<p class="melt-inline-edit__error" id={`${$$restProps.id}-error`} role="alert">
+				<p class="melt-inline-edit__error" id={`${rest.id}-error`} role="alert">
 					{error}
 				</p>
 			{/if}
 		</form>
 	{:else}
-		<Button
-			class="melt-inline-edit__display"
-			variant="ghost"
+		<button
+			type="button"
+			class="melt-button melt-inline-edit__display"
+			data-variant="ghost"
+			data-size="default"
 			{disabled}
 			aria-label={`Edit ${label}`}
-			on:click={startEditing}
+			onclick={startEditing}
 		>
-			<span class="melt-inline-edit__value">{displayValue}</span>
-			<span class="melt-inline-edit__icon" aria-hidden="true">✎</span>
-		</Button>
+			<span class="melt-button__content">
+				<span class="melt-inline-edit__value">{displayValue}</span>
+				<span class="melt-inline-edit__icon" aria-hidden="true">✎</span>
+			</span>
+		</button>
 	{/if}
 </div>

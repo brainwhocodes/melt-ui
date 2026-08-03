@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { Button } from '$docs/components/index.js';
 
-	$: message = $page.status === 404 ? 'Page not found' : 'Something went wrong';
+	let message = $derived($page.status === 404 ? 'Page not found' : 'Something went wrong');
 </script>
 
 <main class="surface-8c3e6fbc92">

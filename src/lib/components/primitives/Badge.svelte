@@ -3,39 +3,56 @@
 </script>
 
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	interface Props {
+		variant?: BadgeVariant;
+		removable?: boolean;
+		removeLabel?: string;
+		disabled?: boolean;
+		class?: string;
+		onremove?: () => void;
+		children?: import('svelte').Snippet;
+		remove?: import('svelte').Snippet;
+		[key: string]: any;
+	}
 
-	export let variant: BadgeVariant = 'neutral';
-	export let removable = false;
-	export let removeLabel = 'Remove';
-	export let disabled = false;
-	let className = '';
-	export { className as class };
+	let {
+		variant = 'neutral',
+		removable = false,
+		removeLabel = 'Remove',
+		disabled = false,
+		class: className = '',
+		onremove,
+		children,
+		remove,
+		...rest
+	}: Props = $props();
 
-	const dispatch = createEventDispatcher<{ remove: void }>();
-
-	function remove(): void {
-		if (!disabled) dispatch('remove');
+	function handleRemove(): void {
+		if (!disabled) onremove?.();
 	}
 </script>
 
 <span
-	{...$$restProps}
+	{...rest}
 	class={`melt-badge ${className}`.trim()}
 	data-variant={variant}
 	data-removable={removable ? '' : undefined}
 	data-disabled={disabled ? '' : undefined}
 >
-	<span class="melt-badge__label"><slot /></span>
+	<span class="melt-badge__label">{@render children?.()}</span>
 	{#if removable}
 		<button
 			class="melt-badge__remove"
 			type="button"
 			aria-label={removeLabel}
 			{disabled}
-			on:click={remove}
+			onclick={handleRemove}
 		>
-			<slot name="remove"><span aria-hidden="true">×</span></slot>
+			{#if remove}
+				{@render remove()}
+			{:else}
+				<span aria-hidden="true">×</span>
+			{/if}
 		</button>
 	{/if}
 </span>

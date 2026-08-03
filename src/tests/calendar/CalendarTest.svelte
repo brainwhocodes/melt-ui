@@ -3,28 +3,55 @@
 	import { ChevronRight, ChevronLeft } from '$icons/index.js';
 	import { removeUndefined } from '../utils.js';
 
-	export let value: CreateCalendarProps['value'] = undefined;
-	export let defaultValue: CreateCalendarProps['defaultValue'] = undefined;
-	export let defaultPlaceholder: CreateCalendarProps['defaultPlaceholder'] = undefined;
-	export let onValueChange: CreateCalendarProps['onValueChange'] = undefined;
-	export let onPlaceholderChange: CreateCalendarProps['onPlaceholderChange'] = undefined;
-	export let isDateUnavailable: CreateCalendarProps['isDateUnavailable'] = undefined;
-	export let isDateDisabled: CreateCalendarProps['isDateDisabled'] = undefined;
-	export let locale: CreateCalendarProps['locale'] = 'en';
-	export let calendarLabel: CreateCalendarProps['calendarLabel'] = undefined;
-	export let preventDeselect: CreateCalendarProps['preventDeselect'] = undefined;
-	export let numberOfMonths: CreateCalendarProps['numberOfMonths'] = undefined;
-	export let pagedNavigation: CreateCalendarProps['pagedNavigation'] = undefined;
-	export let placeholder: CreateCalendarProps['placeholder'] = undefined;
-	export let weekStartsOn: CreateCalendarProps['weekStartsOn'] = undefined;
-	export let fixedWeeks: CreateCalendarProps['fixedWeeks'] = undefined;
-	export let minValue: CreateCalendarProps['minValue'] = undefined;
-	export let maxValue: CreateCalendarProps['maxValue'] = undefined;
-	export let multiple: boolean | undefined = undefined;
-	export let disabled: CreateCalendarProps['disabled'] = undefined;
-	export let readonly: CreateCalendarProps['readonly'] = undefined;
-	export let weekdayFormat: CreateCalendarProps['weekdayFormat'] = undefined;
-	export let ids: CreateCalendarProps['ids'] = undefined;
+	interface Props {
+		value?: CreateCalendarProps['value'];
+		defaultValue?: CreateCalendarProps['defaultValue'];
+		defaultPlaceholder?: CreateCalendarProps['defaultPlaceholder'];
+		onValueChange?: CreateCalendarProps['onValueChange'];
+		onPlaceholderChange?: CreateCalendarProps['onPlaceholderChange'];
+		isDateUnavailable?: CreateCalendarProps['isDateUnavailable'];
+		isDateDisabled?: CreateCalendarProps['isDateDisabled'];
+		locale?: CreateCalendarProps['locale'];
+		calendarLabel?: CreateCalendarProps['calendarLabel'];
+		preventDeselect?: CreateCalendarProps['preventDeselect'];
+		numberOfMonths?: CreateCalendarProps['numberOfMonths'];
+		pagedNavigation?: CreateCalendarProps['pagedNavigation'];
+		placeholder?: CreateCalendarProps['placeholder'];
+		weekStartsOn?: CreateCalendarProps['weekStartsOn'];
+		fixedWeeks?: CreateCalendarProps['fixedWeeks'];
+		minValue?: CreateCalendarProps['minValue'];
+		maxValue?: CreateCalendarProps['maxValue'];
+		multiple?: boolean | undefined;
+		disabled?: CreateCalendarProps['disabled'];
+		readonly?: CreateCalendarProps['readonly'];
+		weekdayFormat?: CreateCalendarProps['weekdayFormat'];
+		ids?: CreateCalendarProps['ids'];
+	}
+
+	let {
+		value = undefined,
+		defaultValue = undefined,
+		defaultPlaceholder = undefined,
+		onValueChange = undefined,
+		onPlaceholderChange = undefined,
+		isDateUnavailable = undefined,
+		isDateDisabled = undefined,
+		locale = 'en',
+		calendarLabel = undefined,
+		preventDeselect = undefined,
+		numberOfMonths = undefined,
+		pagedNavigation = undefined,
+		placeholder = undefined,
+		weekStartsOn = undefined,
+		fixedWeeks = undefined,
+		minValue = undefined,
+		maxValue = undefined,
+		multiple = undefined,
+		disabled = undefined,
+		readonly = undefined,
+		weekdayFormat = undefined,
+		ids = undefined
+	}: Props = $props();
 
 	const {
 		elements: { calendar, heading, grid, cell, prevButton, nextButton },
@@ -140,28 +167,28 @@
 			</div>
 		</div>
 	</div>
-	<button on:click={cycleWeekdayFormat} data-testid="cycle-weekday-format">
+	<button onclick={cycleWeekdayFormat} data-testid="cycle-weekday-format">
 		Cycle weekdayFormat
 	</button>
 	<button
 		data-testid="numberOfMonths"
-		on:click={() => {
+		onclick={() => {
 			$numberOfMonthsOption++;
 		}}>numberOfMonths</button
 	>
 	<br />
-	<button data-testid="weekStartsOn" on:click={cycleWeekStart}>weekStartsOn</button>
+	<button data-testid="weekStartsOn" onclick={cycleWeekStart}>weekStartsOn</button>
 	<br />
 	<button
 		data-testid="fixedWeeks"
-		on:click={() => {
+		onclick={() => {
 			$fixedWeeksOption = !$fixedWeeksOption;
 		}}>fixedWeeksOption</button
 	>
 	<br />
 	<button
 		data-testid="locale"
-		on:click={() => {
+		onclick={() => {
 			$localeOption = 'it';
 		}}>setLocaleToIt</button
 	>
@@ -174,19 +201,19 @@
 
     border-radius: 0.5rem;
 
-    
+
 
     background-color: rgb(var(--color-white) / 1);
 
     padding: 0.75rem;
 
-    
+
 
     color: rgb(var(--color-magnum-800) / 1);
 
-    
 
-    
+
+
 
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)
 }
@@ -226,7 +253,7 @@
 
 	[data-melt-calendar-prevbutton]:hover {
 
-    
+
 
     background-color: rgb(var(--color-magnum-100) / 1)
 }
@@ -246,7 +273,7 @@
 
 	[data-melt-calendar-nextbutton]:hover {
 
-    
+
 
     background-color: rgb(var(--color-magnum-100) / 1)
 }
@@ -255,7 +282,7 @@
 
     font-weight: 600;
 
-    
+
 
     color: rgb(var(--color-magnum-800) / 1)
 }
@@ -268,7 +295,7 @@
 
     font-weight: 600;
 
-    
+
 
     color: rgb(var(--color-magnum-800) / 1)
 }
@@ -316,20 +343,20 @@
 
 	[data-melt-calendar-cell]:hover {
 
-    
+
 
     background-color: rgb(var(--color-magnum-100) / 1)
 }
 
 	[data-melt-calendar-cell]:focus {
 
-    
 
-    
+
+
 
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
-    
+
 
     }
 
@@ -342,18 +369,18 @@
 
 	[data-melt-calendar-cell][data-range-highlighted] {
 
-    
+
 
     background-color: rgb(var(--color-magnum-200) / 1)
 }
 
 	[data-melt-calendar-cell][data-selected] {
 
-    
+
 
     background-color: rgb(var(--color-magnum-300) / 1);
 
-    
+
 
     color: rgb(var(--color-magnum-900) / 1)
 }

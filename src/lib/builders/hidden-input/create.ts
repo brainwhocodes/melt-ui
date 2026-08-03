@@ -63,17 +63,28 @@ export function createHiddenInput(props: CreateHiddenInputProps) {
 			} as const;
 		},
 		action: (node: HTMLInputElement) => {
-			// When value changes, emit a change event
+			// When value changes, emit a change event. The initial invocation of a
+			// store subscription is not a change, so it must not emit an event.
+			let isInitialValue = true;
+			let isInitialChecked = true;
 			const unsub = executeCallbacks(
 				value.subscribe((newValue) => {
 					if (type.get() === 'checkbox') {
 						return;
 					}
 					node.value = newValue;
+					if (isInitialValue) {
+						isInitialValue = false;
+						return;
+					}
 					node.dispatchEvent(new Event('change', { bubbles: true }));
 				}),
 				actualChecked.subscribe(() => {
 					if (type.get() !== 'checkbox') {
+						return;
+					}
+					if (isInitialChecked) {
+						isInitialChecked = false;
 						return;
 					}
 					node.dispatchEvent(new Event('change', { bubbles: true }));

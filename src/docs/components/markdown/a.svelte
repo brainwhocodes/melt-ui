@@ -1,13 +1,20 @@
 <script lang="ts">
 	import { ExternalLink } from '$icons/index.js';
 
-	export let href: string;
-	export let rel: string | undefined = undefined;
+	interface Props {
+		href: string;
+		rel?: string | undefined;
+		children?: import('svelte').Snippet;
+	}
 
-	$: internal = href.startsWith('/') || href.startsWith('#');
+	let { href, rel = $bindable(undefined), children }: Props = $props();
 
-	$: rel = !internal ? 'noopener noreferrer' : undefined;
-	$: target = !internal ? '_blank' : undefined;
+	let internal = $derived(href.startsWith('/') || href.startsWith('#'));
+
+	$effect(() => {
+		rel = !internal ? 'noopener noreferrer' : undefined;
+	});
+	let target = $derived(!internal ? '_blank' : undefined);
 </script>
 
 <a
@@ -16,7 +23,7 @@
 	{target}
 	{rel}
 >
-	<slot />
+	{@render children?.()}
 	{#if !internal}
 		<ExternalLink class="surface-0ea1a882f3" />
 	{/if}

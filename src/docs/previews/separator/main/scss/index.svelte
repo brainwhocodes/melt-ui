@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { createSeparator, type CreateSeparatorProps } from '$lib/index.js';
 
-	export let orientation: CreateSeparatorProps['orientation'] = 'vertical';
+	interface Props {
+		orientation?: CreateSeparatorProps['orientation'];
+	}
+
+	let { orientation = 'vertical' }: Props = $props();
 
 	const {
 		elements: { root: vertical },

@@ -4,12 +4,9 @@ description:
   Displays a menu at the pointer's position when the trigger is right-clicked or long-pressed.
 ---
 
-<script>
+<script lang="ts">
     import { APIReference, KbdTable, Preview } from '$docs/components'
-    export let schemas
-    export let keyboard
-	export let previews
-	export let snippets
+    let { schemas, keyboard, previews, snippets } = $props()
 </script>
 
 ## Anatomy
@@ -68,20 +65,20 @@ turn the `item` elements into links, or we could pass a `m-click` listener funct
 action, which will be called when that item is pressed (Space and Enter keys also trigger the click
 event for items).
 
-```svelte /on:m-click={(e) => console.log('Item 2!')}/#hi /on:m-click={(e) => console.log('Item 3!')}/#hi
+```svelte /onm-click={(e) => console.log('Item 2!')}/#hi /onm-click={(e) => console.log('Item 3!')}/#hi
 <a href="/1" {...$item} use:item>Item 1</a>
-<div {...$item} use:item on:m-click={(e) => console.log('Item 2!')}>Item 2</div>
-<div {...$item} use:item on:m-click={(e) => console.log('Item 3!')}>Item 3</div>
+<div {...$item} use:item onm-click={(e) => console.log('Item 2!')}>Item 2</div>
+<div {...$item} use:item onm-click={(e) => console.log('Item 3!')}>Item 3</div>
 ```
 
 If you wanted to prevent the default behavior that occurs when you select an item, you can call
-`e.preventDefault()` in your `on:m-click` listener, which will prevent the default behavior from
+`e.preventDefault()` in your `onm-click` listener, which will prevent the default behavior from
 occurring.
 
 ```svelte {4}
 <div
 	{...$item} use:item
-	on:m-click={(e) => {
+	onm-click={(e) => {
 		e.preventDefault()
 	}}>
 	Item 2

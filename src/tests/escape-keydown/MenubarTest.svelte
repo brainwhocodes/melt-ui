@@ -2,8 +2,13 @@
 	import { createMenubar, type CreateMenubarMenuProps } from '$lib/index.js';
 
 	type $$Props = CreateMenubarMenuProps & { setRootEscapeBehaviorIgnore: () => void };
-	export let escapeBehavior: CreateMenubarMenuProps['escapeBehavior'] = 'close';
-	export let setRootEscapeBehaviorIgnore: () => void;
+	interface Props {
+		escapeBehavior?: CreateMenubarMenuProps['escapeBehavior'];
+		setRootEscapeBehaviorIgnore: () => void;
+		[key: string]: any
+	}
+
+	let { escapeBehavior = 'close', setRootEscapeBehaviorIgnore, ...rest }: Props = $props();
 
 	const {
 		elements: { menubar },
@@ -13,7 +18,7 @@
 	const {
 		elements: { trigger, menu },
 		states: { open },
-	} = createMenu({ ...$$restProps, escapeBehavior, forceVisible: true });
+	} = createMenu({ ...rest, escapeBehavior, forceVisible: true });
 </script>
 
 <div {...$menubar} use:menubar>
@@ -22,7 +27,7 @@
 		<div {...$menu} use:menu data-testid="menubar-content">
 			<button
 				data-testid="menubar-set-parent-escape-behavior-ignore"
-				on:click={setRootEscapeBehaviorIgnore}
+				onclick={setRootEscapeBehaviorIgnore}
 			>
 				set root escapeBehavior: ignore
 			</button>

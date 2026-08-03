@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	type T = unknown;
 </script>
 
@@ -7,14 +7,29 @@
 
 	import { createToggleGroup, type CreateToggleGroupProps } from '$lib/index.js';
 
-	export let type: T;
-	export let defaultValue: CreateToggleGroupProps<T>['defaultValue'] = undefined;
-	export let disabled: CreateToggleGroupProps['disabled'] = undefined;
-	export let loop: CreateToggleGroupProps['loop'] = undefined;
-	export let onValueChange: CreateToggleGroupProps<T>['onValueChange'] = undefined;
-	export let orientation: CreateToggleGroupProps['orientation'] = undefined;
-	export let items: string[] = ['item-1', 'item-2', 'item-3'];
-	export let value: CreateToggleGroupProps<T>['value'] = undefined;
+	interface Props {
+		type: T;
+		defaultValue?: CreateToggleGroupProps<T>['defaultValue'];
+		disabled?: CreateToggleGroupProps['disabled'];
+		loop?: CreateToggleGroupProps['loop'];
+		onValueChange?: CreateToggleGroupProps<T>['onValueChange'];
+		orientation?: CreateToggleGroupProps['orientation'];
+		items?: string[];
+		value?: CreateToggleGroupProps<T>['value'];
+		[key: string]: any
+	}
+
+	let {
+		type,
+		defaultValue = undefined,
+		disabled = undefined,
+		loop = undefined,
+		onValueChange = undefined,
+		orientation = undefined,
+		items = ['item-1', 'item-2', 'item-3'],
+		value = undefined,
+		...rest
+	}: Props = $props();
 
 	type $$Props = CreateToggleGroupProps<T> & {
 		items: string[];
@@ -32,7 +47,7 @@
 			onValueChange,
 			orientation,
 			value,
-			...$$restProps,
+			...rest,
 		}),
 	});
 </script>

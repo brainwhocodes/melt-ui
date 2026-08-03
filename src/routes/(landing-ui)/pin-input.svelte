@@ -9,8 +9,12 @@
 		defaultValue: ['1', '0', '4', '5', ''],
 	});
 
-	let className = '';
-	export { className as class };
+	interface Props {
+		class?: string;
+	}
+
+	let { class: className = '' }: Props = $props();
+
 </script>
 
 <div {...$root} use:root class={cn('surface-b530640d7f', className)}>

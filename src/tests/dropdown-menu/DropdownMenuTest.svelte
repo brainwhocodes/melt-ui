@@ -9,11 +9,23 @@
 
 	type $$Props = CreateDropdownMenuProps;
 
-	export let loop = false;
-	export let closeFocus: CreateDropdownMenuProps['closeFocus'] = undefined;
-	export let escapeBehavior: CreateDropdownMenuProps['escapeBehavior'] = 'close';
-	export let closeOnOutsideClick: CreateDropdownMenuProps['closeOnOutsideClick'] = true;
-	export let submenuIds: CreateDropdownMenuProps['ids'] = undefined;
+	interface Props {
+		loop?: boolean;
+		closeFocus?: CreateDropdownMenuProps['closeFocus'];
+		escapeBehavior?: CreateDropdownMenuProps['escapeBehavior'];
+		closeOnOutsideClick?: CreateDropdownMenuProps['closeOnOutsideClick'];
+		submenuIds?: CreateDropdownMenuProps['ids'];
+		[key: string]: any
+	}
+
+	let {
+		loop = false,
+		closeFocus = undefined,
+		escapeBehavior = 'close',
+		closeOnOutsideClick = true,
+		submenuIds = undefined,
+		...rest
+	}: Props = $props();
 
 	const {
 		elements: { trigger, menu, item, separator, arrow },
@@ -24,7 +36,7 @@
 			closeFocus,
 			escapeBehavior,
 			closeOnOutsideClick,
-			...$$restProps,
+			...rest,
 		})
 	);
 
@@ -130,14 +142,14 @@
 		max-height: 300px;
 		min-width: 220px;
 		flex-direction: column;
-		
-		
+
+
 		box-shadow: 0 0 #0000, 0 0 #0000, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 		border-radius: 0.375rem;
-		
+
 		background-color: rgb(var(--color-white) / 1);
 		padding: 0.25rem;
-		
+
 		}
 	@media (min-width: 1024px) {
 		.menu {
@@ -145,16 +157,16 @@
 		}
 }
 	.menu {
-		
-		
+
+
 		box-shadow: 0 0 #0000, 0 0 #0000, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important
 }
 	.subMenu {
 		min-width: 220px;
-		
-		
+
+
 		box-shadow: 0 0 #0000, 0 0 #0000, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-		
+
 		}
 	.item {
 		position: relative;
@@ -165,19 +177,19 @@
 		padding-left: 1.5rem;
 		padding-right: 0.25rem;
 		z-index: 20;
-		
+
 		color: rgb(var(--color-magnum-900) / 1);
 		outline: 2px solid transparent;
 		outline-offset: 2px
 }
 	.item[data-highlighted] {
-		
+
 		background-color: rgb(var(--color-magnum-200) / 1);
-		
+
 		color: rgb(var(--color-magnum-900) / 1)
 }
 	.item[data-disabled] {
-		
+
 		color: rgb(var(--color-neutral-300) / 1)
 }
 	.item {
@@ -186,8 +198,8 @@
 		font-size: 0.875rem;
 		line-height: 1.25rem;
 		line-height: 1;
-		
-		
+
+
 		box-shadow: 0 0 #0000, 0 0 #0000, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important
 }
 	.trigger {
@@ -197,9 +209,9 @@
 		align-items: center;
 		justify-content: center;
 		border-radius: 9999px;
-		
+
 		background-color: rgb(var(--color-white) / 1);
-		
+
 		color: rgb(var(--color-magnum-900) / 1);
 		transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
 		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -216,8 +228,8 @@
 		font-weight: 500
 }
 	.trigger:focus {
-		
-		
+
+
 		box-shadow: 0 0 #0000, 0 0 #0000, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)
 }
 	.trigger[data-highlighted] {
@@ -228,7 +240,7 @@
 		position: absolute;
 		left: 0.5rem;
 		top: 50%;
-		
+
 		color: rgb(var(--color-magnum-500) / 1);
 		translate: 0 calc(-50% + 1px)
 }
@@ -237,14 +249,14 @@
 		height: 4.75px;
 		width: 4.75px;
 		border-radius: 9999px;
-		
+
 		background-color: rgb(var(--color-magnum-900) / 1)
 }
 
 	.separator {
 		margin: 5px;
 		height: 1px;
-		
+
 		background-color: rgb(var(--color-magnum-200) / 1)
 }
 
@@ -269,7 +281,7 @@
 		padding-left: 1.5rem;
 		font-size: 0.75rem;
 		line-height: 1.5rem;
-		
+
 		color: rgb(var(--color-neutral-600) / 1)
 }
 </style>

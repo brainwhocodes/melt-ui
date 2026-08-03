@@ -6,11 +6,13 @@
 	import { writable } from 'svelte/store';
 	import { onMount } from 'svelte';
 
-	export let elements: ToastsElements;
-	$: ({ content, title, description, close } = elements);
 
-	export let toast: Toast<ToastData>;
-	$: ({ data, id, getPercentage } = toast);
+	interface Props {
+		elements: ToastsElements;
+		toast: Toast<ToastData>;
+	}
+
+	let { elements, toast }: Props = $props();
 
 	const percentage = writable(0);
 	const {
@@ -31,6 +33,8 @@
 
 		return () => cancelAnimationFrame(frame);
 	});
+	let { content, title, description, close } = $derived(elements);
+	let { data, id, getPercentage } = $derived(toast);
 </script>
 
 <div

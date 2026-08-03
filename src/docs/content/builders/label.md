@@ -3,9 +3,9 @@ title: Label
 description: A control that adds a label to an input element.
 ---
 
-<script>
+<script lang="ts">
     import { APIReference } from "$docs/components/index.js"
-    export let schemas
+    let { schemas } = $props()
 </script>
 
 ## Anatomy

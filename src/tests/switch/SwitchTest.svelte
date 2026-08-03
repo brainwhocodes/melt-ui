@@ -1,13 +1,25 @@
 <script lang="ts">
 	import { createSwitch, type CreateSwitchProps } from '$lib/index.js';
 
-	export let checked: CreateSwitchProps['checked'] = undefined;
-	export let defaultChecked: CreateSwitchProps['defaultChecked'] = undefined;
-	export let disabled: CreateSwitchProps['disabled'] = undefined;
-	export let name: CreateSwitchProps['name'] = undefined;
-	export let onCheckedChange: CreateSwitchProps['onCheckedChange'] = undefined;
-	export let required: CreateSwitchProps['required'] = undefined;
-	export let value: CreateSwitchProps['value'] = undefined;
+	interface Props {
+		checked?: CreateSwitchProps['checked'];
+		defaultChecked?: CreateSwitchProps['defaultChecked'];
+		disabled?: CreateSwitchProps['disabled'];
+		name?: CreateSwitchProps['name'];
+		onCheckedChange?: CreateSwitchProps['onCheckedChange'];
+		required?: CreateSwitchProps['required'];
+		value?: CreateSwitchProps['value'];
+	}
+
+	let {
+		checked = undefined,
+		defaultChecked = undefined,
+		disabled = undefined,
+		name = undefined,
+		onCheckedChange = undefined,
+		required = undefined,
+		value = undefined
+	}: Props = $props();
 
 	const {
 		elements: { root, input },

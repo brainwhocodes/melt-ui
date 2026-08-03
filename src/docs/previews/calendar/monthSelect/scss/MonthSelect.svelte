@@ -18,9 +18,12 @@
 		12: 'December',
 	} as const;
 
-	export let onSelectedChange: CreateSelectProps<number>['onSelectedChange'] =
-		undefined;
-	export let selected: CreateSelectProps<number>['selected'] = undefined;
+	interface Props {
+		onSelectedChange?: CreateSelectProps<number>['onSelectedChange'];
+		selected?: CreateSelectProps<number>['selected'];
+	}
+
+	let { onSelectedChange = undefined, selected = undefined }: Props = $props();
 	const {
 		elements: { trigger, menu, option, label },
 		states: { selectedLabel, open },
@@ -38,7 +41,7 @@
 </script>
 
 <div class="surface-a5503573b6">
-	<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
+	<!-- svelte-ignore a11y_label_has_associated_control - $label contains the 'for' attribute -->
 	<label class="surface-8a71880ce8" {...$label} use:label
 		>Select a month</label
 	>

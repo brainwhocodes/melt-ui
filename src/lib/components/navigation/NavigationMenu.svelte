@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-	import { createEventDispatcher, onDestroy, setContext, tick } from 'svelte';
+	import { onDestroy, setContext, tick } from 'svelte';
 	import { writable } from 'svelte/store';
 	import {
 		NAVIGATION_MENU_ROOT,
@@ -11,13 +11,35 @@
 		type NavigationMenuRootContext
 	} from './context.js';
 
-	export let value = '';
-	export let delay = 150;
-	export let label = 'Main navigation';
-	export let dir: 'ltr' | 'rtl' = 'ltr';
-	export let id = `melt-navigation-menu-${++nextNavigationMenuId}`;
-	let className = '';
-	export { className as class };
+	interface Props {
+		value?: string;
+		delay?: number;
+		label?: string;
+		dir?: 'ltr' | 'rtl';
+		id?: string;
+		class?: string;
+		onchange?: (detail: { value: string }) => void;
+		onopen?: (detail: { value: string }) => void;
+		onclose?: (detail: { value: string }) => void;
+		children?: import('svelte').Snippet;
+		viewport?: import('svelte').Snippet;
+		[key: string]: any;
+	}
+
+	let {
+		value = $bindable(''),
+		delay = 150,
+		label = 'Main navigation',
+		dir = 'ltr',
+		id = `melt-navigation-menu-${++nextNavigationMenuId}`,
+		class: className = '',
+		onchange,
+		onopen,
+		onclose,
+		children,
+		viewport,
+		...rest
+	}: Props = $props();
 
 	type TriggerRegistration = {
 		value: string;
@@ -25,18 +47,13 @@
 		disabled: () => boolean;
 	};
 
-	const dispatch = createEventDispatcher<{
-		change: { value: string };
-		open: { value: string };
-		close: { value: string };
-	}>();
 	const valueStore = writable(value);
 	const rovingValueStore = writable('');
 	const revision = writable(0);
 	const triggers: TriggerRegistration[] = [];
 	const contents = new Map<string, HTMLElement>();
-	let root: HTMLElement;
-	let viewport: HTMLElement | undefined;
+	let root: HTMLElement | undefined = $state();
+	let viewportElement: HTMLElement | undefined;
 	let timer: ReturnType<typeof setTimeout> | undefined;
 	let outsideListening = false;
 	let rovingValue = '';
@@ -71,10 +88,10 @@
 			element.hidden = !active;
 			element.dataset.state = active ? 'open' : 'closed';
 		}
-		if (viewport) {
-			viewport.dataset.state = nextValue ? 'open' : 'closed';
-			if (nextValue) viewport.removeAttribute('aria-hidden');
-			else viewport.setAttribute('aria-hidden', 'true');
+		if (viewportElement) {
+			viewportElement.dataset.state = nextValue ? 'open' : 'closed';
+			if (nextValue) viewportElement.removeAttribute('aria-hidden');
+			else viewportElement.setAttribute('aria-hidden', 'true');
 		}
 	}
 
@@ -86,9 +103,9 @@
 		value = nextValue;
 		valueStore.set(nextValue);
 		syncPortalState(nextValue);
-		dispatch('change', { value: nextValue });
-		if (nextValue) dispatch('open', { value: nextValue });
-		else if (previousValue) dispatch('close', { value: previousValue });
+		onchange?.({ value: nextValue });
+		if (nextValue) onopen?.({ value: nextValue });
+		else if (previousValue) onclose?.({ value: previousValue });
 	}
 
 	function toggleValue(nextValue: string) {
@@ -141,7 +158,7 @@
 
 	function registerContent(contentValue: string, element: HTMLElement) {
 		contents.set(contentValue, element);
-		viewport?.appendChild(element);
+		viewportElement?.appendChild(element);
 		syncPortalState(value);
 		return () => {
 			contents.delete(contentValue);
@@ -149,11 +166,11 @@
 	}
 
 	function registerViewport(element: HTMLElement) {
-		viewport = element;
-		for (const content of contents.values()) viewport.appendChild(content);
+		viewportElement = element;
+		for (const content of contents.values()) viewportElement.appendChild(content);
 		syncPortalState(value);
 		return () => {
-			if (viewport === element) viewport = undefined;
+			if (viewportElement === element) viewportElement = undefined;
 		};
 	}
 
@@ -244,10 +261,10 @@
 	};
 	setContext(NAVIGATION_MENU_ROOT, context);
 
-	$: valueStore.set(value);
-	$: syncPortalState(value);
-	$: reconcileRovingValue(value);
-	$: syncOutsideListener(value);
+	$effect(() => valueStore.set(value));
+	$effect(() => syncPortalState(value));
+	$effect(() => reconcileRovingValue(value));
+	$effect(() => syncOutsideListener(value));
 
 	onDestroy(() => {
 		cancelScheduledChange();
@@ -256,16 +273,16 @@
 </script>
 
 <nav
-	{...$$restProps}
+	{...rest}
 	bind:this={root}
-	id={id}
+	{id}
 	class={`melt-navigation-menu ${className}`.trim()}
 	aria-label={label}
 	{dir}
 	data-state={value ? 'open' : 'closed'}
 >
 	<ul class="melt-navigation-menu__list">
-		<slot />
+		{@render children?.()}
 	</ul>
-	<slot name="viewport" />
+	{@render viewport?.()}
 </nav>

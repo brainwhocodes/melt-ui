@@ -1,26 +1,44 @@
 <script lang="ts">
-	import { createEventDispatcher, onDestroy } from 'svelte';
+	import { onDestroy } from 'svelte';
 	import {
 		drawerContext,
 		type DrawerContext,
 		useOverlayContext,
 	} from './overlay.js';
 
-	export let dragHandleOnly = false;
-	export let style = '';
-	let className = '';
-	export { className as class };
+	interface Props {
+		dragHandleOnly?: boolean;
+		style?: string;
+		onDragStart?: (detail: { originalEvent: PointerEvent }) => void;
+		onDrag?: (detail: { originalEvent: PointerEvent; offset: number; progress: number }) => void;
+		onDragEnd?: (detail: {
+			originalEvent: PointerEvent;
+			snapPoint: number;
+			dismissed: boolean;
+		}) => void;
+		onDragCancel?: (detail: { originalEvent: PointerEvent }) => void;
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let {
+		dragHandleOnly = false,
+		style = '',
+		onDragStart = undefined,
+		onDrag = undefined,
+		onDragEnd = undefined,
+		onDragCancel = undefined,
+		class: className = '',
+		children,
+		...rest
+	}: Props = $props();
+
 
 	const context = useOverlayContext<DrawerContext>(drawerContext, 'DrawerContent');
 	const { direction, activeSnapPoint, dismissThreshold, snapPoints } = context;
-	const dispatch = createEventDispatcher<{
-		dragStart: { originalEvent: PointerEvent };
-		drag: { originalEvent: PointerEvent; offset: number; progress: number };
-		dragEnd: { originalEvent: PointerEvent; snapPoint: number; dismissed: boolean };
-		dragCancel: { originalEvent: PointerEvent };
-	}>();
 
-	let content: HTMLDivElement;
+	let content: HTMLDivElement | undefined = $state();
 	let pointerId: number | undefined;
 	let startX = 0;
 	let startY = 0;
@@ -39,6 +57,7 @@
 	}
 
 	function getSize(): number {
+		if (!content) return 1;
 		const rect = content.getBoundingClientRect();
 		return Math.max(1, $direction === 'left' || $direction === 'right' ? rect.width : rect.height);
 	}
@@ -57,12 +76,13 @@
 	}
 
 	function setOffset(offset: number) {
+		if (!content) return;
 		currentOffset = Math.max(0, Math.min(size, offset));
 		content.style.setProperty('--melt-drawer-drag-offset', `${currentOffset}px`);
 	}
 
 	function handlePointerDown(event: PointerEvent) {
-		if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
+		if (!content || !event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
 		const hasHandle = event.target instanceof Element && Boolean(event.target.closest('[data-melt-drawer-handle]'));
 		if ((dragHandleOnly && !hasHandle) || isInteractiveTarget(event.target)) return;
 		pointerId = event.pointerId;
@@ -77,14 +97,14 @@
 		} catch {
 			// Pointer capture is unavailable in some embedded browsers; document-level motion still bubbles here.
 		}
-		dispatch('dragStart', { originalEvent: event });
+		onDragStart?.({ originalEvent: event });
 	}
 
 	function handlePointerMove(event: PointerEvent) {
 		if (pointerId !== event.pointerId) return;
 		event.preventDefault();
 		setOffset(baseOffset + projectedDistance(event));
-		dispatch('drag', {
+		onDrag?.({
 			originalEvent: event,
 			offset: currentOffset,
 			progress: 1 - currentOffset / size,
@@ -98,7 +118,7 @@
 	}
 
 	function finishPointer(event: PointerEvent, cancelled: boolean) {
-		if (pointerId !== event.pointerId) return;
+		if (!content || pointerId !== event.pointerId) return;
 		try {
 			if (content.hasPointerCapture(event.pointerId)) content.releasePointerCapture(event.pointerId);
 		} catch {
@@ -109,7 +129,7 @@
 
 		if (cancelled) {
 			content.style.removeProperty('--melt-drawer-drag-offset');
-			dispatch('dragCancel', { originalEvent: event });
+			onDragCancel?.({ originalEvent: event });
 			return;
 		}
 
@@ -121,7 +141,7 @@
 		content.style.removeProperty('--melt-drawer-drag-offset');
 		if (dismissed) context.close('swipe');
 		else context.setActiveSnapPoint(snapPoint);
-		dispatch('dragEnd', { originalEvent: event, snapPoint, dismissed });
+		onDragEnd?.({ originalEvent: event, snapPoint, dismissed });
 	}
 
 	onDestroy(() => {
@@ -140,7 +160,7 @@
 </script>
 
 <!-- DrawerHandle provides the keyboard equivalent for the panel drag gesture. -->
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <div
 	bind:this={content}
 	class={`melt-drawer__content ${className}`.trim()}
@@ -149,11 +169,11 @@
 	data-direction={$direction}
 	data-snap-point={$activeSnapPoint}
 	style={`--melt-drawer-snap-offset: ${(1 - $activeSnapPoint) * 100}%; ${style}`}
-	on:pointerdown={handlePointerDown}
-	on:pointermove={handlePointerMove}
-	on:pointerup={(event) => finishPointer(event, false)}
-	on:pointercancel={(event) => finishPointer(event, true)}
-	{...$$restProps}
+	onpointerdown={handlePointerDown}
+	onpointermove={handlePointerMove}
+	onpointerup={(event) => finishPointer(event, false)}
+	onpointercancel={(event) => finishPointer(event, true)}
+	{...rest}
 >
-	<slot />
+	{@render children?.()}
 </div>

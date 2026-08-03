@@ -22,12 +22,14 @@
 		label: monthFormatter.format($placeholder.toDate(getLocalTimeZone())),
 	});
 
-	$: if ($selected.value !== $placeholder.month) {
-		selected.set({
-			value: $placeholder.month,
-			label: monthFormatter.format($placeholder.toDate(getLocalTimeZone())),
-		});
-	}
+	$effect(() => {
+		if ($selected.value !== $placeholder.month) {
+			selected.set({
+				value: $placeholder.month,
+				label: monthFormatter.format($placeholder.toDate(getLocalTimeZone())),
+			});
+		}
+	});
 </script>
 
 <div class="surface-f4426a6c48">
@@ -100,13 +102,13 @@
 
     padding: 0.75rem;
 
-    
+
 
     color: rgb(var(--color-white) / 1);
 
-    
 
-    
+
+
 
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)
 }
@@ -251,13 +253,13 @@
 
 	[data-melt-calendar-cell]:focus {
 
-    
 
-    
+
+
 
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
-    
+
 
     }
 
@@ -272,7 +274,7 @@
 
     pointer-events: none;
 
-    
+
 
     color: rgb(248 113 113 / 1);
 
@@ -281,11 +283,11 @@
 
 	[data-melt-calendar-cell][data-selected] {
 
-    
+
 
     background-color: rgb(var(--color-magnum-400) / 1);
 
-    
+
 
     color: rgb(var(--color-neutral-950) / 1)
 }

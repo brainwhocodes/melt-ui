@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	import { ArrowLeft, Folder, FolderOpen } from '$icons/index.js';
 	import JS from './icons/JS.svelte';
 	import Svelte from './icons/Svelte.svelte';
@@ -22,11 +22,16 @@
 </script>
 
 <script lang="ts">
+	import Tree from './tree.svelte';
 	import { type TreeView } from '$lib/index.js';
 	import { getContext } from 'svelte';
 
-	export let treeItems: TreeItem[];
-	export let level = 1;
+	interface Props {
+		treeItems: TreeItem[];
+		level?: number;
+	}
+
+	let { treeItems, level = 1 }: Props = $props();
 
 	const {
 		elements: { item, group },
@@ -48,22 +53,25 @@
 		>
 			<!-- Add icon. -->
 			{#if icon === 'folder' && hasChildren && $isExpanded(itemId)}
-				<svelte:component this={icons['folderOpen']} class="surface-6349bea7a3" />
+				{@const SvelteComponent = icons['folderOpen']}
+				<SvelteComponent class="surface-6349bea7a3" />
 			{:else}
-				<svelte:component this={icons[icon]} class="surface-8cc931a7ca" />
+				{@const SvelteComponent_1 = icons[icon]}
+				<SvelteComponent_1 class="surface-8cc931a7ca" />
 			{/if}
 
 			<span class="surface-a39ff66aec">{title}</span>
 
 			<!-- Selected icon. -->
 			{#if $isSelected(itemId)}
-				<svelte:component this={icons['highlight']} class="surface-b8da7b3301" />
+				{@const SvelteComponent_2 = icons['highlight']}
+				<SvelteComponent_2 class="surface-b8da7b3301" />
 			{/if}
 		</button>
 
 		{#if children}
 			<ul {...$group({ id: itemId })} use:group>
-				<svelte:self treeItems={children} level={level + 1} />
+				<Tree treeItems={children} level={level + 1} />
 			</ul>
 		{/if}
 	</li>

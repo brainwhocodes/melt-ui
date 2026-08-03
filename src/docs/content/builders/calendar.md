@@ -3,12 +3,10 @@ title: Calendar
 description: An accessible calendar for selecting and displaying dates.
 ---
 
-<script>
+<script lang="ts">
 	import { APIReference, Preview, Callout } from '$docs/components'
 	import { A } from '$docs/components/markdown';
-	export let snippets
-	export let previews
-	export let schemas
+	let { snippets, previews, schemas } = $props()
 </script>
 
 ## Overview
@@ -311,7 +309,7 @@ it to control the selected date programmatically.
 Let's say that when a user selects Halloween (October 31st), we want to display an alert that says
 "Happy Halloween!".
 
-```svelte showLineNumbers {3,5,9,14-16}
+```svelte showLineNumbers {3,5,9,14-18}
 <script lang="ts">
 	import { createCalendar } from '@melt-ui/svelte'
 	import { CalendarDate, isSameDay } from '@internationalized/date'
@@ -325,9 +323,11 @@ Let's say that when a user selects Halloween (October 31st), we want to display 
 		defaultPlaceholder: new CalendarDate(2023, 10, 1)
 	})
 
-	$: if ($value && isSameDay($value, halloween)) {
-		alert('Happy Halloween! 🎃')
-	}
+	$effect(() => {
+		if ($value && isSameDay($value, halloween)) {
+			alert('Happy Halloween! 🎃')
+		}
+	})
 </script>
 ```
 

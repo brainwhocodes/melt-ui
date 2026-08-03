@@ -1,8 +1,11 @@
 <script lang="ts">
 	import { createDateField, type CreateDateFieldProps } from '$lib/index.js';
 
-	export let defaultPlaceholder: CreateDateFieldProps['defaultPlaceholder'] =
-		undefined;
+	interface Props {
+		defaultPlaceholder?: CreateDateFieldProps['defaultPlaceholder'];
+	}
+
+	let { defaultPlaceholder = undefined }: Props = $props();
 
 	const {
 		elements: { field, segment, label },
@@ -55,12 +58,12 @@
 
 	.btn {
     border-radius: 0.25rem;
-    
+
     background-color: rgb(var(--color-magnum-600) / 1);
     padding: 0.25rem;
     font-size: 0.75rem;
     line-height: 1rem;
-    
+
     color: rgb(var(--color-white) / 1)
 }
 </style>

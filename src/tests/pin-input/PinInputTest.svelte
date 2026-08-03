@@ -1,13 +1,25 @@
 <script lang="ts">
 	import { createPinInput, type CreatePinInputProps } from '$lib/index.js';
 
-	export let placeholder: CreatePinInputProps['placeholder'] = '○';
-	export let name: CreatePinInputProps['name'] = undefined;
-	export let disabled: CreatePinInputProps['disabled'] = false;
-	export let type: CreatePinInputProps['type'] = 'text';
-	export let defaultValue: CreatePinInputProps['defaultValue'] = ['1', '2', '3', '4', '5'];
-	export let value: CreatePinInputProps['value'] = undefined;
-	export let onValueChange: CreatePinInputProps['onValueChange'] = undefined;
+	interface Props {
+		placeholder?: CreatePinInputProps['placeholder'];
+		name?: CreatePinInputProps['name'];
+		disabled?: CreatePinInputProps['disabled'];
+		type?: CreatePinInputProps['type'];
+		defaultValue?: CreatePinInputProps['defaultValue'];
+		value?: CreatePinInputProps['value'];
+		onValueChange?: CreatePinInputProps['onValueChange'];
+	}
+
+	let {
+		placeholder = '○',
+		name = undefined,
+		disabled = false,
+		type = 'text',
+		defaultValue = ['1', '2', '3', '4', '5'],
+		value = undefined,
+		onValueChange = undefined
+	}: Props = $props();
 
 	const {
 		elements: { root, input, hiddenInput },

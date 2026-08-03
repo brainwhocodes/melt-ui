@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	type CodeEntry = Record<string, string | undefined>;
 
 	export type PreviewProps = {
@@ -23,19 +23,31 @@
 		position?: PreviewVariants['position'];
 	};
 
-	export let code: $$Props['code'];
-	export let variant: $$Props['variant'] = 'dark';
-	export let size: $$Props['size'] = 'default';
-	export let position: $$Props['position'] = 'default';
-	export let viewCode = false;
+	interface Props {
+		code: $$Props['code'];
+		variant?: $$Props['variant'];
+		size?: $$Props['size'];
+		position?: $$Props['position'];
+		viewCode?: boolean;
+		children?: import('svelte').Snippet;
+	}
 
-	$: codingStyleObj = code.scss ?? {};
+	let {
+		code,
+		variant = 'dark',
+		size = 'default',
+		position = 'default',
+		viewCode = $bindable(false),
+		children
+	}: Props = $props();
 
-	$: files = Object.keys(codingStyleObj).sort((a, b) => {
+	let codingStyleObj = $derived(code.scss ?? {});
+
+	let files = $derived(Object.keys(codingStyleObj).sort((a, b) => {
 		if (a === 'index.svelte') return -1;
 		if (b === 'index.svelte') return 1;
 		return a.localeCompare(b);
-	});
+	}));
 </script>
 
 <div class="surface-2e3526fcaf">
@@ -46,13 +58,15 @@
 
 <div class="surface-3034e361cb" data-comp-preview>
 	{#if viewCode}
-		<TabsRoot tabs={files} let:tab>
-			<TabsList />
-			<CodeBlock>{@html codingStyleObj[tab] ?? ''}</CodeBlock>
-		</TabsRoot>
+		<TabsRoot tabs={files} >
+			{#snippet children({ tab })}
+						<TabsList />
+				<CodeBlock>{@html codingStyleObj[tab] ?? ''}</CodeBlock>
+								{/snippet}
+				</TabsRoot>
 	{:else}
 		<PreviewWrapper {variant} {size} {position}>
-			<slot />
+			{@render children?.()}
 		</PreviewWrapper>
 	{/if}
 </div>

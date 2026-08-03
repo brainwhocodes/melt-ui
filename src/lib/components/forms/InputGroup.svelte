@@ -12,10 +12,26 @@
 		required: boolean;
 	};
 
-	let className = '';
-	export { className as class };
-	export let invalid: boolean | undefined = undefined;
-	export let disabled: boolean | undefined = undefined;
+
+	interface Props {
+		class?: string;
+		invalid?: boolean | undefined;
+		disabled?: boolean | undefined;
+		prefix?: import('svelte').Snippet;
+		children?: import('svelte').Snippet;
+		suffix?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let {
+		class: className = '',
+		invalid = undefined,
+		disabled = undefined,
+		prefix,
+		children,
+		suffix,
+		...rest
+	}: Props = $props();
 
 	type $$Props = HTMLAttributes<HTMLDivElement> & {
 		class?: string;
@@ -27,29 +43,31 @@
 	const groupContext = writable<FieldContextValue>({ invalid: false, disabled: false, required: false });
 	setContext('melt-field', groupContext);
 
-	$: isInvalid = invalid ?? $parentField?.invalid ?? false;
-	$: isDisabled = disabled ?? $parentField?.disabled ?? false;
-	$: groupContext.set({
-		controlId: $parentField?.controlId,
-		describedBy: $parentField?.describedBy,
-		errorId: $parentField?.errorId,
-		invalid: isInvalid,
-		disabled: isDisabled,
-		required: $parentField?.required ?? false
+	let isInvalid = $derived(invalid ?? $parentField?.invalid ?? false);
+	let isDisabled = $derived(disabled ?? $parentField?.disabled ?? false);
+	$effect(() => {
+		groupContext.set({
+			controlId: $parentField?.controlId,
+			describedBy: $parentField?.describedBy,
+			errorId: $parentField?.errorId,
+			invalid: isInvalid,
+			disabled: isDisabled,
+			required: $parentField?.required ?? false
+		});
 	});
 </script>
 
 <div
-	{...$$restProps}
+	{...rest}
 	class={`melt-input-group ${className}`.trim()}
 	data-invalid={isInvalid || undefined}
 	data-disabled={isDisabled || undefined}
 >
-	{#if $$slots.prefix}
-		<span class="melt-input-group__prefix"><slot name="prefix" /></span>
+	{#if prefix}
+		<span class="melt-input-group__prefix">{@render prefix?.()}</span>
 	{/if}
-	<div class="melt-input-group__control"><slot /></div>
-	{#if $$slots.suffix}
-		<span class="melt-input-group__suffix"><slot name="suffix" /></span>
+	<div class="melt-input-group__control">{@render children?.()}</div>
+	{#if suffix}
+		<span class="melt-input-group__suffix">{@render suffix?.()}</span>
 	{/if}
 </div>

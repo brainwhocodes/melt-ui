@@ -44,7 +44,7 @@
 
 <button
 	class="surface-ce9a94c3c9"
-	on:click={addRandomToast}
+	onclick={addRandomToast}
 >
 	Show toast
 </button>

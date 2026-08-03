@@ -5,9 +5,9 @@ description:
   bar.
 ---
 
-<script>
+<script lang="ts">
     import { APIReference } from '$docs/components'
-    export let schemas
+    let { schemas } = $props()
 </script>
 
 ## Anatomy

@@ -1,10 +1,13 @@
 <script lang="ts">
 	import { createDateField, type CreateDateFieldProps } from '$lib/index.js';
 
-	export let locale: CreateDateFieldProps['locale'] = 'en-US';
-	export let defaultValue: CreateDateFieldProps['defaultValue'] = undefined;
-	export let defaultPlaceholder: CreateDateFieldProps['defaultPlaceholder'] =
-		undefined;
+	interface Props {
+		locale?: CreateDateFieldProps['locale'];
+		defaultValue?: CreateDateFieldProps['defaultValue'];
+		defaultPlaceholder?: CreateDateFieldProps['defaultPlaceholder'];
+	}
+
+	let { locale = 'en-US', defaultValue = undefined, defaultPlaceholder = undefined }: Props = $props();
 
 	const {
 		elements: { field, segment, label, hiddenInput },
@@ -53,14 +56,14 @@
 
     font-weight: 500;
 
-    
+
 
     color: rgb(var(--color-white) / 1)
 }
 
 	[data-melt-datefield-label][data-invalid] {
 
-    
+
 
     color: rgb(239 68 68 / 1)
 }
@@ -87,21 +90,21 @@
 
     padding: 0.375rem;
 
-    
+
 
     color: rgb(var(--color-magnum-400) / 1)
 }
 
 	[data-melt-datefield-field][data-invalid] {
 
-    
+
 
     border-color: rgb(248 113 113 / 1)
 }
 
 	[data-melt-datefield-segment][data-invalid] {
 
-    
+
 
     color: rgb(239 68 68 / 1)
 }
@@ -117,7 +120,7 @@
 
     align-self: flex-start;
 
-    
+
 
     color: rgb(239 68 68 / 1)
 }

@@ -1,7 +1,13 @@
 <script lang="ts">
-	export let ratio = 1;
-	let className = '';
-	export { className as class };
+	interface Props {
+		ratio?: number;
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { ratio = 1, class: className = '', children, ...rest }: Props = $props();
+
 
 	function validateRatio(value: number): number {
 		if (!Number.isFinite(value) || value <= 0) {
@@ -10,14 +16,14 @@
 		return value;
 	}
 
-	$: validRatio = validateRatio(ratio);
+	let validRatio = $derived(validateRatio(ratio));
 </script>
 
 <div
-	{...$$restProps}
+	{...rest}
 	class={`melt-aspect-ratio ${className}`.trim()}
 	style:--melt-aspect-ratio={validRatio}
 	data-ratio={validRatio}
 >
-	<slot />
+	{@render children?.()}
 </div>

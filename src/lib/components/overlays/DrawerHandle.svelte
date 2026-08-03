@@ -1,22 +1,33 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import {
 		drawerContext,
 		type DrawerContext,
 		useOverlayContext,
 	} from './overlay.js';
 
-	export let ariaLabel = 'Drawer position';
-	let className = '';
-	export { className as class };
+	interface Props {
+		ariaLabel?: string;
+		onSnapPointChange?: (detail: { value: number }) => void;
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let {
+		ariaLabel = 'Drawer position',
+		onSnapPointChange = undefined,
+		class: className = '',
+		children,
+		...rest
+	}: Props = $props();
+
 	const context = useOverlayContext<DrawerContext>(drawerContext, 'DrawerHandle');
 	const { activeSnapPoint, direction, snapPoints } = context;
-	const dispatch = createEventDispatcher<{ snapPointChange: { value: number } }>();
 
 	function setSnapPoint(value: number) {
 		if (value <= 0) context.close('snap');
 		else context.setActiveSnapPoint(value);
-		dispatch('snapPointChange', { value });
+		onSnapPointChange?.({ value });
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
@@ -51,8 +62,8 @@
 	aria-valuemax={1}
 	aria-valuenow={$activeSnapPoint}
 	data-melt-drawer-handle
-	on:keydown={handleKeydown}
-	{...$$restProps}
+	onkeydown={handleKeydown}
+	{...rest}
 >
-	<slot />
+	{@render children?.()}
 </div>

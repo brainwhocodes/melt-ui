@@ -6,13 +6,18 @@
 		disabledValues?: string[];
 	};
 
-	export let tabValues: string[] = [];
-	export let disabledValues: string[] = [];
+	interface Props {
+		tabValues?: string[];
+		disabledValues?: string[];
+		[key: string]: any
+	}
+
+	let { tabValues = [], disabledValues = [], ...rest }: Props = $props();
 
 	const {
 		elements: { content, root, list, trigger },
 	} = createTabs({
-		...($$restProps as $$Props),
+		...(rest as $$Props),
 	});
 </script>
 

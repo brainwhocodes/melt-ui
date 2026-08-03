@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { createLabel } from '$lib/index.js';
 
-	export let inputId = 'test';
+	interface Props {
+		inputId?: string;
+	}
+
+	let { inputId = 'test' }: Props = $props();
 
 	const {
 		elements: { root },

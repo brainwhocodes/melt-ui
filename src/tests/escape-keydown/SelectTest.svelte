@@ -2,12 +2,17 @@
 	import { createSelect, type CreateSelectProps } from '$lib/index.js';
 
 	type $$Props = CreateSelectProps & { setRootEscapeBehaviorIgnore: () => void };
-	export let setRootEscapeBehaviorIgnore: () => void;
+	interface Props {
+		setRootEscapeBehaviorIgnore: () => void;
+		[key: string]: any
+	}
+
+	let { setRootEscapeBehaviorIgnore, ...rest }: Props = $props();
 
 	const {
 		elements: { trigger, menu },
 		states: { open },
-	} = createSelect({ ...$$restProps, forceVisible: true });
+	} = createSelect({ ...rest, forceVisible: true });
 </script>
 
 <button {...$trigger} use:trigger data-testid="select-trigger">trigger</button>
@@ -15,7 +20,7 @@
 	<div {...$menu} use:menu data-testid="select-content">
 		<button
 			data-testid="select-set-parent-escape-behavior-ignore"
-			on:click={setRootEscapeBehaviorIgnore}
+			onclick={setRootEscapeBehaviorIgnore}
 		>
 			set root escapeBehavior: ignore
 		</button>

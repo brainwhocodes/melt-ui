@@ -5,7 +5,7 @@ description:
   lower-level behavior builders.
 ---
 
-<script>
+<script lang="ts">
     import { Construction, Contributors } from '$docs/components'
 </script>
 
@@ -24,7 +24,7 @@ style injection. Lower-level builders remain available when an application needs
 Import the shared stylesheet once, then use components directly.
 
 ```svelte
-<script>
+<script lang="ts">
 	import { Button, Field, Input } from '@melt-ui/svelte';
 	import '@melt-ui/svelte/styles.css';
 </script>

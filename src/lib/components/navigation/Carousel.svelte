@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	import { getContext } from 'svelte';
 	import type { Action } from 'svelte/action';
 	import type { Writable } from 'svelte/store';
@@ -27,34 +27,52 @@
 </script>
 
 <script lang="ts">
-	import { createEventDispatcher, onDestroy, setContext } from 'svelte';
+	import { onDestroy, setContext } from 'svelte';
 	import { writable } from 'svelte/store';
 
-	let className = '';
-	export { className as class };
-	export let activeIndex = 0;
-	export let orientation: CarouselOrientation = 'horizontal';
-	export let loop = false;
-	export let autoplayInterval = 0;
-	export let pauseOnHover = true;
-	export let pauseOnFocus = true;
-	export let label = 'Carousel';
 
-	const dispatch = createEventDispatcher<{ change: { activeIndex: number } }>();
+	interface Props {
+		class?: string;
+		activeIndex?: number;
+		orientation?: CarouselOrientation;
+		loop?: boolean;
+		autoplayInterval?: number;
+		pauseOnHover?: boolean;
+		pauseOnFocus?: boolean;
+		label?: string;
+		onchange?: (detail: { activeIndex: number }) => void;
+		children?: import('svelte').Snippet<[any]>;
+		[key: string]: any
+	}
+
+	let {
+		class: className = '',
+		activeIndex = $bindable(0),
+		orientation = 'horizontal',
+		loop = false,
+		autoplayInterval = 0,
+		pauseOnHover = true,
+		pauseOnFocus = true,
+		label = 'Carousel',
+		onchange = undefined,
+		children,
+		...rest
+	}: Props = $props();
+
 	const activeIndexStore = writable(normalizeIndex(activeIndex));
 	const orientationStore = writable<CarouselOrientation>(orientation);
 	const indicesStore = writable<number[]>([]);
 	const registeredIndices = new Map<number, number>();
 	const slides = new Map<number, HTMLElement>();
 
-	let currentActiveIndex = normalizeIndex(activeIndex);
+	let currentActiveIndex = $state(normalizeIndex(activeIndex));
 	let viewport: HTMLElement | null = null;
-	let root: HTMLElement | null = null;
+	let root: HTMLElement | null = $state(null);
 	let frame = 0;
 	let timer: ReturnType<typeof setInterval> | null = null;
-	let mounted = false;
-	let pointerPaused = false;
-	let focusPaused = false;
+	let mounted = $state(false);
+	let pointerPaused = $state(false);
+	let focusPaused = $state(false);
 	let reconcileScheduled = false;
 	let destroyed = false;
 
@@ -115,7 +133,7 @@
 		currentActiveIndex = next;
 		activeIndex = next;
 		activeIndexStore.set(next);
-		if (emit) dispatch('change', { activeIndex: next });
+		if (emit) onchange?.({ activeIndex: next });
 	}
 
 	function targetIndex(index: number): number {
@@ -294,8 +312,12 @@
 		focusPaused = false;
 		restartAutoplay();
 	}
-	$: if (!pauseOnHover && pointerPaused) pointerPaused = false;
-	$: if (!pauseOnFocus && focusPaused) focusPaused = false;
+	$effect(() => {
+		if (!pauseOnHover && pointerPaused) pointerPaused = false;
+	});
+	$effect(() => {
+		if (!pauseOnFocus && focusPaused) focusPaused = false;
+	});
 
 	setContext<CarouselContext>(CAROUSEL_CONTEXT, {
 		activeIndex: activeIndexStore,
@@ -311,22 +333,28 @@
 		canGoNext,
 	});
 
-	$: if (activeIndex !== currentActiveIndex) {
-		currentActiveIndex = targetIndex(activeIndex);
-		activeIndex = currentActiveIndex;
-		activeIndexStore.set(currentActiveIndex);
-		if (mounted) scrollViewportTo(currentActiveIndex, false);
-	}
-	$: orientationStore.set(orientation);
-	$: if (mounted) {
-		$indicesStore;
-		autoplayInterval;
-		loop;
-		activeIndex;
-		pauseOnHover;
-		pauseOnFocus;
-		restartAutoplay();
-	}
+	$effect(() => {
+		if (activeIndex !== currentActiveIndex) {
+			currentActiveIndex = targetIndex(activeIndex);
+			activeIndex = currentActiveIndex;
+			activeIndexStore.set(currentActiveIndex);
+			if (mounted) scrollViewportTo(currentActiveIndex, false);
+		}
+	});
+	$effect(() => {
+		orientationStore.set(orientation);
+	});
+	$effect(() => {
+		if (mounted) {
+			$indicesStore;
+			autoplayInterval;
+			loop;
+			activeIndex;
+			pauseOnHover;
+			pauseOnFocus;
+			restartAutoplay();
+		}
+	});
 
 	onDestroy(() => {
 		clearAutoplay();
@@ -336,7 +364,7 @@
 </script>
 
 <div
-	{...$$restProps}
+	{...rest}
 	bind:this={root}
 	class={`melt-carousel ${className}`.trim()}
 	role="region"
@@ -344,10 +372,10 @@
 	aria-label={label}
 	data-orientation={orientation}
 	data-loop={loop ? '' : undefined}
-	on:pointerenter={handlePointerEnter}
-	on:pointerleave={handlePointerLeave}
-	on:focusin={handleFocusIn}
-	on:focusout={handleFocusOut}
+	onpointerenter={handlePointerEnter}
+	onpointerleave={handlePointerLeave}
+	onfocusin={handleFocusIn}
+	onfocusout={handleFocusOut}
 >
-	<slot {activeIndex} {scrollTo} />
+	{@render children?.({ activeIndex, scrollTo, })}
 </div>

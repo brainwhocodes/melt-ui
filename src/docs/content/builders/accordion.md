@@ -5,12 +5,9 @@ description:
   to expand and collapse sections.
 ---
 
-<script>
+<script lang="ts">
     import { KbdTable, APIReference, Preview } from '$docs/components'
-    export let schemas
-    export let keyboard
-    export let snippets
-    export let previews
+    let { schemas, keyboard, snippets, previews } = $props()
 </script>
 
 ## Anatomy
@@ -77,7 +74,7 @@ Accordion.
 </script>
 
 <button
-	on:click={() => {
+	onclick={() => {
 		const randPick = Math.floor(Math.random() * 3) + 1
 		customValue.set(`item-${randPick}`)
 		// Alternatively, you can use the value store directly value.set(`item-${randPick}`)

@@ -1,16 +1,29 @@
 <script lang="ts">
-	export let keys: readonly string[] | undefined = undefined;
-	export let separator = '+';
-	export let label: string | undefined = undefined;
 
-	let className = '';
-	export { className as class };
+	interface Props {
+		keys?: readonly string[] | undefined;
+		separator?: string;
+		label?: string | undefined;
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
 
-	$: accessibleLabel = label ?? (keys?.length ? keys.join(' plus ') : undefined);
+	let {
+		keys = undefined,
+		separator = '+',
+		label = undefined,
+		class: className = '',
+		children,
+		...rest
+	}: Props = $props();
+
+
+	let accessibleLabel = $derived(label ?? (keys?.length ? keys.join(' plus ') : undefined));
 </script>
 
 <kbd
-	{...$$restProps}
+	{...rest}
 	class={`melt-kbd ${className}`}
 	aria-label={accessibleLabel}
 >
@@ -20,6 +33,6 @@
 			<span class="melt-kbd-key">{key}</span>
 		{/each}
 	{:else}
-		<slot />
+		{@render children?.()}
 	{/if}
 </kbd>

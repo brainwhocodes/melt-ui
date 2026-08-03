@@ -3,7 +3,11 @@
 	import type { FullContributor } from '$routes/docs/[...slug]/+layout.server.js';
 	import { fly } from 'svelte/transition';
 
-	export let contributor: FullContributor;
+	interface Props {
+		contributor: FullContributor;
+	}
+
+	let { contributor }: Props = $props();
 
 	const getInitials = (name: string) => {
 		const [first, last] = name.split(' ');

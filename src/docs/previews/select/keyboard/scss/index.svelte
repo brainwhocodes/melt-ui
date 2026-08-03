@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createSelect } from '$lib/index.js';
+	import { createSelect, type MeltEventHandler } from '$lib/index.js';
 	import { Check, ChevronDown } from '$icons/index.js';
 
 	const options = {
@@ -22,12 +22,12 @@
 </script>
 
 <div class="surface-0531d5c50c">
-	<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
+	<!-- svelte-ignore a11y_label_has_associated_control - $label contains the 'for' attribute -->
 	<label class="surface-aa39525f79" {...$label} use:label>Favorite Flavor</label>
 	<button
 		class="preview-space-y-2  preview-text-magnum-700 surface-ca5b268fe6"
 		{...$trigger} use:trigger
-		on:m-keydown={(e) => {
+		onm-keydown={(e: Parameters<MeltEventHandler<KeyboardEvent>>[0]) => {
 			e.preventDefault(); // Cancel default builder behabiour
 			e.detail.originalEvent.preventDefault(); // Cancel page scroll
 

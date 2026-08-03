@@ -1,27 +1,40 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	interface Props {
+		name: string;
+		size?: number | string | undefined;
+		mediaType?: string | undefined;
+		href?: string | undefined;
+		progress?: number | undefined;
+		removable?: boolean;
+		disabled?: boolean;
+		removeLabel?: string;
+		onremove?: (detail: { name: string }) => void;
+		class?: string;
+		preview?: import('svelte').Snippet;
+		children?: import('svelte').Snippet;
+		metadata?: import('svelte').Snippet;
+		remove?: import('svelte').Snippet<[any]>;
+		[key: string]: any
+	}
 
-	export let name: string;
-	export let size: number | string | undefined = undefined;
-	export let mediaType: string | undefined = undefined;
-	export let href: string | undefined = undefined;
-	export let progress: number | undefined = undefined;
-	export let removable = false;
-	export let disabled = false;
-	export let removeLabel = 'Remove attachment';
-	let className = '';
-	export { className as class };
+	let {
+		name,
+		size = undefined,
+		mediaType = undefined,
+		href = undefined,
+		progress = undefined,
+		removable = false,
+		disabled = false,
+		removeLabel = 'Remove attachment',
+		onremove = undefined,
+		class: className = '',
+		preview,
+		children,
+		metadata,
+		remove,
+		...rest
+	}: Props = $props();
 
-	const dispatch = createEventDispatcher<{
-		remove: { name: string };
-	}>();
-
-	$: normalizedProgress = progress === undefined
-		? undefined
-		: Math.min(100, Math.max(0, Number.isFinite(progress) ? progress : 0));
-	$: formattedSize = typeof size === 'number'
-		? formatBytes(Math.max(0, size))
-		: size;
 
 	function formatBytes(bytes: number): string {
 		if (bytes < 1024) return `${bytes} B`;
@@ -36,8 +49,14 @@
 	}
 
 	function handleRemove(): void {
-		if (!disabled) dispatch('remove', { name });
+		if (!disabled) onremove?.({ name });
 	}
+	let normalizedProgress = $derived(progress === undefined
+		? undefined
+		: Math.min(100, Math.max(0, Number.isFinite(progress) ? progress : 0)));
+	let formattedSize = $derived(typeof size === 'number'
+		? formatBytes(Math.max(0, size))
+		: size);
 </script>
 
 <article
@@ -45,30 +64,30 @@
 	class:melt-attachment-disabled={disabled}
 	class={className}
 	data-progress={normalizedProgress}
-	{...$$restProps}
+	{...rest}
 >
-	{#if $$slots.preview}
+	{#if preview}
 		<div class="melt-attachment-preview" aria-hidden="true">
-			<slot name="preview" />
+			{@render preview?.()}
 		</div>
 	{/if}
 
 	<div class="melt-attachment-content">
 		<div class="melt-attachment-name">
 			{#if href && !disabled}
-				<a class="melt-attachment-link" {href}><slot>{name}</slot></a>
+				<a class="melt-attachment-link" {href}>{#if children}{@render children()}{:else}{name}{/if}</a>
 			{:else}
-				<span><slot>{name}</slot></span>
+				<span>{#if children}{@render children()}{:else}{name}{/if}</span>
 			{/if}
 		</div>
 
-		{#if $$slots.metadata || formattedSize || mediaType}
+		{#if metadata || formattedSize || mediaType}
 			<div class="melt-attachment-metadata">
-				<slot name="metadata">
+				{#if metadata}{@render metadata()}{:else}
 					{#if mediaType}<span>{mediaType}</span>{/if}
 					{#if mediaType && formattedSize}<span aria-hidden="true">·</span>{/if}
 					{#if formattedSize}<span>{formattedSize}</span>{/if}
-				</slot>
+				{/if}
 			</div>
 		{/if}
 
@@ -86,9 +105,9 @@
 			type="button"
 			disabled={disabled}
 			aria-label={`${removeLabel}: ${name}`}
-			on:click={handleRemove}
+			onclick={handleRemove}
 		>
-			<slot name="remove" aria-hidden="true">×</slot>
+			{#if remove}{@render remove({ 'aria-hidden': 'true' })}{:else}×{/if}
 		</button>
 	{/if}
 </article>

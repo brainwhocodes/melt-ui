@@ -3,12 +3,10 @@ title: Range Calendar
 description: A calendar component for displaying & selecting date ranges.
 ---
 
-<script>
+<script lang="ts">
 	import { APIReference, Preview, Callout } from '$docs/components'
 	import { A } from '$docs/components/markdown';
-	export let snippets
-	export let previews
-	export let schemas
+	let { snippets, previews, schemas } = $props()
 </script>
 
 ## Overview

@@ -1,26 +1,45 @@
 <script lang="ts">
-	export let compact = false;
-	let className = '';
-	export { className as class };
+	interface Props {
+		compact?: boolean;
+		class?: string;
+		icon?: import('svelte').Snippet;
+		title?: import('svelte').Snippet;
+		description?: import('svelte').Snippet;
+		children?: import('svelte').Snippet;
+		action?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let {
+		compact = false,
+		class: className = '',
+		icon,
+		title,
+		description,
+		children,
+		action,
+		...rest
+	}: Props = $props();
+
 </script>
 
 <div
-	{...$$restProps}
+	{...rest}
 	class={`melt-empty ${className}`.trim()}
 	data-compact={compact ? '' : undefined}
 >
-	{#if $$slots.icon}
-		<div class="melt-empty__icon"><slot name="icon" /></div>
+	{#if icon}
+		<div class="melt-empty__icon">{@render icon?.()}</div>
 	{/if}
-	{#if $$slots.title}
-		<h3 class="melt-empty__title"><slot name="title" /></h3>
+	{#if title}
+		<h3 class="melt-empty__title">{@render title?.()}</h3>
 	{/if}
-	{#if $$slots.description}
-		<div class="melt-empty__description"><slot name="description" /></div>
-	{:else if $$slots.default}
-		<div class="melt-empty__description"><slot /></div>
+	{#if description}
+		<div class="melt-empty__description">{@render description?.()}</div>
+	{:else if children}
+		<div class="melt-empty__description">{@render children?.()}</div>
 	{/if}
-	{#if $$slots.action}
-		<div class="melt-empty__action"><slot name="action" /></div>
+	{#if action}
+		<div class="melt-empty__action">{@render action?.()}</div>
 	{/if}
 </div>

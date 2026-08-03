@@ -5,22 +5,43 @@
 	} from '$lib/builders/date-range-field/index.js';
 	import { removeUndefined } from '../utils.js';
 
-	export let value: CreateDateRangeFieldProps['value'] = undefined;
-	export let defaultValue: CreateDateRangeFieldProps['defaultValue'] = undefined;
-	export let defaultPlaceholder: CreateDateRangeFieldProps['defaultPlaceholder'] = undefined;
-	export let onValueChange: CreateDateRangeFieldProps['onValueChange'] = undefined;
-	export let onPlaceholderChange: CreateDateRangeFieldProps['onPlaceholderChange'] = undefined;
-	export let isDateUnavailable: CreateDateRangeFieldProps['isDateUnavailable'] = undefined;
-	export let disabled: CreateDateRangeFieldProps['disabled'] = undefined;
-	export let readonly: CreateDateRangeFieldProps['readonly'] = undefined;
-	export let readonlySegments: CreateDateRangeFieldProps['readonlySegments'] = undefined;
-	export let hourCycle: CreateDateRangeFieldProps['hourCycle'] = undefined;
-	export let locale: CreateDateRangeFieldProps['locale'] = 'en';
-	export let hideTimeZone: CreateDateRangeFieldProps['hideTimeZone'] = undefined;
-	export let ids: CreateDateRangeFieldProps['ids'] = undefined;
-	export let startIds: CreateDateRangeFieldProps['startIds'] = undefined;
-	export let endIds: CreateDateRangeFieldProps['endIds'] = undefined;
-	export let granularity: CreateDateRangeFieldProps['granularity'] = undefined;
+	interface Props {
+		value?: CreateDateRangeFieldProps['value'];
+		defaultValue?: CreateDateRangeFieldProps['defaultValue'];
+		defaultPlaceholder?: CreateDateRangeFieldProps['defaultPlaceholder'];
+		onValueChange?: CreateDateRangeFieldProps['onValueChange'];
+		onPlaceholderChange?: CreateDateRangeFieldProps['onPlaceholderChange'];
+		isDateUnavailable?: CreateDateRangeFieldProps['isDateUnavailable'];
+		disabled?: CreateDateRangeFieldProps['disabled'];
+		readonly?: CreateDateRangeFieldProps['readonly'];
+		readonlySegments?: CreateDateRangeFieldProps['readonlySegments'];
+		hourCycle?: CreateDateRangeFieldProps['hourCycle'];
+		locale?: CreateDateRangeFieldProps['locale'];
+		hideTimeZone?: CreateDateRangeFieldProps['hideTimeZone'];
+		ids?: CreateDateRangeFieldProps['ids'];
+		startIds?: CreateDateRangeFieldProps['startIds'];
+		endIds?: CreateDateRangeFieldProps['endIds'];
+		granularity?: CreateDateRangeFieldProps['granularity'];
+	}
+
+	let {
+		value = undefined,
+		defaultValue = undefined,
+		defaultPlaceholder = undefined,
+		onValueChange = undefined,
+		onPlaceholderChange = undefined,
+		isDateUnavailable = undefined,
+		disabled = undefined,
+		readonly = undefined,
+		readonlySegments = undefined,
+		hourCycle = undefined,
+		locale = 'en',
+		hideTimeZone = undefined,
+		ids = undefined,
+		startIds = undefined,
+		endIds = undefined,
+		granularity = undefined
+	}: Props = $props();
 
 	const {
 		elements: { field, startSegment, endSegment, label, validation },

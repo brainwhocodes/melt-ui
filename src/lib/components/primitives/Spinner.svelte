@@ -1,22 +1,27 @@
 <script lang="ts">
 	type SpinnerSize = 'sm' | 'md' | 'lg' | number | string;
 
-	export let size: SpinnerSize = 'md';
-	export let label = 'Loading';
 
-	let className = '';
-	export { className as class };
+	interface Props {
+		size?: SpinnerSize;
+		label?: string;
+		class?: string;
+		[key: string]: any
+	}
 
-	$: customSize = typeof size === 'number' ? `${size}px` : typeof size === 'string' && !['sm', 'md', 'lg'].includes(size)
+	let { size = 'md', label = 'Loading', class: className = '', ...rest }: Props = $props();
+
+
+	let customSize = $derived(typeof size === 'number' ? `${size}px` : typeof size === 'string' && !['sm', 'md', 'lg'].includes(size)
 		? size
-		: undefined;
-	$: inlineStyle = [$$restProps.style, customSize ? `--melt-spinner-size: ${customSize}` : '']
+		: undefined);
+	let inlineStyle = $derived([rest.style, customSize ? `--melt-spinner-size: ${customSize}` : '']
 		.filter(Boolean)
-		.join('; ');
+		.join('; '));
 </script>
 
 <span
-	{...$$restProps}
+	{...rest}
 	class={`melt-spinner ${className}`}
 	style={inlineStyle}
 	data-size={customSize ? 'custom' : size}

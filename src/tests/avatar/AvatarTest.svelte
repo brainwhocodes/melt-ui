@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { createAvatar } from '$lib/index.js';
 
-	export let src = 'https://avatars.githubusercontent.com/u/1162160?v=4';
+	interface Props {
+		src?: string;
+	}
+
+	let { src = 'https://avatars.githubusercontent.com/u/1162160?v=4' }: Props = $props();
 
 	const {
 		elements: { image, fallback },

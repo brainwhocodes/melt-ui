@@ -4,10 +4,9 @@ description:
   A set of layered sections of content—known as tab panels—that are displayed one at a time.
 ---
 
-<script>
+<script lang="ts">
     import { APIReference, KbdTable } from '$docs/components'
-    export let schemas
-    export let keyboard
+    let { schemas, keyboard } = $props()
 </script>
 
 ## Anatomy

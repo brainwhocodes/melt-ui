@@ -4,12 +4,10 @@ description:
   An enhanced alternative to using multiple native date inputs for selecting a date range.
 ---
 
-<script>
+<script lang="ts">
 	import { APIReference, Preview, Callout } from '$docs/components'
 	import { Code } from '$docs/components/markdown'
-	export let snippets
-	export let previews
-	export let schemas
+	let { snippets, previews, schemas } = $props()
 </script>
 
 ## Overview
@@ -344,7 +342,7 @@ which is optional, but you want to ensure that if they do enter a range, it's re
 	import { createDateRangeField } from '@melt-ui/svelte'
 	import { CalendarDateTime, CalendarDate, parseDateTime } from '@internationalized/date'
 
-	export let data
+	let { data } = $props()
 
 	const {
 		elements: { field, startSegment, endSegment, label },

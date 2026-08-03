@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createSlider } from '$lib/index.js';
-	export let componentRoot;
+	let { componentRoot } = $props();
 	const {
 		elements: { root, range, thumbs },
 	} = createSlider({

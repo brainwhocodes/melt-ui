@@ -1,7 +1,13 @@
 <script lang="ts">
-	export let label: string;
-	let className = '';
-	export { className as class };
+	interface Props {
+		label: string;
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { label, class: className = '', children, ...rest }: Props = $props();
+
 </script>
 
 <div
@@ -9,9 +15,9 @@
 	class={className}
 	role="separator"
 	aria-label={label}
-	{...$$restProps}
+	{...rest}
 >
 	<span class="melt-marker-line" aria-hidden="true"></span>
-	<span class="melt-marker-label"><slot>{label}</slot></span>
+	<span class="melt-marker-label">{#if children}{@render children()}{:else}{label}{/if}</span>
 	<span class="melt-marker-line" aria-hidden="true"></span>
 </div>

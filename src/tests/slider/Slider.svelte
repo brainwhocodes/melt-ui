@@ -1,14 +1,27 @@
 <script lang="ts">
 	import { createSlider, type CreateSliderProps } from '$lib/index.js';
 
-	export let value = [30];
-	export let max = 100;
-	export let min = 0;
-	export let step = 1;
-	export let onValueChange: CreateSliderProps['onValueChange'] = undefined;
-	export let resetMin: number | undefined = undefined;
-	export let resetMax: number | undefined = undefined;
-	export let resetStep: number | undefined = undefined;
+	interface Props {
+		value?: any;
+		max?: number;
+		min?: number;
+		step?: number;
+		onValueChange?: CreateSliderProps['onValueChange'];
+		resetMin?: number | undefined;
+		resetMax?: number | undefined;
+		resetStep?: number | undefined;
+	}
+
+	let {
+		value = [30],
+		max = 100,
+		min = 0,
+		step = 1,
+		onValueChange = undefined,
+		resetMin = undefined,
+		resetMax = undefined,
+		resetStep = undefined
+	}: Props = $props();
 
 	const {
 		elements: { root, range, thumbs, ticks },
@@ -21,15 +34,21 @@
 		onValueChange,
 	});
 
-	$: if (resetMin) {
-		$optionsMin = resetMin;
-	}
-	$: if (resetMax) {
-		$optionsMax = resetMax;
-	}
-	$: if (resetStep) {
-		$optionsStep = resetStep;
-	}
+	$effect(() => {
+		if (resetMin) {
+			$optionsMin = resetMin;
+		}
+	});
+	$effect(() => {
+		if (resetMax) {
+			$optionsMax = resetMax;
+		}
+	});
+	$effect(() => {
+		if (resetStep) {
+			$optionsStep = resetStep;
+		}
+	});
 </script>
 
 <main>

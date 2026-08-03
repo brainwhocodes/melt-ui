@@ -13,11 +13,16 @@
 		},
 	});
 
-	export let text = 'Tooltip text';
+	interface Props {
+		text?: string;
+		children?: import('svelte').Snippet;
+	}
+
+	let { text = 'Tooltip text', children }: Props = $props();
 </script>
 
 <div {...$trigger} use:trigger>
-	<slot />
+	{@render children?.()}
 </div>
 
 {#if $open}

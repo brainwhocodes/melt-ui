@@ -7,17 +7,23 @@
 		useOverlayContext,
 	} from './overlay.js';
 
-	export let id = '';
-	let className = '';
-	export { className as class };
+	interface Props {
+		id?: string;
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { id = '', class: className = '', children, ...rest }: Props = $props();
+
 	const context = useOverlayContext<DrawerContext>(drawerContext, 'DrawerDescription');
-	let resolvedId = id;
+	let resolvedId = $state(id);
 	onMount(() => {
 		resolvedId = id || createOverlayId('melt-drawer-description');
 		return context.registerDescription(resolvedId);
 	});
 </script>
 
-<p id={resolvedId || undefined} class={`melt-drawer__description ${className}`.trim()} {...$$restProps}>
-	<slot />
+<p id={resolvedId || undefined} class={`melt-drawer__description ${className}`.trim()} {...rest}>
+	{@render children?.()}
 </p>

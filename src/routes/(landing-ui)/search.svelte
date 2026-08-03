@@ -39,7 +39,7 @@
 		highlightOnHover: false,
 	});
 
-	let comboboxInput: HTMLInputElement | null = null;
+	let comboboxInput: HTMLInputElement | null = $state(null);
 
 	const {
 		elements: { trigger, portalled, content, overlay },
@@ -55,7 +55,7 @@
 		openFocus: () => comboboxInput,
 	});
 
-	let search: Promise<PagefindSearchFragment[]> | null = null;
+	let search: Promise<PagefindSearchFragment[]> | null = $state(null);
 
 	async function getResultsFromSearch(query: string) {
 		if (!pagefind || !query) {
@@ -69,11 +69,13 @@
 		);
 	}
 
-	$: search = getResultsFromSearch($inputValue);
+	$effect(() => {
+		search = getResultsFromSearch($inputValue);
+	});
 </script>
 
 <svelte:window
-	on:keydown={(e) => {
+	onkeydown={(e) => {
 		const isCtrl = e.ctrlKey || e.metaKey;
 		if (e.key === '/' || (e.key === 'k' && isCtrl)) {
 			e.preventDefault();
@@ -105,7 +107,7 @@
 					{...$input} use:input
 					class="surface-6d7884f481"
 					placeholder="Search..."
-					on:keydown={(e) => {
+					onkeydown={(e) => {
 						if (e.key === 'Escape') {
 							cbOpen.set(false);
 							open.set(false);

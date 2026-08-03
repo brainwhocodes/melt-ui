@@ -71,7 +71,7 @@
 		multiple: true,
 	});
 
-	$: filteredMangas = $touchedInput
+	let filteredMangas = $derived($touchedInput
 		? mangas.filter(({ title, author }) => {
 				const normalizedInput = $inputValue.toLowerCase();
 				return (
@@ -79,11 +79,11 @@
 					author.toLowerCase().includes(normalizedInput)
 				);
 		  })
-		: mangas;
+		: mangas);
 </script>
 
 <div class="surface-26a3c3a082">
-	<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
+	<!-- svelte-ignore a11y_label_has_associated_control - $label contains the 'for' attribute -->
 	<label {...$label} use:label>
 		<span class="surface-eeb5e9b216"
 			>Choose your favorite manga:</span
@@ -111,7 +111,7 @@
 		{...$menu} use:menu
 		transition:fly={{ duration: 150, y: -5 }}
 	>
-		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+		<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 		<div
 			class="surface-de27e28cd9"
 			tabindex="0"
@@ -151,7 +151,7 @@
 		position: absolute;
 		left: 0.5rem;
 		top: 50%;
-		
+
 		color: rgb(var(--color-magnum-500) / 1);
 		translate: 0 calc(-50% + 1px)
 }

@@ -2,7 +2,11 @@
 	import type { APISchema } from '$docs/types.js';
 	import { APITable, APIWrapper } from '$docs/components/index.js';
 
-	export let schemas: APISchema[];
+	interface Props {
+		schemas: APISchema[];
+	}
+
+	let { schemas }: Props = $props();
 </script>
 
 <APIWrapper>

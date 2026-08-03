@@ -3,10 +3,9 @@ title: Pagination
 description: An interface that allows navigating between pages that contain split entries.
 ---
 
-<script>
+<script lang="ts">
     import { APIReference, KbdTable } from '$docs/components'
-    export let schemas
-    export let keyboard
+    let { schemas, keyboard } = $props()
 </script>
 
 ## Anatomy

@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	export interface CommandItem {
 		value: string;
 		label: string;
@@ -17,7 +17,7 @@
 </script>
 
 <script lang="ts">
-	import { createEventDispatcher, onMount, tick } from 'svelte';
+	import { onMount, tick } from 'svelte';
 
 	interface GroupedItem {
 		item: CommandItem;
@@ -30,46 +30,79 @@
 		items: GroupedItem[];
 	}
 
-	const dispatch = createEventDispatcher<{
-		openchange: { open: boolean };
-		querychange: { query: string };
-		activechange: { activeIndex: number; item: CommandItem | null };
-		select: { value: string; item: CommandItem };
-	}>();
+	interface Props {
+		class?: string;
+		id?: string | undefined;
+		items?: CommandItem[];
+		groups?: CommandGroup[];
+		open?: boolean;
+		value?: string | null;
+		query?: string;
+		activeIndex?: number;
+		modal?: boolean;
+		closeOnSelect?: boolean;
+		label?: string;
+		searchLabel?: string;
+		emptyText?: string;
+		onOpenChange?: ((detail: { open: boolean }) => void) | undefined;
+		onQueryChange?: ((detail: { query: string }) => void) | undefined;
+		onActiveChange?:
+			| ((detail: { activeIndex: number; item: CommandItem | null }) => void)
+			| undefined;
+		onSelect?: ((detail: { value: string; item: CommandItem }) => void) | undefined;
+		header?: import('svelte').Snippet;
+		footer?: import('svelte').Snippet;
+		item?: import('svelte').Snippet<[{ item: CommandItem; active: boolean; selected: boolean }]>;
+		empty?: import('svelte').Snippet;
+		[key: string]: any;
+	}
 
-	let className = '';
-	export { className as class };
-	export let id: string | undefined = undefined;
-	export let items: CommandItem[] = [];
-	export let groups: CommandGroup[] = [];
-	export let open = false;
-	export let value: string | null = null;
-	export let query = '';
-	export let activeIndex = -1;
-	export let modal = false;
-	export let closeOnSelect = true;
-	export let label = 'Command palette';
-	export let searchLabel = 'Search commands';
-	export let emptyText = 'No commands found.';
+	let {
+		class: className = '',
+		id = undefined,
+		items = [],
+		groups = [],
+		open = $bindable(false),
+		value = $bindable(null),
+		query = $bindable(''),
+		activeIndex = $bindable(-1),
+		modal = false,
+		closeOnSelect = true,
+		label = 'Command palette',
+		searchLabel = 'Search commands',
+		emptyText = 'No commands found.',
+		onOpenChange = undefined,
+		onQueryChange = undefined,
+		onActiveChange = undefined,
+		onSelect = undefined,
+		header,
+		footer,
+		item,
+		empty,
+		...rest
+	}: Props = $props();
 
-	let resolvedId = id ?? '';
-	let inputElement: HTMLInputElement;
+	let resolvedId = $state(id ?? '');
+	let inputElement: HTMLInputElement | undefined = $state();
 
 	onMount(() => {
 		if (!resolvedId) resolvedId = `melt-command-${++commandInstance}`;
 	});
 
-	$: if (id && id !== resolvedId) resolvedId = id;
-	$: normalizedQuery = query.trim().toLocaleLowerCase();
-	$: filteredItems = filterItems(items, groups, normalizedQuery);
-	$: resultGroups = groupItems(filteredItems, groups);
-	$: {
+	$effect(() => {
+		if (id && id !== resolvedId) resolvedId = id;
+	});
+	const normalizedQuery = $derived(query.trim().toLocaleLowerCase());
+	const filteredItems = $derived(filterItems(items, groups, normalizedQuery));
+	const resultGroups = $derived(groupItems(filteredItems, groups));
+	$effect(() => {
 		filteredItems;
 		reconcileActive();
-	}
-	$: listId = resolvedId ? `${resolvedId}-list` : undefined;
-	$: activeDescendant =
-		activeIndex >= 0 && resolvedId ? `${resolvedId}-option-${activeIndex}` : undefined;
+	});
+	const listId = $derived(resolvedId ? `${resolvedId}-list` : undefined);
+	const activeDescendant = $derived(
+		activeIndex >= 0 && resolvedId ? `${resolvedId}-option-${activeIndex}` : undefined
+	);
 
 	function filterItems(inputItems: CommandItem[], inputGroups: CommandGroup[], inputQuery: string): CommandItem[] {
 		if (!inputQuery) return inputItems;
@@ -131,26 +164,26 @@
 	function setActive(index: number): void {
 		if (index < 0 || index >= filteredItems.length || filteredItems[index].disabled) return;
 		activeIndex = index;
-		dispatch('activechange', { activeIndex, item: filteredItems[activeIndex] });
+		onActiveChange?.({ activeIndex, item: filteredItems[activeIndex] });
 		if (resolvedId) document.getElementById(`${resolvedId}-option-${activeIndex}`)?.scrollIntoView?.({ block: 'nearest' });
 	}
 
 	function setOpen(next: boolean): void {
 		if (open === next) return;
 		open = next;
-		dispatch('openchange', { open });
+		onOpenChange?.({ open });
 	}
 
 	function handleQueryInput(event: Event): void {
 		query = (event.currentTarget as HTMLInputElement).value;
 		activeIndex = -1;
-		dispatch('querychange', { query });
+		onQueryChange?.({ query });
 	}
 
 	function selectItem(item: CommandItem): void {
 		if (item.disabled) return;
 		value = item.value;
-		dispatch('select', { value: item.value, item });
+		onSelect?.({ value: item.value, item });
 		if (closeOnSelect) setOpen(false);
 	}
 
@@ -201,14 +234,14 @@
 		aria-label={label}
 		aria-modal={modal ? 'true' : undefined}
 		use:manageSurface
-		on:cancel={handleDialogCancel}
-		on:close={() => setOpen(false)}
-		on:click={handleSurfaceClick}
-		on:keydown={handleKeydown}
-		{...$$restProps}
+		oncancel={handleDialogCancel}
+		onclose={() => setOpen(false)}
+		onclick={handleSurfaceClick}
+		onkeydown={handleKeydown}
+		{...rest}
 	>
 		<div class="melt-command-panel">
-			<slot name="header" />
+			{@render header?.()}
 			<label class="melt-command-search">
 				<span class="melt-visually-hidden">{searchLabel}</span>
 				<input
@@ -224,7 +257,7 @@
 					aria-activedescendant={activeDescendant}
 					autocomplete="off"
 					spellcheck="false"
-					on:input={handleQueryInput}
+					oninput={handleQueryInput}
 				/>
 			</label>
 			<div id={listId} class="melt-command-list" role="listbox" aria-label="Commands">
@@ -242,23 +275,35 @@
 								aria-selected={value === result.item.value}
 								data-active={activeIndex === result.index || undefined}
 								data-selected={value === result.item.value || undefined}
-								on:mouseenter={() => setActive(result.index)}
-								on:click={() => selectItem(result.item)}
+								onmouseenter={() => setActive(result.index)}
+								onclick={() => selectItem(result.item)}
 							>
-								<slot name="item" item={result.item} active={activeIndex === result.index} selected={value === result.item.value}>
+								{#if item}
+									{@render item({
+										item: result.item,
+										active: activeIndex === result.index,
+										selected: value === result.item.value
+									})}
+								{:else}
 									<span class="melt-command-item-content">
 										<span class="melt-command-item-label">{result.item.label}</span>
 										{#if result.item.description}<span class="melt-command-item-description">{result.item.description}</span>{/if}
 									</span>
-								</slot>
+								{/if}
 							</button>
 						{/each}
 					</div>
 				{:else}
-					<div class="melt-command-empty" role="status"><slot name="empty">{emptyText}</slot></div>
+					<div class="melt-command-empty" role="status">
+					{#if empty}
+						{@render empty()}
+					{:else}
+						{emptyText}
+					{/if}
+				</div>
 				{/each}
 			</div>
-			<slot name="footer" />
+			{@render footer?.()}
 		</div>
 	</svelte:element>
 {/if}

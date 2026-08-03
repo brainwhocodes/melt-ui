@@ -1,3 +1,5 @@
+<script lang="ts"></script>
+
 <div role="form">
 	<input id="name" type="text" placeholder="Name" />
 	<hr />

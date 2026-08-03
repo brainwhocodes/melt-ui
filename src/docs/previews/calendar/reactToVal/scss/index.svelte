@@ -13,9 +13,11 @@
 		defaultPlaceholder: new CalendarDate(2023, 10, 1),
 	});
 
-	$: if ($value && isSameDay($value, halloween)) {
-		alert('Happy Halloween! 🎃');
-	}
+	$effect(() => {
+		if ($value && isSameDay($value, halloween)) {
+			alert('Happy Halloween! 🎃');
+		}
+	});
 </script>
 
 <div {...$calendar} use:calendar>
@@ -77,13 +79,13 @@
 
     padding: 0.75rem;
 
-    
+
 
     color: rgb(var(--color-white) / 1);
 
-    
 
-    
+
+
 
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)
 }
@@ -197,7 +199,7 @@
 
 	thead {
 
-    
+
 
     color: rgb(var(--color-neutral-500) / 1)
 }
@@ -259,13 +261,13 @@
 
 	[data-melt-calendar-cell]:focus {
 
-    
 
-    
+
+
 
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
-    
+
 
     }
 
@@ -280,7 +282,7 @@
 
     pointer-events: none;
 
-    
+
 
     color: rgb(248 113 113 / 1);
 
@@ -289,11 +291,11 @@
 
 	[data-melt-calendar-cell][data-selected] {
 
-    
+
 
     background-color: rgb(var(--color-magnum-400) / 1);
 
-    
+
 
     color: rgb(var(--color-neutral-950) / 1)
 }

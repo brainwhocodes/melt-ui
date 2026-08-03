@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	import Dialog from './Dialog.svelte';
 	import Popover from './Popover.svelte';
 	import Select from './Select.svelte';
@@ -37,28 +37,40 @@
 </script>
 
 <script lang="ts">
+	import PortalNested from './PortalNested.svelte';
 	import type { CreateDialogProps } from '$lib/index.js';
 
-	export let portal: CreateDialogProps['portal'];
-	export let forceVisible: CreateDialogProps['forceVisible'];
-	export let cmp: Structure = structure;
 
-	$: resolvedCmp = components[cmp.name];
-	export let isRoot = true;
+	interface Props {
+		portal: CreateDialogProps['portal'];
+		forceVisible: CreateDialogProps['forceVisible'];
+		cmp?: Structure;
+		isRoot?: boolean;
+	}
+
+	let {
+		portal,
+		forceVisible,
+		cmp = structure,
+		isRoot = true
+	}: Props = $props();
+	let resolvedCmp = $derived(components[cmp.name]);
 </script>
 
 {#if isRoot}
+	{@const SvelteComponent = resolvedCmp}
 	<main>
-		<svelte:component this={resolvedCmp} {portal} {forceVisible}>
+		<SvelteComponent {portal} {forceVisible}>
 			{#each cmp.children ?? [] as child}
-				<svelte:self cmp={child} isRoot={false} {portal} {forceVisible} />
+				<PortalNested cmp={child} isRoot={false} {portal} {forceVisible} />
 			{/each}
-		</svelte:component>
+		</SvelteComponent>
 	</main>
 {:else}
-	<svelte:component this={resolvedCmp} {portal} {forceVisible}>
+	{@const SvelteComponent_1 = resolvedCmp}
+	<SvelteComponent_1 {portal} {forceVisible}>
 		{#each cmp.children ?? [] as child}
-			<svelte:self cmp={child} isRoot={false} {portal} {forceVisible} />
+			<PortalNested cmp={child} isRoot={false} {portal} {forceVisible} />
 		{/each}
-	</svelte:component>
+	</SvelteComponent_1>
 {/if}

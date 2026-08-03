@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import {
 		alertDialogContext,
 		containFocus,
@@ -14,23 +14,34 @@
 		type OverlayOpenChange,
 	} from './overlay.js';
 
-	export let open = false;
-	export let closeOnEscape = true;
-	export let closeOnBackdrop = false;
-	export let onOpenChange: OverlayOpenChange | undefined = undefined;
-	let className = '';
-	export { className as class };
+	interface Props {
+		open?: boolean;
+		closeOnEscape?: boolean;
+		closeOnBackdrop?: boolean;
+		onOpenChange?: OverlayOpenChange | undefined;
+		onDismiss?: ((detail: { reason: OverlayCloseReason }) => void) | undefined;
+		class?: string;
+		children?: import('svelte').Snippet<[any]>;
+		[key: string]: any
+	}
 
-	const dispatch = createEventDispatcher<{
-		openChange: { open: boolean; reason: OverlayCloseReason };
-		dismiss: { reason: OverlayCloseReason };
-	}>();
+	let {
+		open = $bindable(false),
+		closeOnEscape = true,
+		closeOnBackdrop = false,
+		onOpenChange = undefined,
+		onDismiss = undefined,
+		class: className = '',
+		children,
+		...rest
+	}: Props = $props();
 
-	let dialog: HTMLDialogElement;
-	let mounted = false;
+
+	let dialog: HTMLDialogElement | undefined = $state();
+	let mounted = $state(false);
 	let active = false;
-	let titleId: string | undefined;
-	let descriptionId: string | undefined;
+	let titleId: string | undefined = $state();
+	let descriptionId: string | undefined = $state();
 	let previouslyFocused: HTMLElement | null = null;
 	let releaseFocus: () => void = () => {};
 	let releaseScroll: () => void = () => {};
@@ -40,8 +51,7 @@
 		if (open === next) return;
 		open = next;
 		onOpenChange?.(next, reason);
-		dispatch('openChange', { open: next, reason });
-		if (!next) dispatch('dismiss', { reason });
+		if (!next) onDismiss?.({ reason });
 	}
 
 	function close(reason: OverlayCloseReason = 'programmatic') {
@@ -111,14 +121,16 @@
 		};
 	});
 
-	$: if (mounted && dialog) {
-		if (open) activate();
-		else deactivate();
-	}
+	$effect(() => {
+		if (mounted && dialog) {
+			if (open) activate();
+			else deactivate();
+		}
+	});
 </script>
 
 <!-- Escape supplies the keyboard equivalent for backdrop dismissal. -->
-<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->
 <dialog
 	bind:this={dialog}
 	class={`melt-alert-dialog ${className}`.trim()}
@@ -127,10 +139,10 @@
 	aria-labelledby={titleId}
 	aria-describedby={descriptionId}
 	data-state={open ? 'open' : 'closed'}
-	on:cancel={handleCancel}
-	on:click={handleBackdrop}
-	on:close={handleNativeClose}
-	{...$$restProps}
+	oncancel={handleCancel}
+	onclick={handleBackdrop}
+	onclose={handleNativeClose}
+	{...rest}
 >
-	<slot {close} />
+	{@render children?.({ close, })}
 </dialog>

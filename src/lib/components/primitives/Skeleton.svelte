@@ -2,36 +2,51 @@
 	type SkeletonShape = 'rectangle' | 'circle' | 'text';
 	type CssSize = number | string;
 
-	export let shape: SkeletonShape = 'rectangle';
-	export let width: CssSize | undefined = undefined;
-	export let height: CssSize | undefined = undefined;
-	export let animated = true;
-	export let ariaHidden = true;
 
-	let className = '';
-	export { className as class };
+	interface Props {
+		shape?: SkeletonShape;
+		width?: CssSize | undefined;
+		height?: CssSize | undefined;
+		animated?: boolean;
+		ariaHidden?: boolean;
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let {
+		shape = 'rectangle',
+		width = undefined,
+		height = undefined,
+		animated = true,
+		ariaHidden = true,
+		class: className = '',
+		children,
+		...rest
+	}: Props = $props();
+
 
 	const toCssSize = (value: CssSize | undefined) =>
 		typeof value === 'number' ? `${value}px` : value;
 
-	$: widthValue = toCssSize(width);
-	$: heightValue = toCssSize(height);
-	$: inlineStyle = [
-		$$restProps.style,
+	let widthValue = $derived(toCssSize(width));
+	let heightValue = $derived(toCssSize(height));
+	let inlineStyle = $derived([
+		rest.style,
 		widthValue ? `--melt-skeleton-width: ${widthValue}` : '',
 		heightValue ? `--melt-skeleton-height: ${heightValue}` : '',
 	]
 		.filter(Boolean)
-		.join('; ');
+		.join('; '));
 </script>
 
 <span
-	{...$$restProps}
+	{...rest}
 	class={`melt-skeleton ${className}`}
 	style={inlineStyle}
 	data-shape={shape}
 	data-animated={animated ? '' : undefined}
 	aria-hidden={ariaHidden}
 >
-	<slot />
+	{@render children?.()}
 </span>

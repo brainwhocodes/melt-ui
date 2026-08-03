@@ -1,31 +1,46 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	export type AlertVariant = 'neutral' | 'info' | 'success' | 'warning' | 'danger';
 </script>
 
 <script lang="ts">
-	export let variant: AlertVariant = 'neutral';
-	let className = '';
-	export { className as class };
+	interface Props {
+		variant?: AlertVariant;
+		class?: string;
+		title?: import('svelte').Snippet;
+		content?: import('svelte').Snippet;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let {
+		variant = 'neutral',
+		class: className = '',
+		title,
+		content,
+		children,
+		...rest
+	}: Props = $props();
+
 </script>
 
 <div
-	{...$$restProps}
+	{...rest}
 	class={`melt-alert ${className}`.trim()}
 	data-variant={variant}
 	role="alert"
 >
-	{#if $$slots.title}
+	{#if title}
 		<div class="melt-alert__title">
-			<slot name="title" />
+			{@render title?.()}
 		</div>
 	{/if}
-	{#if $$slots.content}
+	{#if content}
 		<div class="melt-alert__content">
-			<slot name="content" />
+			{@render content?.()}
 		</div>
-	{:else if $$slots.default}
+	{:else if children}
 		<div class="melt-alert__content">
-			<slot />
+			{@render children?.()}
 		</div>
 	{/if}
 </div>

@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { createDialog, type CreateDialogProps } from '$lib/index.js';
 	import { kbd } from '$lib/internal/helpers/keyboard.js';
+	interface Props {
+		[key: string]: any
+	}
+
+	let { ...rest }: Props = $props();
 
 	type $$Props = CreateDialogProps;
 
@@ -8,7 +13,7 @@
 		elements: { trigger, overlay, content, title, description, close, portalled },
 		states: { open },
 	} = createDialog({
-		...$$restProps,
+		...rest,
 	});
 </script>
 
@@ -20,10 +25,10 @@
 		<div {...$content} use:content data-testid="content">
 			<h2 {...$title} use:title data-testid="title">Title</h2>
 			<p {...$description} use:description data-testid="description">Description</p>
-			<button on:click={() => open.update((p) => !p)} data-testid="toggle-open">toggle open</button>
+			<button onclick={() => open.update((p) => !p)} data-testid="toggle-open">toggle open</button>
 			<button
 				data-testid="escape-interceptor"
-				on:keydown={(e) => e.key === kbd.ESCAPE && e.stopPropagation()}
+				onkeydown={(e) => e.key === kbd.ESCAPE && e.stopPropagation()}
 			>
 				escape interceptor
 			</button>
@@ -36,25 +41,28 @@
 </main>
 <div id="portal-target" data-testid="portal-target"></div>
 
-<button on:click|stopPropagation data-testid="click-interceptor">click interceptor</button>
-<button on:pointerdown|stopPropagation data-testid="pointerdown-interceptor">
+<button onclick={(e) => e.stopPropagation()} data-testid="click-interceptor">click interceptor</button>
+<button onpointerdown={(e) => e.stopPropagation()} data-testid="pointerdown-interceptor">
 	pointerdown interceptor
 </button>
-<button on:pointerup|stopPropagation data-testid="pointerup-interceptor">
+<button onpointerup={(e) => e.stopPropagation()} data-testid="pointerup-interceptor">
 	pointerup interceptor
 </button>
-<button on:mousedown|stopPropagation data-testid="mousedown-interceptor">
+<button onmousedown={(e) => e.stopPropagation()} data-testid="mousedown-interceptor">
 	mousedown interceptor
 </button>
-<button on:mouseup|stopPropagation data-testid="mouseup-interceptor">mouseup interceptor</button>
-<button on:touchstart|stopPropagation data-testid="touchstart-interceptor">
+<button onmouseup={(e) => e.stopPropagation()} data-testid="mouseup-interceptor">mouseup interceptor</button>
+<button ontouchstart={(e) => e.stopPropagation()} data-testid="touchstart-interceptor">
 	touchstart interceptor
 </button>
-<button on:touchend|stopPropagation data-testid="touchend-interceptor">
+<button ontouchend={(e) => e.stopPropagation()} data-testid="touchend-interceptor">
 	touchend interceptor
 </button>
 <button
-	on:touchend|preventDefault|stopPropagation
+	ontouchend={(e) => {
+		e.preventDefault();
+		e.stopPropagation();
+	}}
 	data-testid="touchend-prevent-default-interceptor"
 >
 	touchend prevent default interceptor

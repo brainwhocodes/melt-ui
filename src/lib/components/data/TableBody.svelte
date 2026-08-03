@@ -1,8 +1,14 @@
 <script lang="ts">
-	let className = '';
-	export { className as class };
+	interface Props {
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { class: className = '', children, ...rest }: Props = $props();
+
 </script>
 
-<tbody class={`melt-table-body ${className}`} {...$$restProps}>
-	<slot />
+<tbody class={`melt-table-body ${className}`} {...rest}>
+	{@render children?.()}
 </tbody>

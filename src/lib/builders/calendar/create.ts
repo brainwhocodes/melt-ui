@@ -756,12 +756,12 @@ export function createCalendar<
 	 *
 	 * @example
 	 * ```svelte
-	 * <script>
+	 * <script lang="ts">
 	 * 	import { createCalendar } from '@melt-ui/svelte';
 	 * 	const { { ... }, helpers: { nextPage } } = createCalendar()
 	 * </script>
 	 *
-	 * <button on:click={nextPage} aria-label="Next page">Next page</button>
+	 * <button onclick={nextPage} aria-label="Next page">Next page</button>
 	 * ```
 	 */
 	function nextPage() {
@@ -797,12 +797,12 @@ export function createCalendar<
 	 *
 	 * @example
 	 * ```svelte
-	 * <script>
+	 * <script lang="ts">
 	 * 	import { createCalendar } from '@melt-ui/svelte';
 	 * 	const { { ... }, helpers: { prevPage } } = createCalendar()
 	 * </script>
 	 *
-	 * <button on:click={prevPage} aria-label="Previous page">◀�</button>
+	 * <button onclick={prevPage} aria-label="Previous page">◀�</button>
 	 * ```
 	 */
 	function prevPage() {
@@ -836,13 +836,13 @@ export function createCalendar<
 	 *
 	 * @example
 	 * ```svelte
-	 * <script>
+	 * <script lang="ts">
 	 * 	import { createCalendar } from '@melt-ui/svelte';
 	 * 	const { { ... }, helpers: { nextYear, prevYear } } = createCalendar()
 	 * </script>
 	 *
-	 * <button on:click={prevYear} aria-label="Previous year">◀�</button>
-	 * <button on:click={nextYear} aria-label="Next year">▶�</button>
+	 * <button onclick={prevYear} aria-label="Previous year">◀�</button>
+	 * <button onclick={nextYear} aria-label="Next year">▶�</button>
 	 *
 	 * ```
 	 */
@@ -857,13 +857,13 @@ export function createCalendar<
 	 *
 	 * @example
 	 * ```svelte
-	 * <script>
+	 * <script lang="ts">
 	 * 	import { createCalendar } from '@melt-ui/svelte';
 	 * 	const { { ... }, helpers: { nextYear, prevYear } } = createCalendar()
 	 * </script>
 	 *
-	 * <button on:click={prevYear} aria-label="Previous year">◀�</button>
-	 * <button on:click={nextYear} aria-label="Next year">▶�</button>
+	 * <button onclick={prevYear} aria-label="Previous year">◀�</button>
+	 * <button onclick={nextYear} aria-label="Next year">▶�</button>
 	 *
 	 * ```
 	 */
@@ -887,7 +887,7 @@ export function createCalendar<
 	 *
 	 * @example
 	 * ```svelte
-	 * <script>
+	 * <script lang="ts">
 	 * 	import { createCalendar } from '@melt-ui/svelte';
 	 * 	const { { ... }, helpers: { setYear } } = createCalendar()
 	 *
@@ -916,7 +916,7 @@ export function createCalendar<
 	 *
 	 * @example
 	 * ```svelte
-	 * <script>
+	 * <script lang="ts">
 	 * 	import { createCalendar } from '@melt-ui/svelte';
 	 * 	const { { ... }, helpers: { setMonth } } = createCalendar()
 	 *

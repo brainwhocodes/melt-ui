@@ -2,20 +2,39 @@
 	import { createDateField, type CreateDateFieldProps } from '$lib/index.js';
 	import { removeUndefined } from '../utils.js';
 
-	export let value: CreateDateFieldProps['value'] = undefined;
-	export let defaultValue: CreateDateFieldProps['defaultValue'] = undefined;
-	export let defaultPlaceholder: CreateDateFieldProps['defaultPlaceholder'] = undefined;
-	export let onValueChange: CreateDateFieldProps['onValueChange'] = undefined;
-	export let onPlaceholderChange: CreateDateFieldProps['onPlaceholderChange'] = undefined;
-	export let isDateUnavailable: CreateDateFieldProps['isDateUnavailable'] = undefined;
-	export let disabled: CreateDateFieldProps['disabled'] = undefined;
-	export let readonly: CreateDateFieldProps['readonly'] = undefined;
-	export let readonlySegments: CreateDateFieldProps['readonlySegments'] = undefined;
-	export let hourCycle: CreateDateFieldProps['hourCycle'] = undefined;
-	export let locale: CreateDateFieldProps['locale'] = 'en';
-	export let hideTimeZone: CreateDateFieldProps['hideTimeZone'] = undefined;
-	export let ids: CreateDateFieldProps['ids'] = undefined;
-	export let granularity: CreateDateFieldProps['granularity'] = undefined;
+	interface Props {
+		value?: CreateDateFieldProps['value'];
+		defaultValue?: CreateDateFieldProps['defaultValue'];
+		defaultPlaceholder?: CreateDateFieldProps['defaultPlaceholder'];
+		onValueChange?: CreateDateFieldProps['onValueChange'];
+		onPlaceholderChange?: CreateDateFieldProps['onPlaceholderChange'];
+		isDateUnavailable?: CreateDateFieldProps['isDateUnavailable'];
+		disabled?: CreateDateFieldProps['disabled'];
+		readonly?: CreateDateFieldProps['readonly'];
+		readonlySegments?: CreateDateFieldProps['readonlySegments'];
+		hourCycle?: CreateDateFieldProps['hourCycle'];
+		locale?: CreateDateFieldProps['locale'];
+		hideTimeZone?: CreateDateFieldProps['hideTimeZone'];
+		ids?: CreateDateFieldProps['ids'];
+		granularity?: CreateDateFieldProps['granularity'];
+	}
+
+	let {
+		value = undefined,
+		defaultValue = undefined,
+		defaultPlaceholder = undefined,
+		onValueChange = undefined,
+		onPlaceholderChange = undefined,
+		isDateUnavailable = undefined,
+		disabled = undefined,
+		readonly = undefined,
+		readonlySegments = undefined,
+		hourCycle = undefined,
+		locale = 'en',
+		hideTimeZone = undefined,
+		ids = undefined,
+		granularity = undefined
+	}: Props = $props();
 
 	const {
 		elements: { field, segment, label, validation },
@@ -68,18 +87,18 @@
 	</div>
 </main>
 
-<button data-testid="set-locale-en-gb" on:click={() => ($localeOption = 'en-GB')}>
+<button data-testid="set-locale-en-gb" onclick={() => ($localeOption = 'en-GB')}>
 	Use en-GB
 </button>
-<button data-testid="set-locale-en-us" on:click={() => ($localeOption = 'en-US')}>
+<button data-testid="set-locale-en-us" onclick={() => ($localeOption = 'en-US')}>
 	Use en-US
 </button>
-<button data-testid="set-hour-cycle-12" on:click={() => ($hourCycleOption = 12)}>
+<button data-testid="set-hour-cycle-12" onclick={() => ($hourCycleOption = 12)}>
 	Use 12-hour cycle
 </button>
-<button data-testid="set-hour-cycle-24" on:click={() => ($hourCycleOption = 24)}>
+<button data-testid="set-hour-cycle-24" onclick={() => ($hourCycleOption = 24)}>
 	Use 24-hour cycle
 </button>
-<button data-testid="clear-hour-cycle" on:click={() => ($hourCycleOption = undefined)}>
+<button data-testid="clear-hour-cycle" onclick={() => ($hourCycleOption = undefined)}>
 	Use locale hour cycle
 </button>

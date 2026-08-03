@@ -1,6 +1,15 @@
 <script lang="ts">
 	import { componentMap, type ComponentCategory } from '$docs/data/components/index.js';
-	import { Alert, Badge, Button, ButtonGroup, Field, Input, Spinner } from '$lib/index.js';
+	import {
+		Alert,
+		Badge,
+		Button,
+		ButtonGroup,
+		Field,
+		InlineEdit,
+		Input,
+		Spinner,
+	} from '$lib/index.js';
 
 	const categories: readonly { key: ComponentCategory; label: string; description: string }[] = [
 		{
@@ -38,7 +47,8 @@
 	const components = Object.entries(componentMap);
 
 	type PreviewState = 'ready' | 'busy' | 'invalid';
-	let previewState: PreviewState = 'ready';
+	let previewState: PreviewState = $state('ready');
+	let inlineEditValue = $state('Component gallery');
 </script>
 
 <svelte:head>
@@ -84,19 +94,19 @@ import {`{ Button, Field, Input }`} from '@melt-ui/svelte';</code></pre>
 					size="sm"
 					variant={previewState === 'ready' ? 'secondary' : 'ghost'}
 					aria-pressed={previewState === 'ready'}
-					on:click={() => (previewState = 'ready')}>Ready</Button
+					onclick={() => (previewState = 'ready')}>Ready</Button
 				>
 				<Button
 					size="sm"
 					variant={previewState === 'busy' ? 'secondary' : 'ghost'}
 					aria-pressed={previewState === 'busy'}
-					on:click={() => (previewState = 'busy')}>Loading</Button
+					onclick={() => (previewState = 'busy')}>Loading</Button
 				>
 				<Button
 					size="sm"
 					variant={previewState === 'invalid' ? 'secondary' : 'ghost'}
 					aria-pressed={previewState === 'invalid'}
-					on:click={() => (previewState = 'invalid')}>Error</Button
+					onclick={() => (previewState = 'invalid')}>Error</Button
 				>
 			</ButtonGroup>
 		</div>
@@ -111,15 +121,20 @@ import {`{ Button, Field, Input }`} from '@melt-ui/svelte';</code></pre>
 			>
 				<Input type="email" placeholder="you@company.com" />
 			</Field>
+			<InlineEdit id="component-preview-name" label="Preview name" bind:value={inlineEditValue} />
 			<Alert variant={previewState === 'invalid' ? 'warning' : 'info'}>
-				<span slot="title">
-					{previewState === 'invalid' ? 'Review the highlighted field' : 'Native Svelte, shared CSS'}
-				</span>
-				<span slot="content">
-					{previewState === 'invalid'
-						? 'Validation messages are connected to their controls automatically.'
-						: 'No runtime styling engine and no component-level style injection.'}
-				</span>
+				{#snippet title()}
+								<span >
+						{previewState === 'invalid' ? 'Review the highlighted field' : 'Native Svelte, shared CSS'}
+					</span>
+							{/snippet}
+				{#snippet content()}
+								<span >
+						{previewState === 'invalid'
+							? 'Validation messages are connected to their controls automatically.'
+							: 'No runtime styling engine and no component-level style injection.'}
+					</span>
+							{/snippet}
 			</Alert>
 			<ButtonGroup aria-label="Preview actions">
 				<Button loading={previewState === 'busy'} loadingLabel="Inviting teammate">
@@ -150,7 +165,10 @@ import {`{ Button, Field, Input }`} from '@melt-ui/svelte';</code></pre>
 								<h3>{component.name}</h3>
 								<p>{component.description}</p>
 							</div>
-							<code>{component.exports.join(', ')}</code>
+							<div class="component-catalog__example">
+								<code>{component.example}</code>
+								<span>{component.exports.join(', ')}</span>
+							</div>
 							<span class="component-catalog__slug">{slug}</span>
 						</li>
 					{/each}
@@ -208,6 +226,11 @@ import {`{ Button, Field, Input }`} from '@melt-ui/svelte';</code></pre>
 		border: 1px solid rgb(var(--color-neutral-700));
 		border-radius: 0.5rem;
 		background: rgb(var(--color-neutral-900));
+	}
+
+	pre:focus-visible {
+		outline: 2px solid rgb(var(--color-magnum-400));
+		outline-offset: 2px;
 	}
 
 	.component-catalog__preview {
@@ -296,7 +319,7 @@ import {`{ Button, Field, Input }`} from '@melt-ui/svelte';</code></pre>
 
 	.component-catalog__group li {
 		display: grid;
-		grid-template-columns: minmax(12rem, 1fr) minmax(12rem, 0.65fr) auto;
+		grid-template-columns: minmax(12rem, 0.8fr) minmax(16rem, 1fr) auto;
 		gap: 1.5rem;
 		align-items: start;
 		padding-block: 1.25rem;
@@ -319,8 +342,35 @@ import {`{ Button, Field, Input }`} from '@melt-ui/svelte';</code></pre>
 		line-height: 1.6;
 	}
 
-	.component-catalog__group li code {
+	.component-catalog__example {
+		display: grid;
+		gap: 0.625rem;
+		min-width: 0;
+	}
+
+	.component-catalog__example code {
+		display: block;
+		overflow-x: auto;
+		padding: 0.875rem 1rem;
+		border: 1px solid rgb(var(--color-neutral-800));
+		border-radius: 0.5rem;
+		background: rgb(var(--color-neutral-950));
+		white-space: pre;
+		tab-size: 2;
+	}
+
+	.component-catalog__example code:focus-visible {
+		outline: 2px solid rgb(var(--color-magnum-400));
+		outline-offset: 2px;
+	}
+
+	.component-catalog__example span {
 		color: rgb(var(--color-magnum-300));
+		font-size: 0.75rem;
+	}
+
+	.component-catalog__group li code {
+		color: rgb(var(--color-neutral-100));
 	}
 
 	.component-catalog__slug {

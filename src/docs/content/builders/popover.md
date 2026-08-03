@@ -3,12 +3,9 @@ title: Popover
 description: Displays rich content in a portal, triggered by a button.
 ---
 
-<script>
-    import { APIReference, KbdTable, Preview } from '$docs/components' 
-    export let schemas
-    export let keyboard
-    export let snippets
-    export let previews
+<script lang="ts">
+    import { APIReference, KbdTable, Preview } from '$docs/components'
+    let { schemas, keyboard, snippets, previews } = $props()
 </script>
 
 ## Anatomy

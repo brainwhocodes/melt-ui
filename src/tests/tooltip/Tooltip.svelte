@@ -5,10 +5,21 @@
 
 	type $$Props = CreateTooltipProps;
 
-	export let open: Writable<boolean> | undefined = undefined;
-	export let group: CreateTooltipProps['group'] = undefined;
-	export let closeOnPointerDown: CreateTooltipProps['closeOnPointerDown'] = false;
-	export let ids: CreateTooltipProps['ids'] = undefined;
+	interface Props {
+		open?: Writable<boolean> | undefined;
+		group?: CreateTooltipProps['group'];
+		closeOnPointerDown?: CreateTooltipProps['closeOnPointerDown'];
+		ids?: CreateTooltipProps['ids'];
+		[key: string]: any
+	}
+
+	let {
+		open = undefined,
+		group = undefined,
+		closeOnPointerDown = false,
+		ids = undefined,
+		...rest
+	}: Props = $props();
 
 	const {
 		elements: { content, trigger },
@@ -21,11 +32,13 @@
 			openDelay: 0,
 			closeDelay: 0,
 			ids,
-			...$$restProps,
+			...rest,
 		})
 	);
 
-	$: options.group.set(group);
+	$effect(() => {
+		options.group.set(group);
+	});
 </script>
 
 <button {...$trigger} use:trigger data-testid="trigger">Trigger</button>

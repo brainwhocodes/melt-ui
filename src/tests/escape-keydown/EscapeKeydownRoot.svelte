@@ -10,7 +10,11 @@
 	import Tooltip from './TooltipTest.svelte';
 
 	type $$Props = CreateDialogProps;
-	export let escapeBehavior: CreateDialogProps['escapeBehavior'] = 'close';
+	interface Props {
+		escapeBehavior?: CreateDialogProps['escapeBehavior'];
+	}
+
+	let { escapeBehavior = 'close' }: Props = $props();
 
 	const {
 		elements: { trigger, content, portalled },

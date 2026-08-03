@@ -4,8 +4,12 @@
 	import { ChevronsUpDown, X } from '$icons/index.js';
 	import { slide } from 'svelte/transition';
 
-	export let open = false;
-	export let disabled = false;
+	interface Props {
+		open?: boolean;
+		disabled?: boolean;
+	}
+
+	let { open = $bindable(false), disabled = $bindable(false) }: Props = $props();
 
 	const {
 		elements: { root, content, trigger },
@@ -14,8 +18,12 @@
 	} = createCollapsible({ forceVisible: true });
 
 	const sync = createSync({ ...states, ...options });
-	$: sync.open(open, (v) => (open = v));
-	$: sync.disabled(disabled);
+	$effect(() => {
+		sync.open(open, (v) => (open = v));
+	});
+	$effect(() => {
+		sync.disabled(disabled);
+	});
 </script>
 
 <div

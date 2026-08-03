@@ -2,8 +2,12 @@
 	import { createSlider } from '$lib/index.js';
 	import type { Writable } from 'svelte/store';
 
-	export let value: Writable<number[]>;
-	export let autoSort = true;
+	interface Props {
+		value: Writable<number[]>;
+		autoSort?: boolean;
+	}
+
+	let { value, autoSort = true }: Props = $props();
 
 	const {
 		elements: { root, range, thumbs },

@@ -1,10 +1,20 @@
 <script lang="ts">
+	import Tree from './tree.svelte';
 	import type { TableOfContentsItem, TableOfContentsElements } from '$lib/index.js';
 
-	export let tree: TableOfContentsItem[] = [];
-	export let activeHeadingIdxs: number[];
-	export let item: TableOfContentsElements['item'];
-	export let level = 1;
+	interface Props {
+		tree?: TableOfContentsItem[];
+		activeHeadingIdxs: number[];
+		item: TableOfContentsElements['item'];
+		level?: number;
+	}
+
+	let {
+		tree = [],
+		activeHeadingIdxs,
+		item,
+		level = 1
+	}: Props = $props();
 </script>
 
 <ul class="{level !== 1 ? 'preview-pl-4' : ''} surface-8809271687">
@@ -21,7 +31,7 @@
 					{heading.title}
 				</a>
 				{#if heading.children && heading.children.length}
-					<svelte:self tree={heading.children} level={level + 1} {activeHeadingIdxs} {item} />
+					<Tree tree={heading.children} level={level + 1} {activeHeadingIdxs} {item} />
 				{/if}
 			</li>
 		{/each}

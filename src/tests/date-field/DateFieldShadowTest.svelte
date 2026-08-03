@@ -19,10 +19,11 @@
 		rootElement: firstRoot,
 	});
 
-	let hostMount: HTMLDivElement;
-	let fieldContainer: HTMLDivElement;
+	let hostMount: HTMLDivElement | undefined = $state();
+	let fieldContainer: HTMLDivElement | undefined = $state();
 
 	onMount(() => {
+		if (!hostMount || !fieldContainer) return;
 		hostMount.append(firstHost, secondHost);
 		firstRoot.append(fieldContainer);
 		rootElement.set(document);
@@ -30,6 +31,7 @@
 	});
 
 	function moveToSecondRoot() {
+		if (!fieldContainer) return;
 		secondRoot.append(fieldContainer);
 		rootElement.set(secondRoot);
 	}
@@ -45,4 +47,4 @@
 	</div>
 	<span {...$validation} use:validation>Validation</span>
 </div>
-<button data-testid="move-date-field-root" on:click={moveToSecondRoot}>Move date field root</button>
+<button data-testid="move-date-field-root" onclick={moveToSecondRoot}>Move date field root</button>

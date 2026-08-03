@@ -1,32 +1,44 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import { getCarouselContext } from './Carousel.svelte';
 
-	let className = '';
-	export { className as class };
-	export let disabled = false;
-	export let label = 'Next slide';
+
+	interface Props {
+		class?: string;
+		disabled?: boolean;
+		label?: string;
+		onclick?: (event: MouseEvent) => void;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let {
+		class: className = '',
+		disabled = false,
+		label = 'Next slide',
+		onclick = undefined,
+		children,
+		...rest
+	}: Props = $props();
 
 	const carousel = getCarouselContext();
 	const { activeIndex, indices, orientation } = carousel;
-	const dispatch = createEventDispatcher<{ click: MouseEvent }>();
 
 	function handleClick(event: MouseEvent): void {
-		const allowed = dispatch('click', event, { cancelable: true });
-		if (allowed && !event.defaultPrevented) carousel.goBy(1);
+		onclick?.(event);
+		if (!event.defaultPrevented) carousel.goBy(1);
 	}
 
-	$: unavailable = disabled || !carousel.canGoNext($activeIndex, $indices);
+	let unavailable = $derived(disabled || !carousel.canGoNext($activeIndex, $indices));
 </script>
 
 <button
-	{...$$restProps}
+	{...rest}
 	class={`melt-carousel-next ${className}`.trim()}
 	type="button"
 	disabled={unavailable}
 	aria-label={label}
 	data-orientation={$orientation}
-	on:click={handleClick}
+	onclick={handleClick}
 >
-	<slot>Next</slot>
+	{#if children}{@render children()}{:else}Next{/if}
 </button>

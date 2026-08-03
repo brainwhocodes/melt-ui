@@ -35,7 +35,7 @@
 		},
 	});
 
-	let hideHeading = false;
+	let hideHeading = $state(false);
 </script>
 
 <div
@@ -45,7 +45,7 @@
 		id="toc-builder-preview"
 		class="surface-0429f8f0c9"
 	>
-		<button on:click={() => (hideHeading = !hideHeading)} class="hide-heading">
+		<button onclick={() => (hideHeading = !hideHeading)} class="hide-heading">
 			{hideHeading ? 'Show heading' : 'Hide heading'}
 		</button>
 

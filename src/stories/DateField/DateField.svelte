@@ -2,20 +2,39 @@
 	import { createDateField, type CreateDateFieldProps } from '$lib/builders/index.js';
 	import { PreviewWrapper } from '$docs/components/index.js';
 
-	export let value: CreateDateFieldProps['value'] = undefined;
-	export let defaultValue: CreateDateFieldProps['defaultValue'] = undefined;
-	export let defaultPlaceholder: CreateDateFieldProps['defaultPlaceholder'] = undefined;
-	export let onValueChange: CreateDateFieldProps['onValueChange'] = undefined;
-	export let onPlaceholderChange: CreateDateFieldProps['onPlaceholderChange'] = undefined;
-	export let isDateUnavailable: CreateDateFieldProps['isDateUnavailable'] = undefined;
-	export let disabled: CreateDateFieldProps['disabled'] = undefined;
-	export let readonly: CreateDateFieldProps['readonly'] = undefined;
-	export let readonlySegments: CreateDateFieldProps['readonlySegments'] = undefined;
-	export let hourCycle: CreateDateFieldProps['hourCycle'] = undefined;
-	export let locale: CreateDateFieldProps['locale'] = 'en';
-	export let hideTimeZone: CreateDateFieldProps['hideTimeZone'] = undefined;
-	export let ids: CreateDateFieldProps['ids'] = undefined;
-	export let granularity: CreateDateFieldProps['granularity'] = undefined;
+	interface Props {
+		value?: CreateDateFieldProps['value'];
+		defaultValue?: CreateDateFieldProps['defaultValue'];
+		defaultPlaceholder?: CreateDateFieldProps['defaultPlaceholder'];
+		onValueChange?: CreateDateFieldProps['onValueChange'];
+		onPlaceholderChange?: CreateDateFieldProps['onPlaceholderChange'];
+		isDateUnavailable?: CreateDateFieldProps['isDateUnavailable'];
+		disabled?: CreateDateFieldProps['disabled'];
+		readonly?: CreateDateFieldProps['readonly'];
+		readonlySegments?: CreateDateFieldProps['readonlySegments'];
+		hourCycle?: CreateDateFieldProps['hourCycle'];
+		locale?: CreateDateFieldProps['locale'];
+		hideTimeZone?: CreateDateFieldProps['hideTimeZone'];
+		ids?: CreateDateFieldProps['ids'];
+		granularity?: CreateDateFieldProps['granularity'];
+	}
+
+	let {
+		value = undefined,
+		defaultValue = undefined,
+		defaultPlaceholder = undefined,
+		onValueChange = undefined,
+		onPlaceholderChange = undefined,
+		isDateUnavailable = undefined,
+		disabled = undefined,
+		readonly = undefined,
+		readonlySegments = undefined,
+		hourCycle = undefined,
+		locale = 'en',
+		hideTimeZone = undefined,
+		ids = undefined,
+		granularity = undefined
+	}: Props = $props();
 
 	const {
 		elements: { field, segment, label },
@@ -81,12 +100,12 @@
 
 	.btn {
     border-radius: 0.25rem;
-    
+
     background-color: rgb(var(--color-magnum-600) / 1);
     padding: 0.25rem;
     font-size: 0.75rem;
     line-height: 1rem;
-    
+
     color: rgb(var(--color-white) / 1)
 }
 </style>

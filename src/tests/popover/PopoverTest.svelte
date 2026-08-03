@@ -4,14 +4,20 @@
 	import { kbd } from '$lib/internal/helpers/keyboard.js';
 	import { onMount } from 'svelte';
 
-	export let openFocus: CreatePopoverProps['openFocus'] = undefined;
-	export let closeFocus: CreatePopoverProps['closeFocus'] = undefined;
+	interface Props {
+		openFocus?: CreatePopoverProps['openFocus'];
+		closeFocus?: CreatePopoverProps['closeFocus'];
+		[key: string]: any
+	}
+
+	let { openFocus = undefined, closeFocus = undefined, ...rest }: Props = $props();
 	type $$Props = CreatePopoverProps;
 
-	let showSelfRemovingButton = true;
-	let shadowHost: HTMLDivElement;
+	let showSelfRemovingButton = $state(true);
+	let shadowHost: HTMLDivElement | undefined = $state();
 
 	onMount(() => {
+		if (!shadowHost) return;
 		const shadowRoot = shadowHost.attachShadow({ mode: 'open' });
 		const button = document.createElement('button');
 		button.textContent = 'Shadow outside';
@@ -24,7 +30,7 @@
 	} = createPopover({
 		openFocus,
 		closeFocus,
-		...$$restProps,
+		...rest,
 	});
 
 	const {
@@ -66,12 +72,12 @@
 			<input type="number" id="weight" class="input" placeholder="Weight" data-testid="input4" />
 		</fieldset>
 		<button
-			on:keydown={(e) => e.key === kbd.ESCAPE && e.stopPropagation()}
+			onkeydown={(e) => e.key === kbd.ESCAPE && e.stopPropagation()}
 			data-testid="escape-interceptor"
 		>
 			escape interceptor
 		</button>
-		<button on:click={() => open.update((p) => !p)} data-testid="toggle-open">toggle open</button>
+		<button onclick={() => open.update((p) => !p)} data-testid="toggle-open">toggle open</button>
 	</div>
 	<button class="close" {...$close} use:close data-testid="close">
 		<X class="surface-06b5214a49" />
@@ -80,9 +86,9 @@
 </div>
 <div {...$overlay} use:overlay data-testid="overlay"></div>
 <button data-testid="outside">Outside</button>
-<button on:click|stopPropagation data-testid="click-interceptor">click interceptor</button>
+<button onclick={(e) => e.stopPropagation()} data-testid="click-interceptor">click interceptor</button>
 {#if showSelfRemovingButton}
-	<button on:click={() => (showSelfRemovingButton = false)}>Remove me</button>
+	<button onclick={() => (showSelfRemovingButton = false)}>Remove me</button>
 {/if}
 <canvas aria-hidden="true" data-testid="outside-canvas">Outside interaction target</canvas>
 <div bind:this={shadowHost} data-testid="shadow-host"></div>
@@ -114,7 +120,7 @@
 
     line-height: 1.25rem;
 
-    
+
 
     color: rgb(var(--color-neutral-700) / 1)
 }
@@ -125,7 +131,7 @@
 
     font-weight: 500;
 
-    
+
 
     color: rgb(var(--color-neutral-900) / 1)
 }
@@ -142,7 +148,7 @@
 
     border-width: 1px;
 
-    
+
 
     border-color: rgb(var(--color-magnum-800) / 1);
 
@@ -160,15 +166,15 @@
 
 	.input:focus-visible {
 
-    
 
-    
+
+
 
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
-    
 
-    
+
+
 
     }
 
@@ -190,7 +196,7 @@
 
     line-height: 1;
 
-    
+
 
     color: rgb(var(--color-magnum-700) / 1)
 }
@@ -209,7 +215,7 @@
 
     border-radius: 9999px;
 
-    
+
 
     background-color: rgb(var(--color-white) / 1);
 
@@ -221,7 +227,7 @@
 
     font-weight: 500;
 
-    
+
 
     color: rgb(var(--color-magnum-900) / 1);
 
@@ -239,15 +245,15 @@
 
 	.trigger:focus-visible {
 
-    
 
-    
+
+
 
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
-    
 
-    
+
+
 
     }
 
@@ -271,7 +277,7 @@
 
     border-radius: 9999px;
 
-    
+
 
     color: rgb(var(--color-magnum-900) / 1);
 
@@ -289,21 +295,21 @@
 
 	.close:focus-visible {
 
-    
 
-    
+
+
 
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
-    
 
-    
+
+
 
     }
 
 	.close {
 
-    
+
 
     background-color: rgb(var(--color-white) / 1);
 
@@ -324,15 +330,15 @@
 
     border-radius: 4px;
 
-    
+
 
     background-color: rgb(var(--color-white) / 1);
 
     padding: 1.25rem;
 
-    
 
-    
+
+
 
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)
 }

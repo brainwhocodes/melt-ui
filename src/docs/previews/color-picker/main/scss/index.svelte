@@ -34,8 +34,10 @@
 	} = createPopover({ forceVisible: true });
 
 	const sync = createSync(popoverStates);
-	let open = false;
-	$: sync.open(open, (v) => (open = v));
+	let open = $state(false);
+	$effect(() => {
+		sync.open(open, (v) => (open = v));
+	});
 
 	type Direction = 'top' | 'right' | 'bottom' | 'left';
 	const directions: readonly Direction[] = ['top', 'right', 'bottom', 'left'];
@@ -45,16 +47,18 @@
 		bottom: 'top',
 		left: 'right',
 	};
-	let direction: Direction = 'right';
-	$: popoverOptions.positioning.update((config) => ({
-		...config,
-		placement: direction,
-		flip: {
-			fallbackPlacements: (
-				[opposite[direction], 'bottom', 'top'] as Direction[]
-			).filter((placement) => placement !== direction),
-		},
-	}));
+	let direction: Direction = $state('right');
+	$effect(() => {
+		popoverOptions.positioning.update((config) => ({
+			...config,
+			placement: direction,
+			flip: {
+				fallbackPlacements: (
+					[opposite[direction], 'bottom', 'top'] as Direction[]
+				).filter((placement) => placement !== direction),
+			},
+		}));
+	});
 
 	const rows: ReadonlyArray<{
 		label: string;
@@ -79,7 +83,7 @@
 				class:active={direction === side}
 				aria-pressed={direction === side}
 				title={side}
-				on:click={() => (direction = side)}
+				onclick={() => (direction = side)}
 			>
 				{side === 'top' ? '\u2191' : side === 'right' ? '\u2192' : side === 'bottom' ? '\u2193' : '\u2190'}
 			</button>

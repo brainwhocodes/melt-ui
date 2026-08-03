@@ -23,14 +23,20 @@
 		defaultSelected: { value: 'pause', label: 'pause' },
 	});
 
-	export let value: CreateToasterProps['hover'];
+	interface Props {
+		value: CreateToasterProps['hover'];
+	}
 
-	$: value = $selected?.value;
+	let { value = $bindable() }: Props = $props();
+
+	$effect(() => {
+		value = $selected?.value;
+	});
 </script>
 
 <div class="surface-c1ea41ee43">
 	<div class="surface-3583548e35">
-		<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
+		<!-- svelte-ignore a11y_label_has_associated_control - $label contains the 'for' attribute -->
 		<label class="surface-5521ca0221" {...$label} use:label> Hover behavior : </label>
 		<button
 			class="surface-e08e8a514e"

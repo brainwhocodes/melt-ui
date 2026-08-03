@@ -2,12 +2,26 @@
 	import { getContext } from 'svelte';
 	import { NAVIGATION_MENU_ROOT, type NavigationMenuRootContext } from './context.js';
 
-	export let href: string;
-	export let active = false;
-	export let target: string | undefined = undefined;
-	export let rel: string | undefined = undefined;
-	let className = '';
-	export { className as class };
+	interface Props {
+		href: string;
+		active?: boolean;
+		target?: string | undefined;
+		rel?: string | undefined;
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let {
+		href,
+		active = false,
+		target = undefined,
+		rel = undefined,
+		class: className = '',
+		children,
+		...rest
+	}: Props = $props();
+
 
 	const root = getContext<NavigationMenuRootContext>(NAVIGATION_MENU_ROOT);
 
@@ -17,14 +31,14 @@
 </script>
 
 <a
-	{...$$restProps}
+	{...rest}
 	class={`melt-navigation-menu__link ${className}`.trim()}
 	{href}
 	{target}
 	{rel}
 	aria-current={active ? 'page' : undefined}
 	data-active={active ? '' : undefined}
-	on:click={handleClick}
+	onclick={handleClick}
 >
-	<slot />
+	{@render children?.()}
 </a>

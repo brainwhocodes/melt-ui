@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export type HiddenInputProps = CreateHiddenInputProps & {
 		onChange?: (event: Event) => void;
 	};
@@ -12,11 +12,21 @@
 	import { noop } from '$lib/internal/helpers/callbacks.js';
 
 	type $$Props = HiddenInputProps;
-	export let name: $$Props['name'] = undefined;
-	export let value: $$Props['value'];
-	export let disabled: $$Props['disabled'] = undefined;
-	export let required: $$Props['required'] = undefined;
-	export let onChange: $$Props['onChange'] = noop;
+	interface Props {
+		name?: $$Props['name'];
+		value: $$Props['value'];
+		disabled?: $$Props['disabled'];
+		required?: $$Props['required'];
+		onChange?: $$Props['onChange'];
+	}
+
+	let {
+		name = undefined,
+		value,
+		disabled = undefined,
+		required = undefined,
+		onChange = noop
+	}: Props = $props();
 
 	const hiddenInput = createHiddenInput({
 		name,
@@ -26,4 +36,4 @@
 	});
 </script>
 
-<input {...$hiddenInput} use:hiddenInput on:change={onChange} data-testid="input" />
+<input {...$hiddenInput} use:hiddenInput onchange={onChange} data-testid="input" />

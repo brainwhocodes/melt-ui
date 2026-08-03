@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export type ToastData = {
 		title: string;
 		description: string;
@@ -15,12 +15,12 @@
 
 	const hover: Writable<CreateToasterProps['hover']> = writable('pause');
 
-	$: ({
+	let {
 		elements,
 		helpers: { addToast },
 		states: { toasts },
 		actions: { portal },
-	} = createToaster<ToastData>({ hover: $hover }));
+	} = $derived(createToaster<ToastData>({ hover: $hover }));
 
 	const toastData: ToastData[] = [
 		{
@@ -49,7 +49,7 @@
 
 <button
 	class="surface-6036e059a6"
-	on:click={addRandomToast}
+	onclick={addRandomToast}
 >
 	Show toast
 </button>

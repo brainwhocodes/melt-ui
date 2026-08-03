@@ -3,7 +3,7 @@ title: Usage
 description: It only takes a few lines of code to get started building components with Melt UI.
 ---
 
-<script>
+<script lang="ts">
     import { Callout } from '$docs/components';
 </script>
 
@@ -13,7 +13,7 @@ Melt UI exposes a number of component builders. The following code snippet demon
 collapsible component using Melt UI's [Collapsible](/docs/builders/collapsible) builder.
 
 ```svelte
-<script>
+<script lang="ts">
 	import { createCollapsible } from '@melt-ui/svelte'
 	const {
 		elements: { root, content, trigger },
@@ -39,7 +39,7 @@ Melt UI leaves the styling up to you. Use scoped or global CSS, your preferred d
 third-party components, as long as you can pass Melt's props to the elements.
 
 ```svelte
-<script>
+<script lang="ts">
   import { createCollapsible } from '@melt-ui/svelte';
   import Button from '$components/button.svelte';
 
@@ -52,7 +52,7 @@ third-party components, as long as you can pass Melt's props to the elements.
 <!-- Using Svelte Scoped Styles -->
 <div class="root" {...$root} use:root>
 <!-- Using an external component -->
-<Button on:click={() => console.log('clicked')} {...$trigger} action={trigger}>
+<Button onclick={() => console.log('clicked')} {...$trigger} action={trigger}>
   {$open ? 'Close' : 'Open'}
 </Button>
 <!-- Using a shared component style -->
@@ -69,13 +69,13 @@ third-party components, as long as you can pass Melt's props to the elements.
 </style>
 
 <!-- Button.svelte -->
-<script>
+<script lang="ts">
   import type { Action } from 'svelte/action';
-  export let action: Action
+  let { action, children, ...rest } = $props()
 </script>
 
-<button use:action>
-  <slot />
+<button use:action {...rest}>
+  {@render children?.()}
 </button>
 ```
 
@@ -86,7 +86,7 @@ automatically be added and/or altered for you. These changes can then be used fo
 purposes, should you desire to do so.
 
 ```svelte
-<script>
+<script lang="ts">
 	import { createCollapsible } from '@melt-ui/svelte'
 	const {
 		elements: { root, content, trigger }
@@ -123,11 +123,11 @@ manner, where props don't reactively affect the builder's internal state.
 
 ```svelte
 <!-- Uncontrolled -->
-<script>
+<script lang="ts">
 	import { createCollapsible } from '@melt-ui/svelte'
 
 	// This prop only affects the initial state of the component
-	export let defaultOpen = false
+	let { defaultOpen = false } = $props()
 
 	const {
 		elements: { root, content, trigger }
@@ -137,12 +137,12 @@ manner, where props don't reactively affect the builder's internal state.
 
 Or you can use them in a controlled manner, where props do affect the builder's internal state.
 
-```svelte {12-14}
+```svelte {12-16}
 <!-- Controlled -->
-<script>
+<script lang="ts">
 	import { createCollapsible, createSync } from '@melt-ui/svelte'
 
-	export let open = false
+	let { open = $bindable(false) } = $props()
 
 	const {
 		elements: { root, content, trigger },
@@ -151,7 +151,9 @@ Or you can use them in a controlled manner, where props do affect the builder's 
 
 	const sync = createSync(states)
 	// Whenever the open prop changes, update the local state, and vice versa
-	$: sync.open(open, (value) => (open = value))
+	$effect(() => {
+		sync.open(open, (value) => (open = value))
+	})
 </script>
 ```
 
@@ -167,16 +169,17 @@ generic `Button` component. You may want to pass down a `trigger` element from a
 <!-- Button.svelte -->
 <script lang="ts">
  import { type AnyMeltElement, emptyMeltElement } from '@melt-ui/svelte'
+ import type { Snippet } from 'svelte'
 
- export let element: AnyMeltElement = emptyMeltElement
+ let { element = emptyMeltElement, children }: { element?: AnyMeltElement; children?: Snippet } = $props()
 </script>
 
 <button {...$element} use:element>
- <slot />
+ {@render children?.()}
 </button>
 
 <!-- Later, in +page.svelte -->
-<script>
+<script lang="ts">
  import { createCollapsible } from '@melt-ui/svelte'
  import Button from './Button.svelte'
 

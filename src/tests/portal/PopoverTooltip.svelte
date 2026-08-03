@@ -3,8 +3,12 @@
 	import { Settings2 } from '$icons/index.js';
 	import type { PortalConfig } from '$lib/internal/actions/portal.js';
 
-	export let portal: PortalConfig;
-	export let tooltipEscapeBehavior: CreateTooltipProps['escapeBehavior'] = 'close';
+	interface Props {
+		portal: PortalConfig;
+		tooltipEscapeBehavior?: CreateTooltipProps['escapeBehavior'];
+	}
+
+	let { portal, tooltipEscapeBehavior = 'close' }: Props = $props();
 
 	const {
 		elements: { trigger, content, arrow, close },

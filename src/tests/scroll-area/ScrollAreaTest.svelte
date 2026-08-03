@@ -40,27 +40,38 @@
 		width?: string;
 	};
 
-	export let height = '288px';
-	export let width = '490px';
 
-	export let type: $$Props['type'] = 'hover';
-	export let showReplacementControls = false;
-	let viewportKey = 0;
-	let contentKey = 0;
+	interface Props {
+		height?: string;
+		width?: string;
+		type?: $$Props['type'];
+		showReplacementControls?: boolean;
+		[key: string]: any
+	}
+
+	let {
+		height = '288px',
+		width = '490px',
+		type = 'hover',
+		showReplacementControls = false,
+		...rest
+	}: Props = $props();
+	let viewportKey = $state(0);
+	let contentKey = $state(0);
 
 	const {
 		elements: { root, content, viewport, corner, scrollbarY, thumbY, scrollbarX, thumbX },
 	} = createScrollArea(
 		removeUndefined({
 			type,
-			...$$restProps,
+			...rest,
 		})
 	);
 </script>
 
 {#if showReplacementControls}
-	<button on:click={() => (contentKey += 1)}>Replace content</button>
-	<button on:click={() => (viewportKey += 1)}>Replace viewport</button>
+	<button onclick={() => (contentKey += 1)}>Replace content</button>
+	<button onclick={() => (viewportKey += 1)}>Replace viewport</button>
 {/if}
 
 <div

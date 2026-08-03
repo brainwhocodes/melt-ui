@@ -3,7 +3,11 @@
 	import { fade } from 'svelte/transition';
 	import { Settings2, X } from '$icons/index.js';
 
-	export let open = false;
+	interface Props {
+		open?: boolean;
+	}
+
+	let { open = $bindable(false) }: Props = $props();
 
 	const {
 		elements: { trigger, content, arrow, close },
@@ -13,7 +17,9 @@
 	});
 
 	const sync = createSync(states);
-	$: sync.open(open, (v) => (open = v));
+	$effect(() => {
+		sync.open(open, (v) => (open = v));
+	});
 </script>
 
 <button
@@ -76,7 +82,7 @@
     width: 100%;
     border-radius: 0.375rem;
     border-width: 1px;
-    
+
     border-color: rgb(var(--color-magnum-800) / 1);
     background-color: transparent;
     padding-left: 0.625rem;
@@ -85,11 +91,11 @@
     line-height: 1.25rem;
     }
 	.input:focus-visible {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    
-    
+
+
     }
 	.input {
     flex: 1 1 0%;
@@ -100,7 +106,7 @@
     font-size: 0.875rem;
     line-height: 1.25rem;
     line-height: 1;
-    
+
     color: rgb(var(--color-magnum-700) / 1)
 }
 
@@ -111,13 +117,13 @@
     align-items: center;
     justify-content: center;
     border-radius: 9999px;
-    
+
     background-color: rgb(var(--color-white) / 1);
     padding: 0px;
     font-size: 0.875rem;
     line-height: 1.25rem;
     font-weight: 500;
-    
+
     color: rgb(var(--color-magnum-900) / 1);
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -129,11 +135,11 @@
 }
 
 	.trigger:focus-visible {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    
-    
+
+
     }
 
 	.close {
@@ -146,7 +152,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 9999px;
-    
+
     color: rgb(var(--color-magnum-900) / 1);
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -158,15 +164,15 @@
 }
 
 	.close:focus-visible {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    
-    
+
+
     }
 
 	.close {
-    
+
     background-color: rgb(var(--color-white) / 1);
     padding: 0px;
     font-size: 0.875rem;
@@ -178,11 +184,11 @@
     z-index: 10;
     width: 15rem;
     border-radius: 4px;
-    
+
     background-color: rgb(var(--color-white) / 1);
     padding: 1.25rem;
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)
 }
 </style>

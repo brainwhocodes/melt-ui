@@ -5,24 +5,47 @@
 
 	type CalendarProps = CreateCalendarProps<true>;
 
-	export let value: CalendarProps['value'] = undefined;
-	export let defaultValue: CalendarProps['defaultValue'] = undefined;
-	export let defaultPlaceholder: CalendarProps['defaultPlaceholder'] = undefined;
-	export let onValueChange: CalendarProps['onValueChange'] = undefined;
-	export let onPlaceholderChange: CalendarProps['onPlaceholderChange'] = undefined;
-	export let isDateUnavailable: CalendarProps['isDateUnavailable'] = undefined;
-	export let isDateDisabled: CalendarProps['isDateDisabled'] = undefined;
-	export let locale: CalendarProps['locale'] = 'en';
-	export let calendarLabel: CalendarProps['calendarLabel'] = undefined;
-	export let preventDeselect: CalendarProps['preventDeselect'] = undefined;
-	export let numberOfMonths: CalendarProps['numberOfMonths'] = undefined;
-	export let pagedNavigation: CalendarProps['pagedNavigation'] = undefined;
-	export let placeholder: CalendarProps['placeholder'] = undefined;
-	export let weekStartsOn: CalendarProps['weekStartsOn'] = undefined;
-	export let fixedWeeks: CalendarProps['fixedWeeks'] = undefined;
-	export let minValue: CalendarProps['minValue'] = undefined;
-	export let maxValue: CalendarProps['maxValue'] = undefined;
-	export let weekdayFormat: CalendarProps['weekdayFormat'] = undefined;
+	interface Props {
+		value?: CalendarProps['value'];
+		defaultValue?: CalendarProps['defaultValue'];
+		defaultPlaceholder?: CalendarProps['defaultPlaceholder'];
+		onValueChange?: CalendarProps['onValueChange'];
+		onPlaceholderChange?: CalendarProps['onPlaceholderChange'];
+		isDateUnavailable?: CalendarProps['isDateUnavailable'];
+		isDateDisabled?: CalendarProps['isDateDisabled'];
+		locale?: CalendarProps['locale'];
+		calendarLabel?: CalendarProps['calendarLabel'];
+		preventDeselect?: CalendarProps['preventDeselect'];
+		numberOfMonths?: CalendarProps['numberOfMonths'];
+		pagedNavigation?: CalendarProps['pagedNavigation'];
+		placeholder?: CalendarProps['placeholder'];
+		weekStartsOn?: CalendarProps['weekStartsOn'];
+		fixedWeeks?: CalendarProps['fixedWeeks'];
+		minValue?: CalendarProps['minValue'];
+		maxValue?: CalendarProps['maxValue'];
+		weekdayFormat?: CalendarProps['weekdayFormat'];
+	}
+
+	let {
+		value = undefined,
+		defaultValue = undefined,
+		defaultPlaceholder = undefined,
+		onValueChange = undefined,
+		onPlaceholderChange = undefined,
+		isDateUnavailable = undefined,
+		isDateDisabled = undefined,
+		locale = 'en',
+		calendarLabel = undefined,
+		preventDeselect = undefined,
+		numberOfMonths = undefined,
+		pagedNavigation = undefined,
+		placeholder = undefined,
+		weekStartsOn = undefined,
+		fixedWeeks = undefined,
+		minValue = undefined,
+		maxValue = undefined,
+		weekdayFormat = undefined
+	}: Props = $props();
 
 	const {
 		elements: { calendar, heading, grid, cell, prevButton, nextButton },
@@ -119,7 +142,7 @@
     width: 100%;
     border-radius: 0.375rem;
     border-width: 1px;
-    
+
     border-color: rgb(var(--color-magnum-800) / 1);
     background-color: transparent;
     padding-left: 0.625rem;
@@ -128,11 +151,11 @@
     line-height: 1.25rem;
     }
 	.input:focus-visible {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    
-    
+
+
     }
 	.input {
     flex: 1 1 0%;
@@ -143,7 +166,7 @@
     font-size: 0.875rem;
     line-height: 1.25rem;
     line-height: 1;
-    
+
     color: rgb(var(--color-magnum-700) / 1)
 }
 
@@ -153,7 +176,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 0.25rem;
-    
+
     background-color: rgb(var(--color-white) / 1);
     padding: 0px;
     padding-left: 0.5rem;
@@ -163,7 +186,7 @@
     font-size: 0.875rem;
     line-height: 1.25rem;
     font-weight: 500;
-    
+
     color: rgb(var(--color-magnum-900) / 1);
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -175,11 +198,11 @@
 }
 
 	.trigger:focus-visible {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    
-    
+
+
     }
 
 	.close {
@@ -192,7 +215,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 9999px;
-    
+
     color: rgb(var(--color-magnum-900) / 1);
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -204,15 +227,15 @@
 }
 
 	.close:focus-visible {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    
-    
+
+
     }
 
 	.close {
-    
+
     background-color: rgb(var(--color-white) / 1);
     padding: 0px;
     font-size: 0.875rem;
@@ -227,7 +250,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 9999px;
-    
+
     color: rgb(var(--color-magnum-900) / 1);
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -239,14 +262,14 @@
 }
 
 	.button:focus-visible {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    
+
     }
 
 	.button {
-    
+
     background-color: rgb(var(--color-white) / 1);
     padding: 0px;
     font-size: 0.875rem;
@@ -258,11 +281,11 @@
     z-index: 10;
     width: 15rem;
     border-radius: 4px;
-    
+
     background-color: rgb(var(--color-white) / 1);
     padding: 1.25rem;
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)
 }
 
@@ -272,7 +295,7 @@
     justify-content: space-between;
     border-top-width: 1px;
     border-bottom-width: 1px;
-    
+
     border-color: rgb(var(--color-magnum-700) / 1);
     padding-top: 0.25rem;
     padding-bottom: 0.25rem
@@ -291,15 +314,15 @@
 }
 
 	.cell:hover {
-    
+
     background-color: rgb(var(--color-magnum-100) / 1)
 }
 
 	.cell:focus {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    
+
     }
 
 	.cell[data-outside-month] {
@@ -308,12 +331,12 @@
 }
 
 	.cell[data-range-highlighted] {
-    
+
     background-color: rgb(var(--color-magnum-200) / 1)
 }
 
 	.cell[data-selected] {
-    
+
     background-color: rgb(var(--color-magnum-300) / 1)
 }
 
@@ -343,12 +366,12 @@
 
 	.btn {
     border-radius: 0.25rem;
-    
+
     background-color: rgb(var(--color-magnum-600) / 1);
     padding: 0.25rem;
     font-size: 0.75rem;
     line-height: 1rem;
-    
+
     color: rgb(var(--color-white) / 1)
 }
 </style>

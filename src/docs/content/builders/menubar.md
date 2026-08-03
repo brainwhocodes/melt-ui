@@ -4,10 +4,9 @@ description:
   Displays a menu to the user, which can consist of links or functions, triggered by a button.
 ---
 
-<script>
+<script lang="ts">
     import { APIReference, KbdTable } from '$docs/components'
-    export let schemas
-    export let keyboard
+    let { schemas, keyboard } = $props()
 </script>
 
 ## Anatomy

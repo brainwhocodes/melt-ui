@@ -96,7 +96,12 @@ export function createTabs(props?: CreateTabsProps) {
 				if (!$value && !ssrValue && withDefaults.autoSet) {
 					ssrValue = tabValue;
 					$value = tabValue;
-					value.set(tabValue);
+					// Defer the store update: setting the store synchronously here
+					// mutates component state during template evaluation, which
+					// throws `state_unsafe_mutation` in runes mode.
+					queueMicrotask(() => {
+						value.set(tabValue);
+					});
 				}
 
 				const sourceOfTruth = isBrowser ? $value : ssrValue;

@@ -4,10 +4,9 @@ description:
   A hierarchical list of nested items, where each item can have additional children elements.
 ---
 
-<script>
+<script lang="ts">
     import { KbdTable, APIReference, Preview } from '$docs/components'
-    export let schemas;
-    export let keyboard;
+    let { schemas, keyboard } = $props()
 </script>
 
 ## Anatomy

@@ -3,24 +3,30 @@
 	import { fly } from 'svelte/transition';
 	import { Check, Copy } from '$icons/index.js';
 
-	let className: string | undefined | null = undefined;
-	export { className as class };
+	interface Props {
+		class?: string | undefined | null;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { class: className = undefined, children, ...rest }: Props = $props();
+
 
 	const { copied, copyCode, setCodeString } = createCopyCodeButton();
 </script>
 
-<!-- svelte-ignore a11y-no-noninteractive-tabindex -- This is needed to be accessible -->
+<!-- svelte-ignore a11y_no_noninteractive_tabindex -- This is needed to be accessible -->
 <pre
 	use:setCodeString
 	class={cn('force-dark surface-ea5bc47c74', className)}
 	tabindex="0"
-	{...$$restProps}>
-	<slot />
+	{...rest}>
+	{@render children?.()}
 </pre>
 <button
 	class="surface-15b0fea8f4"
 	aria-label="copy"
-	on:click={copyCode}
+	onclick={copyCode}
 	data-code-copy
 >
 	{#if $copied}

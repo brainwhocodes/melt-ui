@@ -3,7 +3,11 @@
 	import { Settings2 } from '$icons/index.js';
 	import type { PortalConfig } from '$lib/internal/actions/portal.js';
 
-	export let portal: PortalConfig;
+	interface Props {
+		portal: PortalConfig;
+	}
+
+	let { portal }: Props = $props();
 
 	const {
 		elements: { trigger, content, arrow, close },

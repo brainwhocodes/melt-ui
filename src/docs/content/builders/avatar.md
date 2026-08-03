@@ -3,9 +3,9 @@ title: Avatar
 description: An image element with a fallback for representing the user.
 ---
 
-<script>
+<script lang="ts">
     import { APIReference } from '$docs/components'
-    export let schemas
+    let { schemas } = $props()
 </script>
 
 ## Anatomy

@@ -1,18 +1,24 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	export type DirectionValue = 'auto' | 'ltr' | 'rtl';
 </script>
 
 <script lang="ts">
-	export let dir: DirectionValue = 'auto';
-	let className = '';
-	export { className as class };
+	interface Props {
+		dir?: DirectionValue;
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { dir = 'auto', class: className = '', children, ...rest }: Props = $props();
+
 </script>
 
 <div
-	{...$$restProps}
+	{...rest}
 	class={`melt-direction ${className}`.trim()}
 	{dir}
 	data-direction={dir}
 >
-	<slot />
+	{@render children?.()}
 </div>

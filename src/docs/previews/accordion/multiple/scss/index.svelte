@@ -29,8 +29,12 @@
 		},
 	];
 
-	let className = '';
-	export { className as class };
+	interface Props {
+		class?: string;
+	}
+
+	let { class: className = '' }: Props = $props();
+
 </script>
 
 <div

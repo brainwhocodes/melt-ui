@@ -2,7 +2,11 @@
 	import { mount, onMount, unmount } from 'svelte';
 	import Slider from './Slider.svelte';
 
-	export let elementRoot: HTMLElement;
+	interface Props {
+		elementRoot: HTMLElement;
+	}
+
+	let { elementRoot = $bindable() }: Props = $props();
 
 	onMount(() => {
 		if (elementRoot) {

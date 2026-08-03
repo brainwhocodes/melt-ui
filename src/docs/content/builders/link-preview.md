@@ -3,9 +3,9 @@ title: Link Preview
 description: Enable sighted users to preview content behind a link.
 ---
 
-<script>
+<script lang="ts">
     import { KbdTable, APIReference, Callout } from '$docs/components'
-    export let schemas
+    let { schemas } = $props()
 </script>
 
 <Callout type="warning">
@@ -69,10 +69,10 @@ events.
 ```svelte {3-8}
 <button
 	{...$trigger} use:trigger
-	on:m-focus={(e) => {
+	onm-focus={(e) => {
 		e.preventDefault()
 	}}
-	on:m-blur={(e) => {
+	onm-blur={(e) => {
 		e.preventDefault()
 	}}>
 	Hover Me

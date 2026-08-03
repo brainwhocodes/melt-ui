@@ -1,3 +1,5 @@
+<script lang="ts"></script>
+
 <ul>
 	<li aria-selected="false" role="option" data-disabled>Caramel</li>
 	<li aria-selected="false" role="option">Chocolate</li>

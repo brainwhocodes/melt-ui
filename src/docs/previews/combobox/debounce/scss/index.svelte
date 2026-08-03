@@ -77,9 +77,9 @@
 		debounceTimer = setTimeout(callback, 450);
 	};
 
-	let filteredMangas = mangas;
+	let filteredMangas = $state(mangas);
 
-	$: {
+	$effect(() => {
 		if ($touchedInput) {
 			debounce(() => {
 				filteredMangas = mangas.filter(({ title, author }) => {
@@ -93,11 +93,11 @@
 		} else {
 			filteredMangas = mangas;
 		}
-	}
+	});
 </script>
 
 <div class="surface-c854410cf3">
-	<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
+	<!-- svelte-ignore a11y_label_has_associated_control - $label contains the 'for' attribute -->
 	<label {...$label} use:label>
 		<span class="surface-b1d8e1adfc"
 			>Choose your favorite manga:</span
@@ -125,7 +125,7 @@
 		{...$menu} use:menu
 		transition:fly={{ duration: 150, y: -5 }}
 	>
-		<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+		<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 		<div
 			class="surface-5e1ab10600"
 			tabindex="0"
@@ -165,7 +165,7 @@
 		position: absolute;
 		left: 0.5rem;
 		top: 50%;
-		
+
 		color: rgb(var(--color-magnum-500) / 1);
 		translate: 0 calc(-50% + 1px)
 }

@@ -2,7 +2,11 @@
 	import { getTabsContext } from '$docs/components/tabs/root.svelte';
 	import { Npm, Yarn, Pnpm } from '$icons/index.js';
 
-	export let tab: string;
+	interface Props {
+		tab: string;
+	}
+
+	let { tab }: Props = $props();
 
 	const { trigger } = getTabsContext();
 </script>

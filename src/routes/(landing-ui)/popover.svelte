@@ -20,17 +20,21 @@
 		disableFocusTrap: true,
 	});
 
-	let className = '';
-	export { className as class };
 
-	export let contentClass = '';
 
-	let popoverButton: HTMLButtonElement;
+	interface Props {
+		class?: string;
+		contentClass?: string;
+	}
+
+	let { class: className = '', contentClass = '' }: Props = $props();
+
+	let popoverButton: HTMLButtonElement | undefined = $state();
 
 	onMount(() => {
 		open.set(true);
 		setTimeout(() => {
-			popoverButton.blur();
+			popoverButton?.blur();
 		}, 100);
 	});
 </script>

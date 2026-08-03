@@ -5,7 +5,13 @@
 
 	const { copied, setCodeString, copyCode } = createCopyCodeButton();
 
-	export let copyBtnClasses = '';
+	interface Props {
+		copyBtnClasses?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { copyBtnClasses = '', children, ...rest }: Props = $props();
 
 	const preTabIndex = (node: HTMLElement) => {
 		const pre = node.querySelector('pre');
@@ -17,17 +23,17 @@
 
 <figure
 	use:setCodeString
-	class={cn($$restProps.class, 'force-dark')}
-	{...$$restProps}
+	class={cn(rest.class, 'force-dark')}
+	{...rest}
 	data-rehype-pretty-code-figure
 	use:preTabIndex
 >
-	<slot />
+	{@render children?.()}
 </figure>
 <button
 	class={cn('force-dark surface-391c35db9b', copyBtnClasses)}
 	aria-label="copy"
-	on:click={copyCode}
+	onclick={copyCode}
 	data-code-copy
 >
 	{#if $copied}

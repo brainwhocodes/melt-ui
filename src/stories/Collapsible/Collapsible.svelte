@@ -3,10 +3,19 @@
 	import { createCollapsible, type CreateCollapsibleProps } from '$lib/index.js';
 	import { ChevronsUpDown, X } from '$icons/index.js';
 
-	export let defaultOpen = false;
-	export let open: CreateCollapsibleProps['open'] = undefined;
-	export let disabled: CreateCollapsibleProps['disabled'] = false;
-	export let onOpenChange: CreateCollapsibleProps['onOpenChange'] = undefined;
+	interface Props {
+		defaultOpen?: boolean;
+		open?: CreateCollapsibleProps['open'];
+		disabled?: CreateCollapsibleProps['disabled'];
+		onOpenChange?: CreateCollapsibleProps['onOpenChange'];
+	}
+
+	let {
+		defaultOpen = false,
+		open = undefined,
+		disabled = false,
+		onOpenChange = undefined
+	}: Props = $props();
 
 	const {
 		elements: { root, content, trigger },
@@ -19,8 +28,12 @@
 		onOpenChange,
 	});
 
-	$: localOpen.set(defaultOpen ?? false);
-	$: localDisabled.set(disabled ?? false);
+	$effect(() => {
+		localOpen.set(defaultOpen ?? false);
+	});
+	$effect(() => {
+		localDisabled.set(disabled ?? false);
+	});
 </script>
 
 <main>

@@ -3,7 +3,7 @@ title: Controlled
 description: Melt UI components are uncontrolled by default, but offer the ability to be controlled.
 ---
 
-<script>
+<script lang="ts">
     import { Callout } from '$docs/components'
 </script>
 
@@ -74,72 +74,72 @@ interaction.
 A common use case for controlling the state of a component is to sync it with props, or other
 internal state. You can do it manually...
 
-```svelte {11,12}
+```svelte {11-14}
 <script lang="ts">
 	import { createDialog } from '@melt-ui/svelte'
 
-	export let open = false
+	let { open = $bindable(false) } = $props()
 
 	const {
 		elements: { trigger, overlay, content, title, description, close },
 		states: { open: localOpen }
 	} = createDialog()
 
-	$: $localOpen = open
-	$: open = $localOpen
+	$effect(() => {
+		$localOpen = open
+		open = $localOpen
+	})
 </script>
 ```
 
 But it's harder to manage, can be error prone, and with multiple states and options, it can get
 messy quickly.
 
-```svelte {14-23}
+```svelte {16-27}
 <script lang="ts">
 	import { createDialog } from '@melt-ui/svelte'
 
-	export let a
-	export let b
-	export let c
-	export let d
-	export let e
+	let { a = $bindable(), b = $bindable(), c = $bindable(), d = $bindable(), e = $bindable() } =
+		$props()
 
 	const {
 		states: { a: localA, b: localB, c: localC, d: localD, e: localE }
 	} = createDialog()
 
-	$: $localA = a
-	$: a = $localA
-	$: $localB = b
-	$: b = $localB
-	$: $localC = c
-	$: c = $localC
-	$: $localD = d
-	$: d = $localD
-	$: $localE = e
-	$: e = $localE
+	$effect(() => {
+		$localA = a
+		a = $localA
+		$localB = b
+		b = $localB
+		$localC = c
+		c = $localC
+		$localD = d
+		d = $localD
+		$localE = e
+		e = $localE
+	})
 </script>
 ```
 
 We provide a `createSync` function that will improve this situation.
 
-```svelte {12-18}
+```svelte {14-21}
 <script lang="ts">
 	import { createDialog, createSync } from '@melt-ui/svelte'
 
-	export let a
-	export let b
-	export let c
-	export let d
-	export let e
+	let { a = $bindable(), b = $bindable(), c = $bindable(), d = $bindable(), e = $bindable() } =
+		$props()
 
 	const { states } = createDialog()
 
 	const sync = createSync(states)
-	$: sync.a(a, (v) => (a = v))
-	$: sync.b(b, (v) => (b = v))
-	$: sync.c(c, (v) => (c = v))
-	$: sync.d(d, (v) => (d = v))
-	$: sync.e(e, (v) => (e = v))
+	$effect(() => {
+		sync.a(a, (v) => (a = v))
+		sync.b(b, (v) => (b = v))
+		sync.c(c, (v) => (c = v))
+		sync.d(d, (v) => (d = v))
+		sync.e(e, (v) => (e = v))
+	})
 </script>
 ```
 
@@ -267,7 +267,7 @@ then you could do something like this:
 ```svelte {3-6}
 <button
 	{...$trigger} use:trigger
-	on:m-click={(e) => {
+	onm-click={(e) => {
 		e.preventDefault()
 		// do something else
 	}}>

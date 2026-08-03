@@ -7,9 +7,15 @@
 		type NavigationMenuRootContext
 	} from './context.js';
 
-	export let value: string;
-	let className = '';
-	export { className as class };
+	interface Props {
+		value: string;
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { value, class: className = '', children, ...rest }: Props = $props();
+
 
 	const root = getContext<NavigationMenuRootContext>(NAVIGATION_MENU_ROOT);
 	const activeValue = root.value;
@@ -26,11 +32,11 @@
 </script>
 
 <li
-	{...$$restProps}
+	{...rest}
 	class={`melt-navigation-menu__item ${className}`.trim()}
 	data-state={$activeValue === value ? 'open' : 'closed'}
-	on:pointerenter={handlePointerEnter}
-	on:pointerleave={handlePointerLeave}
+	onpointerenter={handlePointerEnter}
+	onpointerleave={handlePointerLeave}
 >
-	<slot />
+	{@render children?.()}
 </li>

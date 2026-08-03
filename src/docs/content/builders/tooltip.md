@@ -5,10 +5,9 @@ description:
   or the mouse hovers over it.
 ---
 
-<script>
+<script lang="ts">
     import { APIReference, KbdTable, Callout } from '$docs/components'
-    export let schemas
-    export let keyboard
+    let { schemas, keyboard } = $props()
 </script>
 
 ## Anatomy

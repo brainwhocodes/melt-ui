@@ -6,30 +6,46 @@
 		type ResizablePanelConfig,
 	} from './resizable-context.js';
 
-	export let defaultSize: number | undefined = undefined;
-	export let minSize = 0;
-	export let maxSize = 100;
-	export let disabled = false;
 
-	let className = '';
-	export { className as class };
+	interface Props {
+		defaultSize?: number | undefined;
+		minSize?: number;
+		maxSize?: number;
+		disabled?: boolean;
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let {
+		defaultSize = undefined,
+		minSize = 0,
+		maxSize = 100,
+		disabled = false,
+		class: className = '',
+		children,
+		...rest
+	}: Props = $props();
+
 
 	const context = getContext<ResizableContext>(RESIZABLE_CONTEXT);
 	if (!context) throw new Error('ResizablePanel must be used inside ResizableGroup.');
 	const resizableState = context.state;
 	const token = {};
-	let mounted = false;
+	let mounted = $state(false);
 
-	$: config = { defaultSize, minSize, maxSize, disabled } satisfies ResizablePanelConfig;
-	$: if (mounted) context.updatePanel(token, config);
-	$: panelState = $resizableState.panels.find((panel) => panel.token === token);
-	$: renderedSize = panelState?.size ?? defaultSize;
-	$: inlineStyle = [
-		$$restProps.style,
+	let config = $derived({ defaultSize, minSize, maxSize, disabled } satisfies ResizablePanelConfig);
+	$effect(() => {
+		if (mounted) context.updatePanel(token, config);
+	});
+	let panelState = $derived($resizableState.panels.find((panel) => panel.token === token));
+	let renderedSize = $derived(panelState?.size ?? defaultSize);
+	let inlineStyle = $derived([
+		rest.style,
 		Number.isFinite(renderedSize) ? `--melt-resizable-panel-size: ${renderedSize}%` : '',
 	]
 		.filter(Boolean)
-		.join('; ');
+		.join('; '));
 
 	onMount(() => {
 		mounted = true;
@@ -42,12 +58,12 @@
 </script>
 
 <div
-	{...$$restProps}
+	{...rest}
 	class={`melt-resizable-panel ${className}`}
 	style={inlineStyle}
 	data-size={Number.isFinite(renderedSize) ? renderedSize : undefined}
 	data-disabled={disabled ? '' : undefined}
 	aria-disabled={disabled || undefined}
 >
-	<slot />
+	{@render children?.()}
 </div>

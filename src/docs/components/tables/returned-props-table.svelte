@@ -3,22 +3,36 @@
 	import { transformAPIString } from '$docs/utils/index.js';
 	import { APITableHeading, InfoPopover } from '$docs/components/index.js';
 
-	export let data: APISchema['returnedProps'];
-	export let title = 'Returns';
-	export let tableHeading = 'Returned Prop';
+	interface Props {
+		data: APISchema['returnedProps'];
+		title?: string;
+		tableHeading?: string;
+		info?: import('svelte').Snippet;
+	}
+
+	let {
+		data,
+		title = 'Returns',
+		tableHeading = 'Returned Prop',
+		info
+	}: Props = $props();
+
+	const info_render = $derived(info);
 </script>
 
 {#if data}
 	<APITableHeading>
 		{title}
-		<svelte:fragment slot="info">
-			<slot name="info">
-				Builder functions return an object which enables the creation of the essential elements for
-				a component. Along with the elements, this object may also include additional properties
-				such as stores to manage the component's state or helper functions that simplify interaction
-				with the component.
-			</slot>
-		</svelte:fragment>
+		{#snippet info()}
+
+				{#if info_render}{@render info_render()}{:else}
+					Builder functions return an object which enables the creation of the essential elements for
+					a component. Along with the elements, this object may also include additional properties
+					such as stores to manage the component's state or helper functions that simplify interaction
+					with the component.
+				{/if}
+
+			{/snippet}
 	</APITableHeading>
 
 	<div class="surface-6854fd0f5e">

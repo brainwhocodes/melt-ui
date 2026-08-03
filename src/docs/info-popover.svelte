@@ -9,8 +9,13 @@
 		states: { open },
 	} = createPopover();
 
-	export let iconClasses = '';
-	export let contentClasses = '';
+	interface Props {
+		iconClasses?: string;
+		contentClasses?: string;
+		children?: import('svelte').Snippet;
+	}
+
+	let { iconClasses = '', contentClasses = '', children }: Props = $props();
 </script>
 
 <button {...$trigger} use:trigger aria-label="More info">
@@ -28,15 +33,15 @@
 	>
 		<div {...$arrow} use:arrow></div>
 		<p class="surface-5e2db1b9f4">
-			<slot />
+			{@render children?.()}
 		</p>
 	</div>
 {/if}
 
 <style lang="scss">
 	div:focus {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 0 #0000 !important
 }
 </style>

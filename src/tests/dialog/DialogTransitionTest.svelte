@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { createDialog, type CreateDialogProps } from '$lib/index.js';
 	import { fade } from 'svelte/transition';
+	interface Props {
+		[key: string]: any
+	}
+
+	let { ...rest }: Props = $props();
 
 	type $$Props = CreateDialogProps;
 
@@ -8,7 +13,7 @@
 		elements: { trigger, overlay, content, title, description, close, portalled },
 		states: { open },
 	} = createDialog({
-		...$$restProps,
+		...rest,
 	});
 </script>
 

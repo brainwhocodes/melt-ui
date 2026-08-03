@@ -7,30 +7,47 @@
 		type NavigationMenuRootContext
 	} from './context.js';
 
-	export let disabled = false;
-	export let type: 'button' | 'submit' | 'reset' = 'button';
-	let className = '';
-	export { className as class };
+	interface Props {
+		disabled?: boolean;
+		type?: 'button' | 'submit' | 'reset';
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let {
+		disabled = false,
+		type = 'button',
+		class: className = '',
+		children,
+		...rest
+	}: Props = $props();
+
 
 	const root = getContext<NavigationMenuRootContext>(NAVIGATION_MENU_ROOT);
 	const item = getContext<NavigationMenuItemContext>(NAVIGATION_MENU_ITEM);
 	const activeValue = root.value;
 	const rovingValue = root.rovingValue;
 	const revision = root.revision;
-	let element: HTMLButtonElement;
-	let mounted = false;
-	let lastDisabled = disabled;
-	let tabIndex: 0 | -1 = -1;
-	$: itemValue = item.value();
-	$: expanded = $activeValue === itemValue;
-	$: tabIndex = disabled ? -1 : root.getTabIndex(itemValue, $rovingValue, $revision);
-	$: if (mounted && disabled !== lastDisabled) {
-		lastDisabled = disabled;
-		root.notifyTriggerChange();
-	}
+	let element: HTMLButtonElement | undefined = $state();
+	let mounted = $state(false);
+	let lastDisabled = $state(disabled);
+	let tabIndex: 0 | -1 = $state(-1);
+	let itemValue = $derived(item.value());
+	let expanded = $derived($activeValue === itemValue);
+	$effect(() => {
+		tabIndex = disabled ? -1 : root.getTabIndex(itemValue, $rovingValue, $revision);
+	});
+	$effect(() => {
+		if (mounted && disabled !== lastDisabled) {
+			lastDisabled = disabled;
+			root.notifyTriggerChange();
+		}
+	});
 
 	onMount(() => {
 		mounted = true;
+		if (!element) return;
 		const unregister = root.registerTrigger(itemValue, element, () => disabled);
 		return () => {
 			mounted = false;
@@ -81,7 +98,7 @@
 </script>
 
 <button
-	{...$$restProps}
+	{...rest}
 	bind:this={element}
 	class={`melt-navigation-menu__trigger ${className}`.trim()}
 	{type}
@@ -91,10 +108,10 @@
 	aria-controls={root.getContentId(itemValue)}
 	tabindex={tabIndex}
 	data-state={expanded ? 'open' : 'closed'}
-	on:click={handleClick}
-	on:pointerenter={handlePointerEnter}
-	on:keydown={handleKeydown}
+	onclick={handleClick}
+	onpointerenter={handlePointerEnter}
+	onkeydown={handleKeydown}
 >
-	<slot />
+	{@render children?.()}
 	<span class="melt-navigation-menu__trigger-indicator" aria-hidden="true">▾</span>
 </button>

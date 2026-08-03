@@ -3,7 +3,7 @@ title: Dates & Times
 description: How to work with dates and times in Melt's date-related builders.
 ---
 
-<script>
+<script lang="ts">
   import { Callout, InstallTabs } from '$docs/components';
   import A from '$docs/components/markdown/a.svelte';
 </script>

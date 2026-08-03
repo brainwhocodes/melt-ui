@@ -9,8 +9,12 @@
 		max: 100,
 	});
 
-	let className = '';
-	export { className as class };
+	interface Props {
+		class?: string;
+	}
+
+	let { class: className = '' }: Props = $props();
+
 </script>
 
 <span {...$root} use:root class={cn('surface-e7e7008d6e', className)}>

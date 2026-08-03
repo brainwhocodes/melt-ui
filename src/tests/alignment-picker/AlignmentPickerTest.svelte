@@ -6,14 +6,27 @@
 		items?: AlignmentPickerItemProps[];
 	};
 
-	export let value: CreateAlignmentPickerProps['value'] = undefined;
-	export let defaultValue: CreateAlignmentPickerProps['defaultValue'] = undefined;
-	export let disabled: CreateAlignmentPickerProps['disabled'] = undefined;
-	export let loop: CreateAlignmentPickerProps['loop'] = undefined;
-	export let dir: CreateAlignmentPickerProps['dir'] = undefined;
-	export let name: CreateAlignmentPickerProps['name'] = undefined;
-	export let onValueChange: CreateAlignmentPickerProps['onValueChange'] = undefined;
-	export let items: AlignmentPickerItemProps[] = [
+	interface Props {
+		value?: CreateAlignmentPickerProps['value'];
+		defaultValue?: CreateAlignmentPickerProps['defaultValue'];
+		disabled?: CreateAlignmentPickerProps['disabled'];
+		loop?: CreateAlignmentPickerProps['loop'];
+		dir?: CreateAlignmentPickerProps['dir'];
+		name?: CreateAlignmentPickerProps['name'];
+		onValueChange?: CreateAlignmentPickerProps['onValueChange'];
+		items?: AlignmentPickerItemProps[];
+		[key: string]: any
+	}
+
+	let {
+		value = undefined,
+		defaultValue = undefined,
+		disabled = undefined,
+		loop = undefined,
+		dir = undefined,
+		name = undefined,
+		onValueChange = undefined,
+		items = [
 		{ value: 'top-start' },
 		{ value: 'top-center' },
 		{ value: 'top-end' },
@@ -23,7 +36,9 @@
 		{ value: 'bottom-start' },
 		{ value: 'bottom-center' },
 		{ value: 'bottom-end' },
-	];
+	],
+		...rest
+	}: Props = $props();
 
 	const {
 		elements: { root, item, hiddenInput },
@@ -36,7 +51,7 @@
 		dir,
 		name,
 		onValueChange,
-		...removeUndefined($$restProps),
+		...removeUndefined(rest),
 	});
 </script>
 

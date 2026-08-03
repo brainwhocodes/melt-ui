@@ -1,5 +1,10 @@
 <script lang="ts">
 	import { createLinkPreview, type CreateLinkPreviewProps } from '$lib/index.js';
+	interface Props {
+		[key: string]: any
+	}
+
+	let { ...rest }: Props = $props();
 
 	type $$Props = CreateLinkPreviewProps;
 
@@ -7,7 +12,7 @@
 		elements: { trigger, content, arrow },
 	} = createLinkPreview({
 		openDelay: 0,
-		...$$restProps,
+		...rest,
 	});
 </script>
 
@@ -68,13 +73,13 @@
     align-items: center;
     justify-content: center;
     border-radius: 9999px;
-    
+
     background-color: rgb(var(--color-white) / 1);
     padding: 0px;
     font-size: 0.875rem;
     line-height: 1.25rem;
     font-weight: 500;
-    
+
     color: rgb(var(--color-magnum-900) / 1);
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -84,10 +89,10 @@
     background-color: rgb(var(--color-white) / 0.9)
 }
 	.trigger:focus-visible {
-    
-    
+
+
     box-shadow: 0 0 #0000, 0 0 #0000, 0 0 #0000;
-    
-    
+
+
     }
 </style>

@@ -2,15 +2,27 @@
 	import { onDestroy } from 'svelte';
 	import { getCarouselContext } from './Carousel.svelte';
 
-	let className = '';
-	export { className as class };
-	export let index: number;
-	export let label = '';
+
+	interface Props {
+		class?: string;
+		index: number;
+		label?: string;
+		children?: import('svelte').Snippet<[any]>;
+		[key: string]: any
+	}
+
+	let {
+		class: className = '',
+		index,
+		label = '',
+		children,
+		...rest
+	}: Props = $props();
 
 	const carousel = getCarouselContext();
 	const { activeIndex } = carousel;
-	let registeredIndex = Math.max(0, Math.trunc(index));
-	let unregister = carousel.registerSlide(registeredIndex);
+	let registeredIndex = $state(Math.max(0, Math.trunc(index)));
+	let unregister = $state(carousel.registerSlide(registeredIndex));
 
 	function attach(node: HTMLElement, slideIndex: number) {
 		let registration = carousel.attachSlide(node, slideIndex);
@@ -25,18 +37,20 @@
 		};
 	}
 
-	$: normalizedIndex = Number.isFinite(index) ? Math.max(0, Math.trunc(index)) : 0;
-	$: if (normalizedIndex !== registeredIndex) {
-		unregister();
-		registeredIndex = normalizedIndex;
-		unregister = carousel.registerSlide(registeredIndex);
-	}
+	let normalizedIndex = $derived(Number.isFinite(index) ? Math.max(0, Math.trunc(index)) : 0);
+	$effect(() => {
+		if (normalizedIndex !== registeredIndex) {
+			unregister();
+			registeredIndex = normalizedIndex;
+			unregister = carousel.registerSlide(registeredIndex);
+		}
+	});
 
 	onDestroy(() => unregister());
 </script>
 
 <div
-	{...$$restProps}
+	{...rest}
 	use:attach={normalizedIndex}
 	class={`melt-carousel-slide ${className}`.trim()}
 	role="group"
@@ -46,5 +60,5 @@
 	data-active={$activeIndex === normalizedIndex ? '' : undefined}
 	data-index={normalizedIndex}
 >
-	<slot active={$activeIndex === normalizedIndex} />
+	{@render children?.({ active: $activeIndex === normalizedIndex, })}
 </div>

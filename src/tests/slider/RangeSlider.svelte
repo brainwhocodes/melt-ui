@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createSlider } from '$lib/index.js';
 
-	export let values = [20, 80];
+	let { values = [20, 80] } = $props();
 
 	const {
 		elements: { root, range, thumbs, ticks },

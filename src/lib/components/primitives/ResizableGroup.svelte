@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher, setContext } from 'svelte';
+	import { setContext, untrack } from 'svelte';
 	import { writable } from 'svelte/store';
 	import {
 		RESIZABLE_CONTEXT,
@@ -13,27 +13,41 @@
 		type ResizeSource,
 	} from './resizable-context.js';
 
-	export let direction: ResizableDirection = 'horizontal';
-	export let dir: ResizableDirectionality = 'ltr';
-	export let sizes: number[] = [];
-	export let disabled = false;
+	interface Props {
+		direction?: ResizableDirection;
+		dir?: ResizableDirectionality;
+		sizes?: number[];
+		disabled?: boolean;
+		class?: string;
+		onresize?: (detail: ResizableResizeDetail) => void;
+		children?: import('svelte').Snippet;
+		[key: string]: any;
+	}
 
-	let className = '';
-	export { className as class };
+	let {
+		direction = 'horizontal',
+		dir = 'ltr',
+		sizes = $bindable([]),
+		disabled = false,
+		class: className = '',
+		onresize,
+		children,
+		...rest
+	}: Props = $props();
 
 	interface PanelRegistration {
 		token: ResizableToken;
 		config: ResizablePanelConfig;
 	}
 
-	const dispatch = createEventDispatcher<{ resize: ResizableResizeDetail }>();
 	const initialSizes = sizes.slice();
-	let groupElement: HTMLElement;
-	let panels: PanelRegistration[] = [];
-	let handles: ResizableToken[] = [];
-	let currentSizes: number[] = [];
+	let groupElement: HTMLElement | undefined = $state();
+	// Tokens are compared by identity, so these arrays must stay unproxied.
+	let panels = $state.raw<PanelRegistration[]>([]);
+	let handles = $state.raw<ResizableToken[]>([]);
+	let currentSizes = $state<number[]>([]);
 
-	const state = writable<ResizableState>({ direction, dir, disabled, panels: [], handles: [] });
+	const resizableState = writable<ResizableState>({ direction, dir, disabled, panels: [], handles: [] });
 
 	const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 	const finite = (value: number | undefined): value is number =>
@@ -98,7 +112,7 @@
 	}
 
 	function refreshState() {
-		state.set({
+		resizableState.set({
 			direction,
 			dir,
 			disabled,
@@ -149,8 +163,9 @@
 			previous.maxSize === normalized.maxSize &&
 			previous.disabled === normalized.disabled
 		) return;
-		panels[index] = { token, config: normalized };
-		panels = panels.slice();
+		panels = panels.map((panel, panelIndex) =>
+			panelIndex === index ? { token, config: normalized } : panel
+		);
 		publishSizes(fitSizes(currentSizes));
 	}
 
@@ -195,7 +210,7 @@
 			nextSize: updated[handleIndex + 1],
 			source,
 		};
-		dispatch('resize', detail);
+		onresize?.(detail);
 		return detail;
 	}
 
@@ -212,7 +227,7 @@
 	}
 
 	const context: ResizableContext = {
-		state,
+		state: resizableState,
 		registerPanel,
 		updatePanel,
 		registerHandle,
@@ -222,26 +237,28 @@
 	};
 	setContext(RESIZABLE_CONTEXT, context);
 
-	$: if (
-		panels.length &&
-		sizes.length === panels.length &&
-		!sameSizes(sizes, currentSizes)
-	) publishSizes(fitSizes(sizes));
-	$: {
+	$effect(() => {
+		if (
+			panels.length &&
+			sizes.length === panels.length &&
+			!sameSizes(sizes, currentSizes)
+		) publishSizes(fitSizes(sizes));
+	});
+	$effect(() => {
 		direction;
 		dir;
 		disabled;
-		refreshState();
-	}
+		untrack(() => refreshState());
+	});
 </script>
 
 <div
 	bind:this={groupElement}
-	{...$$restProps}
+	{...rest}
 	class={`melt-resizable-group ${className}`}
 	data-direction={direction}
 	data-disabled={disabled ? '' : undefined}
 	dir={dir}
 >
-	<slot />
+	{@render children?.()}
 </div>

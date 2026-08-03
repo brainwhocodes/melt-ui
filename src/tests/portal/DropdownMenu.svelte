@@ -4,13 +4,19 @@
 
 	type $$Props = CreateDropdownMenuProps;
 
-	export let portal: CreateDropdownMenuProps['portal'] = undefined;
-	export let forceVisible: CreateDropdownMenuProps['forceVisible'] = false;
+	interface Props {
+		portal?: CreateDropdownMenuProps['portal'];
+		forceVisible?: CreateDropdownMenuProps['forceVisible'];
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { portal = undefined, forceVisible = false, children, ...rest }: Props = $props();
 
 	const {
 		elements: { trigger, menu, item },
 		states: { open },
-	} = createDropdownMenu({ forceVisible, portal, ...$$restProps });
+	} = createDropdownMenu({ forceVisible, portal, ...rest });
 
 	const level = initLevel();
 </script>
@@ -21,7 +27,7 @@
 	<div class="menu" {...$menu} use:menu data-testid="dropdown-menu-content-{level}">
 		<div class="item" {...$item} use:item>Item 1</div>
 		<div class="item" {...$item} use:item>Item 2</div>
-		<slot />
+		{@render children?.()}
 	</div>
 {/if}
 <div data-testid="dropdown-menu-outside-{level}"></div>

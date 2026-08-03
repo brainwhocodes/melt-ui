@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	export type ChartType = 'line' | 'bar';
 	export interface ChartSeries {
 		name: string;
@@ -31,40 +31,64 @@
 	const tickFractions = [0, 0.25, 0.5, 0.75, 1];
 	const numberFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
 
-	let className = '';
-	export { className as class };
-	export let type: ChartType = 'line';
-	export let labels: string[] = [];
-	export let series: ChartSeries[] = [];
-	export let width = 640;
-	export let height = 320;
-	export let viewBox: string | undefined = undefined;
-	export let title = 'Chart';
-	export let description: string | undefined = undefined;
-	export let valueFormatter: (value: number) => string = defaultValueFormatter;
+	interface Props {
+		class?: string;
+		type?: ChartType;
+		labels?: string[];
+		series?: ChartSeries[];
+		width?: number;
+		height?: number;
+		viewBox?: string | undefined;
+		title?: string;
+		description?: string | undefined;
+		valueFormatter?: (value: number) => string;
+		table?: import('svelte').Snippet<[{ labels: string[]; series: ChartSeries[] }]>;
+		summary?: import('svelte').Snippet<[{ summary: string }]>;
+		[key: string]: any;
+	}
 
-	$: chartWidth = Math.max(160, finiteDimension(width, 640));
-	$: chartHeight = Math.max(140, finiteDimension(height, 320));
-	$: resolvedViewBox = viewBox ?? `0 0 ${chartWidth} ${chartHeight}`;
-	$: plot = {
+	let {
+		class: className = '',
+		type = 'line',
+		labels = [],
+		series = [],
+		width = 640,
+		height = 320,
+		viewBox = undefined,
+		title = 'Chart',
+		description = undefined,
+		valueFormatter = defaultValueFormatter,
+		table,
+		summary,
+		...rest
+	}: Props = $props();
+
+	const chartWidth = $derived(Math.max(160, finiteDimension(width, 640)));
+	const chartHeight = $derived(Math.max(140, finiteDimension(height, 320)));
+	const resolvedViewBox = $derived(viewBox ?? `0 0 ${chartWidth} ${chartHeight}`);
+	const plot = $derived({
 		left: Math.min(52, chartWidth * 0.16),
 		top: 20,
 		right: chartWidth - 16,
 		bottom: chartHeight - 44
-	};
-	$: plotWidth = Math.max(1, plot.right - plot.left);
-	$: plotHeight = Math.max(1, plot.bottom - plot.top);
-	$: normalizedSeries = normalizeSeries(series, labels.length);
-	$: finiteValues = normalizedSeries.flatMap((entry) =>
-		entry.values.filter((value): value is number => value !== null)
+	});
+	const plotWidth = $derived(Math.max(1, plot.right - plot.left));
+	const plotHeight = $derived(Math.max(1, plot.bottom - plot.top));
+	const normalizedSeries = $derived(normalizeSeries(series, labels.length));
+	const finiteValues = $derived(
+		normalizedSeries.flatMap((entry) =>
+			entry.values.filter((value): value is number => value !== null)
+		)
 	);
-	$: domain = getDomain(finiteValues);
-	$: yTicks = tickFractions.map((fraction) => ({
-		value: domain.max - domain.range * fraction,
-		y: plot.top + plotHeight * fraction
-	}));
-	$: zeroY = valueToY(0, domain.min, domain.range, plot.top, plotHeight);
-	$: lineSeries =
+	const domain = $derived(getDomain(finiteValues));
+	const yTicks = $derived(
+		tickFractions.map((fraction) => ({
+			value: domain.max - domain.range * fraction,
+			y: plot.top + plotHeight * fraction
+		}))
+	);
+	const zeroY = $derived(valueToY(0, domain.min, domain.range, plot.top, plotHeight));
+	const lineSeries = $derived(
 		type === 'line'
 			? normalizedSeries.map((entry) => ({
 					...entry,
@@ -79,12 +103,14 @@
 						domain
 					)
 				}))
-			: [];
-	$: bars =
+			: []
+	);
+	const bars = $derived(
 		type === 'bar'
 			? getBars(normalizedSeries, labels, plot.left, plotWidth, plot.top, plotHeight, domain)
-			: [];
-	$: summary = getSummary(normalizedSeries, labels, finiteValues, valueFormatter);
+			: []
+	);
+	const summaryText = $derived(getSummary(normalizedSeries, labels, finiteValues, valueFormatter));
 
 	function finiteDimension(value: number, fallback: number): number {
 		return Number.isFinite(value) && value > 0 ? value : fallback;
@@ -246,7 +272,7 @@
 	}
 </script>
 
-<figure class={`melt-chart ${className}`} {...$$restProps}>
+<figure class={`melt-chart ${className}`} {...rest}>
 	<div class="melt-chart-viewport">
 		<svg
 			class="melt-chart-svg"
@@ -319,7 +345,9 @@
 
 
 	<div class="melt-chart-data">
-		<slot name="table" {labels} {series}>
+		{#if table}
+			{@render table({ labels, series })}
+		{:else}
 			<table class="melt-table melt-chart-table">
 				<caption>Data for {title}</caption>
 				<thead class="melt-table-header">
@@ -341,9 +369,13 @@
 					{/each}
 				</tbody>
 			</table>
-		</slot>
+		{/if}
 	</div>
 	<figcaption class="melt-chart-summary">
-		<slot name="summary" {summary}>{summary}</slot>
+		{#if summary}
+			{@render summary({ summary: summaryText })}
+		{:else}
+			{summaryText}
+		{/if}
 	</figcaption>
 </figure>

@@ -15,7 +15,7 @@
 </script>
 
 <div class="surface-67b362f6b8">
-	<!-- svelte-ignore a11y-label-has-associated-control - $label contains the 'for' attribute -->
+	<!-- svelte-ignore a11y_label_has_associated_control - $label contains the 'for' attribute -->
 	<label class="surface-1dea140482" {...$label} use:label>Favorite Flavor</label>
 	<button
 		class="preview-space-y-2  preview-text-magnum-700 surface-f60a65b6ea"

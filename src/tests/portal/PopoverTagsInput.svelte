@@ -2,13 +2,17 @@
 	import { createPopover, createTagsInput, type CreatePopoverProps } from '$lib/index.js';
 	import { Settings2 } from '$icons/index.js';
 
-	export let portal: CreatePopoverProps['portal'];
+	interface Props {
+		portal: CreatePopoverProps['portal'];
+		defaultTags?: any;
+	}
+
+	let { portal, defaultTags = ['Svelte', 'Typescript'] }: Props = $props();
 
 	const {
 		elements: { trigger, content, arrow, close },
 	} = createPopover({ portal });
 
-	export let defaultTags = ['Svelte', 'Typescript'];
 	const {
 		elements: { root, input, tag, deleteTrigger, edit },
 		states: { tags },

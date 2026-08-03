@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	export type DataTableKey = string | number;
 	export type DataTableSortDirection = 'asc' | 'desc';
 	export type DataTableRow = Record<string, unknown>;
@@ -23,8 +23,6 @@
 </script>
 
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-
 	interface PreparedRow {
 		row: DataTableRow;
 		key: DataTableKey;
@@ -34,52 +32,69 @@
 		searchText: string;
 	}
 
-	const dispatch = createEventDispatcher<{
-		sortchange: { key: string | null; direction: DataTableSortDirection };
-		querychange: { query: string };
-		selectionchange: { selectedKeys: DataTableKey[]; visibleKeys: DataTableKey[] };
-	}>();
+	interface Props {
+		class?: string;
+		columns?: DataTableColumn[];
+		rows?: DataTableRow[];
+		keyAccessor?: DataTableKeyAccessor;
+		rowLabel?: (row: DataTableRow, index: number) => string;
+		caption?: string;
+		showCaption?: boolean;
+		searchable?: boolean;
+		searchLabel?: string;
+		query?: string;
+		clientSort?: boolean;
+		sortKey?: string | null;
+		sortDirection?: DataTableSortDirection;
+		selectable?: boolean;
+		selectedKeys?: DataTableKey[];
+		emptyText?: string;
+		noResultsText?: string;
+		onSortChange?:
+			| ((detail: { key: string | null; direction: DataTableSortDirection }) => void)
+			| undefined;
+		onQueryChange?: ((detail: { query: string }) => void) | undefined;
+		onSelectionChange?:
+			| ((detail: { selectedKeys: DataTableKey[]; visibleKeys: DataTableKey[] }) => void)
+			| undefined;
+		rowAction?: import('svelte').Snippet<[any]>;
+		toolbar?: import('svelte').Snippet<[any]>;
+		cell?: import('svelte').Snippet<[any]>;
+		empty?: import('svelte').Snippet<[any]>;
+		[key: string]: any
+	}
 
-	let className = '';
-	export { className as class };
-	export let columns: DataTableColumn[] = [];
-	export let rows: DataTableRow[] = [];
-	export let keyAccessor: DataTableKeyAccessor = (_row, index) => index;
-	export let rowLabel: (row: DataTableRow, index: number) => string = (_row, index) =>
-		`Row ${index + 1}`;
-	export let caption = 'Data table';
-	export let showCaption = false;
-	export let searchable = false;
-	export let searchLabel = 'Search rows';
-	export let query = '';
-	export let clientSort = true;
-	export let sortKey: string | null = null;
-	export let sortDirection: DataTableSortDirection = 'asc';
-	export let selectable = false;
-	export let selectedKeys: DataTableKey[] = [];
-	export let emptyText = 'No rows to display.';
-	export let noResultsText = 'No rows match your search.';
+	let {
+		class: className = '',
+		columns = [],
+		rows = [],
+		keyAccessor = (_row, index) => index,
+		rowLabel = (_row, index) =>
+		`Row ${index + 1}`,
+		caption = 'Data table',
+		showCaption = false,
+		searchable = false,
+		searchLabel = 'Search rows',
+		query = $bindable(''),
+		clientSort = true,
+		sortKey = $bindable(null),
+		sortDirection = $bindable('asc'),
+		selectable = false,
+		selectedKeys = $bindable([]),
+		emptyText = 'No rows to display.',
+		noResultsText = 'No rows match your search.',
+		onSortChange = undefined,
+		onQueryChange = undefined,
+		onSelectionChange = undefined,
+		rowAction,
+		toolbar,
+		cell,
+		empty,
+		...rest
+	}: Props = $props();
 
-	const hasRowAction = Boolean($$slots.rowAction);
+	const hasRowAction = Boolean(rowAction);
 
-	$: preparedRows = prepareRows(rows, columns, keyAccessor, rowLabel);
-	$: normalizedQuery = query.trim().toLocaleLowerCase();
-	$: filteredRows = normalizedQuery
-		? preparedRows.filter((prepared) => prepared.searchText.includes(normalizedQuery))
-		: preparedRows;
-	$: visibleRows = clientSort
-		? sortRows(filteredRows, columns, sortKey, sortDirection)
-		: filteredRows;
-	$: visibleKeys = visibleRows.map((prepared) => prepared.key);
-	$: publicVisibleRows = visibleRows.map((prepared) => prepared.row);
-	$: selectedKeySet = new Set(selectedKeys);
-	$: selectedVisibleCount = visibleKeys.reduce<number>(
-		(count, key) => count + (selectedKeySet.has(key) ? 1 : 0),
-		0
-	);
-	$: allVisibleSelected = visibleKeys.length > 0 && selectedVisibleCount === visibleKeys.length;
-	$: someVisibleSelected = selectedVisibleCount > 0 && !allVisibleSelected;
-	$: columnCount = columns.length + (selectable ? 1 : 0) + (hasRowAction ? 1 : 0);
 
 	function readAccessor(row: DataTableRow, index: number, accessor: DataTableAccessor): unknown {
 		return typeof accessor === 'function' ? accessor(row, index) : row[accessor];
@@ -165,12 +180,12 @@
 			sortKey = column.key;
 			sortDirection = 'asc';
 		}
-		dispatch('sortchange', { key: sortKey, direction: sortDirection });
+		onSortChange?.({ key: sortKey, direction: sortDirection });
 	}
 
 	function handleSearchInput(event: Event): void {
 		query = (event.currentTarget as HTMLInputElement).value;
-		dispatch('querychange', { query });
+		onQueryChange?.({ query });
 	}
 	function handleVisibleSelection(event: Event): void {
 		setVisibleSelected((event.currentTarget as HTMLInputElement).checked);
@@ -186,7 +201,7 @@
 		if (checked) next.add(key);
 		else next.delete(key);
 		selectedKeys = [...next];
-		dispatch('selectionchange', { selectedKeys, visibleKeys });
+		onSelectionChange?.({ selectedKeys, visibleKeys });
 	}
 
 	function setVisibleSelected(checked: boolean): void {
@@ -196,7 +211,7 @@
 			else next.delete(key);
 		}
 		selectedKeys = [...next];
-		dispatch('selectionchange', { selectedKeys, visibleKeys });
+		onSelectionChange?.({ selectedKeys, visibleKeys });
 	}
 
 	function indeterminate(node: HTMLInputElement, value: boolean) {
@@ -213,10 +228,28 @@
 		if (column.format) return column.format(value, prepared.row, prepared.index);
 		return value == null ? '' : String(value);
 	}
+	let preparedRows = $derived(prepareRows(rows, columns, keyAccessor, rowLabel));
+	let normalizedQuery = $derived(query.trim().toLocaleLowerCase());
+	let filteredRows = $derived(normalizedQuery
+		? preparedRows.filter((prepared) => prepared.searchText.includes(normalizedQuery))
+		: preparedRows);
+	let visibleRows = $derived(clientSort
+		? sortRows(filteredRows, columns, sortKey, sortDirection)
+		: filteredRows);
+	let visibleKeys = $derived(visibleRows.map((prepared) => prepared.key));
+	let publicVisibleRows = $derived(visibleRows.map((prepared) => prepared.row));
+	let selectedKeySet = $derived(new Set(selectedKeys));
+	let selectedVisibleCount = $derived(visibleKeys.reduce<number>(
+		(count, key) => count + (selectedKeySet.has(key) ? 1 : 0),
+		0
+	));
+	let allVisibleSelected = $derived(visibleKeys.length > 0 && selectedVisibleCount === visibleKeys.length);
+	let someVisibleSelected = $derived(selectedVisibleCount > 0 && !allVisibleSelected);
+	let columnCount = $derived(columns.length + (selectable ? 1 : 0) + (hasRowAction ? 1 : 0));
 </script>
 
-<div class={`melt-data-table ${className}`} {...$$restProps}>
-	{#if searchable || selectable || $$slots.toolbar}
+<div class={`melt-data-table ${className}`} {...rest}>
+	{#if searchable || selectable || toolbar}
 		<div class="melt-data-table-toolbar">
 			{#if searchable}
 				<label class="melt-data-table-search">
@@ -226,7 +259,7 @@
 						value={query}
 						placeholder={searchLabel}
 						aria-label={searchLabel}
-						on:input={handleSearchInput}
+						oninput={handleSearchInput}
 					/>
 				</label>
 			{/if}
@@ -235,12 +268,12 @@
 					{selectedVisibleCount} of {visibleKeys.length} visible rows selected
 				</p>
 			{/if}
-			<slot name="toolbar" rows={publicVisibleRows} {selectedKeys} />
+			{@render toolbar?.({ rows: publicVisibleRows, selectedKeys, })}
 		</div>
 	{/if}
 
 	<!-- The labeled region is intentionally focusable so keyboard users can scroll wide tables. -->
-	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 	<div class="melt-data-table-viewport" tabindex="0" role="region" aria-label={caption}>
 		<table class="melt-table melt-data-table-table">
 			<caption class:melt-visually-hidden={!showCaption}>{caption}</caption>
@@ -254,7 +287,7 @@
 								use:indeterminate={someVisibleSelected}
 								disabled={visibleKeys.length === 0}
 								aria-label="Select all visible rows"
-								on:change={handleVisibleSelection}
+								onchange={handleVisibleSelection}
 							/>
 						</th>
 					{/if}
@@ -268,7 +301,7 @@
 								<button
 									type="button"
 									class="melt-data-table-sort"
-									on:click={() => setSort(column)}
+									onclick={() => setSort(column)}
 								>
 									<span>{column.header}</span>
 									<span class="melt-data-table-sort-indicator" aria-hidden="true">
@@ -292,35 +325,29 @@
 									type="checkbox"
 									checked={selectedKeySet.has(prepared.key)}
 									aria-label={`Select ${prepared.label}`}
-									on:change={(event) => handleRowSelection(event, prepared.key)}
+									onchange={(event) => handleRowSelection(event, prepared.key)}
 								/>
 							</td>
 						{/if}
 						{#each columns as column (column.key)}
 							<td class={`melt-table-cell ${column.numeric ? 'melt-data-table-numeric' : ''}`}>
-								<slot
-									name="cell"
-									row={prepared.row}
-									rowIndex={prepared.index}
-									{column}
-									value={prepared.values[column.key]}
-								>
+								{#if cell}{@render cell({ row: prepared.row, rowIndex: prepared.index, column, value: prepared.values[column.key], })}{:else}
 									{displayValue(column, prepared)}
-								</slot>
+								{/if}
 							</td>
 						{/each}
 						{#if hasRowAction}
 							<td class="melt-table-cell melt-data-table-action">
-								<slot name="rowAction" row={prepared.row} rowIndex={prepared.index} />
+								{@render rowAction?.({ row: prepared.row, rowIndex: prepared.index, })}
 							</td>
 						{/if}
 					</tr>
 				{:else}
 					<tr class="melt-table-row">
 						<td class="melt-table-cell melt-data-table-empty" colspan={Math.max(columnCount, 1)}>
-							<slot name="empty" query={normalizedQuery}>
+							{#if empty}{@render empty({ query: normalizedQuery, })}{:else}
 								{normalizedQuery ? noResultsText : emptyText}
-							</slot>
+							{/if}
 						</td>
 					</tr>
 				{/each}

@@ -1,9 +1,13 @@
 <script lang="ts">
 	import { createAccordion, type CreateAccordionProps } from '$lib/index.js';
 
-	export let multiple = false;
-	export let disabled: CreateAccordionProps['disabled'] = undefined;
-	export let items: { id: string; triggerId: string; title: string; description: string }[] = [];
+	interface Props {
+		multiple?: boolean;
+		disabled?: CreateAccordionProps['disabled'];
+		items?: { id: string; triggerId: string; title: string; description: string }[];
+	}
+
+	let { multiple = false, disabled = undefined, items = [] }: Props = $props();
 
 	const {
 		elements: { root, content, item, trigger },

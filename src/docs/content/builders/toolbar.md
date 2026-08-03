@@ -4,10 +4,9 @@ description:
   A container for grouping a set of controls, such as buttons, toggle groups or dropdown menus.
 ---
 
-<script>
+<script lang="ts">
     import { APIReference, KbdTable } from '$docs/components'
-    export let schemas
-    export let keyboard
+    let { schemas, keyboard } = $props()
 </script>
 
 ## API Reference

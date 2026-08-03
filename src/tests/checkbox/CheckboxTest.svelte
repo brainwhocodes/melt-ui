@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { createCheckbox, type CreateCheckboxProps } from '$lib/index.js';
 
-	export let defaultChecked: CreateCheckboxProps['defaultChecked'] = 'indeterminate';
+	interface Props {
+		defaultChecked?: CreateCheckboxProps['defaultChecked'];
+	}
+
+	let { defaultChecked = 'indeterminate' }: Props = $props();
 
 	const {
 		elements: { root },

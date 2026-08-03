@@ -2,19 +2,31 @@
 	import { page } from '$app/stores';
 	import type { Writable } from 'svelte/store';
 
-	export let href: string;
-	export let open: Writable<boolean>;
 
-	let className: string | undefined | null = undefined;
-	export { className as class };
+	interface Props {
+		href: string;
+		open: Writable<boolean>;
+		class?: string | undefined | null;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let {
+		href,
+		open,
+		class: className = undefined,
+		children,
+		...rest
+	}: Props = $props();
+
 </script>
 
 <a
 	{href}
-	on:click={() => open.set(false)}
+	onclick={() => open.set(false)}
 	class={`docs-button docs-button--ghost docs-button--size-default docs-mobile-nav-link ${className ?? ''}`}
-	{...$$restProps}
+	{...rest}
 	data-active={$page.url.pathname === href}
 >
-	<slot />
+	{@render children?.()}
 </a>

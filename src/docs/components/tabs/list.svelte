@@ -5,8 +5,12 @@
 
 	const { list, tabs } = getTabsContext();
 
-	let className = '';
-	export { className as class };
+	interface Props {
+		class?: string;
+	}
+
+	let { class: className = '' }: Props = $props();
+
 </script>
 
 <div class={cn('surface-1ea62c22d4', className)} {...$list} use:list>

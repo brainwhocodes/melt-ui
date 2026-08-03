@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	export type ButtonGroupOrientation = 'horizontal' | 'vertical';
 </script>
 
@@ -6,9 +6,15 @@
 	import type { HTMLAttributes } from 'svelte/elements';
 
 
-	let className = '';
-	export { className as class };
-	export let orientation: ButtonGroupOrientation = 'horizontal';
+
+	interface Props {
+		class?: string;
+		orientation?: ButtonGroupOrientation;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { class: className = '', orientation = 'horizontal', children, ...rest }: Props = $props();
 
 	type $$Props = HTMLAttributes<HTMLDivElement> & {
 		class?: string;
@@ -17,10 +23,10 @@
 </script>
 
 <div
-	{...$$restProps}
+	{...rest}
 	class={`melt-button-group ${className}`.trim()}
 	role="group"
 	data-orientation={orientation}
 >
-	<slot />
+	{@render children?.()}
 </div>

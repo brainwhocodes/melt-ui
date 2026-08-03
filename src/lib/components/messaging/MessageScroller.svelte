@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { afterUpdate, createEventDispatcher, onMount, tick } from 'svelte';
+	import { onMount, tick } from 'svelte';
 
 	type PrependDetail = {
 		previousScrollHeight: number;
@@ -8,35 +8,55 @@
 		scrollTop: number;
 	};
 
-	export let follow = true;
-	export let atLiveEdge = true;
-	export let threshold = 48;
-	export let label = 'Conversation';
-	export let jumpLabel = 'Jump to latest';
-	export let jumpBehavior: ScrollBehavior = 'smooth';
-	export let live: 'off' | 'polite' = 'polite';
-	let className = '';
-	export { className as class };
+	interface Props {
+		follow?: boolean;
+		atLiveEdge?: boolean;
+		threshold?: number;
+		label?: string;
+		jumpLabel?: string;
+		jumpBehavior?: ScrollBehavior;
+		live?: 'off' | 'polite';
+		class?: string;
+		onfollowchange?: (detail: { follow: boolean }) => void;
+		onliveedgechange?: (detail: { atLiveEdge: boolean }) => void;
+		onprepend?: (detail: PrependDetail) => void;
+		onprependpreserved?: (detail: PrependDetail) => void;
+		onjump?: (detail: { behavior: ScrollBehavior }) => void;
+		children?: import('svelte').Snippet;
+		jump?: import('svelte').Snippet;
+		[key: string]: any;
+	}
 
-	const dispatch = createEventDispatcher<{
-		followchange: { follow: boolean };
-		liveedgechange: { atLiveEdge: boolean };
-		prepend: PrependDetail;
-		prependpreserved: PrependDetail;
-		jump: { behavior: ScrollBehavior };
-	}>();
+	let {
+		follow = true,
+		atLiveEdge = true,
+		threshold = 48,
+		label = 'Conversation',
+		jumpLabel = 'Jump to latest',
+		jumpBehavior = 'smooth',
+		live = 'polite',
+		class: className = '',
+		onfollowchange,
+		onliveedgechange,
+		onprepend,
+		onprependpreserved,
+		onjump,
+		children,
+		jump,
+		...rest
+	}: Props = $props();
 
 	let viewport: HTMLElement;
 	let content: HTMLElement;
 	let observer: ResizeObserver | undefined;
-	let mounted = false;
+	let mounted = $state(false);
 	let preserveDepth = 0;
 	let latestFrame: number | undefined;
-	let previousFollow = follow;
-	let lastContentHeight = 0;
-	let hasResizeObserver = false;
+	let previousFollow = $state(follow);
+	let lastContentHeight = $state(0);
+	let hasResizeObserver = $state(false);
 
-	$: safeThreshold = Number.isFinite(threshold) ? Math.max(0, threshold) : 48;
+	let safeThreshold = $derived(Number.isFinite(threshold) ? Math.max(0, threshold) : 48);
 
 	function distanceFromLiveEdge(): number {
 		if (!viewport) return 0;
@@ -46,13 +66,13 @@
 	function publishLiveEdge(next: boolean): void {
 		if (atLiveEdge === next) return;
 		atLiveEdge = next;
-		dispatch('liveedgechange', { atLiveEdge: next });
+		onliveedgechange?.({ atLiveEdge: next });
 	}
 
 	function publishFollow(next: boolean): void {
 		if (follow === next) return;
 		follow = next;
-		dispatch('followchange', { follow: next });
+		onfollowchange?.({ follow: next });
 	}
 
 	function measureLiveEdge(syncFollow = true): boolean {
@@ -175,8 +195,8 @@
 				delta,
 				scrollTop: viewport?.scrollTop ?? previousScrollTop,
 			};
-			dispatch('prepend', detail);
-			dispatch('prependpreserved', detail);
+			onprepend?.(detail);
+			onprependpreserved?.(detail);
 			return detail;
 		};
 	}
@@ -196,10 +216,10 @@
 	function handleJump(): void {
 		const behavior = resolveScrollBehavior(jumpBehavior);
 		scrollToLatest(behavior);
-		dispatch('jump', { behavior });
+		onjump?.({ behavior });
 	}
 
-	afterUpdate(() => {
+	$effect(() => {
 		if (!mounted || !content) return;
 		if (follow && !previousFollow) {
 			publishLiveEdge(true);
@@ -260,9 +280,9 @@
 	class={className}
 	data-follow={follow}
 	data-live-edge={atLiveEdge}
-	{...$$restProps}
+	{...rest}
 >
-	<!-- svelte-ignore a11y-no-noninteractive-tabindex a11y-no-noninteractive-element-interactions -->
+	<!-- svelte-ignore a11y_no_noninteractive_tabindex a11y_no_noninteractive_element_interactions -->
 	<div
 		class="melt-message-scroller-viewport"
 		bind:this={viewport}
@@ -272,16 +292,20 @@
 		aria-relevant="additions text"
 		aria-atomic="false"
 		tabindex="0"
-		on:keydown={handleViewportKeydown}
+		onkeydown={handleViewportKeydown}
 	>
 		<div class="melt-message-scroller-content" bind:this={content}>
-			<slot />
+			{@render children?.()}
 		</div>
 	</div>
 
 	{#if !atLiveEdge}
-		<button class="melt-message-scroller-jump" type="button" on:click={handleJump}>
-			<slot name="jump">{jumpLabel}</slot>
+		<button class="melt-message-scroller-jump" type="button" onclick={handleJump}>
+			{#if jump}
+				{@render jump()}
+			{:else}
+				{jumpLabel}
+			{/if}
 		</button>
 	{/if}
 </div>

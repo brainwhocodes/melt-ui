@@ -1,35 +1,46 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import {
 		alertDialogContext,
 		type OverlayContext,
 		useOverlayContext,
 	} from './overlay.js';
 
-	export let type: 'button' | 'submit' | 'reset' = 'button';
-	export let disabled = false;
-	let className = '';
-	export { className as class };
+	interface Props {
+		type?: 'button' | 'submit' | 'reset';
+		disabled?: boolean;
+		oncancel?: (detail: { originalEvent: MouseEvent }) => void;
+		onclick?: (detail: { originalEvent: MouseEvent }) => void;
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let {
+		type = 'button',
+		disabled = false,
+		oncancel = undefined,
+		onclick = undefined,
+		class: className = '',
+		children,
+		...rest
+	}: Props = $props();
+
 	const context = useOverlayContext<OverlayContext>(alertDialogContext, 'AlertDialogCancel');
-	const dispatch = createEventDispatcher<{
-		cancel: { originalEvent: MouseEvent };
-		click: { originalEvent: MouseEvent };
-	}>();
 
 	function handleClick(event: MouseEvent) {
-		const clickAllowed = dispatch('click', { originalEvent: event }, { cancelable: true });
-		const cancelAllowed = dispatch('cancel', { originalEvent: event }, { cancelable: true });
-		if (clickAllowed && cancelAllowed && !event.defaultPrevented) context.close('cancel');
+		onclick?.({ originalEvent: event });
+		oncancel?.({ originalEvent: event });
+		if (!event.defaultPrevented) context.close('cancel');
 	}
 </script>
 
 <button
-	{...$$restProps}
+	{...rest}
 	{type}
 	{disabled}
 	class={`melt-alert-dialog__cancel ${className}`.trim()}
 	data-melt-alert-dialog-cancel
-	on:click={handleClick}
+	onclick={handleClick}
 >
-	<slot />
+	{@render children?.()}
 </button>

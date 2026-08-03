@@ -15,7 +15,7 @@ This documentation site and Melt UI's own sources do not require the custom prep
 In the simplest form, the preprocessor will take the following code:
 
 ```svelte
-<script>
+<script lang="ts">
 	import { createCollapsible, melt } from '@melt-ui/svelte'
 	const { open, root, content, trigger } = createCollapsible()
 </script>
@@ -29,7 +29,7 @@ In the simplest form, the preprocessor will take the following code:
 and transform it into this:
 
 ```svelte
-<script>
+<script lang="ts">
 	import { createCollapsible } from '@melt-ui/svelte'
 	const { open, root, content, trigger } = createCollapsible()
 </script>
@@ -43,7 +43,7 @@ and transform it into this:
 It can handle more complex scenarios, such as a builder that is a call expression with dependencies:
 
 ```svelte
-<script>
+<script lang="ts">
 	import { createBuilder, melt } from '@melt-ui/svelte'
 	const { builder } = createBuilder()
 </script>

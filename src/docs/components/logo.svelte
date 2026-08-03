@@ -1,5 +1,4 @@
 <script lang="ts">
-	export let withText = false;
 
 	type ThemeConf = {
 		primary: string;
@@ -32,17 +31,27 @@
 		},
 	} satisfies Record<string, ThemeConf>;
 
-	export let theme: keyof typeof themes = 'gold-caramel';
 
-	export let textColor: 'primary' | 'white' | 'black' = 'primary';
-	$: resolvedTextColor = {
+
+	interface Props {
+		withText?: boolean;
+		theme?: keyof typeof themes;
+		textColor?: 'primary' | 'white' | 'black';
+		class?: string;
+	}
+
+	let {
+		withText = false,
+		theme = 'gold-caramel',
+		textColor = 'primary',
+		class: className = ''
+	}: Props = $props();
+
+	let resolvedTextColor = $derived({
 		primary: themes[theme].primary,
 		white: '#FFFFFF',
 		black: '#171717',
-	}[textColor];
-
-	let className = '';
-	export { className as class };
+	}[textColor]);
 </script>
 
 {#if withText}

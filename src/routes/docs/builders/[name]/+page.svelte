@@ -10,17 +10,23 @@
 		elements: { root: separator },
 	} = createSeparator();
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 
 	type Component = $$Generic<typeof SvelteComponent>;
-	$: component = data.doc.default as unknown as Component;
-	$: doc = data.doc.metadata;
-	$: snippets = data.snippets;
-	$: mainPreview = data.mainPreview as unknown as Component;
-	$: previews = data.previews;
-	$: features = data.builderData.features;
-	$: keyboard = data.builderData.keyboard;
-	$: schemas = data.builderData.schemas;
+	let component = $derived(data.doc.default as unknown as Component);
+	let doc = $derived(data.doc.metadata);
+	let snippets = $derived(data.snippets);
+	let mainPreview = $derived(data.mainPreview as unknown as Component);
+	let previews = $derived(data.previews);
+	let features = $derived(data.builderData.features);
+	let keyboard = $derived(data.builderData.keyboard);
+	let schemas = $derived(data.builderData.schemas);
+
+	const SvelteComponent_2 = $derived(component);
 </script>
 
 <main class="surface-d02747668d">
@@ -38,11 +44,12 @@
 		<div {...$separator} use:separator class="surface-cf84d1beba"></div>
 		<div class="mdsvex" id="mdsvex">
 			<Preview code={snippets.main} viewCode={false} variant="default">
-				<svelte:component this={mainPreview} />
+				{@const SvelteComponent_1 = mainPreview}
+				<SvelteComponent_1 />
 			</Preview>
 			<Features {features} />
 
-			<svelte:component this={component} {snippets} {schemas} {previews} {keyboard} />
+			<SvelteComponent_2 {snippets} {schemas} {previews} {keyboard} />
 		</div>
 		<div {...$separator} use:separator class="surface-e423b90bef"></div>
 		<!-- <DocsPager /> -->

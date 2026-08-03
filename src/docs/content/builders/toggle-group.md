@@ -3,10 +3,9 @@ title: Toggle Group
 description: A set of two-state buttons that can be toggled on or off.
 ---
 
-<script>
+<script lang="ts">
     import { APIReference, KbdTable } from '$docs/components'
-    export let schemas
-    export let keyboard
+    let { schemas, keyboard } = $props()
 </script>
 
 ## Anatomy

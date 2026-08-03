@@ -3,9 +3,9 @@ title: Separator
 description: Displays a horizontal or vertical line to separate content.
 ---
 
-<script>
+<script lang="ts">
     import { APIReference } from '$docs/components'
-    export let schemas
+    let { schemas } = $props()
 </script>
 
 ## Anatomy

@@ -1,8 +1,13 @@
 <script lang="ts">
 	import { cn } from '$docs/utils/index.js';
 
-	let className: string | undefined | null = undefined;
-	export { className as class };
+	interface Props {
+		class?: string | undefined | null;
+		[key: string]: any
+	}
+
+	let { class: className = undefined, ...rest }: Props = $props();
+
 </script>
 
-<hr class={cn('surface-cb2aa92885', className)} {...$$restProps} />
+<hr class={cn('surface-cb2aa92885', className)} {...rest} />

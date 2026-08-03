@@ -4,19 +4,39 @@
 
 	type $$Props = CreateColorPickerProps;
 
-	export let value: CreateColorPickerProps['value'] = undefined;
-	export let defaultValue: CreateColorPickerProps['defaultValue'] = undefined;
-	export let defaultFormat: CreateColorPickerProps['defaultFormat'] = undefined;
-	export let format: CreateColorPickerProps['format'] = undefined;
-	export let disabled: CreateColorPickerProps['disabled'] = undefined;
-	export let readonly: CreateColorPickerProps['readonly'] = undefined;
-	export let dir: CreateColorPickerProps['dir'] = undefined;
-	export let orientation: CreateColorPickerProps['orientation'] = undefined;
-	export let name: CreateColorPickerProps['name'] = undefined;
-	export let previousValue: CreateColorPickerProps['previousValue'] = undefined;
-	export let onValueChange: CreateColorPickerProps['onValueChange'] = undefined;
-	export let onValueCommitted: CreateColorPickerProps['onValueCommitted'] = undefined;
-	export let onFormatChange: CreateColorPickerProps['onFormatChange'] = undefined;
+	interface Props {
+		value?: CreateColorPickerProps['value'];
+		defaultValue?: CreateColorPickerProps['defaultValue'];
+		defaultFormat?: CreateColorPickerProps['defaultFormat'];
+		format?: CreateColorPickerProps['format'];
+		disabled?: CreateColorPickerProps['disabled'];
+		readonly?: CreateColorPickerProps['readonly'];
+		dir?: CreateColorPickerProps['dir'];
+		orientation?: CreateColorPickerProps['orientation'];
+		name?: CreateColorPickerProps['name'];
+		previousValue?: CreateColorPickerProps['previousValue'];
+		onValueChange?: CreateColorPickerProps['onValueChange'];
+		onValueCommitted?: CreateColorPickerProps['onValueCommitted'];
+		onFormatChange?: CreateColorPickerProps['onFormatChange'];
+		[key: string]: any
+	}
+
+	let {
+		value = undefined,
+		defaultValue = undefined,
+		defaultFormat = undefined,
+		format = undefined,
+		disabled = undefined,
+		readonly = undefined,
+		dir = undefined,
+		orientation = undefined,
+		name = undefined,
+		previousValue = undefined,
+		onValueChange = undefined,
+		onValueCommitted = undefined,
+		onFormatChange = undefined,
+		...rest
+	}: Props = $props();
 
 	const {
 		elements: {
@@ -62,7 +82,7 @@
 		onValueChange,
 		onValueCommitted,
 		onFormatChange,
-		...removeUndefined($$restProps),
+		...removeUndefined(rest),
 	});
 </script>
 

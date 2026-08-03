@@ -3,10 +3,9 @@ title: Tags Input
 description: Render tags inside an input, followed by an actual text input.
 ---
 
-<script>
+<script lang="ts">
     import { APIReference, Callout, KbdTable } from '$docs/components'
-    export let schemas
-    export let keyboard
+    let { schemas, keyboard } = $props()
 </script>
 
 ## Anatomy

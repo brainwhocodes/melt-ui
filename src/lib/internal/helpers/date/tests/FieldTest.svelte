@@ -1,3 +1,5 @@
+<script lang="ts"></script>
+
 <div id="field" data-testid="field">
 	<div data-segment="day"></div>
 	<div data-segment="month"></div>

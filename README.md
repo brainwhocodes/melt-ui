@@ -21,6 +21,8 @@ Melt UI provides production-ready components for application interfaces:
 
 ## Getting started
 
+Melt UI requires Svelte 5 and uses runes APIs.
+
 Install the package:
 
 ```sh
@@ -30,7 +32,7 @@ pnpm add @melt-ui/svelte
 Import the shared stylesheet once, then use components directly:
 
 ```svelte
-<script>
+<script lang="ts">
 	import { Button, Field, Input } from '@melt-ui/svelte';
 	import '@melt-ui/svelte/styles.css';
 </script>

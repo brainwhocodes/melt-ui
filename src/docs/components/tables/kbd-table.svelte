@@ -3,7 +3,11 @@
 	import { Kbd } from '$docs/components/index.js';
 	import { transformAPIString } from '$docs/utils/index.js';
 
-	export let keyboard: KeyboardSchema;
+	interface Props {
+		keyboard: KeyboardSchema;
+	}
+
+	let { keyboard }: Props = $props();
 </script>
 
 {#if keyboard && keyboard.length}

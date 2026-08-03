@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 	import {
 		containFocus,
@@ -16,28 +16,44 @@
 		type OverlayOpenChange,
 	} from './overlay.js';
 
-	export let open = false;
-	export let direction: DrawerDirection = 'bottom';
-	export let dismissThreshold = 0.25;
-	export let snapPoints: number[] = [0, 1];
-	export let activeSnapPoint = 1;
-	export let closeOnEscape = true;
-	export let closeOnBackdrop = true;
-	export let onOpenChange: OverlayOpenChange | undefined = undefined;
-	export let onSnapPointChange: ((value: number) => void) | undefined = undefined;
-	let className = '';
-	export { className as class };
+	interface Props {
+		open?: boolean;
+		direction?: DrawerDirection;
+		dismissThreshold?: number;
+		snapPoints?: number[];
+		activeSnapPoint?: number;
+		closeOnEscape?: boolean;
+		closeOnBackdrop?: boolean;
+		onOpenChange?: OverlayOpenChange | undefined;
+		onDismiss?: ((detail: { reason: OverlayCloseReason }) => void) | undefined;
+		onSnapPointChange?: ((value: number) => void) | undefined;
+		class?: string;
+		children?: import('svelte').Snippet<[any]>;
+		[key: string]: any
+	}
 
-	const dispatch = createEventDispatcher<{
-		openChange: { open: boolean; reason: OverlayCloseReason };
-		dismiss: { reason: OverlayCloseReason };
-		snapPointChange: { value: number };
-	}>();
-	let dialog: HTMLDialogElement;
-	let mounted = false;
+	let {
+		open = $bindable(false),
+		direction = 'bottom',
+		dismissThreshold = 0.25,
+		snapPoints = [0, 1],
+		activeSnapPoint = $bindable(1),
+		closeOnEscape = true,
+		closeOnBackdrop = true,
+		onOpenChange = undefined,
+		onDismiss = undefined,
+		onSnapPointChange = undefined,
+		class: className = '',
+		children,
+		...rest
+	}: Props = $props();
+
+
+	let dialog: HTMLDialogElement | undefined = $state();
+	let mounted = $state(false);
 	let active = false;
-	let titleId: string | undefined;
-	let descriptionId: string | undefined;
+	let titleId: string | undefined = $state();
+	let descriptionId: string | undefined = $state();
 	let previouslyFocused: HTMLElement | null = null;
 	let releaseFocus: () => void = () => {};
 	let releaseScroll: () => void = () => {};
@@ -60,8 +76,7 @@
 		if (open === next) return;
 		open = next;
 		onOpenChange?.(next, reason);
-		dispatch('openChange', { open: next, reason });
-		if (!next) dispatch('dismiss', { reason });
+		if (!next) onDismiss?.({ reason });
 	}
 	function close(reason: OverlayCloseReason = 'programmatic') {
 		setOpen(false, reason);
@@ -71,7 +86,6 @@
 		if (normalized === activeSnapPoint) return;
 		activeSnapPoint = normalized;
 		onSnapPointChange?.(normalized);
-		dispatch('snapPointChange', { value: normalized });
 	}
 
 	const context: DrawerContext = {
@@ -138,18 +152,28 @@
 		};
 	});
 
-	$: directionStore.set(direction);
-	$: activeSnapPointStore.set(Math.max(0, Math.min(1, activeSnapPoint)));
-	$: dismissThresholdStore.set(Math.max(0, dismissThreshold));
-	$: snapPointsStore.set(normalizeSnapPoints(snapPoints));
-	$: if (mounted && dialog) {
-		if (open) activate();
-		else deactivate();
-	}
+	$effect(() => {
+		directionStore.set(direction);
+	});
+	$effect(() => {
+		activeSnapPointStore.set(Math.max(0, Math.min(1, activeSnapPoint)));
+	});
+	$effect(() => {
+		dismissThresholdStore.set(Math.max(0, dismissThreshold));
+	});
+	$effect(() => {
+		snapPointsStore.set(normalizeSnapPoints(snapPoints));
+	});
+	$effect(() => {
+		if (mounted && dialog) {
+			if (open) activate();
+			else deactivate();
+		}
+	});
 </script>
 
 <!-- Escape supplies the keyboard equivalent for backdrop dismissal. -->
-<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->
 <dialog
 	bind:this={dialog}
 	class={`melt-drawer ${className}`.trim()}
@@ -159,10 +183,10 @@
 	data-state={open ? 'open' : 'closed'}
 	data-direction={direction}
 	data-snap-point={activeSnapPoint}
-	on:cancel={handleCancel}
-	on:click={handleBackdrop}
-	on:close={handleNativeClose}
-	{...$$restProps}
+	oncancel={handleCancel}
+	onclick={handleBackdrop}
+	onclose={handleNativeClose}
+	{...rest}
 >
-	<slot {close} />
+	{@render children?.({ close, })}
 </dialog>

@@ -28,14 +28,19 @@
 
 	import { ModeWatcher } from 'mode-watcher';
 	import { onMount } from 'svelte';
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
 
-	let mounted = false;
+	let { children }: Props = $props();
+
+	let mounted = $state(false);
 
 	onMount(() => {
 		mounted = true;
 	});
 
-	$: isRoot = $page.url.pathname === '/';
+	let isRoot = $derived($page.url.pathname === '/');
 </script>
 
 <svelte:head>
@@ -65,7 +70,7 @@
 	data-browser={mounted ? '' : undefined}
 >
 	<div class="surface-be15640c06">
-		<slot />
+		{@render children?.()}
 	</div>
 	<header
 		class={cn(

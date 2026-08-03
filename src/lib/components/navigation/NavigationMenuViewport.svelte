@@ -2,11 +2,17 @@
 	import { getContext, onMount } from 'svelte';
 	import { NAVIGATION_MENU_ROOT, type NavigationMenuRootContext } from './context.js';
 
-	let className = '';
-	export { className as class };
+	interface Props {
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { class: className = '', children, ...rest }: Props = $props();
+
 
 	const root = getContext<NavigationMenuRootContext>(NAVIGATION_MENU_ROOT);
-	let element: HTMLDivElement;
+	let element: HTMLDivElement | undefined = $state();
 
 	function handlePointerEnter() {
 		root.cancelScheduledChange();
@@ -18,23 +24,24 @@
 	}
 
 	onMount(() => {
+		if (!element) return;
 		const unregister = root.registerViewport(element);
 		element.addEventListener('pointerenter', handlePointerEnter);
 		element.addEventListener('pointerleave', handlePointerLeave);
 		return () => {
 			unregister();
-			element.removeEventListener('pointerenter', handlePointerEnter);
-			element.removeEventListener('pointerleave', handlePointerLeave);
+			element?.removeEventListener('pointerenter', handlePointerEnter);
+			element?.removeEventListener('pointerleave', handlePointerLeave);
 		};
 	});
 </script>
 
 <div
-	{...$$restProps}
+	{...rest}
 	bind:this={element}
 	class={`melt-navigation-menu__viewport ${className}`.trim()}
 	data-state="closed"
 	aria-hidden="true"
 >
-	<slot />
+	{@render children?.()}
 </div>

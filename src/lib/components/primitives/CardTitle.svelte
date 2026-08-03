@@ -1,8 +1,14 @@
 <script lang="ts">
-	let className = '';
-	export { className as class };
+	interface Props {
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { class: className = '', children, ...rest }: Props = $props();
+
 </script>
 
-<h3 {...$$restProps} class={`melt-card__title ${className}`.trim()}>
-	<slot />
+<h3 {...rest} class={`melt-card__title ${className}`.trim()}>
+	{@render children?.()}
 </h3>

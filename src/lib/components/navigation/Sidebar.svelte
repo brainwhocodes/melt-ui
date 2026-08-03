@@ -1,45 +1,67 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	let nextSidebarId = 0;
 </script>
 
 <script lang="ts">
-	import { createEventDispatcher, onDestroy, onMount, setContext, tick } from 'svelte';
+	import { onDestroy, onMount, setContext, tick } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { SIDEBAR_ROOT, type SidebarContext } from './context.js';
 
-	export let collapsed = false;
-	export let open = false;
-	export let compact = true;
-	export let label = 'Sidebar';
-	export let id = `melt-sidebar-${++nextSidebarId}`;
-	let className = '';
-	export { className as class };
+	interface Props {
+		collapsed?: boolean;
+		open?: boolean;
+		compact?: boolean;
+		label?: string;
+		id?: any;
+		onchange?: (detail: { collapsed: boolean; open: boolean }) => void;
+		onCollapseChange?: (detail: { collapsed: boolean }) => void;
+		onOpenChange?: (detail: { open: boolean }) => void;
+		class?: string;
+		header?: import('svelte').Snippet;
+		content?: import('svelte').Snippet;
+		children?: import('svelte').Snippet;
+		footer?: import('svelte').Snippet;
+		[key: string]: any
+	}
 
-	const dispatch = createEventDispatcher<{
-		change: { collapsed: boolean; open: boolean };
-		collapseChange: { collapsed: boolean };
-		openChange: { open: boolean };
-	}>();
+	let {
+		collapsed = $bindable(false),
+		open = $bindable(false),
+		compact = true,
+		label = 'Sidebar',
+		id = `melt-sidebar-${++nextSidebarId}`,
+		onchange = undefined,
+		onCollapseChange = undefined,
+		onOpenChange = undefined,
+		class: className = '',
+		header,
+		content,
+		children,
+		footer,
+		...rest
+	}: Props = $props();
+
+
 	const collapsedStore = writable(collapsed);
 	const openStore = writable(open);
-	let isMobile = false;
-	let toggleButton: HTMLButtonElement;
+	let isMobile = $state(false);
+	let toggleButton: HTMLButtonElement | undefined = $state();
 	let escapeListening = false;
 
 	function setCollapsed(next: boolean) {
 		if (collapsed === next) return;
 		collapsed = next;
 		collapsedStore.set(next);
-		dispatch('collapseChange', { collapsed: next });
-		dispatch('change', { collapsed: next, open });
+		onCollapseChange?.({ collapsed: next });
+		onchange?.({ collapsed: next, open });
 	}
 
 	function setOpen(next: boolean, returnFocus = false) {
 		if (open === next) return;
 		open = next;
 		openStore.set(next);
-		dispatch('openChange', { open: next });
-		dispatch('change', { collapsed, open: next });
+		onOpenChange?.({ open: next });
+		onchange?.({ collapsed, open: next });
 		if (!next && returnFocus) void tick().then(() => toggleButton?.focus());
 	}
 
@@ -72,9 +94,15 @@
 	};
 	setContext(SIDEBAR_ROOT, context);
 
-	$: collapsedStore.set(collapsed);
-	$: openStore.set(open);
-	$: syncEscapeListener(isMobile && open);
+	$effect(() => {
+		collapsedStore.set(collapsed);
+	});
+	$effect(() => {
+		openStore.set(open);
+	});
+	$effect(() => {
+		syncEscapeListener(isMobile && open);
+	});
 
 	onMount(() => {
 		if (typeof window.matchMedia !== 'function') return;
@@ -94,7 +122,7 @@
 
 
 <div
-	{...$$restProps}
+	{...rest}
 	class={`melt-sidebar-shell ${className}`.trim()}
 	data-collapsed={collapsed ? '' : undefined}
 	data-open={open ? '' : undefined}
@@ -108,7 +136,7 @@
 		aria-controls={id}
 		aria-expanded={isMobile ? open : !collapsed}
 		aria-label={isMobile ? (open ? 'Close sidebar' : 'Open sidebar') : collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-		on:click={toggle}
+		onclick={toggle}
 	>
 		<span aria-hidden="true">☰</span>
 	</button>
@@ -118,7 +146,7 @@
 			type="button"
 			aria-label="Close sidebar"
 			tabindex="-1"
-			on:click={() => setOpen(false, true)}></button>
+			onclick={() => setOpen(false, true)}></button>
 	{/if}
 
 	<aside
@@ -130,13 +158,13 @@
 		data-state={isMobile ? (open ? 'open' : 'closed') : collapsed ? 'collapsed' : 'expanded'}
 	>
 		<header class="melt-sidebar__header">
-			<slot name="header" />
+			{@render header?.()}
 		</header>
 		<div class="melt-sidebar__content">
-			<slot name="content"><slot /></slot>
+			{#if content}{@render content()}{:else}{@render children?.()}{/if}
 		</div>
 		<footer class="melt-sidebar__footer">
-			<slot name="footer" />
+			{@render footer?.()}
 		</footer>
 	</aside>
 </div>

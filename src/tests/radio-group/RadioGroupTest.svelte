@@ -11,18 +11,32 @@
 		disabled: boolean;
 	};
 
-	export let value: CreateRadioGroupProps['value'] = undefined;
-	export let defaultValue: CreateRadioGroupProps['defaultValue'] = undefined;
-	export let disabled: CreateRadioGroupProps['disabled'] = undefined;
-	export let onValueChange: CreateRadioGroupProps['onValueChange'] = undefined;
-	export let required: CreateRadioGroupProps['required'] = undefined;
-	export let name: CreateRadioGroupProps['name'] = undefined;
-	export let items: Item[] = [
+	interface Props {
+		value?: CreateRadioGroupProps['value'];
+		defaultValue?: CreateRadioGroupProps['defaultValue'];
+		disabled?: CreateRadioGroupProps['disabled'];
+		onValueChange?: CreateRadioGroupProps['onValueChange'];
+		required?: CreateRadioGroupProps['required'];
+		name?: CreateRadioGroupProps['name'];
+		items?: Item[];
+		[key: string]: any
+	}
+
+	let {
+		value = undefined,
+		defaultValue = undefined,
+		disabled = undefined,
+		onValueChange = undefined,
+		required = undefined,
+		name = undefined,
+		items = [
 		{ value: 'a', disabled: false },
 		{ value: 'b', disabled: false },
 		{ value: 'c', disabled: false },
 		{ value: 'd', disabled: false },
-	];
+	],
+		...rest
+	}: Props = $props();
 
 	const {
 		elements: { root, item, hiddenInput },
@@ -34,7 +48,7 @@
 		disabled,
 		required,
 		name,
-		...removeUndefined($$restProps),
+		...removeUndefined(rest),
 	});
 </script>
 

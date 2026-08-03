@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { getTabsContext } from '$docs/components/tabs/root.svelte';
 
-	export let tab: string;
+	interface Props {
+		tab: string;
+	}
+
+	let { tab }: Props = $props();
 
 	const { trigger } = getTabsContext();
 </script>

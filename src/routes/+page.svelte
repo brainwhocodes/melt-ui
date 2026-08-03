@@ -12,7 +12,7 @@
 	import PinInput from './(landing-ui)/pin-input.svelte';
 	import Toolbar from './(landing-ui)/toolbar.svelte';
 
-	let copied = false;
+	let copied = $state(false);
 	let copytimeout: ReturnType<typeof setTimeout>;
 	function copyInstallCommand() {
 		navigator.clipboard.writeText(`npx @melt-ui/cli@latest init`);
@@ -43,7 +43,7 @@
 			apps.
 		</p>
 		<button
-			on:click={copyInstallCommand}
+			onclick={copyInstallCommand}
 			class="text-md group surface-6cb894fbe5"
 			aria-label="Copy install command"
 		>

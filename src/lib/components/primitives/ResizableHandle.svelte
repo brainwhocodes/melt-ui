@@ -1,45 +1,58 @@
 <script lang="ts">
-	import { createEventDispatcher, getContext, onMount } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import {
 		RESIZABLE_CONTEXT,
 		type ResizableContext,
 		type ResizableResizeDetail,
 	} from './resizable-context.js';
 
-	export let disabled = false;
-	export let keyboardStep = 1;
 
-	let className = '';
-	export { className as class };
+	interface Props {
+		disabled?: boolean;
+		keyboardStep?: number;
+		onresize?: (detail: ResizableResizeDetail) => void;
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let {
+		disabled = false,
+		keyboardStep = 1,
+		onresize = undefined,
+		class: className = '',
+		children,
+		...rest
+	}: Props = $props();
+
 
 	const context = getContext<ResizableContext>(RESIZABLE_CONTEXT);
 	if (!context) throw new Error('ResizableHandle must be used inside ResizableGroup.');
 	const resizableState = context.state;
-	const dispatch = createEventDispatcher<{ resize: ResizableResizeDetail }>();
 	const token = {};
-	let dragging = false;
-	let activePointer: number | null = null;
+	let dragging = $state(false);
+	let activePointer: number | null = $state(null);
 	let lastCoordinate = 0;
 
-	$: handleIndex = $resizableState.handles.indexOf(token);
-	$: previousPanel = $resizableState.panels[handleIndex];
-	$: nextPanel = $resizableState.panels[handleIndex + 1];
-	$: pairSize = previousPanel && nextPanel ? previousPanel.size + nextPanel.size : 100;
-	$: minimum = previousPanel && nextPanel
+	let handleIndex = $derived($resizableState.handles.indexOf(token));
+	let previousPanel = $derived($resizableState.panels[handleIndex]);
+	let nextPanel = $derived($resizableState.panels[handleIndex + 1]);
+	let pairSize = $derived(previousPanel && nextPanel ? previousPanel.size + nextPanel.size : 100);
+	let minimum = $derived(previousPanel && nextPanel
 		? Math.max(previousPanel.minSize, pairSize - nextPanel.maxSize)
-		: 0;
-	$: maximum = previousPanel && nextPanel
+		: 0);
+	let maximum = $derived(previousPanel && nextPanel
 		? Math.min(previousPanel.maxSize, pairSize - nextPanel.minSize)
-		: 100;
-	$: effectiveDisabled = disabled || $resizableState.disabled || previousPanel?.disabled || nextPanel?.disabled;
-	let separatorOrientation: 'horizontal' | 'vertical';
-	$: separatorOrientation = $resizableState.direction === 'horizontal' ? 'vertical' : 'horizontal';
+		: 100);
+	let effectiveDisabled = $derived(disabled || $resizableState.disabled || previousPanel?.disabled || nextPanel?.disabled);
+	let separatorOrientation: 'horizontal' | 'vertical' = $derived($resizableState.direction === 'horizontal' ? 'vertical' : 'horizontal');
+
 
 	const coordinate = (event: PointerEvent) =>
 		$resizableState.direction === 'horizontal' ? event.clientX : event.clientY;
 
 	function emitResize(detail: ResizableResizeDetail | null) {
-		if (detail) dispatch('resize', detail);
+		if (detail) onresize?.(detail);
 	}
 
 	function handlePointerDown(event: PointerEvent) {
@@ -100,30 +113,30 @@
 </script>
 
 <!-- A focusable ARIA separator is the APG interaction pattern for splitters. -->
-<!-- svelte-ignore a11y-no-noninteractive-tabindex a11y-no-noninteractive-element-interactions -->
+<!-- svelte-ignore a11y_no_noninteractive_tabindex, a11y_no_noninteractive_element_interactions -->
 <div
-	{...$$restProps}
+	{...rest}
 	class={`melt-resizable-handle ${className}`}
 	data-direction={$resizableState.direction}
 	data-active={dragging ? '' : undefined}
 	data-disabled={effectiveDisabled ? '' : undefined}
 	role="separator"
-	aria-label={$$restProps['aria-label'] ?? 'Resize panels'}
+	aria-label={rest['aria-label'] ?? 'Resize panels'}
 	aria-orientation={separatorOrientation}
 	aria-valuemin={minimum}
 	aria-valuemax={maximum}
 	aria-valuenow={previousPanel?.size ?? 0}
 	aria-disabled={effectiveDisabled || undefined}
 	tabindex={effectiveDisabled ? -1 : 0}
-	on:pointerdown={handlePointerDown}
-	on:pointermove={handlePointerMove}
-	on:pointerup={finishPointer}
-	on:pointercancel={finishPointer}
-	on:lostpointercapture={() => {
+	onpointerdown={handlePointerDown}
+	onpointermove={handlePointerMove}
+	onpointerup={finishPointer}
+	onpointercancel={finishPointer}
+	onlostpointercapture={() => {
 		dragging = false;
 		activePointer = null;
 	}}
-	on:keydown={handleKeydown}
+	onkeydown={handleKeydown}
 >
-	<span class="melt-resizable-handle-grip" aria-hidden="true"><slot /></span>
+	<span class="melt-resizable-handle-grip" aria-hidden="true">{@render children?.()}</span>
 </div>

@@ -1,5 +1,10 @@
 <script lang="ts">
 	import { SidebarNav } from '$docs/components/index.js';
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 </script>
 
 <div class="container docs-layout surface-6b510eaf51">
@@ -11,6 +16,6 @@
 		</div>
 	</aside>
 	<div id="main" class="surface-abff33c7ec">
-		<slot />
+		{@render children?.()}
 	</div>
 </div>

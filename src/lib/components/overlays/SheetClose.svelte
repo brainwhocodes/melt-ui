@@ -1,37 +1,49 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import {
 		sheetContext,
 		type OverlayContext,
 		useOverlayContext,
 	} from './overlay.js';
 
-	export let type: 'button' | 'submit' | 'reset' = 'button';
-	export let disabled = false;
-	export let ariaLabel = 'Close';
-	let className = '';
-	export { className as class };
+	interface Props {
+		type?: 'button' | 'submit' | 'reset';
+		disabled?: boolean;
+		ariaLabel?: string;
+		onclose?: (detail: { originalEvent: MouseEvent }) => void;
+		onclick?: (detail: { originalEvent: MouseEvent }) => void;
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let {
+		type = 'button',
+		disabled = false,
+		ariaLabel = 'Close',
+		onclose = undefined,
+		onclick = undefined,
+		class: className = '',
+		children,
+		...rest
+	}: Props = $props();
+
 	const context = useOverlayContext<OverlayContext>(sheetContext, 'SheetClose');
-	const dispatch = createEventDispatcher<{
-		close: { originalEvent: MouseEvent };
-		click: { originalEvent: MouseEvent };
-	}>();
 
 	function handleClick(event: MouseEvent) {
-		const clickAllowed = dispatch('click', { originalEvent: event }, { cancelable: true });
-		const closeAllowed = dispatch('close', { originalEvent: event }, { cancelable: true });
-		if (clickAllowed && closeAllowed && !event.defaultPrevented) context.close('close-button');
+		onclick?.({ originalEvent: event });
+		onclose?.({ originalEvent: event });
+		if (!event.defaultPrevented) context.close('close-button');
 	}
 </script>
 
 <button
-	{...$$restProps}
+	{...rest}
 	{type}
 	{disabled}
 	aria-label={ariaLabel}
 	class={`melt-sheet__close ${className}`.trim()}
 	data-melt-sheet-close
-	on:click={handleClick}
+	onclick={handleClick}
 >
-	<slot>Close</slot>
+	{#if children}{@render children()}{:else}Close{/if}
 </button>

@@ -1,14 +1,20 @@
 <script lang="ts">
-	export let density: 'comfortable' | 'compact' = 'comfortable';
 
-	let className = '';
-	export { className as class };
+	interface Props {
+		density?: 'comfortable' | 'compact';
+		class?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { density = 'comfortable', class: className = '', children, ...rest }: Props = $props();
+
 </script>
 
 <article
-	{...$$restProps}
+	{...rest}
 	class={`melt-typeset ${className}`}
 	data-density={density}
 >
-	<slot />
+	{@render children?.()}
 </article>
