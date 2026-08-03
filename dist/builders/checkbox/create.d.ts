@@ -1,0 +1,58 @@
+import type { MeltActionReturn } from '../../internal/types.js';
+import type { CheckboxEvents } from './events.js';
+import type { CreateCheckboxProps } from './types.js';
+export declare function createCheckbox(props?: CreateCheckboxProps): {
+    elements: {
+        root: import("../../internal/helpers/index.js").MeltElement<[{
+            update: (updater: import("svelte/store").Updater<boolean | "indeterminate">, sideEffect?: ((newValue: boolean | "indeterminate") => void) | undefined) => void;
+            set: (this: void, value: boolean | "indeterminate") => void;
+            subscribe(this: void, run: import("svelte/store").Subscriber<boolean | "indeterminate">, invalidate?: () => void): import("svelte/store").Unsubscriber;
+            get: () => boolean | "indeterminate";
+            destroy?: () => void;
+        }, import("../../internal/helpers/index.js").WithGet<import("svelte/store").Writable<boolean>>, import("../../internal/helpers/index.js").WithGet<import("svelte/store").Writable<boolean>>], (node: HTMLElement) => MeltActionReturn<CheckboxEvents["root"]>, ([$checked, $disabled, $required]: [boolean | "indeterminate", boolean, boolean]) => {
+            readonly 'data-disabled': true | undefined;
+            readonly disabled: true | undefined;
+            readonly 'data-state': "indeterminate" | "checked" | "unchecked";
+            readonly type: "button";
+            readonly role: "checkbox";
+            readonly 'aria-checked': boolean | "mixed";
+            readonly 'aria-required': boolean;
+        }, "checkbox">;
+        input: import("../../internal/helpers/index.js").MeltElement<[import("../../internal/helpers/index.js").WithGet<import("svelte/store").Readable<string>>, import("svelte/store").Readable<string | undefined>, import("../../internal/helpers/index.js").WithGet<import("svelte/store").Readable<boolean>>, import("../../internal/helpers/index.js").WithGet<import("svelte/store").Readable<boolean>>, import("../../internal/helpers/index.js").WithGet<import("svelte/store").Readable<import("svelte/elements").HTMLInputTypeAttribute | null | undefined>>, import("../../internal/helpers/index.js").WithGet<import("svelte/store").Readable<boolean | undefined>>], (node: HTMLInputElement) => {
+            destroy: () => void;
+        }, ([$value, $name, $disabled, $required, $type, $checked]: [string, string | undefined, boolean, boolean, import("svelte/elements").HTMLInputTypeAttribute | null | undefined, boolean | undefined]) => {
+            readonly name: string | undefined;
+            readonly value: string;
+            readonly 'aria-hidden': "true";
+            readonly hidden: true;
+            readonly disabled: boolean;
+            readonly required: boolean;
+            readonly tabIndex: -1;
+            readonly type: import("svelte/elements").HTMLInputTypeAttribute | null | undefined;
+            readonly checked: boolean | undefined;
+            readonly style: string;
+        }, string>;
+    };
+    states: {
+        checked: {
+            update: (updater: import("svelte/store").Updater<boolean | "indeterminate">, sideEffect?: ((newValue: boolean | "indeterminate") => void) | undefined) => void;
+            set: (this: void, value: boolean | "indeterminate") => void;
+            subscribe(this: void, run: import("svelte/store").Subscriber<boolean | "indeterminate">, invalidate?: () => void): import("svelte/store").Unsubscriber;
+            get: () => boolean | "indeterminate";
+            destroy?: () => void;
+        };
+    };
+    helpers: {
+        isIndeterminate: import("svelte/store").Readable<boolean>;
+        isChecked: import("svelte/store").Readable<boolean>;
+    };
+    options: import("../../internal/helpers/index.js").ToWritableStores<Omit<{
+        disabled: boolean;
+        required: boolean;
+        name: string;
+        value: string;
+        defaultChecked: boolean | "indeterminate";
+        checked?: import("svelte/store").Writable<boolean | "indeterminate">;
+        onCheckedChange?: import("../../internal/helpers/index.js").ChangeFn<boolean | "indeterminate">;
+    }, "checked" | "defaultChecked">>;
+};

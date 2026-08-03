@@ -1,0 +1,25 @@
+export const colorPickerEvents = {
+    area: ['pointerdown', 'pointermove', 'pointerup', 'pointercancel'],
+    areaXInput: ['focus', 'keydown', 'input'],
+    areaYInput: ['focus', 'keydown', 'input'],
+    hueTrack: [
+        'pointerdown',
+        'pointermove',
+        'pointerup',
+        'pointercancel',
+    ],
+    hueInput: ['focus', 'keydown', 'input'],
+    alphaTrack: [
+        'pointerdown',
+        'pointermove',
+        'pointerup',
+        'pointercancel',
+    ],
+    alphaInput: ['focus', 'keydown', 'input'],
+    channelInput: ['input', 'change', 'focus', 'blur', 'keydown'],
+    colorInput: ['input', 'change', 'focus', 'blur', 'keydown'],
+    formatSelect: ['change'],
+    previousSwatch: ['click'],
+    copyButton: ['click'],
+    eyedropperButton: ['click'],
+};
