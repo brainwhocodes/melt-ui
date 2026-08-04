@@ -8,6 +8,7 @@ export { default as CarouselPrevious } from './CarouselPrevious.svelte';
 export { default as CarouselSlide } from './CarouselSlide.svelte';
 export { default as CarouselViewport } from './CarouselViewport.svelte';
 export { default as Menubar } from './Menubar.svelte';
+export { default as MenubarMenu } from './MenubarMenu.svelte';
 export { default as NavigationMenu } from './NavigationMenu.svelte';
 export { default as NavigationMenuContent } from './NavigationMenuContent.svelte';
 export { default as NavigationMenuItem } from './NavigationMenuItem.svelte';

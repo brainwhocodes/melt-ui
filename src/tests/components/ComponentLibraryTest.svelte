@@ -287,7 +287,7 @@
 <HoverCard>Card preview</HoverCard>
 <InputOTP maxLength={6} />
 <Label for="username">Username</Label>
-<Menubar menus={[{ label: 'File', items: [{ value: 'save', label: 'Save' }] }]} />
+<Menubar menus={[{ label: 'File', items: [{ value: 'save-file', label: 'Save file' }] }]} />
 <Pagination count={50} perPage={10} />
 <Popover triggerLabel="Help"><p>Help content</p></Popover>
 <Progress value={45} max={100} />

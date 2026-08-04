@@ -288,10 +288,14 @@ describe('styled component library', () => {
 		expect(view.getByText('Header 1')).toBeInTheDocument();
 		expect(view.getByText('JD')).toBeInTheDocument();
 		expect(view.getByLabelText('Subscribe')).toBeInTheDocument();
-		expect(view.getByRole('button', { name: 'Expand info' })).toBeInTheDocument();
+		expect(
+			view.getByRole('button', { name: 'Expand info' }),
+		).toBeInTheDocument();
 		expect(view.getByText('Right click target')).toBeInTheDocument();
 		expect(view.getByText('Username')).toBeInTheDocument();
-		expect(view.getByRole('navigation', { name: 'Pagination' })).toBeInTheDocument();
+		expect(
+			view.getByRole('navigation', { name: 'Pagination' }),
+		).toBeInTheDocument();
 		expect(view.getByText('Success')).toBeInTheDocument();
 		expect(view.getByRole('button', { name: 'Bold' })).toBeInTheDocument();
 
@@ -314,6 +318,14 @@ describe('styled component library', () => {
 
 		const tab1 = view.getByRole('tab', { name: 'Tab 1' });
 		expect(tab1).toHaveAttribute('data-state', 'active');
+
+		// Menubar interaction assertions
+		const fileTrigger = view.getByRole('menuitem', { name: 'File' });
+		expect(fileTrigger).toHaveAttribute('aria-expanded', 'false');
+		expect(view.queryByText('Save file')).not.toBeInTheDocument();
+		await user.click(fileTrigger);
+		expect(fileTrigger).toHaveAttribute('aria-expanded', 'true');
+		expect(view.getByText('Save file')).toBeInTheDocument();
 
 		expect(await axe(view.container)).toHaveNoViolations();
 	});
