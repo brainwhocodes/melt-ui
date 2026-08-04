@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getContext, onMount } from 'svelte';
+	import { getContext, onMount, untrack } from 'svelte';
 	import {
 		NAVIGATION_MENU_ITEM,
 		NAVIGATION_MENU_ROOT,
@@ -31,7 +31,7 @@
 	const revision = root.revision;
 	let element: HTMLButtonElement | undefined = $state();
 	let mounted = $state(false);
-	let lastDisabled = $state(disabled);
+	let lastDisabled = $state(untrack(() => disabled));
 	let tabIndex: 0 | -1 = $state(-1);
 	let itemValue = $derived(item.value());
 	let expanded = $derived($activeValue === itemValue);

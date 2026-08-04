@@ -17,6 +17,13 @@ export default defineConfig({
 					}),
 				]),
 	],
+	build: {
+		rolldownOptions: {
+			checks: {
+				pluginTimings: false,
+			},
+		},
+	},
 	test: {
 		include: ['src/**/*.spec.ts'],
 		// jest like globals

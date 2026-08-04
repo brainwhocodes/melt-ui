@@ -3,6 +3,7 @@
 </script>
 
 <script lang="ts" generics="T extends 'single' | 'multiple'">
+	import { untrack } from 'svelte';
 	import { removeUndefined } from '../utils.js';
 
 	import { createToggleGroup, type CreateToggleGroupProps } from '$lib/index.js';
@@ -38,18 +39,20 @@
 
 	const {
 		elements: { root, item },
-	} = createToggleGroup<T>({
-		...removeUndefined({
-			type,
-			defaultValue,
-			disabled,
-			loop,
-			onValueChange,
-			orientation,
-			value,
-			...rest,
-		}),
-	});
+	} = createToggleGroup<T>(
+		untrack(() => ({
+			...removeUndefined({
+				type,
+				defaultValue,
+				disabled,
+				loop,
+				onValueChange,
+				orientation,
+				value,
+				...rest,
+			}),
+		}))
+	);
 </script>
 
 <main>

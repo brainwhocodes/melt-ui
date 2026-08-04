@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createDropdownMenu, type CreateDropdownMenuProps } from '$lib/index.js';
 	import { writable } from 'svelte/store';
 	import { AlignJustify, ChevronRight } from '$icons/index.js';
@@ -19,11 +20,13 @@
 		elements: { trigger, menu, item, separator, arrow },
 		builders: { createSubmenu, createMenuRadioGroup, createCheckboxItem },
 		states: { open },
-	} = createDropdownMenu({
-		forceVisible: true,
-		loop,
-		...rest,
-	});
+	} = createDropdownMenu(
+		untrack(() => ({
+			forceVisible: true,
+			loop,
+			...rest,
+		}))
+	);
 
 	const {
 		elements: { checkboxItem: settingsSyncCheckbox },

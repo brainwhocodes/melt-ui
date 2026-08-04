@@ -145,11 +145,13 @@
 		<CardFooter>Footer</CardFooter>
 	</Card>
 	<Direction dir="rtl">مرحبا</Direction>
-	<Empty>{#snippet title()}
-				<span >No results</span>{#snippet description()}
-
-			{/snippet}	<span >Try another query.</span>
-			{/snippet}</Empty>
+	<Empty
+		>{#snippet title()}
+			<span >No results</span>
+		{/snippet}{#snippet description()}
+			<span >Try another query.</span>
+		{/snippet}</Empty
+	>
 	<Item selected>{#snippet media()}
 				<span >A</span>
 			{/snippet}Item content{#snippet actions()}

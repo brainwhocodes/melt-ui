@@ -17,7 +17,7 @@
 </script>
 
 <script lang="ts">
-	import { onMount, tick } from 'svelte';
+	import { onMount, tick, untrack } from 'svelte';
 
 	interface GroupedItem {
 		item: CommandItem;
@@ -82,7 +82,7 @@
 		...rest
 	}: Props = $props();
 
-	let resolvedId = $state(id ?? '');
+	let resolvedId = $state(untrack(() => id ?? ''));
 	let inputElement: HTMLInputElement | undefined = $state();
 
 	onMount(() => {

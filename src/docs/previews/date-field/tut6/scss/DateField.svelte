@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createDateField, type CreateDateFieldProps } from '$lib/index.js';
 	import { CalendarDate } from '@internationalized/date';
+	import { untrack } from 'svelte';
 
 	interface Props {
 		defaultValue?: CreateDateFieldProps['defaultValue'];
@@ -14,7 +15,7 @@
 	} = createDateField({
 		name: 'birthday',
 		defaultPlaceholder: new CalendarDate(2023, 10, 11),
-		defaultValue,
+		defaultValue: untrack(() => defaultValue),
 	});
 </script>
 

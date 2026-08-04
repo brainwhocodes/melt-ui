@@ -5,6 +5,7 @@
 </script>
 
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import {
 		createHiddenInput,
 		type CreateHiddenInputProps,
@@ -28,12 +29,14 @@
 		onChange = noop
 	}: Props = $props();
 
-	const hiddenInput = createHiddenInput({
-		name,
-		value,
-		disabled,
-		required,
-	});
+	const hiddenInput = createHiddenInput(
+		untrack(() => ({
+			name,
+			value,
+			disabled,
+			required,
+		}))
+	);
 </script>
 
 <input {...$hiddenInput} use:hiddenInput onchange={onChange} data-testid="input" />

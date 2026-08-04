@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createDateField, type CreateDateFieldProps } from '$lib/index.js';
+	import { untrack } from 'svelte';
 
 	interface Props {
 		defaultPlaceholder?: CreateDateFieldProps['defaultPlaceholder'];
@@ -11,7 +12,7 @@
 		elements: { field, segment, label },
 		states: { value, segmentContents },
 	} = createDateField({
-		defaultPlaceholder,
+		defaultPlaceholder: untrack(() => defaultPlaceholder),
 	});
 </script>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, tick } from 'svelte';
+	import { onMount, tick, untrack } from 'svelte';
 
 	type PrependDetail = {
 		previousScrollHeight: number;
@@ -52,7 +52,7 @@
 	let mounted = $state(false);
 	let preserveDepth = 0;
 	let latestFrame: number | undefined;
-	let previousFollow = $state(follow);
+	let previousFollow = $state(untrack(() => follow));
 	let lastContentHeight = $state(0);
 	let hasResizeObserver = $state(false);
 
@@ -282,8 +282,8 @@
 	data-live-edge={atLiveEdge}
 	{...rest}
 >
-	<!-- svelte-ignore a11y_no_noninteractive_tabindex a11y_no_noninteractive_element_interactions -->
-	<div
+	<!-- svelte-ignore a11y_no_noninteractive_tabindex, a11y_no_noninteractive_element_interactions -->
+	<section
 		class="melt-message-scroller-viewport"
 		bind:this={viewport}
 		role="log"
@@ -297,7 +297,7 @@
 		<div class="melt-message-scroller-content" bind:this={content}>
 			{@render children?.()}
 		</div>
-	</div>
+	</section>
 
 	{#if !atLiveEdge}
 		<button class="melt-message-scroller-jump" type="button" onclick={handleJump}>

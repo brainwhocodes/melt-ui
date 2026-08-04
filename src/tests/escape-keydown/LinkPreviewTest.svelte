@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createLinkPreview, type CreateLinkPreviewProps } from '$lib/index.js';
 
 	type $$Props = CreateLinkPreviewProps & { setRootEscapeBehaviorIgnore: () => void };
@@ -12,7 +13,9 @@
 	const {
 		elements: { trigger, content },
 		states: { open },
-	} = createLinkPreview({ ...rest, forceVisible: true, openDelay: 0, closeDelay: 0 });
+	} = createLinkPreview(
+		untrack(() => ({ ...rest, forceVisible: true, openDelay: 0, closeDelay: 0 }))
+	);
 </script>
 
 <button {...$trigger} use:trigger data-testid="link-preview-trigger">trigger</button>

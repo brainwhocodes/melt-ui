@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createSelect, type CreateSelectProps } from '$lib/index.js';
 
 	type $$Props = CreateSelectProps & { setRootEscapeBehaviorIgnore: () => void };
@@ -12,7 +13,7 @@
 	const {
 		elements: { trigger, menu },
 		states: { open },
-	} = createSelect({ ...rest, forceVisible: true });
+	} = createSelect(untrack(() => ({ ...rest, forceVisible: true })));
 </script>
 
 <button {...$trigger} use:trigger data-testid="select-trigger">trigger</button>

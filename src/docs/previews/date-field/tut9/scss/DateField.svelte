@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createDateField, type CreateDateFieldProps } from '$lib/index.js';
+	import { untrack } from 'svelte';
 
 	interface Props {
 		locale?: CreateDateFieldProps['locale'];
@@ -14,9 +15,9 @@
 		states: { segmentContents },
 	} = createDateField({
 		name: 'appointmentDate',
-		locale,
-		defaultValue,
-		defaultPlaceholder,
+		locale: untrack(() => locale),
+		defaultValue: untrack(() => defaultValue),
+		defaultPlaceholder: untrack(() => defaultPlaceholder),
 	});
 </script>
 

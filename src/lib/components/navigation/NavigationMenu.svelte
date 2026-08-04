@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script lang="ts" module>
 	let nextNavigationMenuId = 0;
 </script>
 

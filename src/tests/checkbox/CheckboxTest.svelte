@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createCheckbox, type CreateCheckboxProps } from '$lib/index.js';
+	import { untrack } from 'svelte';
 
 	interface Props {
 		defaultChecked?: CreateCheckboxProps['defaultChecked'];
@@ -10,9 +11,7 @@
 	const {
 		elements: { root },
 		helpers: { isChecked },
-	} = createCheckbox({
-		defaultChecked,
-	});
+	} = createCheckbox(untrack(() => ({ defaultChecked })));
 </script>
 
 <main>

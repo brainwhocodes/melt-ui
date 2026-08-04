@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-	import { onMount, setContext, type Snippet } from 'svelte';
+	import { onMount, setContext, untrack, type Snippet } from 'svelte';
 	import { writable } from 'svelte/store';
 	import type { HTMLAttributes } from 'svelte/elements';
 
@@ -61,14 +61,16 @@
 
 	// Initialize synchronously (legacy `$:` semantics) so SSR/first paint is wired,
 	// then keep the store in sync with an effect.
-	const fieldContext = writable<FieldContextValue>({
-		controlId,
-		describedBy,
-		errorId: hasError ? errorId : undefined,
-		invalid: isInvalid,
-		disabled,
-		required
-	});
+	const fieldContext = writable<FieldContextValue>(
+		untrack(() => ({
+			controlId,
+			describedBy,
+			errorId: hasError ? errorId : undefined,
+			invalid: isInvalid,
+			disabled,
+			required
+		}))
+	);
 	setContext('melt-field', fieldContext);
 
 	$effect(() => {

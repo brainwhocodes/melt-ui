@@ -1,14 +1,17 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createSlider } from '$lib/index.js';
 
 	let { values = [20, 80] } = $props();
 
 	const {
 		elements: { root, range, thumbs, ticks },
-	} = createSlider({
-		defaultValue: values,
-		max: 100,
-	});
+	} = createSlider(
+		untrack(() => ({
+			defaultValue: values,
+			max: 100,
+		}))
+	);
 </script>
 
 <main>

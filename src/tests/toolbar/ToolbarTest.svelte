@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createToolbar, type CreateToolbarProps, type CreateToolbarGroupProps } from '$lib/index.js';
 
 
@@ -39,18 +40,20 @@
 	const {
 		elements: { root, button, link, separator },
 		builders: { createToolbarGroup },
-	} = createToolbar({
-		loop,
-		orientation,
-	});
+	} = createToolbar(
+		untrack(() => ({
+			loop,
+			orientation,
+		}))
+	);
 
 	const {
 		elements: { group: fontGroup, item: fontItem },
-	} = createToolbarGroup(toolbarGroup1Props);
+	} = createToolbarGroup(untrack(() => toolbarGroup1Props));
 
 	const {
 		elements: { group: alignGroup, item: alignItem },
-	} = createToolbarGroup(toolbarGroup2Props);
+	} = createToolbarGroup(untrack(() => toolbarGroup2Props));
 </script>
 
 <main>

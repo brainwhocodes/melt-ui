@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createDateRangeField, type CreateDateRangeFieldProps } from '$lib/index.js';
 	import { CalendarDateTime } from '@internationalized/date';
+	import { untrack } from 'svelte';
 
 	interface Props {
 		locale?: CreateDateRangeFieldProps['locale'];
@@ -13,7 +14,7 @@
 		states: { segmentContents },
 	} = createDateRangeField({
 		defaultPlaceholder: new CalendarDateTime(2023, 10, 11),
-		locale,
+		locale: untrack(() => locale),
 	});
 </script>
 

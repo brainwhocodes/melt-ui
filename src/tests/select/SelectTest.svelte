@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createSelect, type CreateSelectProps } from '$lib/index.js';
 	import { Check } from '$icons/index.js';
-	import { tick } from 'svelte';
+	import { tick, untrack } from 'svelte';
 	import { removeUndefined } from '../utils.js';
 
 	interface Props {
@@ -26,19 +26,21 @@
 		states: { selected, selectedLabel },
 		helpers: { isSelected },
 	} = createSelect(
-		removeUndefined({
-			multiple,
-			defaultSelected: defaultValue
-				? {
-						value: defaultValue,
-						label: defaultValue,
-				  }
-				: undefined,
-			escapeBehavior,
-			closeOnOutsideClick,
-			ids,
-			onOutsideClick,
-		})
+		removeUndefined(
+			untrack(() => ({
+				multiple,
+				defaultSelected: defaultValue
+					? {
+							value: defaultValue,
+							label: defaultValue,
+					  }
+					: undefined,
+				escapeBehavior,
+				closeOnOutsideClick,
+				ids,
+				onOutsideClick,
+			}))
+		)
 	);
 
 	let options = $state({

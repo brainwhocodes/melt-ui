@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createTooltip, type CreateTooltipProps } from '$lib/index.js';
 	import type { Writable } from 'svelte/store';
 	import { removeUndefined } from '../utils.js';
@@ -25,15 +26,17 @@
 		elements: { content, trigger },
 		options,
 	} = createTooltip(
-		removeUndefined({
-			open,
-			group,
-			closeOnPointerDown,
-			openDelay: 0,
-			closeDelay: 0,
-			ids,
-			...rest,
-		})
+		removeUndefined(
+			untrack(() => ({
+				open,
+				group,
+				closeOnPointerDown,
+				openDelay: 0,
+				closeDelay: 0,
+				ids,
+				...rest,
+			}))
+		)
 	);
 
 	$effect(() => {

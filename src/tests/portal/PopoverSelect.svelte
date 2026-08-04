@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createPopover, createSelect } from '$lib/index.js';
 	import { Settings2 } from '$icons/index.js';
 	import type { PortalConfig } from '$lib/internal/actions/portal.js';
@@ -11,11 +12,11 @@
 
 	const {
 		elements: { trigger, content, arrow, close },
-	} = createPopover({ portal });
+	} = createPopover(untrack(() => ({ portal })));
 
 	const {
 		elements: { trigger: selectTrigger, menu, option },
-	} = createSelect({ portal });
+	} = createSelect(untrack(() => ({ portal })));
 </script>
 
 <button

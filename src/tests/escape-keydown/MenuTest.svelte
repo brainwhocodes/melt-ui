@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createDropdownMenu, type CreateDropdownMenuProps } from '$lib/index.js';
 
 	type $$Props = CreateDropdownMenuProps & { setRootEscapeBehaviorIgnore: () => void };
@@ -12,7 +13,7 @@
 	const {
 		elements: { trigger, menu },
 		states: { open },
-	} = createDropdownMenu({ ...rest, forceVisible: true });
+	} = createDropdownMenu(untrack(() => ({ ...rest, forceVisible: true })));
 </script>
 
 <button {...$trigger} use:trigger data-testid="menu-trigger">trigger</button>

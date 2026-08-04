@@ -19,7 +19,7 @@ description: An interactive component which expands/collapses a panel.
 If you want to create a `Collapsible` component with reactive props, you can use our sync utilities.
 
 <Preview code={snippets.sync}>
-    <svelte:component this={previews.sync} />
+    <previews.sync />
 </Preview>
 
 ## API Reference

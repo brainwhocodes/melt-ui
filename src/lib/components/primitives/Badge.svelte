@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script lang="ts" module>
 	export type BadgeVariant = 'neutral' | 'info' | 'success' | 'warning' | 'danger';
 </script>
 

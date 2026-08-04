@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createRangeCalendar, type CreateRangeCalendarProps } from '$lib/builders/index.js';
 	import { ChevronRight, ChevronLeft } from '$icons/index.js';
 	import { removeUndefined } from '../utils.js';
@@ -58,27 +59,29 @@
 			weekStartsOn: weekStartsOnOption,
 		},
 	} = createRangeCalendar(
-		removeUndefined({
-			value,
-			defaultValue,
-			defaultPlaceholder,
-			onValueChange,
-			onPlaceholderChange,
-			isDateUnavailable,
-			isDateDisabled,
-			locale,
-			calendarLabel,
-			preventDeselect,
-			numberOfMonths,
-			pagedNavigation,
-			placeholder,
-			weekStartsOn,
-			fixedWeeks,
-			minValue,
-			maxValue,
-			weekdayFormat,
-			ids,
-		})
+		removeUndefined(
+			untrack(() => ({
+				value,
+				defaultValue,
+				defaultPlaceholder,
+				onValueChange,
+				onPlaceholderChange,
+				isDateUnavailable,
+				isDateDisabled,
+				locale,
+				calendarLabel,
+				preventDeselect,
+				numberOfMonths,
+				pagedNavigation,
+				placeholder,
+				weekStartsOn,
+				fixedWeeks,
+				minValue,
+				maxValue,
+				weekdayFormat,
+				ids,
+			}))
+		)
 	);
 
 	function cycleWeekdayFormat() {

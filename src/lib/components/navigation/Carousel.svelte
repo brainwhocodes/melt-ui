@@ -27,7 +27,7 @@
 </script>
 
 <script lang="ts">
-	import { onDestroy, setContext } from 'svelte';
+	import { onDestroy, setContext, untrack } from 'svelte';
 	import { writable } from 'svelte/store';
 
 
@@ -60,7 +60,7 @@
 	}: Props = $props();
 
 	const activeIndexStore = writable(normalizeIndex(activeIndex));
-	const orientationStore = writable<CarouselOrientation>(orientation);
+	const orientationStore = writable<CarouselOrientation>(untrack(() => orientation));
 	const indicesStore = writable<number[]>([]);
 	const registeredIndices = new Map<number, number>();
 	const slides = new Map<number, HTMLElement>();

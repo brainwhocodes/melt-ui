@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createTagsInput, type AddTag } from '$lib/index.js';
 
 	interface Props {
@@ -19,13 +20,15 @@
 	const {
 		elements: { root, input, tag, deleteTrigger, edit },
 		states: { tags },
-	} = createTagsInput({
-		defaultTags,
-		unique,
-		allowed,
-		add,
-		trim,
-	});
+	} = createTagsInput(
+		untrack(() => ({
+			defaultTags,
+			unique,
+			allowed,
+			add,
+			trim,
+		}))
+	);
 </script>
 
 <main>

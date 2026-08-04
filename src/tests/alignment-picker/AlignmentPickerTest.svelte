@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createAlignmentPicker, type AlignmentPickerItemProps, type CreateAlignmentPickerProps } from '$lib/index.js';
 	import { removeUndefined } from '../utils.js';
+	import { untrack } from 'svelte';
 
 	type $$Props = CreateAlignmentPickerProps & {
 		items?: AlignmentPickerItemProps[];
@@ -43,16 +44,18 @@
 	const {
 		elements: { root, item, hiddenInput },
 		states: { value: localValue },
-	} = createAlignmentPicker({
-		value,
-		defaultValue,
-		disabled,
-		loop,
-		dir,
-		name,
-		onValueChange,
-		...removeUndefined(rest),
-	});
+	} = createAlignmentPicker(
+		untrack(() => ({
+			value,
+			defaultValue,
+			disabled,
+			loop,
+			dir,
+			name,
+			onValueChange,
+			...removeUndefined(rest),
+		}))
+	);
 </script>
 
 <main>

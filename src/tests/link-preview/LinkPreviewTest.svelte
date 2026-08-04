@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createLinkPreview, type CreateLinkPreviewProps } from '$lib/index.js';
 	interface Props {
 		[key: string]: any
@@ -10,10 +11,12 @@
 
 	const {
 		elements: { trigger, content, arrow },
-	} = createLinkPreview({
-		openDelay: 0,
-		...rest,
-	});
+	} = createLinkPreview(
+		untrack(() => ({
+			openDelay: 0,
+			...rest,
+		}))
+	);
 </script>
 
 <a

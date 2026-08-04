@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createDialog, type CreateDialogProps } from '$lib/index.js';
 	import { initLevel } from './level.js';
 
@@ -13,7 +14,7 @@
 	const {
 		elements: { trigger, overlay, content, title, description, close, portalled },
 		states: { open },
-	} = createDialog({ portal, forceVisible });
+	} = createDialog(untrack(() => ({ portal, forceVisible })));
 
 	const level = initLevel();
 </script>

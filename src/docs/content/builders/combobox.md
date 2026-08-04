@@ -27,7 +27,7 @@ description:
 We expose a `multiple` prop to allow for multiple selections.
 
 <Preview code={snippets.multi}>
-  <svelte:component this={previews.multi} />
+  <previews.multi />
 </Preview>
 
 ### Debounce
@@ -37,7 +37,7 @@ user input in the `input` element. This pattern can be useful to prevent over-re
 server, for example.
 
 <Preview code={snippets.debounce}>
-  <svelte:component this={previews.debounce} />
+  <previews.debounce />
 </Preview>
 
 ### Group
@@ -45,7 +45,7 @@ server, for example.
 The `group` and `groupLabel` elements can be used to group combobox list items.
 
 <Preview code={snippets.group}>
-  <svelte:component this={previews.group} />
+  <previews.group />
 </Preview>
 
 ### Shadow DOM
@@ -55,7 +55,7 @@ By utilizing the `rootElement` property you can override this behaviour, this is
 when running inside the Shadow DOM.
 
 <Preview code={snippets.shadow} position="static">
-    <svelte:component this={previews.shadow} />
+    <previews.shadow />
 </Preview>
 
 ## API Reference

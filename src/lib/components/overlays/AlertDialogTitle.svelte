@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 	import {
 		alertDialogContext,
 		createOverlayId,
@@ -17,7 +17,7 @@
 	let { id = '', class: className = '', children, ...rest }: Props = $props();
 
 	const context = useOverlayContext<OverlayContext>(alertDialogContext, 'AlertDialogTitle');
-	let resolvedId = $state(id);
+	let resolvedId = $state(untrack(() => id));
 
 	onMount(() => {
 		resolvedId = id || createOverlayId('melt-alert-dialog-title');

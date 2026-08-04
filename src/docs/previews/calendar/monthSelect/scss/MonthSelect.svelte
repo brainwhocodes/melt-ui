@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createSelect, type CreateSelectProps } from '$lib/index.js';
 	import { Check, ChevronDown } from '$icons/index.js';
+	import { untrack } from 'svelte';
 	import { fade } from 'svelte/transition';
 
 	const months = {
@@ -35,8 +36,8 @@
 			fitViewport: true,
 			sameWidth: true,
 		},
-		onSelectedChange,
-		selected,
+		onSelectedChange: untrack(() => onSelectedChange),
+		selected: untrack(() => selected),
 	});
 </script>
 

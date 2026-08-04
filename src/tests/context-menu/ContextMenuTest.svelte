@@ -4,6 +4,7 @@
 	import { ChevronRight } from '$icons/index.js';
 	import { fade } from 'svelte/transition';
 	import { removeUndefined } from '../utils.js';
+	import { untrack } from 'svelte';
 
 	const settingsSync = writable(true);
 	const hideMeltUI = writable(false);
@@ -32,14 +33,16 @@
 		elements: { trigger, menu, item, separator, arrow },
 		builders: { createSubmenu, createMenuRadioGroup, createCheckboxItem },
 		states: { open },
-	} = createContextMenu({
-		loop,
-		closeFocus,
-		escapeBehavior,
-		closeOnOutsideClick,
-		...rest,
-		forceVisible: true,
-	});
+	} = createContextMenu(
+		untrack(() => ({
+			loop,
+			closeFocus,
+			escapeBehavior,
+			closeOnOutsideClick,
+			...rest,
+			forceVisible: true,
+		}))
+	);
 
 	const {
 		elements: { checkboxItem: settingsSyncCheckbox },
@@ -56,9 +59,11 @@
 		elements: { subMenu: subMenuA, subTrigger: subTriggerA },
 		states: { subOpen },
 	} = createSubmenu(
-		removeUndefined({
-			ids: submenuIds,
-		})
+		removeUndefined(
+			untrack(() => ({
+				ids: submenuIds,
+			}))
+		)
 	);
 
 	const {

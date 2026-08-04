@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 	import {
 		createOverlayId,
 		drawerContext,
@@ -17,7 +17,7 @@
 	let { id = '', class: className = '', children, ...rest }: Props = $props();
 
 	const context = useOverlayContext<DrawerContext>(drawerContext, 'DrawerTitle');
-	let resolvedId = $state(id);
+	let resolvedId = $state(untrack(() => id));
 	onMount(() => {
 		resolvedId = id || createOverlayId('melt-drawer-title');
 		return context.registerTitle(resolvedId);

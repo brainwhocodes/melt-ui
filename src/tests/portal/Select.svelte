@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createSelect, type CreateSelectProps } from '$lib/index.js';
 	import { initLevel } from './level.js';
 
@@ -13,7 +14,7 @@
 	const {
 		elements: { trigger, menu, option, group, groupLabel, label },
 		states: { selectedLabel, open },
-	} = createSelect({ portal, forceVisible });
+	} = createSelect(untrack(() => ({ portal, forceVisible })));
 
 	const options = {
 		sweet: ['Caramel', 'Chocolate', 'Strawberry', 'Cookies & Cream'],

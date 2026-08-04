@@ -15,7 +15,7 @@
 
 <script lang="ts">
 	import { createTabs } from '$lib/index.js';
-	import { getContext, setContext } from 'svelte';
+	import { getContext, setContext, untrack } from 'svelte';
 	import { writable, type Writable } from 'svelte/store';
 
 	interface Props {
@@ -24,7 +24,7 @@
 	}
 
 	let { tabs = [], children }: Props = $props();
-	const value = writable(tabs[0]);
+	const value = writable(untrack(() => tabs[0]));
 
 	const {
 		elements: { root, content, list, trigger },
@@ -36,7 +36,7 @@
 		value.set(tabs[0]);
 	});
 
-	const tabsStore = writable(tabs);
+	const tabsStore = writable(untrack(() => tabs));
 	$effect(() => {
 		tabsStore.update(() => tabs);
 	});

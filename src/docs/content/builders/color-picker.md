@@ -19,7 +19,7 @@ preview exposes as a direction control; floating-ui's flip keeps the panel on sc
 chosen side does not fit.
 
 <Preview code={snippets.main}>
-    <svelte:component this={previews.main} />
+    <previews.main />
 </Preview>
 
 ## Anatomy

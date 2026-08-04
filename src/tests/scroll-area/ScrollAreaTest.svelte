@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createScrollArea, type CreateScrollAreaProps } from '$lib/index.js';
 	import { removeUndefined } from '../utils.js';
 
@@ -62,10 +63,12 @@
 	const {
 		elements: { root, content, viewport, corner, scrollbarY, thumbY, scrollbarX, thumbX },
 	} = createScrollArea(
-		removeUndefined({
-			type,
-			...rest,
-		})
+		removeUndefined(
+			untrack(() => ({
+				type,
+				...rest,
+			}))
+		)
 	);
 </script>
 

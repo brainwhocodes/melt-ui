@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createDropdownMenu, type CreateDropdownMenuProps } from '$lib/index.js';
 	import { writable } from 'svelte/store';
 	import { AlignJustify, ChevronRight } from '$icons/index.js';
@@ -31,13 +32,15 @@
 		elements: { trigger, menu, item, separator, arrow },
 		builders: { createSubmenu, createMenuRadioGroup, createCheckboxItem },
 	} = createDropdownMenu(
-		removeUndefined({
-			loop,
-			closeFocus,
-			escapeBehavior,
-			closeOnOutsideClick,
-			...rest,
-		})
+		removeUndefined(
+			untrack(() => ({
+				loop,
+				closeFocus,
+				escapeBehavior,
+				closeOnOutsideClick,
+				...rest,
+			}))
+		)
 	);
 
 	const {
@@ -54,9 +57,11 @@
 	const {
 		elements: { subMenu: subMenuA, subTrigger: subTriggerA },
 	} = createSubmenu(
-		removeUndefined({
-			ids: submenuIds,
-		})
+		removeUndefined(
+			untrack(() => ({
+				ids: submenuIds,
+			}))
+		)
 	);
 
 	const {

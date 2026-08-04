@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createSwitch, type CreateSwitchProps } from '$lib/index.js';
 
 	interface Props {
@@ -23,15 +24,17 @@
 
 	const {
 		elements: { root, input },
-	} = createSwitch({
-		checked,
-		defaultChecked,
-		disabled,
-		name,
-		onCheckedChange,
-		required,
-		value,
-	});
+	} = createSwitch(
+		untrack(() => ({
+			checked,
+			defaultChecked,
+			disabled,
+			name,
+			onCheckedChange,
+			required,
+			value,
+		}))
+	);
 </script>
 
 <main>

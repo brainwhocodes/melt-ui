@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createCombobox, type ComboboxOptionProps, type CreateComboboxProps } from '$lib/index.js';
 	import { removeUndefined } from '../utils.js';
+	import { untrack } from 'svelte';
 
 	interface Props {
 		options?: ComboboxOptionProps[];
@@ -30,19 +31,21 @@
 		elements: { menu, input, option, label },
 		states: { open, inputValue, selected },
 	} = createCombobox(
-		removeUndefined({
-			multiple,
-			defaultSelected: defaultValue
-				? {
-						value: defaultValue,
-						label: defaultValue,
-				  }
-				: undefined,
-			ids,
-			onOutsideClick,
-			escapeBehavior,
-			forceVisible: true,
-		})
+		removeUndefined(
+			untrack(() => ({
+				multiple,
+				defaultSelected: defaultValue
+					? {
+							value: defaultValue,
+							label: defaultValue,
+					  }
+					: undefined,
+				ids,
+				onOutsideClick,
+				escapeBehavior,
+				forceVisible: true,
+			}))
+		)
 	);
 
 	$effect(() => {

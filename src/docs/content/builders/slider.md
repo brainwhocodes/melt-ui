@@ -22,7 +22,7 @@ with multiple values, and use multiple thumbs to display the range. Here's an ex
 slider with two thumbs:
 
 <Preview code={snippets.range}>
-    <svelte:component this={previews.range} />
+    <previews.range />
 </Preview>
 
 ### Vertical slider
@@ -31,7 +31,7 @@ By setting the `orientation` prop to `vertical`, you can create a vertical slide
 example:
 
 <Preview code={snippets.vertical}>
-    <svelte:component this={previews.vertical} />
+    <previews.vertical />
 </Preview>
 
 ### RTL
@@ -40,14 +40,14 @@ To enable Right-to-Left (RTL) support, you can set the `rtl` prop to `true. Here
 horizontal slider with RTL enabled:
 
 <Preview code={snippets.rtl_horizontal}>
-    <svelte:component this={previews.rtl_horizontal} />
+    <previews.rtl_horizontal />
 </Preview>
 
 In a Right-to-Left (RTL) context, vertical sliders function from top-to-bottom instead of bottom-to
 top. Here's an example of a vertical slider with RTL enabled:
 
 <Preview code={snippets.rtl_vertical}>
-    <svelte:component this={previews.rtl_vertical} />
+    <previews.rtl_vertical />
 </Preview>
 
 ### Slider ticks
@@ -55,7 +55,7 @@ top. Here's an example of a vertical slider with RTL enabled:
 You can add slider ticks using the `ticks` state and the `tick` element returned by `createSlider`.
 
 <Preview code={snippets.ticks}>
-    <svelte:component this={previews.ticks} />
+    <previews.ticks />
 </Preview>
 
 ### Auto Sorting
@@ -65,7 +65,7 @@ setting `autoSort` to `false`, which will keep values in their original spot whe
 past each other.
 
 <Preview code={snippets.multiple}>
-    <svelte:component this={previews.multiple} />
+    <previews.multiple />
 </Preview>
 
 ### Shdaow dom
@@ -75,7 +75,7 @@ utilizing the `rootElement` property you can override this behaviour, this is es
 running inside the shadow-dom.
 
 <Preview code={snippets.shadow}>
-    <svelte:component this={previews.shadow} />
+    <previews.shadow />
 </Preview>
 
 ## API Reference

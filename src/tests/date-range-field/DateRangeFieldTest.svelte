@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import {
 		createDateRangeField,
 		type CreateDateRangeFieldProps,
@@ -47,24 +48,26 @@
 		elements: { field, startSegment, endSegment, label, validation },
 		states: { value: insideValue, segmentContents, isInvalid },
 	} = createDateRangeField(
-		removeUndefined({
-			value,
-			defaultValue,
-			defaultPlaceholder,
-			onValueChange,
-			onPlaceholderChange,
-			isDateUnavailable,
-			disabled,
-			readonly,
-			readonlySegments,
-			hourCycle,
-			locale,
-			hideTimeZone,
-			ids,
-			startIds,
-			endIds,
-			granularity,
-		})
+		removeUndefined(
+			untrack(() => ({
+				value,
+				defaultValue,
+				defaultPlaceholder,
+				onValueChange,
+				onPlaceholderChange,
+				isDateUnavailable,
+				disabled,
+				readonly,
+				readonlySegments,
+				hourCycle,
+				locale,
+				hideTimeZone,
+				ids,
+				startIds,
+				endIds,
+				granularity,
+			}))
+		)
 	);
 </script>
 

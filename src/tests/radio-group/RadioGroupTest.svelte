@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createRadioGroup, type CreateRadioGroupProps } from '$lib/index.js';
 	import { removeUndefined } from '../utils.js';
 
@@ -41,15 +42,17 @@
 	const {
 		elements: { root, item, hiddenInput },
 		states: { value: localValue },
-	} = createRadioGroup({
-		value,
-		defaultValue,
-		onValueChange,
-		disabled,
-		required,
-		name,
-		...removeUndefined(rest),
-	});
+	} = createRadioGroup(
+		untrack(() => ({
+			value,
+			defaultValue,
+			onValueChange,
+			disabled,
+			required,
+			name,
+			...removeUndefined(rest),
+		}))
+	);
 </script>
 
 <main>

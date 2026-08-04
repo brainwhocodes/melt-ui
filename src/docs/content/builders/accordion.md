@@ -32,7 +32,7 @@ To disable a single item, you can pass in an object instead of a string to the f
 ```
 
 <Preview code={snippets.disabled}>
-    <svelte:component this={previews.disabled} />
+    <previews.disabled />
 </Preview>
 
 ### Opening multiple items at once
@@ -47,7 +47,7 @@ Pass in the `multiple` prop to `createAccordion` with a value of `true`.
 ```
 
 <Preview code={snippets.multiple}>
-    <svelte:component this={previews.multiple} />
+    <previews.multiple />
 </Preview>
 
 ### Controlled

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createDialog, type CreateDialogProps } from '$lib/index.js';
 	import { kbd } from '$lib/internal/helpers/keyboard.js';
 	interface Props {
@@ -12,9 +13,9 @@
 	const {
 		elements: { trigger, overlay, content, title, description, close, portalled },
 		states: { open },
-	} = createDialog({
-		...rest,
-	});
+	} = createDialog(
+		untrack(() => ({ ...rest }))
+	);
 </script>
 
 <main data-testid="main">

@@ -2,7 +2,7 @@
 	import { createPopover, type CreatePopoverProps } from '$lib/index.js';
 	import { Settings2, X } from '$icons/index.js';
 	import { kbd } from '$lib/internal/helpers/keyboard.js';
-	import { onMount } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 
 	interface Props {
 		openFocus?: CreatePopoverProps['openFocus'];
@@ -27,11 +27,13 @@
 	const {
 		elements: { trigger, content, arrow, close, overlay },
 		states: { open },
-	} = createPopover({
-		openFocus,
-		closeFocus,
-		...rest,
-	});
+	} = createPopover(
+		untrack(() => ({
+			openFocus,
+			closeFocus,
+			...rest,
+		}))
+	);
 
 	const {
 		elements: { trigger: triggerB, content: contentB },

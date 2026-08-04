@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createDropdownMenu, type CreateDropdownMenuProps } from '$lib/index.js';
 	import { initLevel } from './level.js';
 
@@ -16,7 +17,7 @@
 	const {
 		elements: { trigger, menu, item },
 		states: { open },
-	} = createDropdownMenu({ forceVisible, portal, ...rest });
+	} = createDropdownMenu(untrack(() => ({ forceVisible, portal, ...rest })));
 
 	const level = initLevel();
 </script>

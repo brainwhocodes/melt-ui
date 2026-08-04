@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createSlider } from '$lib/index.js';
+	import { untrack } from 'svelte';
 	import type { Writable } from 'svelte/store';
 
 	interface Props {
@@ -12,9 +13,9 @@
 	const {
 		elements: { root, range, thumbs },
 	} = createSlider({
-		value,
+		value: untrack(() => value),
 		max: 100,
-		autoSort,
+		autoSort: untrack(() => autoSort),
 	});
 </script>
 

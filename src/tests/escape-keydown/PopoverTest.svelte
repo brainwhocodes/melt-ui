@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createPopover, type CreatePopoverProps } from '$lib/index.js';
 
 	type $$Props = CreatePopoverProps & { setRootEscapeBehaviorIgnore: () => void };
@@ -12,7 +13,7 @@
 	const {
 		elements: { trigger, content },
 		states: { open },
-	} = createPopover({ ...rest, forceVisible: true });
+	} = createPopover(untrack(() => ({ ...rest, forceVisible: true })));
 </script>
 
 <button {...$trigger} use:trigger data-testid="popover-trigger">trigger</button>

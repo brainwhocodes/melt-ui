@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { type CreateTabsProps, createTabs } from '$lib/index.js';
 
 	type $$Props = CreateTabsProps & {
@@ -16,9 +17,11 @@
 
 	const {
 		elements: { content, root, list, trigger },
-	} = createTabs({
-		...(rest as $$Props),
-	});
+	} = createTabs(
+		untrack(() => ({
+			...(rest as $$Props),
+		}))
+	);
 </script>
 
 <main>

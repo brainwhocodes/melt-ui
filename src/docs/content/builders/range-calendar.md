@@ -262,7 +262,7 @@ By default, the placeholder will be set to the current date, but you can overrid
 ```
 
 <Preview code={snippets.changePh} variant="dark" size="auto">
-	<svelte:component this={previews.changePh} />
+	<previews.changePh />
 </Preview>
 
 Now our calendar starts out in February 2021, rather than the current month.
@@ -304,7 +304,7 @@ type DateRange = {
 ```
 
 <Preview code={snippets.changeValue} variant="dark" size="auto">
-	<svelte:component this={previews.changeValue} />
+	<previews.changeValue />
 </Preview>
 
 ### Using the Value
@@ -345,7 +345,7 @@ that may be unappealing. The calendar navigates to the previous month, and since
 additional week, the calendar jumps in height.
 
 <Preview code={snippets.changeValue} variant="dark" size="auto">
-	<svelte:component this={previews.changeValue} />
+	<previews.changeValue />
 </Preview>
 
 You could use CSS to add the extra space to accommodate for such a jump, or you can set the
@@ -365,7 +365,7 @@ regardless of the month.
 ```
 
 <Preview code={snippets.fixedWeeks} variant="dark" size="auto">
-	<svelte:component this={previews.fixedWeeks} />
+	<previews.fixedWeeks />
 </Preview>
 
 ### Multiple Months
@@ -386,7 +386,7 @@ like, using the `numberOfMonths` prop.
 ```
 
 <Preview code={snippets.multipleMonths} variant="dark" size="auto">
-	<svelte:component this={previews.multipleMonths} />
+	<previews.multipleMonths />
 </Preview>
 
 ### Paged Navigation
@@ -410,7 +410,7 @@ months being displayed.
 ```
 
 <Preview code={snippets.pagedNav} variant="dark" size="auto">
-	<svelte:component this={previews.pagedNav} />
+	<previews.pagedNav />
 </Preview>
 
 ### Localization
@@ -433,7 +433,7 @@ constructor.
 ```
 
 <Preview code={snippets.locale} variant="dark" size="auto">
-	<svelte:component this={previews.locale} />
+	<previews.locale />
 </Preview>
 
 ## Validation
@@ -469,7 +469,7 @@ The unavailable dates will have the `data-unavailable` attribute set, which you 
 differently than the other dates.
 
 <Preview code={snippets.unavailable} variant="dark" size="auto">
-	<svelte:component this={previews.unavailable} />
+	<previews.unavailable />
 </Preview>
 
 ### Disabled Dates
@@ -499,7 +499,7 @@ boolean indicating whether the date is disabled.
 In this example, we're disabling the first 10 days of each month.
 
 <Preview code={snippets.disabled} variant="dark" size="auto">
-	<svelte:component this={previews.disabled} />
+	<previews.disabled />
 </Preview>
 
 ### Minimum & Maximum Values
@@ -526,7 +526,7 @@ If a date is before the `minValue`, or after the `maxValue`, it will be disabled
 ```
 
 <Preview code={snippets.minMax} variant="dark" size="auto">
-	<svelte:component this={previews.minMax} />
+	<previews.minMax />
 </Preview>
 
 ## API Reference

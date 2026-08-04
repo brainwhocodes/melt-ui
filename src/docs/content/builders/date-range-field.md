@@ -217,7 +217,7 @@ as the `defaultPlaceholder` prop.
 ```
 
 <Preview code={snippets.defaultPh} variant="dark" size="sm">
-	<svelte:component this={previews.defaultPh} />
+	<previews.defaultPh />
 </Preview>
 
 As you can see above, by making that one change, the field now represents date and times, and the
@@ -262,7 +262,7 @@ We're using the `now` parser function to create a `ZonedDateTime` object with th
 time, and we're getting the user's local timezone using the `getLocalTimeZone` function.
 
 <Preview code={snippets.nowLocalTz} variant="dark" size="sm">
-	<svelte:component this={previews.nowLocalTz} />
+	<previews.nowLocalTz />
 </Preview>
 
 Alternatively, we can hardcode the timezone to something like `America/Los_Angeles` by passing it as
@@ -283,7 +283,7 @@ the argument to the `now` function.
 ```
 
 <Preview code={snippets.nowLA} variant="dark" size="sm">
-	<svelte:component this={previews.nowLA} />
+	<previews.nowLA />
 </Preview>
 
 How you represent and store dates with timezones will depend entirely on your use case, but there
@@ -323,7 +323,7 @@ placeholder & value props interact.
 ```
 
 <Preview code={snippets.defaultValue} variant="dark" size="sm">
-	<svelte:component this={previews.defaultValue} />
+	<previews.defaultValue />
 </Preview>
 
 As you can see, the field represents a `CalendarDateTime` object, and even if you clear the field,
@@ -366,7 +366,7 @@ The following example demonstrates how it would work in both scenarios (with and
 availability dates).
 
 <Preview code={snippets.valueAndPh} variant="dark" size="sm">
-	<svelte:component this={previews.valueAndPh} />
+	<previews.valueAndPh />
 </Preview>
 
 Situations like this make using the `defaultValue` and `defaultPlaceholder` props together a must.
@@ -496,7 +496,7 @@ Here's an example to get an idea of what you might do. Attempt to enter an unava
 you'll see the behavior in action.
 
 <Preview code={snippets.unavailable} variant="dark" size="sm">
-	<svelte:component this={previews.unavailable} />
+	<previews.unavailable />
 </Preview>
 
 The Date Field builder also accepts `minValue` and `maxValue` props to set the minimum and maximum
@@ -525,7 +525,7 @@ In this example, we're limiting the selection dates to between October 11th, 202
 11th, 2024.
 
 <Preview code={snippets.minMax} variant="dark" size="sm">
-	<svelte:component this={previews.minMax} />
+	<previews.minMax />
 </Preview>
 
 If you increment the year of the end date to 2024, you'll see the validation message appear, as the
@@ -555,7 +555,7 @@ simple as passing it as the `locale` prop.
 Here's an example showcasing a few different locales:
 
 <Preview code={snippets.locales} variant="dark" size="default">
-	<svelte:component this={previews.locales} />
+	<previews.locales />
 </Preview>
 
 Notice that they all have the same `defaultPlaceholder`, yet the segments are formatted differently
@@ -593,7 +593,7 @@ In this example, the `year` segment is readonly on both start and end fields, `m
 readonly on start, but the `day` segment is focusable and editable on both.
 
 <Preview code={snippets.readonlySegments} variant="dark" size="sm">
-	<svelte:component this={previews.readonlySegments} />
+	<previews.readonlySegments />
 </Preview>
 
 This could be used to ensure the end year can not be set different from the start year, using a

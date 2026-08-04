@@ -114,7 +114,7 @@ be used for a navigation menu, a settings panel, or any other content that you w
 drawer.
 
 <Preview code={snippets.drawer}>
-    <svelte:component this={previews.drawer} />
+    <previews.drawer />
 </Preview>
 
 ### Alert Dialog
@@ -123,7 +123,7 @@ It's common to use a dialog as a pop-up decision window or alert dialog. For exa
 pop-up that asks the user to confirm a decision.
 
 <Preview code={snippets.alert}>
-    <svelte:component this={previews.alert} />
+    <previews.alert />
 </Preview>
 
 ### Nested Dialogs
@@ -131,7 +131,7 @@ pop-up that asks the user to confirm a decision.
 Dialogs can be nested. For example, here's a dialog that opens another dialog.
 
 <Preview code={snippets.nested}>
-    <svelte:component this={previews.nested} />
+    <previews.nested />
 </Preview>
 
 ## API Reference

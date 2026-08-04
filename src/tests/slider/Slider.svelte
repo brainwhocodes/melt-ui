@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createSlider, type CreateSliderProps } from '$lib/index.js';
 
 	interface Props {
@@ -26,13 +27,15 @@
 	const {
 		elements: { root, range, thumbs, ticks },
 		options: { min: optionsMin, max: optionsMax, step: optionsStep },
-	} = createSlider({
-		defaultValue: value,
-		max,
-		min,
-		step,
-		onValueChange,
-	});
+	} = createSlider(
+		untrack(() => ({
+			defaultValue: value,
+			max,
+			min,
+			step,
+			onValueChange,
+		}))
+	);
 
 	$effect(() => {
 		if (resetMin) {

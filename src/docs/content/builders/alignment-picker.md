@@ -15,7 +15,7 @@ description: A nine-point logical alignment control with spatial keyboard naviga
 `bottom-end`.
 
 <Preview code={snippets.main}>
-    <svelte:component this={previews.main} />
+    <previews.main />
 </Preview>
 
 ## Anatomy

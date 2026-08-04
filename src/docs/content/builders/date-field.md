@@ -162,7 +162,7 @@ And that, along with some additional structure and styles, is all you need to ge
 Date Field!
 
 <Preview code={snippets.tut1} variant="dark" size="sm">
-	<svelte:component this={previews.tut1} />
+	<previews.tut1 />
 </Preview>
 
 ### The Power of Placeholder
@@ -198,7 +198,7 @@ as the `defaultPlaceholder` prop.
 ```
 
 <Preview code={snippets.tut2} variant="dark" size="sm">
-	<svelte:component this={previews.tut2} />
+	<previews.tut2 />
 </Preview>
 
 As you can see above, by making that one change, the field now represents a date and time, and the
@@ -244,7 +244,7 @@ We're using the `now` parser function to create a `ZonedDateTime` object with th
 time, and we're getting the user's local timezone using the `getLocalTimeZone` function.
 
 <Preview code={snippets.tut3} variant="dark" size="sm">
-	<svelte:component this={previews.tut3} />
+	<previews.tut3 />
 </Preview>
 
 Alternatively, we can hardcode the timezone to something like `America/Los_Angeles` by passing it as
@@ -266,7 +266,7 @@ the argument to the `now` function.
 ```
 
 <Preview code={snippets.tut4} variant="dark" size="sm">
-	<svelte:component this={previews.tut4} />
+	<previews.tut4 />
 </Preview>
 
 How you represent and store dates with timezones will depend entirely on your use case, but there
@@ -304,7 +304,7 @@ props interact.
 ```
 
 <Preview code={snippets.tut5} variant="dark" size="sm">
-	<svelte:component this={previews.tut5} />
+	<previews.tut5 />
 </Preview>
 
 As you can see, the field represents a `CalendarDate` object, and even if you clear the field, it
@@ -344,7 +344,7 @@ The following example demonstrates how it would work in both scenarios (with and
 birthday).
 
 <Preview code={snippets.tut6} variant="dark" size="sm">
-	<svelte:component this={previews.tut6} />
+	<previews.tut6 />
 </Preview>
 
 ### Validating Dates
@@ -480,7 +480,7 @@ Here's an example to get an idea of what you might do. Attempt to enter an unava
 you'll see the behavior in action.
 
 <Preview code={snippets.tut7} variant="dark" size="sm">
-	<svelte:component this={previews.tut7} />
+	<previews.tut7 />
 </Preview>
 
 The Date Field builder also accepts `minValue` and `maxValue` props to set the minimum and maximum
@@ -507,7 +507,7 @@ In this example, we're limiting the selection dates to between October 11th, 202
 11th, 2024.
 
 <Preview code={snippets.tut8} variant="dark" size="sm">
-	<svelte:component this={previews.tut8} />
+	<previews.tut8 />
 </Preview>
 
 ### Locale-aware Formatting
@@ -535,7 +535,7 @@ simple as passing it as the `locale` prop.
 Here's an example showcasing a few different locales:
 
 <Preview code={snippets.tut9} variant="dark" size="sm">
-	<svelte:component this={previews.tut9} />
+	<previews.tut9 />
 </Preview>
 
 Notice that they all have the same `defaultPlaceholder`, yet the segments are formatted differently
@@ -568,7 +568,7 @@ In this example, the `year` segment is readonly, but the `month` and `day` segme
 and editable.
 
 <Preview code={snippets.readonlySegments} variant="dark" size="sm">
-	<svelte:component this={previews.readonlySegments} />
+	<previews.readonlySegments />
 </Preview>
 
 ## API Reference

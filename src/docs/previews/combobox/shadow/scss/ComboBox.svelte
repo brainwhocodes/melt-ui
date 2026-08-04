@@ -2,6 +2,7 @@
 	import { createCombobox } from '$lib/index.js';
 	import { Check, ChevronDown, ChevronUp } from '$icons/index.js';
 	import { fly } from 'svelte/transition';
+	import { untrack } from 'svelte';
 	let { componentRoot } = $props();
 	type Manga = {
 		author: string;
@@ -69,7 +70,7 @@
 	} = createCombobox({
 		forceVisible: true,
 		multiple: true,
-		rootElement: componentRoot,
+		rootElement: untrack(() => componentRoot),
 	});
 
 	let filteredMangas = $derived($touchedInput

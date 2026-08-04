@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createDatePicker, type CreateDatePickerProps } from '$lib/builders/index.js';
 	import { ChevronRight, ChevronLeft, Calendar } from '$icons/index.js';
 	import { removeUndefined } from '../utils.js';
@@ -83,33 +84,35 @@
 			weekStartsOn: weekStartsOnOption,
 		},
 	} = createDatePicker(
-		removeUndefined({
-			value,
-			defaultValue,
-			defaultPlaceholder,
-			onValueChange,
-			onPlaceholderChange,
-			isDateUnavailable,
-			disabled,
-			readonly,
-			hourCycle,
-			locale,
-			hideTimeZone,
-			granularity,
-			dateFieldIds,
-			calendarIds,
-			preventDeselect,
-			calendarLabel,
-			numberOfMonths,
-			pagedNavigation,
-			placeholder,
-			weekStartsOn,
-			isDateDisabled,
-			weekdayFormat,
-			popoverIds,
-			onOutsideClick,
-			fixedWeeks,
-		})
+		removeUndefined(
+			untrack(() => ({
+				value,
+				defaultValue,
+				defaultPlaceholder,
+				onValueChange,
+				onPlaceholderChange,
+				isDateUnavailable,
+				disabled,
+				readonly,
+				hourCycle,
+				locale,
+				hideTimeZone,
+				granularity,
+				dateFieldIds,
+				calendarIds,
+				preventDeselect,
+				calendarLabel,
+				numberOfMonths,
+				pagedNavigation,
+				placeholder,
+				weekStartsOn,
+				isDateDisabled,
+				weekdayFormat,
+				popoverIds,
+				onOutsideClick,
+				fixedWeeks,
+			}))
+		)
 	);
 
 	function cycleWeekStart() {

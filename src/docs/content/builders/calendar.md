@@ -262,7 +262,7 @@ By default, the placeholder will be set to the current date, but you can overrid
 ```
 
 <Preview code={snippets.changePh} variant="dark" size="auto">
-	<svelte:component this={previews.changePh} />
+	<previews.changePh />
 </Preview>
 
 Now our calendar starts out in February 2021, rather than the current month.
@@ -291,7 +291,7 @@ To have a date selected by default, we can use the `value` (controlled), or `def
 ```
 
 <Preview code={snippets.changeValue} variant="dark" size="auto">
-	<svelte:component this={previews.changeValue} />
+	<previews.changeValue />
 </Preview>
 
 ### Reacting to Value Changes
@@ -332,7 +332,7 @@ Let's say that when a user selects Halloween (October 31st), we want to display 
 ```
 
 <Preview code={snippets.reactToVal} variant="dark" size="auto">
-	<svelte:component this={previews.reactToVal} />
+	<previews.reactToVal />
 </Preview>
 
 ### Using the Value
@@ -371,7 +371,7 @@ unappealing. The calendar navigates to the previous month, and since that month 
 week, the calendar jumps in height.
 
 <Preview code={snippets.changeValue} variant="dark" size="auto">
-	<svelte:component this={previews.changeValue} />
+	<previews.changeValue />
 </Preview>
 
 You could use CSS to add the extra space to accommodate for such a jump, or you can set the
@@ -393,7 +393,7 @@ regardless of the month.
 ```
 
 <Preview code={snippets.fixedWeeks} variant="dark" size="auto">
-	<svelte:component this={previews.fixedWeeks} />
+	<previews.fixedWeeks />
 </Preview>
 
 ### Multiple Months
@@ -414,7 +414,7 @@ like, using the `numberOfMonths` prop.
 ```
 
 <Preview code={snippets.multipleMonths} variant="dark" size="auto">
-	<svelte:component this={previews.multipleMonths} />
+	<previews.multipleMonths />
 </Preview>
 
 ### Paged Navigation
@@ -438,7 +438,7 @@ months being displayed.
 ```
 
 <Preview code={snippets.pagedNav} variant="dark" size="auto">
-	<svelte:component this={previews.pagedNav} />
+	<previews.pagedNav />
 </Preview>
 
 ### Localization
@@ -461,7 +461,7 @@ constructor.
 ```
 
 <Preview code={snippets.locale} variant="dark" size="auto">
-	<svelte:component this={previews.locale} />
+	<previews.locale />
 </Preview>
 
 The Calendar builder also supports the use of specific calendar systems, such as the Persian
@@ -504,7 +504,7 @@ able to deselect dates.
 ```
 
 <Preview code={snippets.preventDeselect} variant="dark" size="auto">
-	<svelte:component this={previews.preventDeselect} />
+	<previews.preventDeselect />
 </Preview>
 
 ### Multiple Selection
@@ -525,7 +525,7 @@ behavior, you can set the `multiple` prop to `true`.
 ```
 
 <Preview code={snippets.multipleSelect} variant="dark" size="auto">
-	<svelte:component this={previews.multipleSelect} />
+	<previews.multipleSelect />
 </Preview>
 
 ### Limiting Selected Dates
@@ -562,7 +562,7 @@ another.
 ```
 
 <Preview code={snippets.limitSelectedA} variant="dark" size="auto">
-	<svelte:component this={previews.limitSelectedA} />
+	<previews.limitSelectedA />
 </Preview>
 
 An alternative, though not sure about the user experience implications, is to automatically deselect
@@ -589,7 +589,7 @@ the oldest date when the user selects a new one after they've already selected 3
 ```
 
 <Preview code={snippets.limitSelectedB} variant="dark" size="auto">
-	<svelte:component this={previews.limitSelectedB} />
+	<previews.limitSelectedB />
 </Preview>
 
 Using [change functions](/docs/controlled#change-functions) is a powerful way to customize the way
@@ -628,7 +628,7 @@ The unavailable dates will have the `data-unavailable` attribute set, which you 
 differently than the other dates.
 
 <Preview code={snippets.unavailable} variant="dark" size="auto">
-	<svelte:component this={previews.unavailable} />
+	<previews.unavailable />
 </Preview>
 
 ### Disabled Dates
@@ -658,7 +658,7 @@ boolean indicating whether the date is disabled.
 In this example, we're disabling the first 10 days of each month.
 
 <Preview code={snippets.disabled} variant="dark" size="auto">
-	<svelte:component this={previews.disabled} />
+	<previews.disabled />
 </Preview>
 
 ### Minimum & Maximum Values
@@ -685,7 +685,7 @@ If a date is before the `minValue`, or after the `maxValue`, it will be disabled
 ```
 
 <Preview code={snippets.minMax} variant="dark" size="auto">
-	<svelte:component this={previews.minMax} />
+	<previews.minMax />
 </Preview>
 
 ## Composition
@@ -704,7 +704,7 @@ and/or `setYear` helper functions provided by the Calendar builder. Here's an ex
 how to add a "month selector" to your calendar:
 
 <Preview code={snippets.monthSelect} variant="dark" size="auto">
-	<svelte:component this={previews.monthSelect} />
+	<previews.monthSelect />
 </Preview>
 
 ## API Reference

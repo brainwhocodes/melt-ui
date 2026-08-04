@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createDialog, type CreateDialogProps } from '$lib/index.js';
 
 	type $$Props = CreateDialogProps & { setRootEscapeBehaviorIgnore: () => void };
@@ -13,7 +14,7 @@
 	const {
 		elements: { trigger, content, portalled },
 		states: { open },
-	} = createDialog({ escapeBehavior, forceVisible: true });
+	} = createDialog(untrack(() => ({ escapeBehavior, forceVisible: true })));
 </script>
 
 <button {...$trigger} use:trigger data-testid="dialog-trigger">Open</button>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createPinInput, type CreatePinInputProps } from '$lib/index.js';
 
 	interface Props {
@@ -23,15 +24,17 @@
 
 	const {
 		elements: { root, input, hiddenInput },
-	} = createPinInput({
-		placeholder,
-		name,
-		disabled,
-		type,
-		defaultValue,
-		value,
-		onValueChange,
-	});
+	} = createPinInput(
+		untrack(() => ({
+			placeholder,
+			name,
+			disabled,
+			type,
+			defaultValue,
+			value,
+			onValueChange,
+		}))
+	);
 </script>
 
 <main>

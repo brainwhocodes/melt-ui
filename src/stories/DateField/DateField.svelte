@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createDateField, type CreateDateFieldProps } from '$lib/builders/index.js';
 	import { PreviewWrapper } from '$docs/components/index.js';
+	import { untrack } from 'svelte';
 
 	interface Props {
 		value?: CreateDateFieldProps['value'];
@@ -39,22 +40,24 @@
 	const {
 		elements: { field, segment, label },
 		states: { value: insideValue, segmentContents },
-	} = createDateField({
-		value,
-		defaultValue,
-		defaultPlaceholder,
-		onValueChange,
-		onPlaceholderChange,
-		isDateUnavailable,
-		disabled,
-		readonly,
-		readonlySegments,
-		hourCycle,
-		locale,
-		hideTimeZone,
-		ids,
-		granularity,
-	});
+	} = createDateField(
+		untrack(() => ({
+			value,
+			defaultValue,
+			defaultPlaceholder,
+			onValueChange,
+			onPlaceholderChange,
+			isDateUnavailable,
+			disabled,
+			readonly,
+			readonlySegments,
+			hourCycle,
+			locale,
+			hideTimeZone,
+			ids,
+			granularity,
+		}))
+	);
 </script>
 
 <PreviewWrapper>

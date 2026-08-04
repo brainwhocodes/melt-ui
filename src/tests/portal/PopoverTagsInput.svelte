@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createPopover, createTagsInput, type CreatePopoverProps } from '$lib/index.js';
 	import { Settings2 } from '$icons/index.js';
 
@@ -11,12 +12,12 @@
 
 	const {
 		elements: { trigger, content, arrow, close },
-	} = createPopover({ portal });
+	} = createPopover(untrack(() => ({ portal })));
 
 	const {
 		elements: { root, input, tag, deleteTrigger, edit },
 		states: { tags },
-	} = createTagsInput({ defaultTags });
+	} = createTagsInput(untrack(() => ({ defaultTags })));
 </script>
 
 <button

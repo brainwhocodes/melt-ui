@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createColorPicker, type CreateColorPickerProps } from '$lib/index.js';
 	import { removeUndefined } from '../utils.js';
+	import { untrack } from 'svelte';
 
 	type $$Props = CreateColorPickerProps;
 
@@ -68,22 +69,24 @@
 			cssColor,
 			active,
 		},
-	} = createColorPicker({
-		value,
-		defaultValue,
-		defaultFormat,
-		format,
-		disabled,
-		readonly,
-		dir,
-		orientation,
-		name,
-		previousValue,
-		onValueChange,
-		onValueCommitted,
-		onFormatChange,
-		...removeUndefined(rest),
-	});
+	} = createColorPicker(
+		untrack(() => ({
+			value,
+			defaultValue,
+			defaultFormat,
+			format,
+			disabled,
+			readonly,
+			dir,
+			orientation,
+			name,
+			previousValue,
+			onValueChange,
+			onValueCommitted,
+			onFormatChange,
+			...removeUndefined(rest),
+		}))
+	);
 </script>
 
 <main>

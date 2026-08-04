@@ -198,7 +198,7 @@ When a time isn't included with a `CalendarDateTime` object, the time will defau
 on that date.
 
 <Preview code={snippets.defaultPh} variant="dark" size="sm">
-	<svelte:component this={previews.defaultPh} />
+	<previews.defaultPh />
 </Preview>
 
 ## Values
@@ -229,7 +229,7 @@ And as the example below demonstrates, the field is populated with the date, and
 that date selected.
 
 <Preview code={snippets.defaultValue} variant="dark" size="sm">
-	<svelte:component this={previews.defaultValue} />
+	<previews.defaultValue />
 </Preview>
 
 ### Using the Value Store
@@ -257,7 +257,7 @@ action when the value changes.
 ```
 
 <Preview code={snippets.usingValue} variant="dark" size="sm">
-	<svelte:component this={previews.usingValue} />
+	<previews.usingValue />
 </Preview>
 
 ## Usage with Forms
@@ -323,7 +323,7 @@ Now, regardless of the month, the calendar will always render 6 weeks, so there 
 UI when navigating between different sized months.
 
 <Preview code={snippets.fixedWeeks} variant="dark" size="sm">
-	<svelte:component this={previews.fixedWeeks} />
+	<previews.fixedWeeks />
 </Preview>
 
 ### Multiple Months
@@ -344,7 +344,7 @@ By default, the calendar will display one month, but you can change this by sett
 ```
 
 <Preview code={snippets.multipleMonths} variant="dark" size="sm">
-	<svelte:component this={previews.multipleMonths} />
+	<previews.multipleMonths />
 </Preview>
 
 ### Paged Navigation
@@ -368,7 +368,7 @@ months being displayed.
 ```
 
 <Preview code={snippets.pagedNav} variant="dark" size="sm">
-	<svelte:component this={previews.pagedNav} />
+	<previews.pagedNav />
 </Preview>
 
 ### Localization
@@ -391,7 +391,7 @@ constructor.
 ```
 
 <Preview code={snippets.locale} variant="dark" size="sm">
-	<svelte:component this={previews.locale} />
+	<previews.locale />
 </Preview>
 
 ### Prevent Deselection
@@ -418,7 +418,7 @@ can still clear the field by deleting the value in the field, this only handles 
 behavior.
 
 <Preview code={snippets.preventDeselect} variant="dark" size="sm">
-	<svelte:component this={previews.preventDeselect} />
+	<previews.preventDeselect />
 </Preview>
 
 ## Validation
@@ -455,7 +455,7 @@ The unavailable dates will have the `data-unavailable` attribute set, which you 
 differently than the other dates.
 
 <Preview code={snippets.unavailable} variant="dark" size="sm">
-	<svelte:component this={previews.unavailable} />
+	<previews.unavailable />
 </Preview>
 
 ### Disabled Dates
@@ -485,7 +485,7 @@ boolean indicating whether the date is disabled.
 In this example, we're disabling the first 10 days of each month.
 
 <Preview code={snippets.disabled} variant="dark" size="sm">
-	<svelte:component this={previews.disabled} />
+	<previews.disabled />
 </Preview>
 
 ### Minimum & Maximum Values
@@ -511,7 +511,7 @@ If a date is before the `minValue`, or after the `maxValue`, it will be disabled
 ```
 
 <Preview code={snippets.minMax} variant="dark" size="sm">
-	<svelte:component this={previews.minMax} />
+	<previews.minMax />
 </Preview>
 
 ## API Reference

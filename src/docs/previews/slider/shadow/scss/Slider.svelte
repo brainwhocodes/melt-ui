@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createSlider } from '$lib/index.js';
+	import { untrack } from 'svelte';
 	let { componentRoot } = $props();
 	const {
 		elements: { root, range, thumbs },
@@ -8,7 +9,7 @@
 		min: 0,
 		max: 100,
 		step: 1,
-		rootElement: componentRoot,
+		rootElement: untrack(() => componentRoot),
 	});
 </script>
 

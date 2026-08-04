@@ -144,7 +144,7 @@ Each individual `toast` item provides a `getPercentage` helper function to deter
 of the time elapsed at any given moment. You can use that to provide a progress bar to your toasts
 
 <Preview code={snippets.progress}>
-    <svelte:component this={previews.progress} />
+    <previews.progress />
 </Preview>
 
 ## API Reference

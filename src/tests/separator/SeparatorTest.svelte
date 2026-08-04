@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import type { Orientation } from '$lib/internal/types.js';
 	import { createSeparator } from '$lib/index.js';
 
@@ -10,9 +11,11 @@
 
 	const {
 		elements: { root: vertical },
-	} = createSeparator({
-		orientation,
-	});
+	} = createSeparator(
+		untrack(() => ({
+			orientation,
+		}))
+	);
 
 	const {
 		elements: { root: horizontalSeparator },

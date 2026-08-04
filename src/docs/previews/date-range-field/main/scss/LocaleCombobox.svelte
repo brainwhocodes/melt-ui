@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createCombobox, type CreateComboboxProps } from '$lib/index.js';
 	import { Check, ChevronDown, ChevronUp } from '$icons/index.js';
+	import { untrack } from 'svelte';
 	import { fly } from 'svelte/transition';
 	import { localeOptions } from './locales.js';
 
@@ -28,8 +29,8 @@
 		helpers: { isSelected },
 	} = createCombobox<string>({
 		forceVisible: true,
-		onSelectedChange,
-		defaultSelected,
+		onSelectedChange: untrack(() => onSelectedChange),
+		defaultSelected: untrack(() => defaultSelected),
 	});
 
 	$effect(() => {

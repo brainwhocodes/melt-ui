@@ -2,6 +2,7 @@
 	import PreviewWrapper from '$docs/components/preview-wrapper.svelte';
 	import { createCollapsible, type CreateCollapsibleProps } from '$lib/index.js';
 	import { ChevronsUpDown, X } from '$icons/index.js';
+	import { untrack } from 'svelte';
 
 	interface Props {
 		defaultOpen?: boolean;
@@ -21,12 +22,14 @@
 		elements: { root, content, trigger },
 		states: { open: localOpen },
 		options: { disabled: localDisabled },
-	} = createCollapsible({
-		defaultOpen,
-		open,
-		disabled,
-		onOpenChange,
-	});
+	} = createCollapsible(
+		untrack(() => ({
+			defaultOpen,
+			open,
+			disabled,
+			onOpenChange,
+		}))
+	);
 
 	$effect(() => {
 		localOpen.set(defaultOpen ?? false);

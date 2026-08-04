@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onDestroy } from 'svelte';
+	import { onDestroy, untrack } from 'svelte';
 	import { getCarouselContext } from './Carousel.svelte';
 
 
@@ -21,8 +21,8 @@
 
 	const carousel = getCarouselContext();
 	const { activeIndex } = carousel;
-	let registeredIndex = $state(Math.max(0, Math.trunc(index)));
-	let unregister = $state(carousel.registerSlide(registeredIndex));
+	let registeredIndex = $state(untrack(() => Math.max(0, Math.trunc(index))));
+	let unregister = untrack(() => carousel.registerSlide(registeredIndex));
 
 	function attach(node: HTMLElement, slideIndex: number) {
 		let registration = carousel.attachSlide(node, slideIndex);

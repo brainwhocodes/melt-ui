@@ -47,7 +47,9 @@
 	let handles = $state.raw<ResizableToken[]>([]);
 	let currentSizes = $state<number[]>([]);
 
-	const resizableState = writable<ResizableState>({ direction, dir, disabled, panels: [], handles: [] });
+	const resizableState = writable<ResizableState>(
+		untrack(() => ({ direction, dir, disabled, panels: [], handles: [] }))
+	);
 
 	const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 	const finite = (value: number | undefined): value is number =>

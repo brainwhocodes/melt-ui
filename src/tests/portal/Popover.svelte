@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createPopover, type CreatePopoverProps } from '$lib/index.js';
 	import { Settings2 } from '$icons/index.js';
 	import { initLevel } from './level.js';
@@ -14,7 +15,7 @@
 	const {
 		elements: { trigger, content, arrow, close },
 		states: { open },
-	} = createPopover({ portal, forceVisible });
+	} = createPopover(untrack(() => ({ portal, forceVisible })));
 
 	const level = initLevel();
 </script>

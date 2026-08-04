@@ -93,7 +93,7 @@
 		...rest
 	}: Props = $props();
 
-	const hasRowAction = Boolean(rowAction);
+	const hasRowAction = $derived(Boolean(rowAction));
 
 
 	function readAccessor(row: DataTableRow, index: number, accessor: DataTableAccessor): unknown {

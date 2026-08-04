@@ -101,13 +101,13 @@ The [Modal Popover](#modal-popover) example below demonstrates this behavior in 
 ### Nested Popovers
 
 <Preview code={snippets.nested}>
-    <svelte:component this={previews.nested} />
+    <previews.nested />
 </Preview>
 
 ### Modal Popover
 
 <Preview code={snippets.modal}>
-	<svelte:component this={previews.modal} />
+	<previews.modal />
 </Preview>
 
 ## API Reference

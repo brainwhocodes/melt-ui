@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createMenubar, type CreateMenubarMenuProps } from '$lib/index.js';
 
 	type $$Props = CreateMenubarMenuProps & { setRootEscapeBehaviorIgnore: () => void };
@@ -13,12 +14,12 @@
 	const {
 		elements: { menubar },
 		builders: { createMenu },
-	} = createMenubar({ escapeBehavior });
+	} = createMenubar(untrack(() => ({ escapeBehavior })));
 
 	const {
 		elements: { trigger, menu },
 		states: { open },
-	} = createMenu({ ...rest, escapeBehavior, forceVisible: true });
+	} = createMenu(untrack(() => ({ ...rest, escapeBehavior, forceVisible: true })));
 </script>
 
 <div {...$menubar} use:menubar>

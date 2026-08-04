@@ -2,6 +2,7 @@
 	import { createCalendar, type CreateCalendarProps } from '$lib/index.js';
 	import { ChevronRight, ChevronLeft } from '$icons/index.js';
 	import { removeUndefined } from '../utils.js';
+	import { untrack } from 'svelte';
 
 	interface Props {
 		value?: CreateCalendarProps['value'];
@@ -64,30 +65,32 @@
 			locale: localeOption,
 		},
 	} = createCalendar(
-		removeUndefined({
-			value,
-			defaultValue,
-			defaultPlaceholder,
-			onValueChange,
-			onPlaceholderChange,
-			isDateUnavailable,
-			isDateDisabled,
-			locale,
-			calendarLabel,
-			preventDeselect,
-			numberOfMonths,
-			pagedNavigation,
-			placeholder,
-			weekStartsOn,
-			fixedWeeks,
-			minValue,
-			maxValue,
-			multiple,
-			disabled,
-			readonly,
-			weekdayFormat,
-			ids,
-		})
+		removeUndefined(
+			untrack(() => ({
+				value,
+				defaultValue,
+				defaultPlaceholder,
+				onValueChange,
+				onPlaceholderChange,
+				isDateUnavailable,
+				isDateDisabled,
+				locale,
+				calendarLabel,
+				preventDeselect,
+				numberOfMonths,
+				pagedNavigation,
+				placeholder,
+				weekStartsOn,
+				fixedWeeks,
+				minValue,
+				maxValue,
+				multiple,
+				disabled,
+				readonly,
+				weekdayFormat,
+				ids,
+			}))
+		)
 	);
 
 	function cycleWeekStart() {

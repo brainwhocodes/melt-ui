@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createSeparator, type CreateSeparatorProps } from '$lib/index.js';
+	import { untrack } from 'svelte';
 
 	interface Props {
 		orientation?: CreateSeparatorProps['orientation'];
@@ -10,7 +11,7 @@
 	const {
 		elements: { root: vertical },
 	} = createSeparator({
-		orientation,
+		orientation: untrack(() => orientation),
 	});
 
 	const {

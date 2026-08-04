@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createAccordion, type CreateAccordionProps } from '$lib/index.js';
+	import { untrack } from 'svelte';
 
 	interface Props {
 		multiple?: boolean;
@@ -12,7 +13,7 @@
 	const {
 		elements: { root, content, item, trigger },
 		helpers: { isSelected },
-	} = createAccordion({ multiple, disabled });
+	} = createAccordion(untrack(() => ({ multiple, disabled })));
 </script>
 
 <div {...$root} use:root>

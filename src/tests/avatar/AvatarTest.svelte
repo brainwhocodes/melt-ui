@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createAvatar } from '$lib/index.js';
+	import { untrack } from 'svelte';
 
 	interface Props {
 		src?: string;
@@ -9,9 +10,7 @@
 
 	const {
 		elements: { image, fallback },
-	} = createAvatar({
-		src,
-	});
+	} = createAvatar(untrack(() => ({ src })));
 </script>
 
 <div class="surface-900127e8ae">

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createDateField, type CreateDateFieldProps } from '$lib/index.js';
 	import { removeUndefined } from '../utils.js';
 
@@ -41,22 +42,24 @@
 		states: { value: insideValue, segmentContents },
 		options: { hourCycle: hourCycleOption, locale: localeOption },
 	} = createDateField(
-		removeUndefined({
-			value,
-			defaultValue,
-			defaultPlaceholder,
-			onValueChange,
-			onPlaceholderChange,
-			isDateUnavailable,
-			disabled,
-			readonly,
-			readonlySegments,
-			hourCycle,
-			locale,
-			hideTimeZone,
-			ids,
-			granularity,
-		})
+		removeUndefined(
+			untrack(() => ({
+				value,
+				defaultValue,
+				defaultPlaceholder,
+				onValueChange,
+				onPlaceholderChange,
+				isDateUnavailable,
+				disabled,
+				readonly,
+				readonlySegments,
+				hourCycle,
+				locale,
+				hideTimeZone,
+				ids,
+				granularity,
+			}))
+		)
 	);
 </script>
 

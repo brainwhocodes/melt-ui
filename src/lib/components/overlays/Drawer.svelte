@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 	import { writable } from 'svelte/store';
 	import {
 		containFocus,
@@ -59,10 +59,10 @@
 	let releaseScroll: () => void = () => {};
 	let releaseFallback: () => void = () => {};
 
-	const directionStore = writable<DrawerDirection>(direction);
+	const directionStore = writable<DrawerDirection>(untrack(() => direction));
 	const activeSnapPointStore = writable(activeSnapPoint);
-	const dismissThresholdStore = writable(dismissThreshold);
-	const snapPointsStore = writable<number[]>(normalizeSnapPoints(snapPoints));
+	const dismissThresholdStore = writable(untrack(() => dismissThreshold));
+	const snapPointsStore = writable<number[]>(untrack(() => normalizeSnapPoints(snapPoints)));
 
 	function normalizeSnapPoints(points: number[]): number[] {
 		const normalized = points

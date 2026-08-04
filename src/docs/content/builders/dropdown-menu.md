@@ -116,7 +116,7 @@ An example using the `overlay` builder element to prevent interaction with the r
 while the menu is open.
 
 <Preview code={snippets.modal}>
-    <svelte:component this={previews.modal} />
+    <previews.modal />
 </Preview>
 
 ## API Reference

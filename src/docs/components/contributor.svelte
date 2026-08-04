@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createAvatar, createLinkPreview } from '$lib/index.js';
 	import type { FullContributor } from '$routes/docs/[...slug]/+layout.server.js';
+	import { untrack } from 'svelte';
 	import { fly } from 'svelte/transition';
 
 	interface Props {
@@ -20,7 +21,7 @@
 	const {
 		elements: { image, fallback },
 	} = createAvatar({
-		src: contributor.avatar_url,
+		src: untrack(() => contributor.avatar_url),
 	});
 
 	const {

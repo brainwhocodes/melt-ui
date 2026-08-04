@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { createTooltip, type CreateTooltipProps } from '$lib/index.js';
 
 	type $$Props = CreateTooltipProps & { setRootEscapeBehaviorIgnore: () => void };
@@ -12,7 +13,9 @@
 	const {
 		elements: { trigger, content },
 		states: { open },
-	} = createTooltip({ ...rest, forceVisible: true, openDelay: 0, closeDelay: 0 });
+	} = createTooltip(
+		untrack(() => ({ ...rest, forceVisible: true, openDelay: 0, closeDelay: 0 }))
+	);
 </script>
 
 <button {...$trigger} use:trigger data-testid="tooltip-trigger">trigger</button>
