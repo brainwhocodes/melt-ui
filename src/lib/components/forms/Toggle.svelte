@@ -36,7 +36,7 @@
 	} = untrack(() =>
 		createToggle({
 			pressed: pressedStore,
-			disabled,
+			disabled: untrack(() => disabled),
 			onPressedChange: (next) => {
 				pressed = next.next;
 				onPressedChange?.(next.next);

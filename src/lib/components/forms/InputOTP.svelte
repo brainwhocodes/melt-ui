@@ -32,8 +32,9 @@
 		elements: { root, input, hiddenInput },
 	} = untrack(() =>
 		createPinInput({
+			defaultValue: untrack(() => value),
 			value: valueStore,
-			disabled,
+			disabled: untrack(() => disabled),
 			onValueChange: (next) => {
 				value = next.next as any;
 				onValueChange?.(next.next as any);

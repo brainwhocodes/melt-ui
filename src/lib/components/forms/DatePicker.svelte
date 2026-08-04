@@ -25,20 +25,14 @@
 		...rest
 	}: Props = $props();
 
-	const valueStore = writable(untrack(() => value));
-	const placeholderStore = writable(untrack(() => placeholder));
+	const valueStore = writable<DateValue | undefined>(untrack(() => value));
 
 	$effect(() => {
-		valueStore.set(value as any);
+		valueStore.set(value);
 	});
 
-	$effect(() => {
-		if (placeholder !== undefined) {
-			placeholderStore.set(placeholder as any);
-		}
-	});
-
-	const pickerProps: any = {
+	const pickerOptions: any = {
+		value: valueStore,
 		disabled: untrack(() => disabled),
 		readonly: untrack(() => readonly),
 		onValueChange: (next: any) => {
@@ -48,11 +42,8 @@
 		},
 	};
 
-	if (untrack(() => value !== undefined)) {
-		pickerProps.value = valueStore;
-	}
 	if (untrack(() => placeholder !== undefined)) {
-		pickerProps.placeholder = placeholderStore;
+		pickerOptions.placeholder = writable(untrack(() => placeholder));
 	}
 
 	const {
@@ -70,7 +61,7 @@
 		},
 		states: { months, headingValue, weekdays, segmentContents, open },
 		helpers: { isDateDisabled, isDateSelected },
-	} = untrack(() => createDatePicker(pickerProps));
+	} = untrack(() => createDatePicker(pickerOptions));
 </script>
 
 <div class={`melt-date-picker ${className}`.trim()} {...rest}>

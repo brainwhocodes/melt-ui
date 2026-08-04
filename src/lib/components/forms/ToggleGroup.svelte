@@ -45,8 +45,8 @@
 		createToggleGroup({
 			value: valueStore as any,
 			type: type as any,
-			disabled,
-			orientation,
+			disabled: untrack(() => disabled),
+			orientation: untrack(() => orientation),
 			onValueChange: (next) => {
 				value = next.next as any;
 				onValueChange?.(next.next as any);

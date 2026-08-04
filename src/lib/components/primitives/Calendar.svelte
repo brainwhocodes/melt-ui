@@ -25,20 +25,14 @@
 		...rest
 	}: Props = $props();
 
-	const valueStore = writable(untrack(() => value));
-	const placeholderStore = writable(untrack(() => placeholder));
+	const valueStore = writable<DateValue | undefined>(untrack(() => value));
 
 	$effect(() => {
-		valueStore.set(value as any);
+		valueStore.set(value);
 	});
 
-	$effect(() => {
-		if (placeholder !== undefined) {
-			placeholderStore.set(placeholder as any);
-		}
-	});
-
-	const calendarProps: any = {
+	const calendarOptions: any = {
+		value: valueStore,
 		disabled: untrack(() => disabled),
 		readonly: untrack(() => readonly),
 		onValueChange: (next: any) => {
@@ -48,18 +42,15 @@
 		},
 	};
 
-	if (untrack(() => value !== undefined)) {
-		calendarProps.value = valueStore;
-	}
 	if (untrack(() => placeholder !== undefined)) {
-		calendarProps.placeholder = placeholderStore;
+		calendarOptions.placeholder = writable(untrack(() => placeholder));
 	}
 
 	const {
 		elements: { calendar, heading, grid, prevButton, nextButton, cell },
 		states: { months, headingValue, weekdays },
 		helpers: { isDateDisabled, isDateSelected },
-	} = untrack(() => createCalendar(calendarProps));
+	} = untrack(() => createCalendar(calendarOptions));
 </script>
 
 <div {...$calendar} use:calendar class={`melt-calendar ${className}`.trim()} {...rest}>

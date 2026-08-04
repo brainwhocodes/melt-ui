@@ -68,7 +68,7 @@
 			stylesheet once, then ship only the Svelte components you use.
 		</p>
 		<pre><code>import '@melt-ui/svelte/styles.css';
-import {`{ Button, Field, Input }`} from '@melt-ui/svelte';</code></pre>
+import {`{ Button, Field, Input }`} from '@melt-ui/svelte/components';</code></pre>
 	</header>
 
 	<section class="component-catalog__preview" aria-labelledby="preview-title">

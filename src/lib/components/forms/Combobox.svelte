@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createCombobox } from '$lib/builders/combobox/create.js';
+	import { createCombobox, type ComboboxOption } from '$lib/builders/combobox/index.js';
 	import { melt } from '$lib/internal/actions/index.js';
 	import { untrack } from 'svelte';
 	import { writable } from 'svelte/store';
@@ -30,7 +30,7 @@
 		...rest
 	}: Props = $props();
 
-	const selectedStore = writable(
+	const selectedStore = writable<ComboboxOption<string> | undefined>(
 		untrack(() => {
 			const match = items.find((i) => i.value === value);
 			return match ? { value: match.value, label: match.label } : undefined;
@@ -39,7 +39,7 @@
 
 	$effect(() => {
 		const match = items.find((i) => i.value === value);
-		selectedStore.set(match ? { value: match.value, label: match.label } : (undefined as any));
+		selectedStore.set(match ? { value: match.value, label: match.label } : undefined);
 	});
 
 	const {
@@ -47,9 +47,13 @@
 		states: { open, inputValue, touchedInput },
 		helpers: { isSelected },
 	} = untrack(() =>
-		createCombobox<ComboboxItem>({
+		createCombobox({
+			defaultSelected: untrack(() => {
+				const match = items.find((i) => i.value === value);
+				return match ? { value: match.value, label: match.label } : undefined;
+			}),
 			selected: selectedStore as any,
-			disabled,
+			disabled: untrack(() => disabled),
 			onSelectedChange: (next: any) => {
 				const selectedVal =
 					typeof next.next === 'object' && next.next !== null
@@ -61,6 +65,13 @@
 			},
 		})
 	);
+
+	$effect(() => {
+		if (!$open) {
+			const match = items.find((i) => i.value === value);
+			inputValue.set(match?.label ?? '');
+		}
+	});
 
 	let filteredItems = $derived(
 		$touchedInput

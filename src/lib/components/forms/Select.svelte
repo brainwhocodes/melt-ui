@@ -49,7 +49,7 @@
 	} = untrack(() =>
 		createSelect({
 			selected: selectedStore as any,
-			disabled,
+			disabled: untrack(() => disabled),
 			onSelectedChange: (next) => {
 				const val = (next.next as any)?.value;
 				value = val;
