@@ -2,6 +2,7 @@
 	import { createToggleGroup } from '$lib/builders/toggle-group/create.js';
 	import { melt } from '$lib/internal/actions/index.js';
 	import { untrack } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	export interface ToggleOption {
 		value: string;
@@ -31,11 +32,18 @@
 		...rest
 	}: Props = $props();
 
+	const valueStore = writable(untrack(() => value));
+
+	$effect(() => {
+		valueStore.set(value as any);
+	});
+
 	const {
 		elements: { root, item },
 		helpers: { isPressed },
 	} = untrack(() =>
 		createToggleGroup({
+			value: valueStore as any,
 			type: type as any,
 			disabled,
 			orientation,

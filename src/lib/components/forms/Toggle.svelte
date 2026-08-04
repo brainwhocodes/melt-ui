@@ -2,6 +2,7 @@
 	import { createToggle } from '$lib/builders/toggle/create.js';
 	import { melt } from '$lib/internal/actions/index.js';
 	import { untrack, type Snippet } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	interface Props {
 		pressed?: boolean;
@@ -23,11 +24,18 @@
 		...rest
 	}: Props = $props();
 
+	const pressedStore = writable(untrack(() => pressed ?? false));
+
+	$effect(() => {
+		pressedStore.set(pressed ?? false);
+	});
+
 	const {
 		elements: { root },
 		states: { pressed: isPressed },
 	} = untrack(() =>
 		createToggle({
+			pressed: pressedStore,
 			disabled,
 			onPressedChange: (next) => {
 				pressed = next.next;

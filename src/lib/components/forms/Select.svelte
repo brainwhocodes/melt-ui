@@ -30,12 +30,16 @@
 		...rest
 	}: Props = $props();
 
-	const valueStore = writable(untrack(() => value));
+	const selectedStore = writable(
+		untrack(() => {
+			const match = options.find((o) => o.value === value);
+			return match ? { value: match.value, label: match.label } : undefined;
+		})
+	);
 
 	$effect(() => {
-		if (value !== undefined) {
-			valueStore.set(value);
-		}
+		const match = options.find((o) => o.value === value);
+		selectedStore.set(match ? { value: match.value, label: match.label } : (undefined as any));
 	});
 
 	const {
@@ -44,10 +48,7 @@
 		helpers: { isSelected },
 	} = untrack(() =>
 		createSelect({
-			defaultSelected: untrack(() => {
-				const match = options.find((o) => o.value === value);
-				return match ? { value: match.value, label: match.label } : undefined;
-			}),
+			selected: selectedStore as any,
 			disabled,
 			onSelectedChange: (next) => {
 				const val = (next.next as any)?.value;

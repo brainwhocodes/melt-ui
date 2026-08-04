@@ -3,9 +3,11 @@
 	import { melt } from '$lib/internal/actions/index.js';
 	import type { DateValue } from '@internationalized/date';
 	import { untrack } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	interface Props {
 		value?: DateValue;
+		placeholder?: DateValue;
 		disabled?: boolean;
 		readonly?: boolean;
 		class?: string;
@@ -15,12 +17,43 @@
 
 	let {
 		value = $bindable(),
+		placeholder = $bindable(),
 		disabled = false,
 		readonly = false,
 		class: className = '',
 		onValueChange,
 		...rest
 	}: Props = $props();
+
+	const valueStore = writable(untrack(() => value));
+	const placeholderStore = writable(untrack(() => placeholder));
+
+	$effect(() => {
+		valueStore.set(value as any);
+	});
+
+	$effect(() => {
+		if (placeholder !== undefined) {
+			placeholderStore.set(placeholder as any);
+		}
+	});
+
+	const pickerProps: any = {
+		disabled: untrack(() => disabled),
+		readonly: untrack(() => readonly),
+		onValueChange: (next: any) => {
+			value = next.next as any;
+			onValueChange?.(next.next as any);
+			return next.next;
+		},
+	};
+
+	if (untrack(() => value !== undefined)) {
+		pickerProps.value = valueStore;
+	}
+	if (untrack(() => placeholder !== undefined)) {
+		pickerProps.placeholder = placeholderStore;
+	}
 
 	const {
 		elements: {
@@ -37,17 +70,7 @@
 		},
 		states: { months, headingValue, weekdays, segmentContents, open },
 		helpers: { isDateDisabled, isDateSelected },
-	} = untrack(() =>
-		createDatePicker({
-			disabled,
-			readonly,
-			onValueChange: (next) => {
-				value = next.next as any;
-				onValueChange?.(next.next as any);
-				return next.next;
-			},
-		})
-	);
+	} = untrack(() => createDatePicker(pickerProps));
 </script>
 
 <div class={`melt-date-picker ${className}`.trim()} {...rest}>

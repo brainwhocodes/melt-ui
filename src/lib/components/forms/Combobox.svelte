@@ -2,6 +2,7 @@
 	import { createCombobox } from '$lib/builders/combobox/create.js';
 	import { melt } from '$lib/internal/actions/index.js';
 	import { untrack } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	export interface ComboboxItem {
 		value: string;
@@ -29,12 +30,25 @@
 		...rest
 	}: Props = $props();
 
+	const selectedStore = writable(
+		untrack(() => {
+			const match = items.find((i) => i.value === value);
+			return match ? { value: match.value, label: match.label } : undefined;
+		})
+	);
+
+	$effect(() => {
+		const match = items.find((i) => i.value === value);
+		selectedStore.set(match ? { value: match.value, label: match.label } : (undefined as any));
+	});
+
 	const {
 		elements: { menu, input, option },
 		states: { open, inputValue, touchedInput },
 		helpers: { isSelected },
 	} = untrack(() =>
 		createCombobox<ComboboxItem>({
+			selected: selectedStore as any,
 			disabled,
 			onSelectedChange: (next: any) => {
 				const selectedVal =

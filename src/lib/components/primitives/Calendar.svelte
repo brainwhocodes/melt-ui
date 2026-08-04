@@ -3,6 +3,7 @@
 	import { melt } from '$lib/internal/actions/index.js';
 	import type { DateValue } from '@internationalized/date';
 	import { untrack } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	interface Props {
 		value?: DateValue;
@@ -24,21 +25,41 @@
 		...rest
 	}: Props = $props();
 
+	const valueStore = writable(untrack(() => value));
+	const placeholderStore = writable(untrack(() => placeholder));
+
+	$effect(() => {
+		valueStore.set(value as any);
+	});
+
+	$effect(() => {
+		if (placeholder !== undefined) {
+			placeholderStore.set(placeholder as any);
+		}
+	});
+
+	const calendarProps: any = {
+		disabled: untrack(() => disabled),
+		readonly: untrack(() => readonly),
+		onValueChange: (next: any) => {
+			value = next.next as any;
+			onValueChange?.(next.next as any);
+			return next.next;
+		},
+	};
+
+	if (untrack(() => value !== undefined)) {
+		calendarProps.value = valueStore;
+	}
+	if (untrack(() => placeholder !== undefined)) {
+		calendarProps.placeholder = placeholderStore;
+	}
+
 	const {
 		elements: { calendar, heading, grid, prevButton, nextButton, cell },
 		states: { months, headingValue, weekdays },
 		helpers: { isDateDisabled, isDateSelected },
-	} = untrack(() =>
-		createCalendar({
-			disabled,
-			readonly,
-			onValueChange: (next) => {
-				value = next.next as any;
-				onValueChange?.(next.next as any);
-				return next.next;
-			},
-		})
-	);
+	} = untrack(() => createCalendar(calendarProps));
 </script>
 
 <div {...$calendar} use:calendar class={`melt-calendar ${className}`.trim()} {...rest}>

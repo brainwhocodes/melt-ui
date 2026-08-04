@@ -2,6 +2,7 @@
 	import { createPinInput } from '$lib/builders/pin-input/create.js';
 	import { melt } from '$lib/internal/actions/index.js';
 	import { untrack } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	interface Props {
 		maxLength?: number;
@@ -21,10 +22,17 @@
 		...rest
 	}: Props = $props();
 
+	const valueStore = writable(untrack(() => value ?? []));
+
+	$effect(() => {
+		valueStore.set(value ?? []);
+	});
+
 	const {
 		elements: { root, input, hiddenInput },
 	} = untrack(() =>
 		createPinInput({
+			value: valueStore,
 			disabled,
 			onValueChange: (next) => {
 				value = next.next as any;

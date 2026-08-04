@@ -2,8 +2,8 @@ import { fireEvent, render, waitFor, within } from '@testing-library/svelte';
 import { userEvent } from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { describe, expect, it, vi } from 'vitest';
+import { Checkbox } from '$lib/components/index.js';
 import ComponentLibraryTest from './ComponentLibraryTest.svelte';
-
 describe('styled component library', () => {
 	it('has no automatically detectable navigation accessibility violations', async () => {
 		const view = render(ComponentLibraryTest);
@@ -328,5 +328,19 @@ describe('styled component library', () => {
 		expect(view.getByText('Save file')).toBeInTheDocument();
 
 		expect(await axe(view.container)).toHaveNoViolations();
+	});
+
+	it('bridges controlled state, non-default values, and parent clearing across components', async () => {
+		const onCheckedChange = vi.fn();
+		const view = render(Checkbox, { checked: true, label: 'Notify', onCheckedChange });
+
+		const checkbox = view.getByLabelText('Notify');
+		expect(checkbox).toHaveAttribute('data-state', 'checked');
+
+		await fireEvent.click(checkbox);
+		expect(onCheckedChange).toHaveBeenCalledWith(false);
+
+		await view.rerender({ checked: false, label: 'Notify', onCheckedChange });
+		expect(checkbox).toHaveAttribute('data-state', 'unchecked');
 	});
 });
