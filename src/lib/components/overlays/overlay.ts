@@ -70,6 +70,7 @@ export function getFocusableElements(container: HTMLElement): HTMLElement[] {
 	).filter((element) => {
 		const style = window.getComputedStyle(element);
 		return (
+			element.tabIndex >= 0 &&
 			!element.hidden &&
 			!element.closest('[hidden], [aria-hidden="true"]') &&
 			style.display !== 'none' &&
