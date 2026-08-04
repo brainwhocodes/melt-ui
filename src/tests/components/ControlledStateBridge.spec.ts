@@ -16,6 +16,7 @@ import {
 	Tabs,
 	Toggle,
 	ToggleGroup,
+	Tooltip,
 } from '$lib/components/index.js';
 
 describe('Controlled State Bridge & Parent Clearing', () => {
@@ -235,5 +236,16 @@ describe('Controlled State Bridge & Parent Clearing', () => {
 		await tick();
 		const tabA = tabsView.getByRole('tab', { name: 'Tab A' });
 		expect(tabA).toHaveAttribute('data-state', 'active');
+	});
+
+	it('Tooltip & HoverCard: attaches trigger actions directly to focusable buttons', async () => {
+		const view = render(Tooltip, { triggerLabel: 'Info', content: 'More details', openDelay: 0 });
+		const triggerBtn = view.getByRole('button', { name: 'Info' });
+
+		triggerBtn.focus();
+		await tick();
+
+		expect(triggerBtn).toHaveFocus();
+		expect(triggerBtn).toHaveAttribute('aria-describedby');
 	});
 });

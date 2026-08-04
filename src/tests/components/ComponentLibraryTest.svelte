@@ -284,7 +284,7 @@
 <DatePicker />
 <Dialog title="Dialog Title" description="Dialog Description" />
 <DropdownMenu items={[{ value: 'edit', label: 'Edit' }]} />
-<HoverCard>Card preview</HoverCard>
+<HoverCard triggerLabel="Card preview trigger">Card preview</HoverCard>
 <InputOTP maxLength={6} />
 <Label for="username">Username</Label>
 <Menubar menus={[{ label: 'File', items: [{ value: 'save-file', label: 'Save file' }] }]} />
@@ -301,4 +301,4 @@
 <Toast title="Success" variant="success" />
 <Toggle label="Bold" />
 <ToggleGroup options={[{ value: 'b', label: 'B' }]} />
-<Tooltip content="Tooltip text"><button>Hover target</button></Tooltip>
+<Tooltip content="Tooltip text" triggerLabel="Hover target" />
