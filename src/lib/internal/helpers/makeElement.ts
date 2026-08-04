@@ -1,9 +1,9 @@
 import type { Action } from 'svelte/action';
 import { derived, type Readable } from 'svelte/store';
-import type { Stores, StoresValues } from './store/types.js';
 import { isBrowser, isHTMLElement, noop } from './index.js';
 import { removeUndefined } from './object.js';
 import { lightable } from './store/lightable.js';
+import type { Stores, StoresValues } from './store/types.js';
 
 /* @deprecated
  *  We need to stop using `data-melt-id` and use normal ids for a11y compatibility.
@@ -98,9 +98,7 @@ export function makeElement<
 			// If stores are provided, create a derived store from them
 			return derived(stores, (values) => {
 				const result = (
-					returned as (
-						values: StoresValues<NonNullable<S>>,
-					) => ReturnType<R>
+					returned as (values: StoresValues<NonNullable<S>>) => ReturnType<R>
 				)(values);
 				if (isFunctionWithParams(result)) {
 					const fn = (...args: Parameters<typeof result>) => {

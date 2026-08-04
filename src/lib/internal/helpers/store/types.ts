@@ -5,6 +5,7 @@ export type Stores =
 	| [Readable<unknown>, ...Array<Readable<unknown>>]
 	| Array<Readable<unknown>>;
 
-export type StoresValues<T> = T extends Readable<infer U>
-	? U
-	: { [K in keyof T]: T[K] extends Readable<infer U> ? U : never };
+export type StoresValues<T> =
+	T extends Readable<infer U>
+		? U
+		: { [K in keyof T]: T[K] extends Readable<infer U> ? U : never };

@@ -2,6 +2,7 @@
 	import { createCheckbox } from '$lib/builders/checkbox/create.js';
 	import { melt } from '$lib/internal/actions/index.js';
 	import { untrack } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	interface Props {
 		checked?: boolean | 'indeterminate';
@@ -27,11 +28,20 @@
 		...rest
 	}: Props = $props();
 
+	const checkedStore = writable(untrack(() => checked));
+
+	$effect(() => {
+		if (checked !== undefined) {
+			checkedStore.set(checked);
+		}
+	});
+
 	const {
 		elements: { root, input },
 		states: { checked: isChecked },
 	} = untrack(() =>
 		createCheckbox({
+			checked: checkedStore,
 			disabled,
 			required,
 			name,
@@ -49,6 +59,7 @@
 	<button
 		{...$root}
 		use:root
+		aria-label={label || 'Checkbox'}
 		class="melt-checkbox"
 		data-state={$isChecked === 'indeterminate' ? 'indeterminate' : $isChecked ? 'checked' : 'unchecked'}
 		{...rest}

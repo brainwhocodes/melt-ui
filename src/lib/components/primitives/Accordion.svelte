@@ -2,6 +2,7 @@
 	import { createAccordion } from '$lib/builders/accordion/create.js';
 	import { melt } from '$lib/internal/actions/index.js';
 	import { untrack, type Snippet } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	export interface AccordionItemData {
 		value: string;
@@ -32,11 +33,20 @@
 		...rest
 	}: Props = $props();
 
+	const valueStore = writable(untrack(() => value));
+
+	$effect(() => {
+		if (value !== undefined) {
+			valueStore.set(value);
+		}
+	});
+
 	const {
 		elements: { root, item, trigger, content },
 		helpers: { isSelected },
 	} = untrack(() =>
 		createAccordion({
+			value: valueStore as any,
 			multiple: multiple as any,
 			disabled,
 			onValueChange: (next) => {

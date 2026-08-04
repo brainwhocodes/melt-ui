@@ -410,7 +410,8 @@ export const componentMap = {
 	accordion: {
 		name: 'Accordion',
 		category: 'primitives',
-		description: 'A vertically stacked set of interactive headings that reveal content.',
+		description:
+			'A vertically stacked set of interactive headings that reveal content.',
 		exports: ['Accordion'],
 		example: `<Accordion items={[{ value: '1', title: 'Details', content: 'Info' }]} />`,
 	},
@@ -431,7 +432,8 @@ export const componentMap = {
 	checkbox: {
 		name: 'Checkbox',
 		category: 'forms',
-		description: 'A control that allows toggling between checked and unchecked state.',
+		description:
+			'A control that allows toggling between checked and unchecked state.',
 		exports: ['Checkbox'],
 		example: `<Checkbox label="Accept terms" />`,
 	},

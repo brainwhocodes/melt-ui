@@ -2,6 +2,7 @@
 	import { createTabs } from '$lib/builders/tabs/create.js';
 	import { melt } from '$lib/internal/actions/index.js';
 	import { untrack, type Snippet } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	export interface TabData {
 		value: string;
@@ -30,11 +31,21 @@
 		...rest
 	}: Props = $props();
 
+	const valueStore = writable(untrack(() => value ?? tabs[0]?.value));
+
+	$effect(() => {
+		if (value !== undefined) {
+			valueStore.set(value);
+		}
+	});
+
 	const {
 		elements: { root, list, trigger, content },
 		states: { value: currentValue },
 	} = untrack(() =>
 		createTabs({
+			defaultValue: untrack(() => tabs[0]?.value),
+			value: valueStore,
 			orientation,
 			onValueChange: (next) => {
 				value = next.next;
@@ -69,11 +80,14 @@
 		{@render children()}
 	{:else}
 		{#each tabs as tab (tab.value)}
-			{#if $currentValue === tab.value}
-				<div {...$content(tab.value)} use:content class="melt-tabs-content">
-					{tab.content}
-				</div>
-			{/if}
+			<div
+				{...$content(tab.value)}
+				use:content
+				class="melt-tabs-content"
+				hidden={$currentValue !== tab.value}
+			>
+				{tab.content}
+			</div>
 		{/each}
 	{/if}
 </div>

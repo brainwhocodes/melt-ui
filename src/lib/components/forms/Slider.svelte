@@ -2,6 +2,7 @@
 	import { createSlider } from '$lib/builders/slider/create.js';
 	import { melt } from '$lib/internal/actions/index.js';
 	import { untrack } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	interface Props {
 		value?: number[];
@@ -27,11 +28,20 @@
 		...rest
 	}: Props = $props();
 
+	const valueStore = writable(untrack(() => value));
+
+	$effect(() => {
+		if (value !== undefined) {
+			valueStore.set(value);
+		}
+	});
+
 	const {
 		elements: { root, range, thumbs },
 		states: { value: sliderValue },
 	} = untrack(() =>
 		createSlider({
+			value: valueStore,
 			min,
 			max,
 			step,
@@ -58,6 +68,6 @@
 	</span>
 	{#each $sliderValue as _, i}
 		{@const thumbItem = $thumbs[i]}
-		<span {...thumbItem} use:thumbs class="melt-slider-thumb"></span>
+		<span {...thumbItem} use:thumbs aria-label="Slider" class="melt-slider-thumb"></span>
 	{/each}
 </span>

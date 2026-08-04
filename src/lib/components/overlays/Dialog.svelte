@@ -2,6 +2,7 @@
 	import { createDialog } from '$lib/builders/dialog/create.js';
 	import { melt } from '$lib/internal/actions/index.js';
 	import { untrack, type Snippet } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	interface Props {
 		open?: boolean;
@@ -27,11 +28,20 @@
 		...rest
 	}: Props = $props();
 
+	const openStore = writable(untrack(() => open));
+
+	$effect(() => {
+		if (open !== undefined) {
+			openStore.set(open);
+		}
+	});
+
 	const {
 		elements: { trigger, overlay, content, title: titleEl, description: descEl, close, portalled },
 		states: { open: isOpen },
 	} = untrack(() =>
 		createDialog({
+			open: openStore,
 			onOpenChange: (next) => {
 				open = next.next;
 				onOpenChange?.(next.next);

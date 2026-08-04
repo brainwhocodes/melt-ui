@@ -2,6 +2,7 @@
 	import { createSelect } from '$lib/builders/select/create.js';
 	import { melt } from '$lib/internal/actions/index.js';
 	import { untrack } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	export interface SelectOption {
 		value: string;
@@ -29,16 +30,29 @@
 		...rest
 	}: Props = $props();
 
+	const valueStore = writable(untrack(() => value));
+
+	$effect(() => {
+		if (value !== undefined) {
+			valueStore.set(value);
+		}
+	});
+
 	const {
 		elements: { trigger, menu, option },
 		states: { selectedLabel, open },
 		helpers: { isSelected },
 	} = untrack(() =>
 		createSelect({
+			defaultSelected: untrack(() => {
+				const match = options.find((o) => o.value === value);
+				return match ? { value: match.value, label: match.label } : undefined;
+			}),
 			disabled,
 			onSelectedChange: (next) => {
-				value = (next.next as any)?.value;
-				onValueChange?.((next.next as any)?.value);
+				const val = (next.next as any)?.value;
+				value = val;
+				onValueChange?.(val);
 				return next.next;
 			},
 		})
@@ -46,7 +60,13 @@
 </script>
 
 <div class={`melt-select ${className}`.trim()} {...rest}>
-	<button {...$trigger} use:trigger class="melt-select-trigger" {disabled}>
+	<button
+		{...$trigger}
+		use:trigger
+		aria-label={placeholder || 'Select'}
+		class="melt-select-trigger"
+		{disabled}
+	>
 		<span>{$selectedLabel || placeholder}</span>
 		<span class="melt-select-arrow">▼</span>
 	</button>

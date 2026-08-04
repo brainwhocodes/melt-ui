@@ -2,6 +2,7 @@
 	import { createRadioGroup } from '$lib/builders/radio-group/create.js';
 	import { melt } from '$lib/internal/actions/index.js';
 	import { untrack } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	export interface RadioOption {
 		value: string;
@@ -29,11 +30,20 @@
 		...rest
 	}: Props = $props();
 
+	const valueStore = writable(untrack(() => value));
+
+	$effect(() => {
+		if (value !== undefined) {
+			valueStore.set(value);
+		}
+	});
+
 	const {
 		elements: { root, item, hiddenInput },
 		helpers: { isChecked },
 	} = untrack(() =>
 		createRadioGroup({
+			value: valueStore,
 			disabled,
 			orientation,
 			onValueChange: (next) => {
@@ -51,6 +61,7 @@
 			<button
 				{...$item(option.value)}
 				use:item
+				aria-label={option.label}
 				class="melt-radio-item"
 				data-state={$isChecked(option.value) ? 'checked' : 'unchecked'}
 				disabled={option.disabled}

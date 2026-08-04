@@ -2,6 +2,7 @@
 	import { createSwitch } from '$lib/builders/switch/create.js';
 	import { melt } from '$lib/internal/actions/index.js';
 	import { untrack } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	interface Props {
 		checked?: boolean;
@@ -27,11 +28,20 @@
 		...rest
 	}: Props = $props();
 
+	const checkedStore = writable(untrack(() => checked));
+
+	$effect(() => {
+		if (checked !== undefined) {
+			checkedStore.set(checked);
+		}
+	});
+
 	const {
 		elements: { root, input },
 		states: { checked: isChecked },
 	} = untrack(() =>
 		createSwitch({
+			checked: checkedStore,
 			disabled,
 			required,
 			name,
@@ -49,6 +59,7 @@
 	<button
 		{...$root}
 		use:root
+		aria-label={label || 'Switch'}
 		class="melt-switch"
 		data-state={$isChecked ? 'checked' : 'unchecked'}
 		{...rest}

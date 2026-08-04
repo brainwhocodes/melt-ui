@@ -12,7 +12,6 @@ import * as environment from '$app/environment';
 import * as navigation from '$app/navigation';
 import * as stores from '$app/stores';
 
-
 expect.extend(toHaveNoViolations as never);
 
 configure({
@@ -91,14 +90,11 @@ vi.mock('$app/stores', (): typeof stores => {
 	};
 });
 
-
 globalThis.ResizeObserver ??= ResizeObserver;
 if (typeof Element !== 'undefined') {
 	Element.prototype.animate = (_keyframes, options) => {
 		const duration =
-			typeof options === 'number'
-				? options
-				: Number(options?.duration ?? 0);
+			typeof options === 'number' ? options : Number(options?.duration ?? 0);
 		let cancelled = false;
 		let finishHandler: Animation['onfinish'] = null;
 		const animation = {

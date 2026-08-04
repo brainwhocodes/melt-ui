@@ -29,10 +29,9 @@
 		builders: { createMenu },
 	} = untrack(() => createMenubar());
 
-	const menu1 = createMenu();
-	const menu2 = createMenu();
-	const menu3 = createMenu();
-	const menuInstances = [menu1, menu2, menu3];
+	let menuInstances = $derived.by(() => {
+		return untrack(() => menus.map(() => createMenu()));
+	});
 </script>
 
 <div {...$menubar} use:menubar class={`melt-menubar ${className}`.trim()} {...rest}>
@@ -42,10 +41,11 @@
 		{#each menus as mData, i (mData.label)}
 			{@const inst = menuInstances[i]}
 			{#if inst}
-				<div class="melt-menubar-menu">
+				<div class="melt-menubar-menu" role="none">
 					<button
 						{...inst.elements.trigger}
 						use:inst.elements.trigger
+						role="menuitem"
 						class="melt-menubar-trigger"
 					>
 						{mData.label}

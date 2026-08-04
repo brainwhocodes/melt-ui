@@ -2,6 +2,7 @@
 	import { createCollapsible } from '$lib/builders/collapsible/create.js';
 	import { melt } from '$lib/internal/actions/index.js';
 	import { untrack, type Snippet } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	interface Props {
 		open?: boolean;
@@ -25,11 +26,20 @@
 		...rest
 	}: Props = $props();
 
+	const openStore = writable(untrack(() => open));
+
+	$effect(() => {
+		if (open !== undefined) {
+			openStore.set(open);
+		}
+	});
+
 	const {
 		elements: { root, trigger, content },
 		states: { open: isOpen },
 	} = untrack(() =>
 		createCollapsible({
+			open: openStore,
 			disabled,
 			onOpenChange: (next) => {
 				open = next.next;

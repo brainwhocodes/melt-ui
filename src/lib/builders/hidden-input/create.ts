@@ -1,4 +1,4 @@
-import { readable, type Readable } from 'svelte/store';
+import { type Readable, readable } from 'svelte/store';
 import { executeCallbacks } from '$lib/internal/helpers/callbacks.js';
 import {
 	createElHelpers,

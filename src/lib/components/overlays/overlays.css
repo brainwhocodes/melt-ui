@@ -384,3 +384,118 @@
 		width: calc(100% - 1.25rem);
 	}
 }
+
+/* ContextMenu & DropdownMenu */
+.melt-context-menu-wrapper,
+.melt-dropdown-menu-wrapper,
+.melt-hover-card-wrapper,
+.melt-popover-wrapper,
+.melt-tooltip-wrapper {
+	position: relative;
+	display: inline-block;
+}
+
+.melt-context-menu,
+.melt-dropdown-menu {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	margin-top: 0.25rem;
+	min-width: 10rem;
+	padding: 0.25rem;
+	border-radius: var(--melt-radius-md);
+	border: 1px solid var(--melt-color-border);
+	background: var(--melt-color-surface-raised);
+	box-shadow: var(--melt-shadow-md);
+	z-index: 50;
+}
+
+.melt-context-menu-item,
+.melt-dropdown-menu-item {
+	padding: 0.5rem 0.75rem;
+	border-radius: var(--melt-radius-sm);
+	color: var(--melt-color-ink);
+	font-family: var(--melt-font-sans);
+	font-size: 0.875rem;
+	cursor: pointer;
+}
+
+.melt-context-menu-item:hover,
+.melt-dropdown-menu-item:hover {
+	background: var(--melt-color-accent);
+	color: var(--melt-color-accent-ink);
+}
+
+/* Dialog */
+.melt-dialog-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 50;
+	background: oklch(0% 0 0 / 40%);
+	backdrop-filter: blur(4px);
+}
+
+.melt-dialog-content {
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 50;
+	width: min(90vw, 30rem);
+	padding: 1.5rem;
+	border-radius: var(--melt-radius-lg);
+	border: 1px solid var(--melt-color-border);
+	background: var(--melt-color-surface-raised);
+	box-shadow: var(--melt-shadow-md);
+	font-family: var(--melt-font-sans);
+}
+
+.melt-dialog-title {
+	font-size: 1.125rem;
+	font-weight: 650;
+	color: var(--melt-color-ink);
+	margin-bottom: 0.5rem;
+}
+
+.melt-dialog-description {
+	font-size: 0.875rem;
+	color: var(--melt-color-muted);
+	margin-bottom: 1rem;
+}
+
+.melt-dialog-close {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	color: var(--melt-color-muted);
+}
+
+/* HoverCard & Popover & Tooltip */
+.melt-hover-card-content,
+.melt-popover-content,
+.melt-tooltip-content {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	margin-top: 0.375rem;
+	padding: 0.75rem 1rem;
+	border-radius: var(--melt-radius-md);
+	border: 1px solid var(--melt-color-border);
+	background: var(--melt-color-surface-raised);
+	box-shadow: var(--melt-shadow-md);
+	z-index: 50;
+	font-family: var(--melt-font-sans);
+	font-size: 0.875rem;
+	color: var(--melt-color-ink);
+}
+
+.melt-tooltip-content {
+	padding: 0.375rem 0.625rem;
+	font-size: 0.75rem;
+	background: var(--melt-color-ink);
+	color: var(--melt-color-surface-raised);
+	border: none;
+}

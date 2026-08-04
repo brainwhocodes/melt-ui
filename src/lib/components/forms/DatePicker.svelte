@@ -64,7 +64,7 @@
 	{#if $open}
 		<div {...$content} use:content class="melt-date-picker-content">
 			<div {...$calendar} use:calendar class="melt-calendar">
-				<header class="melt-calendar-header">
+				<div class="melt-calendar-header">
 					<button {...$prevButton} use:prevButton class="melt-calendar-prev" aria-label="Previous Month">
 						&larr;
 					</button>
@@ -74,7 +74,7 @@
 					<button {...$nextButton} use:nextButton class="melt-calendar-next" aria-label="Next Month">
 						&rarr;
 					</button>
-				</header>
+				</div>
 				{#each $months as month}
 					<table {...$grid} use:grid class="melt-calendar-grid">
 						<thead class="melt-calendar-thead">

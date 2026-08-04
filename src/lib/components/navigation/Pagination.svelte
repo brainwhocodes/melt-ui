@@ -2,6 +2,7 @@
 	import { createPagination } from '$lib/builders/pagination/create.js';
 	import { melt } from '$lib/internal/actions/index.js';
 	import { untrack } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	interface Props {
 		count?: number;
@@ -23,6 +24,14 @@
 		...rest
 	}: Props = $props();
 
+	const pageStore = writable(untrack(() => page));
+
+	$effect(() => {
+		if (page !== undefined) {
+			pageStore.set(page);
+		}
+	});
+
 	const {
 		elements: { root, pageTrigger, prevButton, nextButton },
 		states: { pages, page: currentPage },
@@ -31,6 +40,7 @@
 			count,
 			perPage,
 			siblingCount,
+			page: pageStore,
 			onPageChange: (next) => {
 				page = next.next;
 				onPageChange?.(next.next);

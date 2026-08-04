@@ -36,9 +36,9 @@
 </script>
 
 <div {...$root} use:root class={`melt-input-otp ${className}`.trim()} {...rest}>
-	{#each Array(maxLength) as _, i}
+	{#each Array(maxLength) as _}
 		<input
-			{...$input}
+			{...$input()}
 			use:input
 			class="melt-input-otp-cell"
 		/>

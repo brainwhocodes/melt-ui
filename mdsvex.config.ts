@@ -1,17 +1,17 @@
-import { escapeSvelte } from 'mdsvex';
+import type { Root as HastRoot } from 'hast';
 import { toHtml } from 'hast-util-to-html';
+import type { InlineCode, Root as MdastRoot } from 'mdast';
+import type { MdsvexOptions } from 'mdsvex';
+import { escapeSvelte } from 'mdsvex';
 import { resolve } from 'path';
+import type { Options as RehypePrettyCodeOptions } from 'rehype-pretty-code';
 import rehypePrettyCode from 'rehype-pretty-code';
 import { codeImport } from 'remark-code-import';
 import remarkGfm from 'remark-gfm';
 import { getHighlighter } from 'shiki';
+import type { Transformer } from 'unified';
 import { visit } from 'unist-util-visit';
 import { fileURLToPath } from 'url';
-import type { Root as HastRoot } from 'hast';
-import type { InlineCode, Root as MdastRoot } from 'mdast';
-import type { MdsvexOptions } from 'mdsvex';
-import type { Options as RehypePrettyCodeOptions } from 'rehype-pretty-code';
-import type { Transformer } from 'unified';
 
 type HastTransformer = Transformer<HastRoot, HastRoot>;
 type MdastTransformer = Transformer<MdastRoot, MdastRoot>;
@@ -25,7 +25,10 @@ const prettyCodeOptions: RehypePrettyCodeOptions = {
 	onVisitLine(node) {
 		if (node.children.length === 0) {
 			// we're modifying the node type
-			node.children = { type: 'text', value: ' ' } as unknown as typeof node.children;
+			node.children = {
+				type: 'text',
+				value: ' ',
+			} as unknown as typeof node.children;
 		}
 	},
 	onVisitHighlightedLine(node) {
@@ -65,7 +68,11 @@ export const mdsvexOptions: MdsvexOptions = {
 	// `Node`, which is contravariant-incompatible with hast/mdast-specific transformers
 	// (and `Settings` is a weak type). The plugins below are standard rehype/remark
 	// plugins; cast the arrays to mdsvex's plugin-list types at this boundary.
-	remarkPlugins: [remarkGfm, remarkEscapeSvelte, codeImport] as MdsvexOptions['remarkPlugins'],
+	remarkPlugins: [
+		remarkGfm,
+		remarkEscapeSvelte,
+		codeImport,
+	] as MdsvexOptions['remarkPlugins'],
 	rehypePlugins: [
 		rehypeComponentPreToPre,
 		[rehypePrettyCode, prettyCodeOptions],
@@ -127,12 +134,20 @@ function rehypeHandleMetadata(): HastTransformer {
 				}
 
 				const preElement = node.children.at(-1);
-				if (preElement && 'tagName' in preElement && preElement.tagName !== 'pre') {
+				if (
+					preElement &&
+					'tagName' in preElement &&
+					preElement.tagName !== 'pre'
+				) {
 					return;
 				}
 
 				const firstChild = node.children.at(0);
-				if (firstChild && 'tagName' in firstChild && firstChild.tagName === 'figcaption') {
+				if (
+					firstChild &&
+					'tagName' in firstChild &&
+					firstChild.tagName === 'figcaption'
+				) {
 					node.properties['data-metadata'] = '';
 					const lastChild = node.children.at(-1);
 					if (lastChild && 'properties' in lastChild) {

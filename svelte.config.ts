@@ -1,14 +1,15 @@
-import { mdsvex } from 'mdsvex';
 import adapterStatic from '@sveltejs/adapter-static';
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import type { Config } from '@sveltejs/kit';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import { mdsvex } from 'mdsvex';
 import type { PreprocessorGroup } from 'svelte/compiler';
 import { mdsvexOptions } from './mdsvex.config.ts';
 
 const vite = vitePreprocess();
 const viteTypescriptAndScss: PreprocessorGroup = {
 	...vite,
-	style: (options) => (options.attributes.lang === 'scss' ? vite.style?.(options) : undefined),
+	style: (options) =>
+		options.attributes.lang === 'scss' ? vite.style?.(options) : undefined,
 };
 
 // mdsvex 0.12.x wraps page metadata in the deprecated `<script context="module">`;
@@ -17,7 +18,10 @@ const mdsvexModuleScript: PreprocessorGroup = {
 	name: 'mdsvex-module-script',
 	markup: ({ content, filename }) => {
 		if (!filename?.endsWith('.md')) return;
-		const code = content.replace('<script context="module">', '<script module>');
+		const code = content.replace(
+			'<script context="module">',
+			'<script module>',
+		);
 		return code === content ? undefined : { code };
 	},
 };
@@ -26,7 +30,11 @@ const config: Config = {
 	extensions: ['.svelte', '.md'],
 	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
 	// for more information about preprocessors
-	preprocess: [mdsvex(mdsvexOptions), mdsvexModuleScript, viteTypescriptAndScss],
+	preprocess: [
+		mdsvex(mdsvexOptions),
+		mdsvexModuleScript,
+		viteTypescriptAndScss,
+	],
 
 	kit: {
 		// adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.

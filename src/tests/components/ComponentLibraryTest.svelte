@@ -76,6 +76,34 @@
 		Typeset,
 		TypesetHeading,
 		TypesetText,
+		Accordion,
+		Avatar,
+		Calendar,
+		Checkbox,
+		Collapsible,
+		Combobox,
+		ContextMenu,
+		DatePicker,
+		Dialog,
+		DropdownMenu,
+		HoverCard,
+		InputOTP,
+		Label,
+		Menubar,
+		Pagination,
+		Popover,
+		Progress,
+		RadioGroup,
+		ScrollArea,
+		Select,
+		Separator,
+		Slider,
+		Switch,
+		Tabs,
+		Toast,
+		Toggle,
+		ToggleGroup,
+		Tooltip,
 		type ChartSeries,
 		type CommandItem,
 		type DataTableColumn,
@@ -244,3 +272,33 @@
 <Drawer bind:open={drawerOpen} direction="bottom">
 	<DrawerContent><DrawerHandle /><DrawerTitle>Filters</DrawerTitle><DrawerDescription>Refine results</DrawerDescription><DrawerClose ariaLabel="Close drawer">Close drawer</DrawerClose></DrawerContent>
 </Drawer>
+
+<!-- 28 New Pre-Styled Components Coverage -->
+<Accordion items={[{ value: '1', title: 'Header 1', content: 'Content 1' }]} />
+<Avatar src="" fallback="JD" />
+<Calendar />
+<Checkbox label="Subscribe" />
+<Collapsible label="Expand info"><p>Details</p></Collapsible>
+<Combobox items={[{ value: '1', label: 'Item 1' }]} />
+<ContextMenu items={[{ value: 'copy', label: 'Copy' }]}>Right click target</ContextMenu>
+<DatePicker />
+<Dialog title="Dialog Title" description="Dialog Description" />
+<DropdownMenu items={[{ value: 'edit', label: 'Edit' }]} />
+<HoverCard>Card preview</HoverCard>
+<InputOTP maxLength={6} />
+<Label for="username">Username</Label>
+<Menubar menus={[{ label: 'File', items: [{ value: 'save', label: 'Save' }] }]} />
+<Pagination count={50} perPage={10} />
+<Popover triggerLabel="Help"><p>Help content</p></Popover>
+<Progress value={45} max={100} />
+<RadioGroup options={[{ value: '1', label: 'First' }]} />
+<ScrollArea><p>Scrollable content block</p></ScrollArea>
+<Select options={[{ value: 'a', label: 'Option A' }]} />
+<Separator orientation="horizontal" />
+<Slider value={[30]} min={0} max={100} />
+<Switch label="Dark mode" />
+<Tabs tabs={[{ value: 't1', label: 'Tab 1', content: 'Tab 1 Content' }]} />
+<Toast title="Success" variant="success" />
+<Toggle label="Bold" />
+<ToggleGroup options={[{ value: 'b', label: 'B' }]} />
+<Tooltip content="Tooltip text"><button>Hover target</button></Tooltip>

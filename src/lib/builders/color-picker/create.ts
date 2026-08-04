@@ -813,22 +813,23 @@ export function createColorPicker(props?: CreateColorPickerProps) {
 
 	const colorInput = makeElement(name('color-input'), {
 		stores: [value, format, disabled, readonlyOption, colorInputDraft],
-		returned: ([$value, $format, $disabled, $readonly, $draft]) => ({
-			type: 'text',
-			value:
-				$draft ??
-				($format === 'hex'
-					? formatSerializedHex($value)
-					: serializeColor($value, $format)),
-			'aria-label': 'Color value',
-			spellcheck: false,
-			autocomplete: 'off',
-			'data-format': $format,
-			disabled: $disabled,
-			readonly: $readonly ? true : undefined,
-			'aria-disabled': disabledAttr($disabled),
-			'aria-readonly': $readonly ? true : undefined,
-		} as const),
+		returned: ([$value, $format, $disabled, $readonly, $draft]) =>
+			({
+				type: 'text',
+				value:
+					$draft ??
+					($format === 'hex'
+						? formatSerializedHex($value)
+						: serializeColor($value, $format)),
+				'aria-label': 'Color value',
+				spellcheck: false,
+				autocomplete: 'off',
+				'data-format': $format,
+				disabled: $disabled,
+				readonly: $readonly ? true : undefined,
+				'aria-disabled': disabledAttr($disabled),
+				'aria-readonly': $readonly ? true : undefined,
+			}) as const,
 		action: (node: HTMLInputElement) => {
 			let sessionAlpha = value.get().alpha;
 			const canonical = () => {

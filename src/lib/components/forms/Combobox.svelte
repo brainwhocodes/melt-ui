@@ -34,11 +34,15 @@
 		states: { open, inputValue, touchedInput },
 		helpers: { isSelected },
 	} = untrack(() =>
-		createCombobox<string>({
+		createCombobox<ComboboxItem>({
 			disabled,
 			onSelectedChange: (next: any) => {
-				value = next.next?.value;
-				onValueChange?.(next.next?.value);
+				const selectedVal =
+					typeof next.next === 'object' && next.next !== null
+						? next.next.value ?? next.next.label
+						: next.next;
+				value = selectedVal;
+				onValueChange?.(selectedVal);
 				return next.next;
 			},
 		})

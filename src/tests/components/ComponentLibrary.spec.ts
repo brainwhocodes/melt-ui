@@ -22,7 +22,9 @@ describe('styled component library', () => {
 		expect(email).toHaveAccessibleDescription('Work address Email is required');
 		expect(view.getByRole('alert')).toHaveTextContent('Components loaded.');
 
-		const inlineDisplay = view.getByRole('button', { name: 'Edit Project name' });
+		const inlineDisplay = view.getByRole('button', {
+			name: 'Edit Project name',
+		});
 		await user.click(inlineDisplay);
 		const inlineInput = view.getByRole('textbox', { name: 'Project name' });
 		expect(inlineInput).toHaveFocus();
@@ -37,10 +39,12 @@ describe('styled component library', () => {
 			name: 'Project name',
 		});
 		await user.keyboard('{Escape}');
-		expect(view.getByRole('button', { name: 'Edit Project name' })).toHaveFocus();
-		expect(view.getByRole('button', { name: 'Edit Project name' })).toHaveTextContent(
-			'Component gallery',
-		);
+		expect(
+			view.getByRole('button', { name: 'Edit Project name' }),
+		).toHaveFocus();
+		expect(
+			view.getByRole('button', { name: 'Edit Project name' }),
+		).toHaveTextContent('Component gallery');
 
 		expect(
 			view.getByRole('status', { name: 'Loading records' }),
@@ -275,5 +279,42 @@ describe('styled component library', () => {
 			).not.toBeInTheDocument(),
 		);
 		vi.unstubAllGlobals();
+	});
+
+	it('renders, interacts, and satisfies accessibility for all 28 new pre-styled components', async () => {
+		const user = userEvent.setup();
+		const view = render(ComponentLibraryTest);
+
+		expect(view.getByText('Header 1')).toBeInTheDocument();
+		expect(view.getByText('JD')).toBeInTheDocument();
+		expect(view.getByLabelText('Subscribe')).toBeInTheDocument();
+		expect(view.getByRole('button', { name: 'Expand info' })).toBeInTheDocument();
+		expect(view.getByText('Right click target')).toBeInTheDocument();
+		expect(view.getByText('Username')).toBeInTheDocument();
+		expect(view.getByRole('navigation', { name: 'Pagination' })).toBeInTheDocument();
+		expect(view.getByText('Success')).toBeInTheDocument();
+		expect(view.getByRole('button', { name: 'Bold' })).toBeInTheDocument();
+
+		// State bridge & ARIA assertions
+		const progress = view.getByRole('meter', { name: 'Progress' });
+		expect(progress).toHaveAttribute('aria-valuenow', '45');
+
+		const checkbox = view.getByLabelText('Subscribe');
+		expect(checkbox).toHaveAttribute('data-state', 'unchecked');
+		await user.click(checkbox);
+		expect(checkbox).toHaveAttribute('data-state', 'checked');
+
+		const switchEl = view.getByLabelText('Dark mode');
+		expect(switchEl).toHaveAttribute('data-state', 'unchecked');
+		await user.click(switchEl);
+		expect(switchEl).toHaveAttribute('data-state', 'checked');
+
+		const sliderThumb = view.getByRole('slider', { name: 'Slider' });
+		expect(sliderThumb).toHaveAttribute('aria-valuenow', '30');
+
+		const tab1 = view.getByRole('tab', { name: 'Tab 1' });
+		expect(tab1).toHaveAttribute('data-state', 'active');
+
+		expect(await axe(view.container)).toHaveNoViolations();
 	});
 });
