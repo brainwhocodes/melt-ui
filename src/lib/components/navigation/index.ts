@@ -14,3 +14,6 @@ export { default as NavigationMenuLink } from './NavigationMenuLink.svelte';
 export { default as NavigationMenuTrigger } from './NavigationMenuTrigger.svelte';
 export { default as NavigationMenuViewport } from './NavigationMenuViewport.svelte';
 export { default as Sidebar } from './Sidebar.svelte';
+export { default as Menubar } from './Menubar.svelte';
+export { default as Pagination } from './Pagination.svelte';
+export { default as Tabs } from './Tabs.svelte';

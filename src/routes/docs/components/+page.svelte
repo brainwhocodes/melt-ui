@@ -9,7 +9,7 @@
 		InlineEdit,
 		Input,
 		Spinner,
-	} from '$lib/index.js';
+	} from '$lib/components/index.js';
 
 	const categories: readonly { key: ComponentCategory; label: string; description: string }[] = [
 		{

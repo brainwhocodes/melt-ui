@@ -79,7 +79,7 @@
 		type ChartSeries,
 		type CommandItem,
 		type DataTableColumn,
-	} from '$lib/index.js';
+	} from '$lib/components/index.js';
 
 	let alertOpen = $state(false);
 	let sheetOpen = $state(false);

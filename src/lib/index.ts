@@ -1,5 +1,4 @@
 export * from './builders/index.js';
-export * from './components/index.js';
 export { melt } from './internal/actions/index.js';
 export type { AnyMeltElement } from './internal/helpers/makeElement.js';
 export type { MeltEvent, MeltEventHandler } from './internal/types.js';
