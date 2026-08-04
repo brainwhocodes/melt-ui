@@ -1,0 +1,16 @@
+diff --git a/src/exports/vite/index.js b/src/exports/vite/index.js
+index bd3af895b4e0f736dfac9be3ce79d13610267a8d..ae864462d566a3d2dd7c40665e2d4495de8879d5 100644
+--- a/src/exports/vite/index.js
++++ b/src/exports/vite/index.js
+@@ -1684,8 +1684,9 @@ function find_overridden_config(config, resolved_config, enforced_config, path,
+ 			if (enforced === true) {
+ 				// Normalize path separators before comparing to avoid false positives on Windows,
+ 				// where config values like `root` may use backslashes while SvelteKit uses forward slashes.
+-				const a = typeof config[key] === 'string' ? posixify(config[key]) : config[key];
+-				const b = typeof resolved === 'string' ? posixify(resolved) : resolved;
++				const normalize_path = (val) => (typeof val === 'string' ? posixify(val).replace(/^[a-z]:/i, (m) => m.toLowerCase()) : val);
++				const a = normalize_path(config[key]);
++				const b = normalize_path(resolved);
+ 				if (a !== b) {
+ 					out.push(path + key);
+ 				}

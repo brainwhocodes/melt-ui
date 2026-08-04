@@ -100,7 +100,6 @@
 		"@biomejs/biome": "2.5.6",
 		"@changesets/cli": "^2.26.2",
 		"@fontsource/inter": "^5.0.8",
-		"mdsvex": "^0.12.8",
 		"@playwright/test": "^1.62.1",
 		"@storybook/addon-a11y": "^10.5.6",
 		"@storybook/addon-links": "^10.5.6",
@@ -126,7 +125,9 @@
 		"escape-html": "^1.0.3",
 		"hast-util-to-html": "^9.0.0",
 		"jest-axe": "^8.0.0",
+		"jsdom": "^29.1.1",
 		"lucide-svelte": "^0.321.0",
+		"mdsvex": "^0.12.8",
 		"mode-watcher": "^1.1.0",
 		"postcss-html": "2.0.0",
 		"postcss-scss": "4.0.9",
@@ -136,7 +137,6 @@
 		"rehype-pretty-code": "^0.13.0",
 		"remark-code-import": "^1.2.0",
 		"remark-gfm": "^3.0.1",
-		"jsdom": "^29.1.1",
 		"resize-observer-polyfill": "^1.5.1",
 		"sass": "1.102.0",
 		"shiki": "^1.1.1",
@@ -160,5 +160,10 @@
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"type": "module",
-	"packageManager": "pnpm@9.12.2"
+	"packageManager": "pnpm@9.12.2",
+	"pnpm": {
+		"patchedDependencies": {
+			"@sveltejs/kit@2.70.2": "patches/@sveltejs__kit@2.70.2.patch"
+		}
+	}
 }
