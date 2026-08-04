@@ -162,6 +162,18 @@ describe('Controlled State Bridge & Parent Clearing', () => {
 		await tgView.rerender({ options, value: undefined });
 		await tick();
 		expect(btnX).toHaveAttribute('data-state', 'off');
+
+		// Multi-select ToggleGroup assertion
+		const onTgValueChange = vi.fn();
+		const multiView = render(ToggleGroup, {
+			options,
+			type: 'multiple',
+			value: ['x'],
+			onValueChange: onTgValueChange,
+		});
+		const multiBtnY = multiView.getByRole('button', { name: 'Y' });
+		await user.click(multiBtnY);
+		expect(onTgValueChange).toHaveBeenCalledWith(['x', 'y']);
 	});
 
 	it('Checkbox & Switch: handles non-default checked states, parent updates, and clearing', async () => {

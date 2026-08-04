@@ -32,10 +32,21 @@
 		...rest
 	}: Props = $props();
 
-	const valueStore = writable(untrack(() => value));
+	const initialValue = untrack(() => {
+		if (type === 'multiple') {
+			return Array.isArray(value) ? value : value !== undefined ? [value] : [];
+		}
+		return typeof value === 'string' ? value : undefined;
+	});
+
+	const valueStore = writable<string | string[] | undefined>(initialValue);
 
 	$effect(() => {
-		valueStore.set(value as any);
+		if (type === 'multiple') {
+			valueStore.set(Array.isArray(value) ? value : value !== undefined ? [value] : []);
+		} else {
+			valueStore.set((typeof value === 'string' ? value : undefined) as any);
+		}
 	});
 
 	const {
