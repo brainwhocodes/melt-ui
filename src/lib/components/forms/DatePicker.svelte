@@ -102,14 +102,16 @@
 							{#each month.weeks as weekDates}
 								<tr>
 									{#each weekDates as date}
-										<td
-											{...$cell(date, month.value)}
-											use:cell
-											class="melt-calendar-cell"
-											data-selected={$isDateSelected(date) ? '' : undefined}
-											data-disabled={$isDateDisabled(date) ? '' : undefined}
-										>
-											{date.day}
+										<td role="gridcell" class="melt-calendar-cell-wrapper">
+											<div
+												{...$cell(date, month.value)}
+												use:cell
+												class="melt-calendar-cell"
+												data-selected={$isDateSelected(date) ? '' : undefined}
+												data-disabled={$isDateDisabled(date) ? '' : undefined}
+											>
+												{date.day}
+											</div>
 										</td>
 									{/each}
 								</tr>

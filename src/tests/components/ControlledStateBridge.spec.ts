@@ -62,12 +62,17 @@ describe('Controlled State Bridge & Parent Clearing', () => {
 		expect(inputs[0]?.value).toBe('');
 	});
 
-	it('Calendar: handles non-default initial DateValue, parent updates, and clearing', async () => {
+	it('Calendar: handles non-default initial DateValue, parent updates, clearing, and grid cell hierarchy', async () => {
 		const onValueChange = vi.fn();
 		const initialDate = new CalendarDate(2026, 8, 15);
 		const nextDate = new CalendarDate(2026, 8, 20);
 
 		const view = render(Calendar, { value: initialDate, onValueChange });
+		const gridCell = view.container.querySelector('td[role="gridcell"]');
+		expect(gridCell).not.toBeNull();
+		const cellButton = gridCell?.querySelector('[role="button"][data-melt-calendar-cell]');
+		expect(cellButton).not.toBeNull();
+
 		expect(view.container.querySelector('[data-selected]')).toHaveTextContent('15');
 		expect(onValueChange).not.toHaveBeenCalled();
 
